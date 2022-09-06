@@ -9,6 +9,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SolutionItems", "SolutionIt
 		global.json = global.json
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TagTool.App.Core", "TagTool.App.Core\TagTool.App.Core.csproj", "{D2E532D1-862D-43BE-8486-897B227D67B9}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -19,5 +21,9 @@ Global
 		{645CC627-2F78-4A8C-A686-BF813907110D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{645CC627-2F78-4A8C-A686-BF813907110D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{645CC627-2F78-4A8C-A686-BF813907110D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D2E532D1-862D-43BE-8486-897B227D67B9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D2E532D1-862D-43BE-8486-897B227D67B9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D2E532D1-862D-43BE-8486-897B227D67B9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D2E532D1-862D-43BE-8486-897B227D67B9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

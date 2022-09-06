@@ -4,7 +4,8 @@
     xmlns:vm="using:TagTool.App.ViewModels"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+    xmlns:local="using:TagTool.App.Views"
+    mc:Ignorable="d" d:DesignWidth="600" d:DesignHeight="400"
     x:Class="TagTool.App.Views.MainWindow"
     Icon="/Assets/avalonia-logo.ico"
     Title="TagTool.App"
@@ -16,7 +17,7 @@
         <vm:MainWindowViewModel />
     </Design.DataContext>
 
-    <Panel>
+    <DockPanel>
         <ExperimentalAcrylicBorder IsHitTestVisible="False">
             <ExperimentalAcrylicBorder.Material>
                 <ExperimentalAcrylicMaterial
@@ -24,9 +25,33 @@
                     TintColor="Black"
                     TintOpacity="1"
                     MaterialOpacity="0.65" />
+                
             </ExperimentalAcrylicBorder.Material>
         </ExperimentalAcrylicBorder>
 
+        <Menu DockPanel.Dock="Top">
+            <MenuItem Classes="" Header="_File">
+                <MenuItem Header="_Open..." />
+                <Separator />
+                <MenuItem Header="_Exit" />
+            </MenuItem>
+            <MenuItem Header="_Edit">
+                <MenuItem Header="Copy">
+                    <MenuItem Header="Nested">
+                        <MenuItem Header="Nested2" />
+                    </MenuItem>
+                    <MenuItem Header="Paste" />
+                </MenuItem>
+            </MenuItem>
+        </Menu>
+
+        <local:ToolbarView DockPanel.Dock="Top" />
+
+        <Panel>
+            <local:SearchTabsView />
+        </Panel>
+
+
         <TextBlock Text="{Binding Greeting}" HorizontalAlignment="Center" VerticalAlignment="Center" />
-    </Panel>
+    </DockPanel>
 </Window>

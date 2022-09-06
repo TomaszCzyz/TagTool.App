@@ -1,0 +1,37 @@
+syntax = "proto3";
+
+option csharp_namespace = "TagTool.Backend";
+
+package TagToolBackend;
+
+service TagSearchService {
+  rpc FindTags (FindTagsRequest) returns (stream FoundTagReply);
+  rpc MatchTags (MatchTagsRequest) returns (stream MatchedTagReply);
+}
+
+message FindTagsRequest {
+  string partialTagName = 1;
+  optional int32 maxReturn = 2;
+}
+
+message FoundTagReply {
+  string tagName = 1;
+}
+
+message MatchTagsRequest {
+  string partialTagName = 1;
+  optional int32 maxReturn = 2;
+}
+
+message MatchedTagReply {
+  string matchedTagName = 1;
+  int32 score = 2;
+  repeated MatchedPart matchedParts = 3;
+}
+
+message MatchedPart {
+  int32 startIndex = 1;
+  int32 length = 2;
+}
+
+
