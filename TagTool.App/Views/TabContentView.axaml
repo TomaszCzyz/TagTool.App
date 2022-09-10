@@ -3,10 +3,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
-    xmlns:assists="clr-namespace:Material.Styles.Assists;assembly=Material.Styles"
     xmlns:viewModels="clr-namespace:TagTool.App.ViewModels"
-    xmlns:controls="clr-namespace:TagTool.App.Controls"
     mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
     x:Class="TagTool.App.Views.TabContentView">
 
@@ -16,7 +13,7 @@
 
     <Grid
         ColumnDefinitions="400"
-        RowDefinitions="Auto,Auto,*"
+        RowDefinitions="Auto,Auto,*,*"
         Margin="4">
 
         <StackPanel Orientation="Horizontal">
@@ -27,61 +24,48 @@
         <Panel Grid.Row="1">
             <TextBox
                 Name="SearchTextBox"
-
                 Text="{Binding SearchText}"
                 BorderBrush="{Binding $self.Foreground}"
                 BorderThickness="1"
-                Classes="Solo"
                 Watermark="Enter Tag name"
-                assists:TextFieldAssist.CornerRadius="32"
                 Margin="8">
+                <!-- assists:TextFieldAssist.CornerRadius="32" -->
+                <!-- Classes="Solo" -->
 
                 <TextBox.InnerLeftContent>
                     <Border
                         Height="{Binding $parent[TextBox].Height}"
                         Width="{Binding $self.Bounds.Height}">
 
-                        <avalonia:MaterialIcon
-                            HorizontalAlignment="Center"
-                            VerticalAlignment="Center"
-                            Kind="Magnify"
-                            Width="20"
-                            Height="20" />
+                        <!-- <avalonia:MaterialIcon -->
+                        <!--     HorizontalAlignment="Center" -->
+                        <!--     VerticalAlignment="Center" -->
+                        <!--     Kind="Magnify" -->
+                        <!--     Width="20" -->
+                        <!--     Height="20" /> -->
 
                     </Border>
                 </TextBox.InnerLeftContent>
             </TextBox>
-            <Popup
-                IsOpen="{Binding #SearchTextBox.IsFocused}"
-                IsLightDismissEnabled="True"
-                PlacementTarget="{Binding #SearchTextBox}">
 
-                <ListBox Items="{Binding TagsSearchResults}">
-                    <ListBox.ItemTemplate>
-                        <DataTemplate DataType="controls:FormattedTextBlock">
-                            <controls:FormattedTextBlock 
-                                Text="LongLongLongLongText"
-                                Spans="{Binding Spans}"
-                                TextWrapping="Wrap" />
-                            
-                            <!-- <FormattedText -->
-                            <!--     FontSize="18" -->
-                            <!--     Text="{Binding MatchedText}" -->
-                            <!--     Spans="{Binding Spans}" /> -->
-
-                            <!-- <TextBlock -->
-                            <!-- -->
-                            <!-- -->
-                            <!--     FontSize="18" -->
-                            <!--     x:DataType="models:HighlightedMatch" -->
-                            <!--     Text="{Binding HighlightedText}" -->
-                            <!--     TextDecorations=""/> -->
-                        </DataTemplate>
-
-                    </ListBox.ItemTemplate>
-                </ListBox>
-            </Popup>
         </Panel>
+        <ListBox Grid.Row="3">
+            <!-- IsOpen="{Binding #SearchTextBox.IsFocused}" -->
+            <!-- IsLightDismissEnabled="True" -->
+            <!-- PlacementTarget="{Binding #SearchTextBox}"> -->
+
+            <ListBox Items="{Binding TagsSearchResults}">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <RichTextBlock
+                            Text="{Binding MatchedText}"
+                            Inlines="{Binding Inlines}" />
+
+                    </DataTemplate>
+
+                </ListBox.ItemTemplate>
+            </ListBox>
+        </ListBox>
         <ListBox Grid.Row="2">
             <ListBoxItem>
                 <TextBox Text="Item1" />

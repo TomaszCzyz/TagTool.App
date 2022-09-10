@@ -1,4 +1,4 @@
-﻿using Avalonia.Media;
+﻿using Avalonia.Controls.Documents;
 
 namespace TagTool.App.Core.Models;
 
@@ -8,9 +8,7 @@ public class HighlightedMatch
 {
     public string MatchedText { get; set; } = "default";
 
-    public List<FormattedTextStyleSpan> Spans { get; set; }
-
-    public FormattedText? HighlightedText { get; set; }
+    public InlineCollection Inlines { get; set; } = null!;
 
     public int Score { get; init; }
 

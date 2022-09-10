@@ -1,10 +1,10 @@
 ﻿using System.Collections.ObjectModel;
 using System.Reactive.Linq;
+using Avalonia.Controls.Documents;
 using Avalonia.Media;
 using Grpc.Core;
 using ReactiveUI;
 using Splat;
-using TagTool.App.Controls;
 using TagTool.App.Core.Models;
 using TagTool.Backend;
 
@@ -12,8 +12,7 @@ namespace TagTool.App.ViewModels;
 
 public class TabContentViewModel : ViewModelBase, IDisposable
 {
-    // public ObservableCollection<HighlightedMatch> TagsSearchResults { get; set; } = new();
-    public ObservableCollection<StyledText> TagsSearchResults { get; set; } = new();
+    public ObservableCollection<HighlightedMatch> TagsSearchResults { get; set; } = new();
 
     private string? _searchText;
 
@@ -33,11 +32,11 @@ public class TabContentViewModel : ViewModelBase, IDisposable
             .ObserveOn(RxApp.MainThreadScheduler)
             .Subscribe(DoSearch!);
 
-        var styledText = StyledText.Create();
-        styledText.Append("StyledText", new ImageBrush());
+        var run = new Run { Text = "text", Background = Brushes.DarkSeaGreen };
 
-        TagsSearchResults.Add(styledText);
-        TagsSearchResults.Add(styledText);
+        TagsSearchResults.Add(new HighlightedMatch { MatchedText = "texttexttex", Inlines = new InlineCollection { run } });
+        TagsSearchResults.Add(new HighlightedMatch { MatchedText = "texttexttex", Inlines = new InlineCollection { run } });
+        TagsSearchResults.Add(new HighlightedMatch { MatchedText = "texttexttex", Inlines = new InlineCollection { run } });
     }
 
     private readonly TagSearchService.TagSearchServiceClient _tagSearchServiceClient;
@@ -70,12 +69,11 @@ public class TabContentViewModel : ViewModelBase, IDisposable
                 var viewListItem = new HighlightedMatch
                 {
                     MatchedText = reply.MatchedTagName,
-                    Spans = FindSpans(reply.MatchedTagName, highlightInfos),
-                    HighlightedText = HighlightText(reply.MatchedTagName, highlightInfos),
+                    Inlines = FindSpans(reply.MatchedTagName, highlightInfos),
                     Score = reply.Score
                 };
 
-                // TagsSearchResults.Add(viewListItem);
+                TagsSearchResults.Add(viewListItem);
             }
         }
         catch (RpcException e) when (e.Status.StatusCode == StatusCode.Cancelled)
@@ -85,13 +83,13 @@ public class TabContentViewModel : ViewModelBase, IDisposable
         finally
         {
             // todo: do not create new class... manage existing collection
-            // TagsSearchResults = new ObservableCollection<StyledText>(TagsSearchResults.OrderByDescending(item => item.Score));
+            TagsSearchResults = new ObservableCollection<HighlightedMatch>(TagsSearchResults.OrderByDescending(item => item.Score));
         }
     }
 
-    private static List<FormattedTextStyleSpan> FindSpans(string tagName, IReadOnlyCollection<HighlightInfo> highlightInfos)
+    private static InlineCollection FindSpans(string tagName, IReadOnlyCollection<HighlightInfo> highlightInfos)
     {
-        var spans = new List<FormattedTextStyleSpan>();
+        var inlines = new InlineCollection();
 
         var lastIndex = 0;
         var index = 0;
@@ -100,7 +98,7 @@ public class TabContentViewModel : ViewModelBase, IDisposable
         {
             if (lastIndex == index) return;
 
-            // formattedText.Spans.Add(new Span<> { Text = tagName[lastIndex..index] });
+            inlines.Add(new Run { Text = tagName[lastIndex..index] });
         }
 
         while (index < tagName.Length)
@@ -115,56 +113,16 @@ public class TabContentViewModel : ViewModelBase, IDisposable
             {
                 FlushNotHighlighted();
 
-                // var span = new FormattedTextStyleSpan(index, highlightedPart.Length, new LinearGradientBrush());
-                // spans.Add(span);
+                var endIndex = index + highlightedPart.Length;
+                inlines.Add(new Run { Text = tagName[index..endIndex], Background = Brushes.DarkSeaGreen });
 
-                index += highlightedPart.Length;
+                index = endIndex;
                 lastIndex = index;
             }
         }
 
         FlushNotHighlighted();
-        return spans;
-    }
-
-    private static FormattedText HighlightText(string tagName, IReadOnlyCollection<HighlightInfo> highlightInfos)
-    {
-        var spans = new List<FormattedTextStyleSpan>();
-
-        var lastIndex = 0;
-        var index = 0;
-
-        void FlushNotHighlighted()
-        {
-            if (lastIndex == index) return;
-
-            // formattedText.Spans.Add(new Span<> { Text = tagName[lastIndex..index] });
-        }
-
-        while (index < tagName.Length)
-        {
-            var highlightedPart = highlightInfos.FirstOrDefault(info => info.StartIndex == index);
-
-            if (highlightedPart is null)
-            {
-                index++;
-            }
-            else
-            {
-                FlushNotHighlighted();
-
-                // var span = new FormattedTextStyleSpan(index, highlightedPart.Length, new LinearGradientBrush());
-                // spans.Add(span);
-
-                index += highlightedPart.Length;
-                lastIndex = index;
-            }
-        }
-
-        FlushNotHighlighted();
-
-        var formattedText = new FormattedText { Text = tagName, Spans = spans };
-        return formattedText;
+        return inlines;
     }
 
     public void Dispose()
