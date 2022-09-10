@@ -28,15 +28,9 @@ public class TabContentViewModel : ViewModelBase, IDisposable
 
         this.WhenAnyValue(x => x.SearchText)
             .Where(x => !string.IsNullOrWhiteSpace(x))
-            .Throttle(TimeSpan.FromMilliseconds(400))
+            .Throttle(TimeSpan.FromMilliseconds(100))
             .ObserveOn(RxApp.MainThreadScheduler)
             .Subscribe(DoSearch!);
-
-        var run = new Run { Text = "text", Background = Brushes.DarkSeaGreen };
-
-        TagsSearchResults.Add(new HighlightedMatch { MatchedText = "texttexttex", Inlines = new InlineCollection { run } });
-        TagsSearchResults.Add(new HighlightedMatch { MatchedText = "texttexttex", Inlines = new InlineCollection { run } });
-        TagsSearchResults.Add(new HighlightedMatch { MatchedText = "texttexttex", Inlines = new InlineCollection { run } });
     }
 
     private readonly TagSearchService.TagSearchServiceClient _tagSearchServiceClient;
@@ -83,7 +77,7 @@ public class TabContentViewModel : ViewModelBase, IDisposable
         finally
         {
             // todo: do not create new class... manage existing collection
-            TagsSearchResults = new ObservableCollection<HighlightedMatch>(TagsSearchResults.OrderByDescending(item => item.Score));
+            // TagsSearchResults = new ObservableCollection<HighlightedMatch>(TagsSearchResults.OrderByDescending(item => item.Score));
         }
     }
 
