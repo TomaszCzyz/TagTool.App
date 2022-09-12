@@ -1,0 +1,71 @@
+﻿<Styles
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <Design.PreviewWith>
+        <Border Padding="20">
+            <StackPanel>
+                <AutoCompleteBox Classes="wrapped" />
+                <AutoCompleteBox Classes="wrapped" />
+            </StackPanel>
+        </Border>
+    </Design.PreviewWith>
+
+    <Style Selector="AutoCompleteBox.wrapped">
+        <Setter Property="Background" Value="Transparent" />
+        <!-- <Setter Property="BorderBrush" Value="{DynamicResource MaterialDesignTextBoxBorder}" /> -->
+        <!-- <Setter Property="BorderThickness" Value="1 1 1 2" /> -->
+        <Setter Property="BorderThickness" Value="1" />
+        <Setter Property="Padding" Value="4" />
+        <Setter Property="Template">
+            <ControlTemplate>
+                <Panel>
+                    <TextBox
+                        Name="PART_TextBox"
+                        Background="{TemplateBinding Background}"
+                        BorderBrush="{TemplateBinding BorderBrush}"
+                        BorderThickness="{TemplateBinding BorderThickness}"
+                        Padding="{TemplateBinding Padding}"
+                        Watermark="{TemplateBinding Watermark}"
+                        DataValidationErrors.Errors="{TemplateBinding (DataValidationErrors.Errors)}" />
+
+                    <Popup
+                        Name="PART_Popup"
+                        MinWidth="{Binding Bounds.Width, RelativeSource={RelativeSource TemplatedParent}}"
+                        MaxHeight="{TemplateBinding MaxDropDownHeight}"
+                        PlacementTarget="{TemplateBinding}"
+                        IsLightDismissEnabled="True">
+
+                        <Border
+                            BorderBrush="{DynamicResource MaterialDesignTextAreaBorder}"
+                            BorderThickness="1">
+
+                            <ListBox
+                                Name="PART_SelectingItemsControl"
+                                BorderThickness="0"
+                                Background="{TemplateBinding Background}"
+                                Foreground="{TemplateBinding Foreground}"
+                                ItemTemplate="{TemplateBinding ItemTemplate}"
+                                ScrollViewer.HorizontalScrollBarVisibility="Auto"
+                                ScrollViewer.VerticalScrollBarVisibility="Auto">
+                                <ListBox.ItemsPanel>
+                                    <ItemsPanelTemplate>
+                                        <WrapPanel />
+                                    </ItemsPanelTemplate>
+                                </ListBox.ItemsPanel>
+                            </ListBox>
+                        </Border>
+                    </Popup>
+                </Panel>
+            </ControlTemplate>
+        </Setter>
+    </Style>
+    <Style Selector="AutoCompleteBox">
+        <Setter Property="ListBox.ItemsPanel">
+            <ItemsPanelTemplate>
+                <WrapPanel />
+            </ItemsPanelTemplate>
+        </Setter>
+    </Style>
+
+</Styles>

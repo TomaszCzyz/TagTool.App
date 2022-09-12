@@ -8,12 +8,11 @@
         <local:ViewLocator />
     </Application.DataTemplates>
 
-    <!-- <Application.Styles> -->
-    <!--     <StyleInclude Source="avares://Avalonia.Themes.Default/DefaultTheme.xaml" /> -->
-    <!--     <StyleInclude Source="avares://Material.Icons.Avalonia/App.xaml" /> -->
-    <!--     <themes:MaterialTheme BaseTheme="Light" PrimaryColor="Purple" SecondaryColor="Lime" /> -->
-    <!-- </Application.Styles> -->
     <Application.Styles>
         <FluentTheme Mode="Dark" />
+        <!--     <themes:MaterialTheme BaseTheme="Light" PrimaryColor="Purple" SecondaryColor="Lime" /> -->
+        <StyleInclude Source="avares://Material.Icons.Avalonia/App.xaml" />
+        <StyleInclude Source="/Views/TemplatedControls/TagChip.axaml" />
+        <StyleInclude Source="/Views/TemplatedControls/AutoCompleteBox.axaml" />
     </Application.Styles>
 </Application>

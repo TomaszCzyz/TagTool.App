@@ -5,6 +5,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:viewModels="clr-namespace:TagTool.App.ViewModels"
     xmlns:models="clr-namespace:TagTool.App.Core.Models;assembly=TagTool.App.Core"
+    xmlns:templatedControls="clr-namespace:TagTool.App.Views.TemplatedControls"
     mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
     x:Class="TagTool.App.Views.TabContentView">
 
@@ -13,7 +14,7 @@
     </Design.DataContext>
 
     <Grid
-        ColumnDefinitions="400"
+        ColumnDefinitions="450"
         RowDefinitions="Auto,Auto,*,*"
         Margin="4">
 
@@ -24,6 +25,7 @@
 
         <Panel Grid.Row="1">
             <AutoCompleteBox
+                Classes="wrapped"
                 Name="AutoCompleteBox"
                 FilterMode="None"
                 IsTextCompletionEnabled="True"
@@ -35,7 +37,10 @@
                 Items="{Binding TagsSearchResults}">
                 <AutoCompleteBox.ItemTemplate>
                     <DataTemplate x:DataType="models:HighlightedMatch">
-                        <RichTextBlock
+                        <!-- <RichTextBlock -->
+                        <!--     Text="{Binding MatchedText}" -->
+                        <!--     Inlines="{Binding Inlines}" /> -->
+                        <templatedControls:TagChip
                             Text="{Binding MatchedText}"
                             Inlines="{Binding Inlines}" />
 
@@ -53,18 +58,6 @@
             <ListBoxItem>
                 <TextBox Text="Item1" />
             </ListBoxItem>
-        </ListBox>
-        <ListBox Grid.Row="3">
-            <ListBox Items="{Binding TagsSearchResults, Mode=TwoWay}">
-                <ListBox.ItemTemplate>
-                    <DataTemplate>
-                        <RichTextBlock
-                            Text="{Binding MatchedText}"
-                            Inlines="{Binding Inlines}" />
-
-                    </DataTemplate>
-                </ListBox.ItemTemplate>
-            </ListBox>
         </ListBox>
     </Grid>
 

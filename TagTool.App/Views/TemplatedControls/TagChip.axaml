@@ -1,0 +1,77 @@
+﻿<Styles
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:controls="using:TagTool.App.Views.TemplatedControls"
+    xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia">
+
+    <Design.PreviewWith>
+        <StackPanel Margin="20">
+            <controls:TagChip />
+            <controls:TagChip Text="Test" IsDeletable="False" />
+            <controls:TagChip />
+
+        </StackPanel>
+    </Design.PreviewWith>
+
+    <Style Selector="controls|TagChip">
+        <Setter Property="Height" Value="32" />
+        <Setter Property="HorizontalAlignment" Value="Center" />
+        <Setter Property="FontSize" Value="13" />
+        <Setter Property="Background" Value="#137788" />
+        <Setter Property="Margin" Value="4" />
+        <Setter Property="BorderThickness" Value="1" />
+        <Setter Property="BorderBrush" Value="Blue" />
+        <Setter Property="Template">
+            <ControlTemplate>
+                <Grid ColumnDefinitions="*,Auto">
+                    <Border
+                        Grid.ColumnSpan="2"
+                        CornerRadius="16"
+                        Background="{TemplateBinding Background}"
+                        BorderBrush="{TemplateBinding BorderBrush}"
+                        BorderThickness="{TemplateBinding BorderThickness}"
+                        Opacity="0.5" />
+
+
+                    <RichTextBlock
+                        Grid.Column="0"
+                        x:Name="RichTextBlock"
+                        Text="{TemplateBinding Text}"
+                        Inlines="{TemplateBinding Inlines}"
+                        IsTabStop="False"
+                        VerticalAlignment="Center"
+                        Margin="8 0 8 0" />
+
+                    <Button
+                        Grid.Column="1"
+                        IsVisible="{TemplateBinding IsDeletable}"
+                        Margin="0 0 8 0"
+                        VerticalAlignment="Center"
+                        Width="16"
+                        Height="16">
+                        <Button.Template>
+                            <ControlTemplate>
+                                <Panel>
+                                    <Ellipse
+                                        x:Name="Bg"
+                                        Fill="#FFA6A6A6"
+                                        Stroke="#FF009587"
+                                        StrokeThickness="0" />
+
+                                    <avalonia:MaterialIcon
+                                        Kind="Close"
+                                        Width="12"
+                                        Height="12"
+                                        HorizontalAlignment="Center"
+                                        VerticalAlignment="Center" />
+
+                                </Panel>
+                            </ControlTemplate>
+                        </Button.Template>
+                    </Button>
+                </Grid>
+            </ControlTemplate>
+        </Setter>
+    </Style>
+
+</Styles>

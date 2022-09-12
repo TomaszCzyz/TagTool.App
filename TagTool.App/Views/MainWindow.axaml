@@ -18,16 +18,16 @@
     </Design.DataContext>
 
     <DockPanel>
-        <ExperimentalAcrylicBorder IsHitTestVisible="False">
-            <ExperimentalAcrylicBorder.Material>
-                <ExperimentalAcrylicMaterial
-                    BackgroundSource="Digger"
-                    TintColor="Black"
-                    TintOpacity="1"
-                    MaterialOpacity="0.65" />
-
-            </ExperimentalAcrylicBorder.Material>
-        </ExperimentalAcrylicBorder>
+        <!-- <ExperimentalAcrylicBorder IsHitTestVisible="False"> -->
+        <!--     <ExperimentalAcrylicBorder.Material> -->
+        <!--         <ExperimentalAcrylicMaterial -->
+        <!--             BackgroundSource="Digger" -->
+        <!--             TintColor="Black" -->
+        <!--             TintOpacity="1" -->
+        <!--             MaterialOpacity="0.65" /> -->
+        <!-- -->
+        <!--     </ExperimentalAcrylicBorder.Material> -->
+        <!-- </ExperimentalAcrylicBorder> -->
 
         <Menu DockPanel.Dock="Top">
             <MenuItem Classes="" Header="_File">
