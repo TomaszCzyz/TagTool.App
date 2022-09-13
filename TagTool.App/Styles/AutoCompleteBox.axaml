@@ -13,9 +13,8 @@
 
     <Style Selector="AutoCompleteBox.wrapped">
         <Setter Property="Background" Value="Transparent" />
-        <!-- <Setter Property="BorderBrush" Value="{DynamicResource MaterialDesignTextBoxBorder}" /> -->
-        <!-- <Setter Property="BorderThickness" Value="1 1 1 2" /> -->
-        <Setter Property="BorderThickness" Value="1" />
+        <Setter Property="BorderBrush" Value="{DynamicResource MaterialDesignTextBoxBorder}" />
+        <Setter Property="BorderThickness" Value="0 0 0 1" />
         <Setter Property="Padding" Value="4" />
         <Setter Property="Template">
             <ControlTemplate>
@@ -42,12 +41,14 @@
 
                             <ListBox
                                 Name="PART_SelectingItemsControl"
+                                MaxWidth="350"
                                 BorderThickness="0"
                                 Background="{TemplateBinding Background}"
                                 Foreground="{TemplateBinding Foreground}"
+                                HorizontalAlignment="Center"
                                 ItemTemplate="{TemplateBinding ItemTemplate}"
-                                ScrollViewer.HorizontalScrollBarVisibility="Auto"
-                                ScrollViewer.VerticalScrollBarVisibility="Auto">
+                                ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                                ScrollViewer.VerticalScrollBarVisibility="Disabled">
                                 <ListBox.ItemsPanel>
                                     <ItemsPanelTemplate>
                                         <WrapPanel />
@@ -58,13 +59,6 @@
                     </Popup>
                 </Panel>
             </ControlTemplate>
-        </Setter>
-    </Style>
-    <Style Selector="AutoCompleteBox">
-        <Setter Property="ListBox.ItemsPanel">
-            <ItemsPanelTemplate>
-                <WrapPanel />
-            </ItemsPanelTemplate>
         </Setter>
     </Style>
 

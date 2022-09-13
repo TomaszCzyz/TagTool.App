@@ -19,7 +19,7 @@
     <PackageReference Include="Avalonia.Desktop" Version="11.0.0-preview1" />
     <PackageReference Include="Avalonia.ReactiveUI" Version="11.0.0-preview1" />
     <PackageReference Include="Avalonia.Themes.Fluent" Version="11.0.0-preview1" />
-<!--    <PackageReference Include="Material.Avalonia" Version="3.0.0-rc0.99-nightly" />-->
+    <PackageReference Include="Material.Avalonia" Version="3.0.1-alpha2" />
     <PackageReference Include="Material.Icons.Avalonia" Version="1.2.0" />
     <PackageReference Include="Serilog.Sinks.SQLite" Version="5.5.0" />
     <PackageReference Include="Splat.Serilog" Version="14.4.1" />
@@ -37,7 +37,6 @@
   <ItemGroup>
     <Folder Include="Models\" />
     <AvaloniaResource Include="Assets\**" />
-    <Folder Include="Views\UserControls" />
     <None Remove=".gitignore" />
   </ItemGroup>
 
@@ -55,4 +54,5 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
   </ItemGroup>
+
 </Project>

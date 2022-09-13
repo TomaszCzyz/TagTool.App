@@ -8,7 +8,7 @@ public class HighlightedMatch
 {
     public string MatchedText { get; set; } = "default";
 
-    public InlineCollection Inlines { get; set; } = null!;
+    public InlineCollection? Inlines { get; set; }
 
     public int Score { get; init; }
 

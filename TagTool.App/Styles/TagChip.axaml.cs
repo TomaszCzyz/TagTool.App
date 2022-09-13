@@ -1,31 +1,32 @@
 ﻿using System.Windows.Input;
 using Avalonia;
-using Avalonia.Controls;
 using Avalonia.Controls.Documents;
-using Avalonia.Controls.Metadata;
 using Avalonia.Controls.Primitives;
 using Avalonia.Media;
 
-namespace TagTool.App.Views.TemplatedControls;
+namespace TagTool.App.Styles;
 
-[TemplatePart(Name = DeleteButtonPartName, Type = typeof(Button))]
+// [TemplatePart(Name = DeleteButtonPartName, Type = typeof(Button))]
 public class TagChip : TemplatedControl
 {
-    public const string DeleteButtonPartName = "PART_DeleteButton";
+    // public const string DeleteButtonPartName = "PART_DeleteButton";
 
     // private ButtonBase? _deleteButton;
 
-    private static readonly InlineCollection _exampleInlineCollection = new();
-
-    static TagChip()
+    private readonly InlineCollection _exampleInlineCollection = new();
+    //
+    public TagChip()
     {
-        _exampleInlineCollection.Add(new Run { Text = "Text" });
-        _exampleInlineCollection.Add(new Run { Text = "Text", Background = Brushes.DarkSeaGreen });
-        _exampleInlineCollection.Add(new Run { Text = "Text" });
+        Inlines = new InlineCollection
+        {
+            new Run { Text = "Text" },
+            new Run { Text = "Text", Background = Brushes.DarkSeaGreen },
+            new Run { Text = "Text" }
+        };
     }
 
-    public static readonly StyledProperty<InlineCollection> InlinesProperty
-        = AvaloniaProperty.Register<TagChip, InlineCollection>(nameof(Inlines), _exampleInlineCollection);
+    public static readonly StyledProperty<InlineCollection?> InlinesProperty
+        = AvaloniaProperty.Register<TagChip, InlineCollection?>(nameof(Inlines));
 
     public static readonly StyledProperty<string> TextProperty
         = AvaloniaProperty.Register<TagChip, string>(nameof(Text), "DefaultTagText");
@@ -42,7 +43,7 @@ public class TagChip : TemplatedControl
     public static readonly StyledProperty<object?> DeleteCommandParameterProperty = AvaloniaProperty.Register<TagChip, object?>(
         nameof(DeleteCommandParameter));
 
-    public InlineCollection Inlines
+    public InlineCollection? Inlines
     {
         get => GetValue(InlinesProperty);
         set => SetValue(InlinesProperty, value);

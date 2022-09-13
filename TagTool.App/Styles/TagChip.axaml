@@ -1,19 +1,50 @@
 ﻿<Styles
     xmlns="https://github.com/avaloniaui"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:controls="using:TagTool.App.Views.TemplatedControls"
-    xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia">
+    xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+    xmlns:styles="clr-namespace:TagTool.App.Styles">
 
     <Design.PreviewWith>
         <StackPanel Margin="20">
-            <controls:TagChip />
-            <controls:TagChip Text="Test" IsDeletable="False" />
-            <controls:TagChip />
+            <styles:TagChip />
+            <styles:TagChip Text="Test" IsDeletable="True" />
+            <styles:TagChip Text="Test" IsDeletable="False" />
+            <styles:TagChip Text="Test" IsDeletable="False" />
+            <!-- <controls:TagChip Classes="test" Text="Test" IsDeletable="False"> -->
+            <!--     <controls:TagChip.Inlines> -->
+            <!--         <Run FontStyle="Italic" FontSize="14" Text="ssssqwe"></Run> -->
+            <!--     </controls:TagChip.Inlines> -->
+            <!-- </controls:TagChip> -->
+            
+            <!-- <controls:TagChip Foreground="Red"> -->
+            <!--     <controls:TagChip.Inlines> -->
+            <!--         <Run FontStyle="Italic" FontSize="14" Text="ssssqwe"></Run> -->
+            <!--     </controls:TagChip.Inlines> -->
+            <!-- </controls:TagChip> -->
 
         </StackPanel>
     </Design.PreviewWith>
 
-    <Style Selector="controls|TagChip">
+    <Style Selector="styles|TagChip.test">
+        <Setter Property="FontSize" Value="13" />
+        <Setter Property="Background" Value="#5317d8" />
+        <Setter Property="Margin" Value="4" />
+        <Setter Property="Template">
+            <ControlTemplate>
+                <RichTextBlock
+                    Inlines="{TemplateBinding Inlines}"
+                    Text="{TemplateBinding Text}"
+                    VerticalAlignment="Center"
+                    Margin="8 0 8 0">
+
+                    <!-- <Span Inlines="{TemplateBinding Inlines}" /> -->
+                    <Run FontStyle="Italic" FontSize="20" Text="asdxcxcxcxcasd"></Run>
+                </RichTextBlock>
+            </ControlTemplate>
+        </Setter>
+    </Style>
+
+    <Style Selector="styles|TagChip">
         <Setter Property="Height" Value="32" />
         <Setter Property="HorizontalAlignment" Value="Center" />
         <Setter Property="FontSize" Value="13" />
@@ -21,6 +52,11 @@
         <Setter Property="Margin" Value="4" />
         <Setter Property="BorderThickness" Value="1" />
         <Setter Property="BorderBrush" Value="Blue" />
+        <!-- <Setter Property="Inlines"> -->
+        <!--     <Setter.Value> -->
+        <!--         <Run FontWeight="Bold" FontStyle="Italic" Text="asdads"></Run> -->
+        <!--     </Setter.Value> -->
+        <!-- </Setter> -->
         <Setter Property="Template">
             <ControlTemplate>
                 <Grid ColumnDefinitions="*,Auto">
@@ -32,15 +68,16 @@
                         BorderThickness="{TemplateBinding BorderThickness}"
                         Opacity="0.5" />
 
-
                     <RichTextBlock
                         Grid.Column="0"
-                        x:Name="RichTextBlock"
-                        Text="{TemplateBinding Text}"
                         Inlines="{TemplateBinding Inlines}"
+                        Text="{TemplateBinding Text}"
                         IsTabStop="False"
                         VerticalAlignment="Center"
-                        Margin="8 0 8 0" />
+                        Margin="8 0 8 0">
+
+                        <!-- <Run FontStyle="Italic" FontSize="20" Text="asdasd"></Run> -->
+                    </RichTextBlock>
 
                     <Button
                         Grid.Column="1"

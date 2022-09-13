@@ -5,7 +5,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:viewModels="clr-namespace:TagTool.App.ViewModels"
     xmlns:models="clr-namespace:TagTool.App.Core.Models;assembly=TagTool.App.Core"
-    xmlns:templatedControls="clr-namespace:TagTool.App.Views.TemplatedControls"
+    xmlns:styles="clr-namespace:TagTool.App.Styles"
     mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
     x:Class="TagTool.App.Views.TabContentView">
 
@@ -19,8 +19,8 @@
         Margin="4">
 
         <StackPanel Orientation="Horizontal">
-            <Button Content="AddFav1" />
-            <Button Content="AddFav2" />
+            <Button Classes="addTag" />
+            <Button Classes="deleteTag" />
         </StackPanel>
 
         <Panel Grid.Row="1">
@@ -35,17 +35,19 @@
                 Watermark="Enter Tag name"
                 Margin="8"
                 Items="{Binding TagsSearchResults}">
-                <AutoCompleteBox.ItemTemplate>
+                <AutoCompleteBox.DataTemplates>
                     <DataTemplate x:DataType="models:HighlightedMatch">
-                        <!-- <RichTextBlock -->
-                        <!--     Text="{Binding MatchedText}" -->
-                        <!--     Inlines="{Binding Inlines}" /> -->
-                        <templatedControls:TagChip
-                            Text="{Binding MatchedText}"
-                            Inlines="{Binding Inlines}" />
-
+                        <StackPanel>
+                            <!-- <RichTextBlock -->
+                            <!--     Text="{Binding MatchedText}" -->
+                            <!--     Inlines="{Binding Inlines}" /> -->
+                            <styles:TagChip
+                                Text="{Binding MatchedText}"
+                                Inlines="{Binding Inlines}" />
+                
+                        </StackPanel>
                     </DataTemplate>
-                </AutoCompleteBox.ItemTemplate>
+                </AutoCompleteBox.DataTemplates>
             </AutoCompleteBox>
         </Panel>
         <ListBox Grid.Row="2">

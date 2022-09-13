@@ -1,0 +1,52 @@
+﻿<Styles
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia">
+
+    <Design.PreviewWith>
+        <Border Padding="20" Background="#c6c6c6">
+            <StackPanel Orientation="Horizontal">
+                <Button Classes="addTag" />
+                <Button Classes="addTag" Foreground="Green" />
+                <Line StartPoint="0,0" EndPoint="0,35" Stroke="Black" StrokeThickness="0.5" Margin="5,0,10,0" />
+                <Button Classes="deleteTag" />
+                <Line StartPoint="0,0" EndPoint="0,35" Stroke="Black" StrokeThickness="0.5" Margin="5,0,10,0" />
+                <Button Content="SomeContent" />
+            </StackPanel>
+        </Border>
+    </Design.PreviewWith>
+
+    <Style Selector="Button.addTag">
+        <Setter Property="Margin" Value="4" />
+        <Setter Property="Template">
+            <ControlTemplate>
+                <Panel>
+                    <avalonia:MaterialIcon
+                        Kind="NotePlus"
+                        Width="25"
+                        Height="25"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center" />
+
+                </Panel>
+            </ControlTemplate>
+        </Setter>
+    </Style>
+
+    <Style Selector="Button.deleteTag">
+        <Setter Property="Margin" Value="4" />
+        <Setter Property="Template">
+            <ControlTemplate>
+                <Panel>
+                    <avalonia:MaterialIcon
+                        Kind="NoteMinus"
+                        Width="25"
+                        Height="25"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center" />
+
+                </Panel>
+            </ControlTemplate>
+        </Setter>
+    </Style>
+</Styles>
