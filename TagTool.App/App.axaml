@@ -11,7 +11,8 @@
 
     <Application.Styles>
         <FluentTheme Mode="Dark" />
-        <themes:MaterialTheme BaseTheme="Dark" PrimaryColor="Purple" SecondaryColor="Lime" />
+        <StyleInclude Source="avares://Avalonia.Controls.DataGrid/Themes/Fluent.xaml"/>
+        <themes:MaterialTheme BaseTheme="Dark" PrimaryColor="Lime" SecondaryColor="Cyan" />
         <StyleInclude Source="avares://Material.Icons.Avalonia/App.xaml" />
         <StyleInclude Source="/Styles/TagChip.axaml" />
         <StyleInclude Source="/Styles/AutoCompleteBox.axaml" />

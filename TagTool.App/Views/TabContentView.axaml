@@ -3,10 +3,11 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:viewModels="clr-namespace:TagTool.App.ViewModels"
     xmlns:models="clr-namespace:TagTool.App.Core.Models;assembly=TagTool.App.Core"
+    xmlns:viewModels="clr-namespace:TagTool.App.ViewModels"
     xmlns:styles="clr-namespace:TagTool.App.Styles"
-    mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+    xmlns:userControls="clr-namespace:TagTool.App.UserControls"
+    mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="350"
     x:Class="TagTool.App.Views.TabContentView">
 
     <Design.DataContext>
@@ -14,26 +15,24 @@
     </Design.DataContext>
 
     <Grid
-        ColumnDefinitions="450"
-        RowDefinitions="Auto,Auto,*,*"
+        ColumnDefinitions="650"
+        RowDefinitions="Auto,Auto,*"
         Margin="4">
 
-        <StackPanel Orientation="Horizontal">
-            <Button Classes="addTag" />
+        <StackPanel
+            Grid.Row="0"
+            Orientation="Horizontal"
+            Height="35">
+
+            <userControls:AddTagButton />
             <Button Classes="deleteTag" />
         </StackPanel>
 
         <Panel Grid.Row="1">
             <AutoCompleteBox
                 Classes="wrapped"
-                Name="AutoCompleteBox"
-                FilterMode="None"
-                IsTextCompletionEnabled="True"
-                Text="{Binding SearchText}"
-                BorderBrush="{Binding $self.Foreground}"
-                BorderThickness="1"
                 Watermark="Enter Tag name"
-                Margin="8"
+                Text="{Binding SearchText}"
                 Items="{Binding TagsSearchResults}">
                 <AutoCompleteBox.DataTemplates>
                     <DataTemplate x:DataType="models:HighlightedMatch">
@@ -44,23 +43,26 @@
                             <styles:TagChip
                                 Text="{Binding MatchedText}"
                                 Inlines="{Binding Inlines}" />
-                
+
                         </StackPanel>
                     </DataTemplate>
                 </AutoCompleteBox.DataTemplates>
             </AutoCompleteBox>
         </Panel>
-        <ListBox Grid.Row="2">
-            <ListBoxItem>
-                <TextBox Text="Item1" />
-            </ListBoxItem>
-            <ListBoxItem>
-                <TextBox Text="Item1" />
-            </ListBoxItem>
-            <ListBoxItem>
-                <TextBox Text="Item1" />
-            </ListBoxItem>
-        </ListBox>
+        <Grid Grid.Row="2">
+            <DataGrid 
+                Name="MyDataGrid"
+                Items="{Binding Files}"
+                CanUserResizeColumns="True"
+                CanUserReorderColumns="True"
+                CanUserSortColumns="True"
+                AutoGenerateColumns="True">
+                <!-- <DataGrid.Columns> -->
+                <!--     <DataGridTextColumn Header="Forename"  Binding="{Binding SearchText}"/> -->
+                <!--     <DataGridTextColumn Header="Surname" Binding="{Binding LastName}" /> -->
+                <!-- </DataGrid.Columns> -->
+            </DataGrid>
+        </Grid>
     </Grid>
 
 </UserControl>

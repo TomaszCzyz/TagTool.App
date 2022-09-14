@@ -17,19 +17,8 @@
         <vm:MainWindowViewModel />
     </Design.DataContext>
 
-    <DockPanel>
-        <!-- <ExperimentalAcrylicBorder IsHitTestVisible="False"> -->
-        <!--     <ExperimentalAcrylicBorder.Material> -->
-        <!--         <ExperimentalAcrylicMaterial -->
-        <!--             BackgroundSource="Digger" -->
-        <!--             TintColor="Black" -->
-        <!--             TintOpacity="1" -->
-        <!--             MaterialOpacity="0.65" /> -->
-        <!-- -->
-        <!--     </ExperimentalAcrylicBorder.Material> -->
-        <!-- </ExperimentalAcrylicBorder> -->
-
-        <Menu DockPanel.Dock="Top">
+    <Grid RowDefinitions="Auto,Auto,*">
+        <Menu Grid.Row="0" Height="50">
             <MenuItem Classes="" Header="_File">
                 <MenuItem Header="_Open..." />
                 <Separator />
@@ -45,13 +34,18 @@
             </MenuItem>
         </Menu>
 
-        <local:ToolbarView DockPanel.Dock="Top" />
+        <local:ToolbarView Grid.Row="1" DockPanel.Dock="Top" />
 
-        <Panel>
-            <local:SearchTabsView />
-        </Panel>
+        <DockControl
+            Grid.Row="2" Grid.Column="0"
+            x:Name="DockControl"
+            Layout="{Binding Layout}"
+            Margin="4" />
 
+    </Grid>
 
-        <TextBlock Text="{Binding Greeting}" HorizontalAlignment="Center" VerticalAlignment="Center" />
-    </DockPanel>
+    <!-- <Panel> -->
+    <!--     <local:SearchTabsView /> -->
+    <!-- </Panel> -->
+
 </Window>

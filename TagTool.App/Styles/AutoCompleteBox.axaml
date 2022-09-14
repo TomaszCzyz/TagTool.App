@@ -16,6 +16,8 @@
         <Setter Property="BorderBrush" Value="{DynamicResource MaterialDesignTextBoxBorder}" />
         <Setter Property="BorderThickness" Value="0 0 0 1" />
         <Setter Property="Padding" Value="4" />
+        <Setter Property="FilterMode" Value="None"/>
+        <Setter Property="Margin" Value="4"/>
         <Setter Property="Template">
             <ControlTemplate>
                 <Panel>
@@ -41,19 +43,17 @@
 
                             <ListBox
                                 Name="PART_SelectingItemsControl"
-                                MaxWidth="350"
-                                BorderThickness="0"
+                                Classes="tags"
                                 Background="{TemplateBinding Background}"
                                 Foreground="{TemplateBinding Foreground}"
-                                HorizontalAlignment="Center"
                                 ItemTemplate="{TemplateBinding ItemTemplate}"
                                 ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                                 ScrollViewer.VerticalScrollBarVisibility="Disabled">
-                                <ListBox.ItemsPanel>
-                                    <ItemsPanelTemplate>
-                                        <WrapPanel />
-                                    </ItemsPanelTemplate>
-                                </ListBox.ItemsPanel>
+                                <ListBox.Styles>
+                                    <Style Selector="ListBoxItem">
+                                        <Setter Property="Padding" Value="2"></Setter>
+                                    </Style>
+                                </ListBox.Styles>
                             </ListBox>
                         </Border>
                     </Popup>

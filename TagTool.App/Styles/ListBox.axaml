@@ -1,0 +1,109 @@
+﻿<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:models="clr-namespace:TagTool.App.Core.Models;assembly=TagTool.App.Core"
+        xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia">
+
+    <Design.PreviewWith>
+        <Border Padding="20">
+            <StackPanel>
+                <TextBlock Text="asdasd" />
+                <ListBox
+                    Classes="tags"
+                    MaxWidth="300"
+                    Padding="0">
+
+                    <!-- <ListBox.ItemsPanel> -->
+                    <!--     <ItemsPanelTemplate> -->
+                    <!--         <WrapPanel /> -->
+                    <!--     </ItemsPanelTemplate> -->
+                    <!-- </ListBox.ItemsPanel> -->
+
+                    <ListBox.Styles>
+                        <Style Selector="ListBoxItem">
+                            <Setter Property="Padding" Value="2"></Setter>
+                        </Style>
+                    </ListBox.Styles>
+                    <ListBox.DataTemplates>
+                        <DataTemplate x:DataType="models:HighlightedMatch">
+                            <Grid ColumnDefinitions="*,Auto" Height="32">
+                                <Border
+                                    Grid.ColumnSpan="2"
+                                    CornerRadius="16"
+                                    ClipToBounds="True"
+                                    Background="#33a38a"
+                                    BorderBrush="Green"
+                                    BorderThickness="1"
+                                    Opacity="0.5" />
+
+                                <RichTextBlock
+                                    Grid.Column="0"
+                                    Inlines="{Binding Inlines}"
+                                    Text="{Binding MatchedText}"
+                                    IsTabStop="False"
+                                    VerticalAlignment="Center"
+                                    Margin="8 0 8 0" />
+
+                                <Button
+                                    Grid.Column="1"
+                                    IsVisible="True"
+                                    Margin="0 0 8 0"
+                                    VerticalAlignment="Center"
+                                    Width="16"
+                                    Height="16">
+                                    <Button.Template>
+                                        <ControlTemplate>
+                                            <Panel>
+                                                <Ellipse
+                                                    x:Name="Bg"
+                                                    Fill="#BBA6B656"
+                                                    Stroke="#FF009587"
+                                                    StrokeThickness="0" />
+
+                                                <avalonia:MaterialIcon
+                                                    Kind="Close"
+                                                    Width="12"
+                                                    Height="12"
+                                                    HorizontalAlignment="Center"
+                                                    VerticalAlignment="Center" />
+
+                                            </Panel>
+                                        </ControlTemplate>
+                                    </Button.Template>
+                                </Button>
+                            </Grid>
+                        </DataTemplate>
+                    </ListBox.DataTemplates>
+                    <ListBox.Items>
+                        <models:HighlightedMatch MatchedText="Tag1" />
+                        <models:HighlightedMatch MatchedText="Wag2" />
+                        <models:HighlightedMatch MatchedText="tag3" />
+                        <models:HighlightedMatch MatchedText="tagggggggg4" />
+                        <models:HighlightedMatch MatchedText="tag5" />
+                        <models:HighlightedMatch MatchedText="taggggggg7" />
+                        <models:HighlightedMatch MatchedText="tagg8" />
+                        <models:HighlightedMatch MatchedText="taggg9" />
+                        <models:HighlightedMatch MatchedText="tag0" />
+                        <models:HighlightedMatch MatchedText="tag6" />
+                    </ListBox.Items>
+                </ListBox>
+
+            </StackPanel>
+
+        </Border>
+    </Design.PreviewWith>
+
+    <Style Selector="ListBox.tags">
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="BorderBrush" Value="{DynamicResource MaterialDesignTextBoxBorder}" />
+        <Setter Property="BorderThickness" Value="0" />
+        <Setter Property="Padding" Value="4" />
+        <Setter Property="MaxWidth" Value="{Binding Bounds.Width, RelativeSource={RelativeSource TemplatedParent}}" />
+        <Setter Property="ItemsPanel">
+            <Setter.Value>
+                <ItemsPanelTemplate>
+                    <WrapPanel />
+                </ItemsPanelTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+</Styles>

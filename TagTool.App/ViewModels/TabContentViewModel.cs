@@ -2,16 +2,20 @@
 using System.Reactive.Linq;
 using Avalonia.Controls.Documents;
 using Avalonia.Media;
+using DynamicData;
 using Grpc.Core;
 using ReactiveUI;
 using Splat;
 using TagTool.App.Core.Models;
 using TagTool.Backend;
+using File = TagTool.App.Models.File;
 
 namespace TagTool.App.ViewModels;
 
 public class TabContentViewModel : ViewModelBase, IDisposable
 {
+    public ObservableCollection<File> Files { get; set; } = new();
+
     public ObservableCollection<HighlightedMatch> TagsSearchResults { get; set; } = new();
 
     private string? _searchText;
@@ -24,6 +28,8 @@ public class TabContentViewModel : ViewModelBase, IDisposable
 
     public TabContentViewModel()
     {
+        Files.AddRange(_exampleFiles);
+
         _tagSearchServiceClient = Locator.Current.GetService<TagSearchService.TagSearchServiceClient>()!;
 
         this.WhenAnyValue(x => x.SearchText)
@@ -34,6 +40,7 @@ public class TabContentViewModel : ViewModelBase, IDisposable
     }
 
     private readonly TagSearchService.TagSearchServiceClient _tagSearchServiceClient;
+
     private CancellationTokenSource? _cts;
 
     private async void DoSearch(string value)
@@ -124,4 +131,24 @@ public class TabContentViewModel : ViewModelBase, IDisposable
         _cts?.Dispose();
         GC.SuppressFinalize(this);
     }
+
+    private readonly File[] _exampleFiles =
+    {
+        new(1, "File1", 1234, new DateTime(2022, 12, 12), null, @"C:\Program Files"),
+        new(1, "File1", 1234, new DateTime(2022, 12, 12), null, @"C:\Program Files"),
+        new(1, "File1", 1234, new DateTime(2022, 12, 12), null, @"C:\Program Files"),
+        new(1, "File1", 1234, new DateTime(2022, 12, 12), null, @"C:\Program Files"),
+        new(1, "File1", 1234, new DateTime(2022, 12, 12), null, @"C:\Program Files"),
+        new(1, "File1", 1234, new DateTime(2022, 12, 12), null, @"C:\Program Files"),
+        new(1, "File1", 1234, new DateTime(2022, 12, 12), null, @"C:\Program Files"),
+        new(1, "File1", 1234, new DateTime(2022, 12, 12), null, @"C:\Program Files"),
+        new(1, "File1", 1234, new DateTime(2022, 12, 12), null, @"C:\Program Files"),
+        new(1, "File1", 1234, new DateTime(2022, 12, 12), null, @"C:\Program Files"),
+        new(1, "File1", 1234, new DateTime(2022, 12, 12), null, @"C:\Program Files"),
+        new(1, "File1", 1234, new DateTime(2022, 12, 12), null, @"C:\Program Files"),
+        new(2, "File2", 1234, new DateTime(1999, 1, 1), null, @"C:\Users\tczyz\Source\repos\LayersTraversing"),
+        new(3, "File3", 144234, new DateTime(2022, 2, 12), null, @"C:\Program Files"),
+        new(4, "FileFile4", 13234, new DateTime(202, 12, 30), null, @"C:\Users\tczyz\Source"),
+        new(5, "File5", 122334, new DateTime(1990, 12, 30), null, @"C:\Users\tczyz\Source\repos\LayersTraversing\file.txt")
+    };
 }
