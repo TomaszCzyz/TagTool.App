@@ -1,11 +1,12 @@
-﻿using Avalonia.Controls;
+﻿using Avalonia;
+using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
 
 namespace TagTool.App.Views;
 
-public partial class SearchTabsView : UserControl
+public partial class MenuView : UserControl
 {
-    public SearchTabsView()
+    public MenuView()
     {
         InitializeComponent();
     }
@@ -15,3 +16,4 @@ public partial class SearchTabsView : UserControl
         AvaloniaXamlLoader.Load(this);
     }
 }
+

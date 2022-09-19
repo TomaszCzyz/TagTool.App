@@ -18,24 +18,8 @@
     </Design.DataContext>
 
     <Grid RowDefinitions="Auto,Auto,*">
-        <Menu Grid.Row="0" Height="50">
-            <MenuItem Classes="" Header="_File">
-                <MenuItem Header="_Open..." />
-                <Separator />
-                <MenuItem Header="_Exit" />
-            </MenuItem>
-            <MenuItem Header="_Edit">
-                <MenuItem Header="Copy">
-                    <MenuItem Header="Nested">
-                        <MenuItem Header="Nested2" />
-                    </MenuItem>
-                    <MenuItem Header="Paste" />
-                </MenuItem>
-            </MenuItem>
-        </Menu>
-
+        <local:MenuView Height="50" />
         <local:ToolbarView Grid.Row="1" DockPanel.Dock="Top" />
-
         <DockControl
             Grid.Row="2" Grid.Column="0"
             x:Name="DockControl"
@@ -43,9 +27,4 @@
             Margin="4" />
 
     </Grid>
-
-    <!-- <Panel> -->
-    <!--     <local:SearchTabsView /> -->
-    <!-- </Panel> -->
-
 </Window>
