@@ -1,5 +1,4 @@
-﻿using System.Text;
-using Dock.Model.ReactiveUI.Controls;
+﻿using Dock.Model.ReactiveUI.Controls;
 using ReactiveUI;
 
 namespace TagTool.App.ViewModels.Docks;
@@ -18,12 +17,17 @@ public class FilesDocumentDock : DocumentDock
             return;
         }
 
-        var document = new FileViewModel
+        // var document = new FileViewModel
+        // {
+        //     Path = string.Empty,
+        //     Title = "Untitled",
+        //     Text = "",
+        //     Encoding = Encoding.Default.WebName
+        // };
+
+        var document = new TabContentViewModel
         {
-            Path = string.Empty,
-            Title = "Untitled",
-            Text = "",
-            Encoding = Encoding.Default.WebName
+            Title = "Untitled"
         };
 
         Factory?.AddDockable(this, document);

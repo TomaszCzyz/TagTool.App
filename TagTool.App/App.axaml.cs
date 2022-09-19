@@ -15,9 +15,17 @@ public class App : Application
 
     public override void OnFrameworkInitializationCompleted()
     {
-        if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
+        var mainWindowViewModel = new MainWindowViewModel();
+
+        if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktopLifetime)
         {
-            desktop.MainWindow = new MainWindow { DataContext = new MainWindowViewModel() };
+            var mainWindow = new MainWindow { DataContext = new MainWindowViewModel() };
+
+            mainWindow.Closing += (_, _) => mainWindowViewModel.CloseLayout();
+
+            desktopLifetime.MainWindow = mainWindow;
+
+            desktopLifetime.Exit += (_, _) => mainWindowViewModel.CloseLayout();
         }
 
         base.OnFrameworkInitializationCompleted();

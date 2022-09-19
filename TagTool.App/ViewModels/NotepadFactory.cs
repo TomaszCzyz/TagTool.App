@@ -25,6 +25,11 @@ public class NotepadFactory : Factory
             Encoding = Encoding.Default.WebName
         };
 
+        var untitledTabContentViewModel = new TabContentViewModel
+        {
+            Title = "Untitled"
+        };
+
         var documentDock = new FilesDocumentDock
         {
             Id = "Files",
@@ -34,7 +39,8 @@ public class NotepadFactory : Factory
             ActiveDockable = untitledFileViewModel,
             VisibleDockables = CreateList<IDockable>
             (
-                untitledFileViewModel
+                untitledFileViewModel,
+                untitledTabContentViewModel
             ),
             CanCreateDocument = true
         };
@@ -43,9 +49,7 @@ public class NotepadFactory : Factory
         {
             Proportion = 0.2,
             Orientation = Orientation.Vertical,
-            VisibleDockables = CreateList<IDockable>
-            (
-            )
+            VisibleDockables = CreateList<IDockable>()
         };
 
         var windowLayout = CreateRootDock();
@@ -82,11 +86,7 @@ public class NotepadFactory : Factory
     {
         ContextLocator = new Dictionary<string, Func<object>> { ["Find"] = () => layout, ["Replace"] = () => layout };
 
-        DockableLocator = new Dictionary<string, Func<IDockable?>>
-        {
-            ["Root"] = () => _rootDock,
-            ["Files"] = () => _documentDock
-        };
+        DockableLocator = new Dictionary<string, Func<IDockable?>> { ["Root"] = () => _rootDock, ["Files"] = () => _documentDock };
 
         HostWindowLocator = new Dictionary<string, Func<IHostWindow>> { [nameof(IDockWindow)] = () => new HostWindow() };
 

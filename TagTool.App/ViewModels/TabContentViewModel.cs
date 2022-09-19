@@ -2,6 +2,7 @@
 using System.Reactive.Linq;
 using Avalonia.Controls.Documents;
 using Avalonia.Media;
+using Dock.Model.ReactiveUI.Controls;
 using DynamicData;
 using Grpc.Core;
 using ReactiveUI;
@@ -12,7 +13,7 @@ using File = TagTool.App.Models.File;
 
 namespace TagTool.App.ViewModels;
 
-public class TabContentViewModel : ViewModelBase, IDisposable
+public class TabContentViewModel : Document, IDisposable
 {
     public ObservableCollection<File> Files { get; set; } = new();
 
