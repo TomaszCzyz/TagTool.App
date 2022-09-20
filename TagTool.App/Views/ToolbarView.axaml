@@ -6,9 +6,9 @@
     mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="50"
     x:Class="TagTool.App.Views.ToolbarView">
 
-    <StackPanel Orientation="Horizontal">
-        <Button>AddTag</Button>
-        <Button>AddSearchTab</Button>
-        <Button>AddNote</Button>
+    <StackPanel Orientation="Horizontal" >
+        <Button Content="AddTag" />
+        <Button Content="AddSearchTab" />
+        <Button Content="AddNote" />
     </StackPanel>
 </UserControl>

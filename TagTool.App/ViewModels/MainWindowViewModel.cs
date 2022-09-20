@@ -6,7 +6,6 @@ namespace TagTool.App.ViewModels;
 
 public class MainWindowViewModel : ReactiveObject
 {
-    private readonly IFactory? _factory;
     private IRootDock? _layout;
 
     public IRootDock? Layout
@@ -17,12 +16,12 @@ public class MainWindowViewModel : ReactiveObject
 
     public MainWindowViewModel()
     {
-        _factory = new NotepadFactory();
+        var factory = new NotepadFactory();
 
-        Layout = _factory?.CreateLayout();
+        Layout = factory.CreateLayout();
         if (Layout is { })
         {
-            _factory?.InitLayout(Layout);
+            factory?.InitLayout(Layout);
         }
     }
 

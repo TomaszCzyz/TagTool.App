@@ -25,10 +25,8 @@ public class NotepadFactory : Factory
             Encoding = Encoding.Default.WebName
         };
 
-        var untitledTabContentViewModel = new TabContentViewModel
-        {
-            Title = "Untitled"
-        };
+        var untitledTabContentViewModel = new TabContentViewModel { Title = "Untitled" };
+        var untitledTabContentViewModel2 = new TabContentViewModel { Title = "Untitled" };
 
         var documentDock = new FilesDocumentDock
         {
@@ -45,12 +43,23 @@ public class NotepadFactory : Factory
             CanCreateDocument = true
         };
 
-        var tools = new ProportionalDock
+        var documentDock2 = new FilesDocumentDock
         {
-            Proportion = 0.2,
-            Orientation = Orientation.Vertical,
-            VisibleDockables = CreateList<IDockable>()
+            Id = "Files",
+            Title = "Files",
+            IsCollapsable = false,
+            Proportion = double.NaN,
+            ActiveDockable = untitledFileViewModel,
+            VisibleDockables = CreateList<IDockable>(untitledTabContentViewModel2),
+            CanCreateDocument = true
         };
+
+        // var tools = new ProportionalDock
+        // {
+        //     Proportion = 0.2,
+        //     Orientation = Orientation.Vertical,
+        //     VisibleDockables = CreateList<IDockable>()
+        // };
 
         var windowLayout = CreateRootDock();
         windowLayout.Title = "Default";
@@ -62,7 +71,7 @@ public class NotepadFactory : Factory
             (
                 documentDock,
                 new ProportionalDockSplitter(),
-                tools
+                documentDock2
             )
         };
         windowLayout.IsCollapsable = false;

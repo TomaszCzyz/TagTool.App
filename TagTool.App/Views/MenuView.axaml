@@ -6,6 +6,23 @@
     mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
     x:Class="TagTool.App.Views.MenuView">
 
+    <UserControl.Styles>
+        <Style Selector="Menu">
+            <Setter Property="Height" Value="28" />
+            <Setter Property="Padding" Value="2 0" />
+        </Style>
+        <Style Selector="MenuItem">
+            <Setter Property="Height" Value="20" />
+            <Setter Property="Padding" Value="2 0" />
+        </Style>
+        <Style Selector="MenuItem AccessText">
+            <Setter Property="FontSize" Value="18" />
+        </Style>
+        <!-- <Style Selector="styles|Card"> -->
+        <!--     <Setter Property="Margin" Value="0" /> -->
+        <!-- </Style> -->
+    </UserControl.Styles>
+
     <Menu>
         <MenuItem Header="_File">
             <MenuItem Header="_New" Command="{Binding FileNew}" />

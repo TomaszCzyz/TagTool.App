@@ -3,9 +3,9 @@ using Avalonia.Markup.Xaml;
 
 namespace TagTool.App.Views;
 
-public partial class MenuView : UserControl
+public partial class MainPanel : UserControl
 {
-    public MenuView()
+    public MainPanel()
     {
         InitializeComponent();
     }

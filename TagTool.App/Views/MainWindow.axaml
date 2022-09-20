@@ -5,7 +5,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:local="using:TagTool.App.Views"
-    mc:Ignorable="d" d:DesignWidth="600" d:DesignHeight="400"
+    mc:Ignorable="d" d:DesignWidth="1600" d:DesignHeight="900"
     x:Class="TagTool.App.Views.MainWindow"
     Icon="/Assets/avalonia-logo.ico"
     Title="TagTool.App"
@@ -18,13 +18,8 @@
     </Design.DataContext>
 
     <Grid RowDefinitions="Auto,Auto,*">
-        <local:MenuView Height="50" />
-        <local:ToolbarView Grid.Row="1" DockPanel.Dock="Top" />
-        <DockControl
-            Grid.Row="2" Grid.Column="0"
-            x:Name="DockControl"
-            Layout="{Binding Layout}"
-            Margin="4" />
-
+        <local:MenuView />
+        <local:ToolbarView Grid.Row="1" />
+        <local:MainPanel Grid.Row="2" />
     </Grid>
 </Window>
