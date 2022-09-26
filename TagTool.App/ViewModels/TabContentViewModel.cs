@@ -19,6 +19,8 @@ public class TabContentViewModel : Document, IDisposable
 
     public ObservableCollection<HighlightedMatch> TagsSearchResults { get; set; } = new();
 
+    public ObservableCollection<string> EnteredTags { get; set; } = new();
+
     private string? _searchText;
 
     public string? SearchText
@@ -38,6 +40,8 @@ public class TabContentViewModel : Document, IDisposable
             .Throttle(TimeSpan.FromMilliseconds(100))
             .ObserveOn(RxApp.MainThreadScheduler)
             .Subscribe(DoSearch!);
+
+        EnteredTags.AddRange(new[] { "Tag1", "Audio", "Dog", "Picture", "Colleague", "Tag6" });
     }
 
     private readonly TagSearchService.TagSearchServiceClient _tagSearchServiceClient;

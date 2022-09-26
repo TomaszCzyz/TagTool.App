@@ -6,7 +6,7 @@ public record HighlightInfo(int StartIndex, int Length);
 
 public class HighlightedMatch
 {
-    public string MatchedText { get; set; } = "default";
+    public string? MatchedText { get; set; } = "default";
 
     public InlineCollection? Inlines { get; set; }
 

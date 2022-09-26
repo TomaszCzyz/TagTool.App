@@ -18,5 +18,7 @@
         <StyleInclude Source="/Styles/TagChip.axaml" />
         <StyleInclude Source="/Styles/AutoCompleteBox.axaml" />
         <StyleInclude Source="/Styles/Button.axaml" />
+        <StyleInclude Source="/Styles/ListBox.axaml" />
+        <StyleInclude Source="/Styles/TagSearchBar.axaml" />
     </Application.Styles>
 </Application>
