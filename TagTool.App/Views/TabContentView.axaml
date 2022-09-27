@@ -5,9 +5,8 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:viewModels="clr-namespace:TagTool.App.ViewModels"
     xmlns:userControls="clr-namespace:TagTool.App.UserControls"
-    xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
-    xmlns:assists="clr-namespace:Material.Styles.Assists;assembly=Material.Styles"
     xmlns:styles="clr-namespace:TagTool.App.Styles"
+    xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
     mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="350"
     x:Class="TagTool.App.Views.TabContentView">
 
@@ -30,71 +29,42 @@
         </StackPanel>
 
         <Panel Grid.Row="1">
-            <TextBox
-                BorderBrush="{Binding $self.Foreground}"
-                BorderThickness="1"
-                Watermark="Search field"
-                Margin="8"
-                assists:TextFieldAssist.CornerRadius="34">
-                <TextBox.InnerLeftContent>
-                    <Grid ColumnDefinitions="Auto,Auto">
-                        <Border
-                            BorderThickness="1" BorderBrush="Red"
+            <Border BorderThickness="1" BorderBrush="Green" CornerRadius="30">
+                <Grid ColumnDefinitions="Auto,*">
+                    <avalonia:MaterialIcon
+                        Kind="Magnify"
+                        Margin="15 0 5 0"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        Width="20"
+                        Height="20" />
 
-                            Height="{Binding $parent[TextBox].Height}"
-                            Padding="4">
-
-                            <avalonia:MaterialIcon
-                                HorizontalAlignment="Center"
-                                VerticalAlignment="Center"
-                                Kind="Magnify"
-                                Width="20"
-                                Height="20" />
-
-                        </Border>
+                    <Panel Grid.Column="1">
                         <ItemsControl
-                            Grid.Column="1"
+                            Name="SearchTagsItemsControl"
                             Items="{Binding EnteredTags}"
-                            HorizontalAlignment="Center"
-                            VerticalAlignment="Center"
-                            MaxWidth="350">
+                            HorizontalAlignment="Left"
+                            VerticalAlignment="Center">
 
-                            <ItemsControl.ItemTemplate>
-                                <DataTemplate>
-                                    <styles:TagChip BorderBrush="Red" BorderThickness="1" Text="{Binding }" />
+                            <ItemsControl.DataTemplates>
+                                <DataTemplate DataType="viewModels:Tag">
+                                    <styles:TagChip BorderBrush="Red" BorderThickness="1" Text="{Binding Name}" />
                                 </DataTemplate>
-                            </ItemsControl.ItemTemplate>
+                                <DataTemplate DataType="userControls:NewSearchTagTextBox">
+                                    <userControls:NewSearchTagTextBox />
+                                </DataTemplate>
+                            </ItemsControl.DataTemplates>
                             <ItemsControl.ItemsPanel>
                                 <ItemsPanelTemplate>
                                     <WrapPanel />
                                 </ItemsPanelTemplate>
                             </ItemsControl.ItemsPanel>
+
                         </ItemsControl>
 
-                    </Grid>
-
-                </TextBox.InnerLeftContent>
-            </TextBox>
-            <!-- <AutoCompleteBox -->
-            <!--     Classes="wrapped" -->
-            <!--     Watermark="Enter Tag name" -->
-            <!--     MinimumPrefixLength="1" -->
-            <!--     Text="{Binding SearchText}" -->
-            <!--     Items="{Binding TagsSearchResults}"> -->
-            <!--     <AutoCompleteBox.DataTemplates> -->
-            <!--         <DataTemplate x:DataType="models:HighlightedMatch"> -->
-            <!--             <StackPanel> -->
-            <!--                 ~1~ <RichTextBlock @1@ -->
-            <!--                 ~1~     Text="{Binding MatchedText}" @1@ -->
-            <!--                 ~1~     Inlines="{Binding Inlines}" /> @1@ -->
-            <!--                 <styles:TagChip -->
-            <!--                     Text="{Binding MatchedText}" -->
-            <!--                     Inlines="{Binding Inlines}" /> -->
-            <!-- -->
-            <!--             </StackPanel> -->
-            <!--         </DataTemplate> -->
-            <!--     </AutoCompleteBox.DataTemplates> -->
-            <!-- </AutoCompleteBox> -->
+                    </Panel>
+                </Grid>
+            </Border>
         </Panel>
         <Grid Grid.Row="2">
             <DataGrid

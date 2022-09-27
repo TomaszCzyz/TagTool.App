@@ -1,0 +1,60 @@
+﻿<UserControl
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+    xmlns:styles="clr-namespace:TagTool.App.Styles"
+    xmlns:viewModels="clr-namespace:TagTool.App.ViewModels"
+    xmlns:system="clr-namespace:System;assembly=System.Runtime"
+    mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+    x:Class="TagTool.App.UserControls.TagSearchBar">
+
+    <Design.DataContext>
+        <viewModels:TabContentViewModel />
+    </Design.DataContext>
+
+    <StackPanel>
+        <Border BorderThickness="1" BorderBrush="Green" CornerRadius="30">
+            <Grid ColumnDefinitions="Auto,*">
+                <avalonia:MaterialIcon
+                    Kind="Magnify"
+                    Margin="15 0 5 0"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    Width="20"
+                    Height="20" />
+
+                <Panel Grid.Column="1">
+                    <ItemsControl
+                        Items="{Binding EnteredTags}"
+                        HorizontalAlignment="Left"
+                        VerticalAlignment="Center">
+
+                        <ItemsControl.DataTemplates>
+                            <DataTemplate DataType="viewModels:Tag">
+                                <styles:TagChip BorderBrush="Red" BorderThickness="1" Text="{Binding Name}" />
+                            </DataTemplate>
+                            <DataTemplate DataType="system:String">
+                                <TextBox
+                                    Margin="4"
+                                    BorderThickness="0"
+                                    Watermark="Next Tag..." />
+
+                            </DataTemplate>
+                        </ItemsControl.DataTemplates>
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <WrapPanel />
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+
+                    </ItemsControl>
+
+                </Panel>
+
+            </Grid>
+        </Border>
+    </StackPanel>
+
+</UserControl>

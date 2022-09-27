@@ -1,0 +1,30 @@
+﻿<UserControl
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:viewModels="clr-namespace:TagTool.App.ViewModels"
+    mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+    x:Class="TagTool.App.UserControls.NewSearchTagTextBox">
+
+    <Design.DataContext>
+        <viewModels:TabContentViewModel />
+    </Design.DataContext>
+
+    <Panel>
+        <TextBox
+            Name="MyTextBox"
+            Text="{Binding NewSearchTag}"
+            Margin="4"
+            BorderThickness="0"
+            Watermark="Next Tag...">
+            <Interaction.Behaviors>
+                <EventTriggerBehavior EventName="KeyDown">
+                    <InvokeCommandAction Command="{Binding AddSearchTag}" />
+                </EventTriggerBehavior>
+            </Interaction.Behaviors>
+        </TextBox>
+
+    </Panel>
+
+</UserControl>

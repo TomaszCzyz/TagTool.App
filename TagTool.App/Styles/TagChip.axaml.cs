@@ -2,7 +2,6 @@
 using Avalonia;
 using Avalonia.Controls.Documents;
 using Avalonia.Controls.Primitives;
-using Avalonia.Media;
 
 namespace TagTool.App.Styles;
 
@@ -12,18 +11,6 @@ public class TagChip : TemplatedControl
     // public const string DeleteButtonPartName = "PART_DeleteButton";
 
     // private ButtonBase? _deleteButton;
-
-    private readonly InlineCollection _exampleInlineCollection = new();
-    //
-    public TagChip()
-    {
-        Inlines = new InlineCollection
-        {
-            new Run { Text = "Text" },
-            new Run { Text = "Text", Background = Brushes.DarkSeaGreen },
-            new Run { Text = "Text" }
-        };
-    }
 
     public static readonly StyledProperty<InlineCollection?> InlinesProperty
         = AvaloniaProperty.Register<TagChip, InlineCollection?>(nameof(Inlines));

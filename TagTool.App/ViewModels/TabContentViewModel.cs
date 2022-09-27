@@ -2,30 +2,50 @@
 using System.Reactive.Linq;
 using Avalonia.Controls.Documents;
 using Avalonia.Media;
+using CommunityToolkit.Mvvm.Input;
 using Dock.Model.ReactiveUI.Controls;
 using DynamicData;
 using Grpc.Core;
 using ReactiveUI;
 using Splat;
 using TagTool.App.Core.Models;
+using TagTool.App.UserControls;
 using TagTool.Backend;
 using File = TagTool.App.Models.File;
 
 namespace TagTool.App.ViewModels;
 
-public class TabContentViewModel : Document, IDisposable
+public class Tag
+{
+    public Tag(string name)
+    {
+        Name = name;
+    }
+
+    public string Name { get; set; }
+}
+
+public partial class TabContentViewModel : Document, IDisposable
 {
     public ObservableCollection<File> Files { get; set; } = new();
 
     public ObservableCollection<HighlightedMatch> TagsSearchResults { get; set; } = new();
 
-    public ObservableCollection<string> EnteredTags { get; set; } = new();
+    public ObservableCollection<object> EnteredTags { get; set; } = new();
 
     private string? _searchText;
 
     public string? SearchText
     {
         get => _searchText;
+        set => this.RaiseAndSetIfChanged(ref _searchText, value);
+    }
+
+    private string _newSearchTag;
+
+    public string NewSearchTag
+    {
+        get => _newSearchTag;
         set => this.RaiseAndSetIfChanged(ref _searchText, value);
     }
 
@@ -41,12 +61,20 @@ public class TabContentViewModel : Document, IDisposable
             .ObserveOn(RxApp.MainThreadScheduler)
             .Subscribe(DoSearch!);
 
-        EnteredTags.AddRange(new[] { "Tag1", "Audio", "Dog", "Picture", "Colleague", "Tag6" });
+        EnteredTags.AddRange(new Tag[] { new("Tag1"), new("Audio"), new("Dog"), new("Picture"), new("Colleague"), new("Tag6") });
+        EnteredTags.Add(new NewSearchTagTextBox { DataContext = this });
+        // EnteredTags.Add(new Tag("NextTag"));
     }
 
     private readonly TagSearchService.TagSearchServiceClient _tagSearchServiceClient;
 
     private CancellationTokenSource? _cts;
+
+    [RelayCommand]
+    public void AddSearchTag()
+    {
+        EnteredTags.Add(new Tag("NewTag"));
+    }
 
     private async void DoSearch(string value)
     {
