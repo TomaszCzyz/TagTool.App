@@ -1,8 +1,27 @@
 ﻿using System.Net;
 using System.Net.Sockets;
 using Grpc.Net.Client;
+using TagTool.Backend;
 
 namespace TagTool.App.Core.Services;
+
+public class TagSearchServiceFactory
+{
+    public TagSearchService.TagSearchServiceClient Create()
+    {
+        var grpcChannel = UnixDomainSocketConnectionFactory.CreateChannel();
+        return new TagSearchService.TagSearchServiceClient(grpcChannel);
+    }
+}
+
+public class TagServiceFactory
+{
+    public TagToolService.TagToolServiceClient Create()
+    {
+        var grpcChannel = UnixDomainSocketConnectionFactory.CreateChannel();
+        return new TagToolService.TagToolServiceClient(grpcChannel);
+    }
+}
 
 public class UnixDomainSocketConnectionFactory
 {

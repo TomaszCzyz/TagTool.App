@@ -1,14 +1,15 @@
 ﻿using System.Collections.ObjectModel;
-using System.Reactive.Linq;
+using Avalonia;
 using Avalonia.Controls.Documents;
 using Avalonia.Media;
+using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using Dock.Model.ReactiveUI.Controls;
+using Dock.Model.Mvvm.Controls;
 using DynamicData;
 using Grpc.Core;
-using ReactiveUI;
-using Splat;
 using TagTool.App.Core.Models;
+using TagTool.App.Core.Services;
+using TagTool.App.Extensions;
 using TagTool.App.UserControls;
 using TagTool.Backend;
 using File = TagTool.App.Models.File;
@@ -33,33 +34,24 @@ public partial class TabContentViewModel : Document, IDisposable
 
     public ObservableCollection<object> EnteredTags { get; set; } = new();
 
+    [ObservableProperty]
     private string? _searchText;
 
-    public string? SearchText
-    {
-        get => _searchText;
-        set => this.RaiseAndSetIfChanged(ref _searchText, value);
-    }
-
+    [ObservableProperty]
     private string _newSearchTag;
-
-    public string NewSearchTag
-    {
-        get => _newSearchTag;
-        set => this.RaiseAndSetIfChanged(ref _searchText, value);
-    }
 
     public TabContentViewModel()
     {
         Files.AddRange(_exampleFiles);
 
-        _tagSearchServiceClient = Locator.Current.GetService<TagSearchService.TagSearchServiceClient>()!;
+        _tagSearchServiceClient = Application.Current?.CreateInstance<TagSearchServiceFactory>().Create();
+        // Locator.Current.GetService<TagSearchService.TagSearchServiceClient>()!;
 
-        this.WhenAnyValue(x => x.SearchText)
-            .Where(x => !string.IsNullOrWhiteSpace(x))
-            .Throttle(TimeSpan.FromMilliseconds(100))
-            .ObserveOn(RxApp.MainThreadScheduler)
-            .Subscribe(DoSearch!);
+        // this.WhenAnyValue(x => x.SearchText)
+        //     .Where(x => !string.IsNullOrWhiteSpace(x))
+        //     .Throttle(TimeSpan.FromMilliseconds(100))
+        //     .ObserveOn(RxApp.MainThreadScheduler)
+        //     .Subscribe(DoSearch!);
 
         EnteredTags.AddRange(new Tag[] { new("Tag1"), new("Audio"), new("Dog"), new("Picture"), new("Colleague"), new("Tag6") });
         EnteredTags.Add(new NewSearchTagTextBox { DataContext = this });
@@ -112,7 +104,7 @@ public partial class TabContentViewModel : Document, IDisposable
         }
         catch (RpcException e) when (e.Status.StatusCode == StatusCode.Cancelled)
         {
-            this.Log().Debug("Streaming of tag names hints for SearchBar was cancelled");
+            // this.Log().Debug("Streaming of tag names hints for SearchBar was cancelled");
         }
         finally
         {

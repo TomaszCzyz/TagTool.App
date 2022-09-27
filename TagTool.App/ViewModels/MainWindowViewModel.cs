@@ -1,18 +1,13 @@
-﻿using Dock.Model.Controls;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using Dock.Model.Controls;
 using Dock.Model.Core;
-using ReactiveUI;
 
 namespace TagTool.App.ViewModels;
 
-public class MainWindowViewModel : ReactiveObject
+public partial class MainWindowViewModel : ObservableObject
 {
+    [ObservableProperty]
     private IRootDock? _layout;
-
-    public IRootDock? Layout
-    {
-        get => _layout;
-        set => this.RaiseAndSetIfChanged(ref _layout, value);
-    }
 
     public MainWindowViewModel()
     {
@@ -21,7 +16,7 @@ public class MainWindowViewModel : ReactiveObject
         Layout = factory.CreateLayout();
         if (Layout is { })
         {
-            factory?.InitLayout(Layout);
+            factory.InitLayout(Layout);
         }
     }
 

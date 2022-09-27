@@ -1,29 +1,16 @@
-﻿using Dock.Model.ReactiveUI.Controls;
-using ReactiveUI;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using Dock.Model.Mvvm.Controls;
 
 namespace TagTool.App.ViewModels;
 
-public class FileViewModel : Document
+public partial class FileViewModel : Document
 {
+    [ObservableProperty]
     private string _path = string.Empty;
+
+    [ObservableProperty]
     private string _text = string.Empty;
+
+    [ObservableProperty]
     private string _encoding = string.Empty;
-
-    public string Path
-    {
-        get => _path;
-        set => this.RaiseAndSetIfChanged(ref _path, value);
-    }
-
-    public string Text
-    {
-        get => _text;
-        set => this.RaiseAndSetIfChanged(ref _text, value);
-    }
-
-    public string Encoding
-    {
-        get => _encoding;
-        set => this.RaiseAndSetIfChanged(ref _encoding, value);
-    }
 }

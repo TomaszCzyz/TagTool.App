@@ -1,6 +1,9 @@
 using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
+using Microsoft.Extensions.DependencyInjection;
+using Serilog;
+using TagTool.App.Core.Services;
 using TagTool.App.ViewModels;
 using TagTool.App.Views;
 
@@ -11,6 +14,9 @@ public class App : Application
     public override void Initialize()
     {
         AvaloniaXamlLoader.Load(this);
+
+        var services = ConfigureServices();
+        Resources[typeof(IServiceProvider)] = services;
     }
 
     public override void OnFrameworkInitializationCompleted()
@@ -19,7 +25,7 @@ public class App : Application
 
         if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktopLifetime)
         {
-            var mainWindow = new MainWindow { DataContext = new MainWindowViewModel() };
+            var mainWindow = new MainWindow();
 
             mainWindow.Closing += (_, _) => mainWindowViewModel.CloseLayout();
 
@@ -29,5 +35,21 @@ public class App : Application
         }
 
         base.OnFrameworkInitializationCompleted();
+    }
+
+    private static IServiceProvider ConfigureServices()
+    {
+        var services = new ServiceCollection();
+
+        services.AddSingleton<TagSearchServiceFactory>();
+        services.AddSingleton<TagServiceFactory>();
+
+        services.AddSingleton(Log.Logger);
+        services.AddTransient<TabContentViewModel>();
+        services.AddTransient<FileViewModel>();
+        services.AddTransient<MainWindowViewModel>();
+        services.AddTransient<TabContentViewModel>();
+
+        return services.BuildServiceProvider();
     }
 }

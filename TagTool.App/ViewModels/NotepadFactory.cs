@@ -2,8 +2,8 @@
 using Dock.Avalonia.Controls;
 using Dock.Model.Controls;
 using Dock.Model.Core;
-using Dock.Model.ReactiveUI;
-using Dock.Model.ReactiveUI.Controls;
+using Dock.Model.Mvvm;
+using Dock.Model.Mvvm.Controls;
 using TagTool.App.ViewModels.Docks;
 
 namespace TagTool.App.ViewModels;
