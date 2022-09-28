@@ -57,6 +57,13 @@ public partial class TabContentViewModel : Document, IDisposable
         //     .ObserveOn(RxApp.MainThreadScheduler)
         //     .Subscribe(DoSearch!);
 
+        TagsSearchResults.Add(new HighlightedMatch { MatchedText = "someMatch" });
+        TagsSearchResults.Add(new HighlightedMatch { MatchedText = "someMatch" });
+        TagsSearchResults.Add(new HighlightedMatch { MatchedText = "someMatch" });
+        TagsSearchResults.Add(new HighlightedMatch { MatchedText = "someMatch" });
+        TagsSearchResults.Add(new HighlightedMatch { MatchedText = "someMatch" });
+        TagsSearchResults.Add(new HighlightedMatch { MatchedText = "someMatch" });
+
         EnteredTags.AddRange(new Tag[] { new("Tag1"), new("Audio"), new("Dog"), new("Picture"), new("Colleague"), new("Tag6") });
         EnteredTags.Add(new NewSearchTagTextBox { DataContext = this });
         // EnteredTags.Add(new Tag("NextTag"));

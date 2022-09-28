@@ -4,6 +4,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:viewModels="clr-namespace:TagTool.App.ViewModels"
+    xmlns:styles="clr-namespace:TagTool.App.Styles"
     mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
     x:Class="TagTool.App.UserControls.NewSearchTagTextBox">
 
@@ -29,6 +30,34 @@
             </Interaction.Behaviors>
         </TextBox>
 
+        <Popup
+            Name="PART_Popup"
+            PlacementTarget="{Binding #MyTextBox}"
+            IsLightDismissEnabled="True"
+            IsOpen="{Binding #MyTextBox.Text, Converter={x:Static StringConverters.IsNotNullOrEmpty}}">
+
+            <Border
+                BorderBrush="Green"
+                BorderThickness="1">
+
+                <ListBox
+                    Name="PART_SelectingItemsControl"
+                    Items="{Binding TagsSearchResults}"
+                    ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                    ScrollViewer.VerticalScrollBarVisibility="Disabled">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <styles:TagChip BorderBrush="Red" BorderThickness="1" Text="{Binding MatchedText}" />
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                    <ListBox.Styles>
+                        <Style Selector="ListBoxItem">
+                            <Setter Property="Padding" Value="2" />
+                        </Style>
+                    </ListBox.Styles>
+                </ListBox>
+            </Border>
+        </Popup>
     </Panel>
 
 </UserControl>
