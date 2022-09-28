@@ -1,6 +1,7 @@
 ﻿using System.Collections.ObjectModel;
 using Avalonia;
 using Avalonia.Controls.Documents;
+using Avalonia.Input;
 using Avalonia.Media;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
@@ -40,12 +41,15 @@ public partial class TabContentViewModel : Document, IDisposable
     [ObservableProperty]
     private string _newSearchTag;
 
-    public TabContentViewModel()
+    public TabContentViewModel() : this(Application.Current?.CreateInstance<TagSearchServiceFactory>()!)
     {
-        Files.AddRange(_exampleFiles);
+    }
 
-        _tagSearchServiceClient = Application.Current?.CreateInstance<TagSearchServiceFactory>().Create();
-        // Locator.Current.GetService<TagSearchService.TagSearchServiceClient>()!;
+    public TabContentViewModel(TagSearchServiceFactory tagSearchServiceFactory)
+    {
+        _tagSearchServiceClient = tagSearchServiceFactory.Create();
+
+        Files.AddRange(_exampleFiles);
 
         // this.WhenAnyValue(x => x.SearchText)
         //     .Where(x => !string.IsNullOrWhiteSpace(x))
@@ -63,9 +67,30 @@ public partial class TabContentViewModel : Document, IDisposable
     private CancellationTokenSource? _cts;
 
     [RelayCommand]
-    public void AddSearchTag()
+    public void AddSearchTag(KeyEventArgs e)
     {
-        EnteredTags.Add(new Tag("NewTag"));
+        switch (e.Key)
+        {
+            case Key.Enter:
+                if (string.IsNullOrWhiteSpace(NewSearchTag)) return;
+
+                EnteredTags.Insert(EnteredTags.Count - 1, new Tag(NewSearchTag));
+                NewSearchTag = string.Empty;
+                return;
+            case Key.Back: // TODO: Key.Back event is consumed by TextBox, so this case is unreachable
+                if (!string.IsNullOrWhiteSpace(NewSearchTag)) return;
+
+                EnteredTags.RemoveAt(EnteredTags.Count - 2);
+                return;
+        }
+    }
+
+    [RelayCommand]
+    public void RemoveLastTag()
+    {
+        if (EnteredTags.Count <= 1) return;
+
+        EnteredTags.RemoveAt(EnteredTags.Count - 2);
     }
 
     private async void DoSearch(string value)

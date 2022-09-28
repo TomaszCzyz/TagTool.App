@@ -1,5 +1,7 @@
-﻿using CommunityToolkit.Mvvm.Input;
+﻿using Avalonia;
+using CommunityToolkit.Mvvm.Input;
 using Dock.Model.Mvvm.Controls;
+using TagTool.App.Extensions;
 
 namespace TagTool.App.ViewModels.Docks;
 
@@ -25,10 +27,8 @@ public class FilesDocumentDock : DocumentDock
         //     Encoding = Encoding.Default.WebName
         // };
 
-        var document = new TabContentViewModel
-        {
-            Title = "Untitled"
-        };
+        var document = Application.Current?.CreateInstance<TabContentViewModel>()!;
+        document.Title = "Untitled";
 
         Factory?.AddDockable(this, document);
         Factory?.SetActiveDockable(document);

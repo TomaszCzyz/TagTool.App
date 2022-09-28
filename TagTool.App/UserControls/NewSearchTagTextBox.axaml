@@ -10,6 +10,10 @@
     <Design.DataContext>
         <viewModels:TabContentViewModel />
     </Design.DataContext>
+    
+    <UserControl.KeyBindings>
+        <KeyBinding Command="{Binding RemoveLastTag}" Gesture="Ctrl+D" />
+    </UserControl.KeyBindings>
 
     <Panel>
         <TextBox
@@ -20,7 +24,7 @@
             Watermark="Next Tag...">
             <Interaction.Behaviors>
                 <EventTriggerBehavior EventName="KeyDown">
-                    <InvokeCommandAction Command="{Binding AddSearchTag}" />
+                    <InvokeCommandAction Command="{Binding AddSearchTag}" PassEventArgsToCommand="True" />
                 </EventTriggerBehavior>
             </Interaction.Behaviors>
         </TextBox>

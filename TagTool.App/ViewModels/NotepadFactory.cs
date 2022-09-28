@@ -1,9 +1,11 @@
 ﻿using System.Text;
+using Avalonia;
 using Dock.Avalonia.Controls;
 using Dock.Model.Controls;
 using Dock.Model.Core;
 using Dock.Model.Mvvm;
 using Dock.Model.Mvvm.Controls;
+using TagTool.App.Extensions;
 using TagTool.App.ViewModels.Docks;
 
 namespace TagTool.App.ViewModels;
@@ -25,8 +27,10 @@ public class NotepadFactory : Factory
             Encoding = Encoding.Default.WebName
         };
 
-        var untitledTabContentViewModel = new TabContentViewModel { Title = "Untitled" };
-        var untitledTabContentViewModel2 = new TabContentViewModel { Title = "Untitled" };
+        var untitledTabContentViewModel = Application.Current?.CreateInstance<TabContentViewModel>()!;
+        untitledTabContentViewModel.Title = "Untitled";
+        var untitledTabContentViewModel2 = Application.Current?.CreateInstance<TabContentViewModel>()!;
+        untitledTabContentViewModel2.Title = "Untitled";
 
         var documentDock = new FilesDocumentDock
         {
