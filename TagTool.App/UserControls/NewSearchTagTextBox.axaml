@@ -6,12 +6,13 @@
     xmlns:viewModels="clr-namespace:TagTool.App.ViewModels"
     xmlns:styles="clr-namespace:TagTool.App.Styles"
     mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-    x:Class="TagTool.App.UserControls.NewSearchTagTextBox">
+    x:Class="TagTool.App.UserControls.NewSearchTagTextBox"
+    x:DataType="viewModels:TabContentViewModel">
 
     <Design.DataContext>
         <viewModels:TabContentViewModel />
     </Design.DataContext>
-    
+
     <UserControl.KeyBindings>
         <KeyBinding Command="{Binding RemoveLastTag}" Gesture="Ctrl+D" />
     </UserControl.KeyBindings>
@@ -19,9 +20,11 @@
     <Panel>
         <TextBox
             Name="MyTextBox"
+            Classes="NoBorder"
             Text="{Binding NewSearchTag}"
             Margin="4"
             BorderThickness="0"
+            FontSize="14"
             Watermark="Next Tag...">
             <Interaction.Behaviors>
                 <EventTriggerBehavior EventName="KeyDown">
@@ -47,7 +50,10 @@
                     ScrollViewer.VerticalScrollBarVisibility="Disabled">
                     <ListBox.ItemTemplate>
                         <DataTemplate>
-                            <styles:TagChip BorderBrush="Red" BorderThickness="1" Text="{Binding MatchedText}" />
+                            <styles:TagChip
+                                Text="{Binding MatchedText}" 
+                                IsDeletable="False"/>
+
                         </DataTemplate>
                     </ListBox.ItemTemplate>
                     <ListBox.Styles>
@@ -55,6 +61,11 @@
                             <Setter Property="Padding" Value="2" />
                         </Style>
                     </ListBox.Styles>
+                    <ListBox.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <WrapPanel MaxWidth="400" />
+                        </ItemsPanelTemplate>
+                    </ListBox.ItemsPanel>
                 </ListBox>
             </Border>
         </Popup>

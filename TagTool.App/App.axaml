@@ -19,5 +19,6 @@
         <StyleInclude Source="/Styles/Button.axaml" />
         <StyleInclude Source="/Styles/ListBox.axaml" />
         <StyleInclude Source="/Styles/TagSearchBar.axaml" />
+        <StyleInclude Source="/Styles/TextBox.axaml" />
     </Application.Styles>
 </Application>

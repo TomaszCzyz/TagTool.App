@@ -33,5 +33,3 @@ message MatchedPart {
   int32 startIndex = 1;
   int32 length = 2;
 }
-
-

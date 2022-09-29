@@ -19,12 +19,12 @@ namespace TagTool.App.ViewModels;
 
 public class Tag
 {
-    public Tag(string name)
+    public Tag(string? name)
     {
         Name = name;
     }
 
-    public string Name { get; set; }
+    public string? Name { get; set; }
 }
 
 public partial class TabContentViewModel : Document, IDisposable
@@ -39,7 +39,7 @@ public partial class TabContentViewModel : Document, IDisposable
     private string? _searchText;
 
     [ObservableProperty]
-    private string _newSearchTag;
+    private string? _newSearchTag;
 
     public TabContentViewModel() : this(Application.Current?.CreateInstance<TagSearchServiceFactory>()!)
     {
@@ -51,16 +51,6 @@ public partial class TabContentViewModel : Document, IDisposable
 
         Files.AddRange(_exampleFiles);
 
-        // this.WhenAnyValue(x => x.SearchText)
-        //     .Where(x => !string.IsNullOrWhiteSpace(x))
-        //     .Throttle(TimeSpan.FromMilliseconds(100))
-        //     .ObserveOn(RxApp.MainThreadScheduler)
-        //     .Subscribe(DoSearch!);
-
-        TagsSearchResults.Add(new HighlightedMatch { MatchedText = "someMatch" });
-        TagsSearchResults.Add(new HighlightedMatch { MatchedText = "someMatch" });
-        TagsSearchResults.Add(new HighlightedMatch { MatchedText = "someMatch" });
-        TagsSearchResults.Add(new HighlightedMatch { MatchedText = "someMatch" });
         TagsSearchResults.Add(new HighlightedMatch { MatchedText = "someMatch" });
         TagsSearchResults.Add(new HighlightedMatch { MatchedText = "someMatch" });
 
@@ -100,7 +90,12 @@ public partial class TabContentViewModel : Document, IDisposable
         EnteredTags.RemoveAt(EnteredTags.Count - 2);
     }
 
-    private async void DoSearch(string value)
+    partial void OnNewSearchTagChanged(string? value)
+    {
+        DoSearch(value);
+    }
+
+    private async void DoSearch(string? value)
     {
         TagsSearchResults.Clear();
         if (string.IsNullOrEmpty(value)) return;
@@ -137,11 +132,6 @@ public partial class TabContentViewModel : Document, IDisposable
         catch (RpcException e) when (e.Status.StatusCode == StatusCode.Cancelled)
         {
             // this.Log().Debug("Streaming of tag names hints for SearchBar was cancelled");
-        }
-        finally
-        {
-            // todo: do not create new class... manage existing collection
-            // TagsSearchResults = new ObservableCollection<HighlightedMatch>(TagsSearchResults.OrderByDescending(item => item.Score));
         }
     }
 

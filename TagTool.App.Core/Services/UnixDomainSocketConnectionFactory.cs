@@ -16,10 +16,10 @@ public class TagSearchServiceFactory
 
 public class TagServiceFactory
 {
-    public TagToolService.TagToolServiceClient Create()
+    public TagService.TagServiceClient Create()
     {
         var grpcChannel = UnixDomainSocketConnectionFactory.CreateChannel();
-        return new TagToolService.TagToolServiceClient(grpcChannel);
+        return new TagService.TagServiceClient(grpcChannel);
     }
 }
 

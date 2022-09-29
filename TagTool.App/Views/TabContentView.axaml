@@ -48,7 +48,7 @@
 
                             <ItemsControl.DataTemplates>
                                 <DataTemplate DataType="viewModels:Tag">
-                                    <styles:TagChip BorderBrush="Red" BorderThickness="1" Text="{Binding Name}" />
+                                    <styles:TagChip Text="{Binding Name}" />
                                 </DataTemplate>
                                 <DataTemplate DataType="userControls:NewSearchTagTextBox">
                                     <userControls:NewSearchTagTextBox />
@@ -59,9 +59,7 @@
                                     <WrapPanel />
                                 </ItemsPanelTemplate>
                             </ItemsControl.ItemsPanel>
-
                         </ItemsControl>
-
                     </Panel>
                 </Grid>
             </Border>
