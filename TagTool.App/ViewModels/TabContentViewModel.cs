@@ -11,7 +11,6 @@ using Grpc.Core;
 using TagTool.App.Core.Models;
 using TagTool.App.Core.Services;
 using TagTool.App.Extensions;
-using TagTool.App.UserControls;
 using TagTool.Backend;
 using File = TagTool.App.Models.File;
 
@@ -39,7 +38,7 @@ public partial class TabContentViewModel : Document, IDisposable
     private string? _searchText;
 
     [ObservableProperty]
-    private string? _newSearchTag;
+    private string? _newSearchTag = "initialTag";
 
     public TabContentViewModel() : this(Application.Current?.CreateInstance<TagSearchServiceFactory>()!)
     {
@@ -54,8 +53,14 @@ public partial class TabContentViewModel : Document, IDisposable
         TagsSearchResults.Add(new HighlightedMatch { MatchedText = "someMatch" });
         TagsSearchResults.Add(new HighlightedMatch { MatchedText = "someMatch" });
 
-        EnteredTags.AddRange(new Tag[] { new("Tag1"), new("Audio"), new("Dog"), new("Picture"), new("Colleague"), new("Tag6") });
-        EnteredTags.Add(new NewSearchTagTextBox { DataContext = this });
+        EnteredTags.AddRange(
+            new Tag[]
+            {
+                new("Tag1"), new("Audio"), new("Dog"), new("Picture"), new("Colleague"), new("Tag6"), new("Tag7"), new("LastTag")
+            });
+        // EnteredTags.Add(new NewSearchTagTextBox { DataContext = this });
+        // EnteredTags.Add(new AutoCompleteBox { DataContext = this });
+        EnteredTags.Add("TextField");
         // EnteredTags.Add(new Tag("NextTag"));
     }
 

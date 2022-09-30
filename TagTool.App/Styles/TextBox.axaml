@@ -16,7 +16,6 @@
                     BorderThickness="1"
                     Watermark="Next Tag..." />
             </StackPanel>
-
         </Border>
     </Design.PreviewWith>
 
