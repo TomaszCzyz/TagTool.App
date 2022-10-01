@@ -51,7 +51,7 @@
     </Style>
 
     <Style Selector="DocumentTabStrip /template/ Button#PART_ButtonCreate">
-        <Setter Property="Background" Value="Red"></Setter>
+        <Setter Property="Background" Value="Red" />
         <Setter Property="Template">
             <ControlTemplate>
                 <Panel>

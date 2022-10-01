@@ -51,7 +51,7 @@
                                 ScrollViewer.VerticalScrollBarVisibility="Disabled">
                                 <ListBox.Styles>
                                     <Style Selector="ListBoxItem">
-                                        <Setter Property="Padding" Value="2"></Setter>
+                                        <Setter Property="Padding" Value="2" />
                                     </Style>
                                 </ListBox.Styles>
                             </ListBox>
