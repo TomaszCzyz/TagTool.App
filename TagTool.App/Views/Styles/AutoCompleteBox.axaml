@@ -43,7 +43,6 @@
 
                             <ListBox
                                 Name="PART_SelectingItemsControl"
-                                Classes="tags"
                                 Background="{TemplateBinding Background}"
                                 Foreground="{TemplateBinding Foreground}"
                                 ItemTemplate="{TemplateBinding ItemTemplate}"

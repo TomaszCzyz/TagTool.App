@@ -24,7 +24,7 @@
             Orientation="Horizontal"
             Height="35">
 
-            <userControls:AddTagButton />
+            <Button Classes="addTag" />
             <Button Classes="deleteTag" />
         </StackPanel>
 

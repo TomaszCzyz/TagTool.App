@@ -18,9 +18,6 @@
         <Style Selector="MenuItem AccessText">
             <Setter Property="FontSize" Value="18" />
         </Style>
-        <!-- <Style Selector="styles|Card"> -->
-        <!--     <Setter Property="Margin" Value="0" /> -->
-        <!-- </Style> -->
     </UserControl.Styles>
 
     <Menu>
