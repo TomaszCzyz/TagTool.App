@@ -4,7 +4,7 @@
     xmlns:vm="using:TagTool.App.ViewModels"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:local="using:TagTool.App.Views"
+    xmlns:userControls="clr-namespace:TagTool.App.Views.UserControls"
     mc:Ignorable="d" d:DesignWidth="1600" d:DesignHeight="900"
     x:Class="TagTool.App.Views.MainWindow"
     Icon="/Assets/avalonia-logo.ico"
@@ -18,8 +18,8 @@
     </Design.DataContext>
 
     <Grid RowDefinitions="Auto,Auto,*">
-        <local:MenuView />
-        <local:ToolbarView Grid.Row="1" />
-        <local:MainPanel Grid.Row="2" />
+        <userControls:MenuView />
+        <userControls:Toolbar Grid.Row="1" />
+        <userControls:MainPanel Grid.Row="2" />
     </Grid>
 </Window>

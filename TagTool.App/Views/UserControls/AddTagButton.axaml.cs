@@ -1,7 +1,7 @@
 ﻿using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
 
-namespace TagTool.App.UserControls;
+namespace TagTool.App.Views.UserControls;
 
 public partial class AddTagButton : UserControl
 {

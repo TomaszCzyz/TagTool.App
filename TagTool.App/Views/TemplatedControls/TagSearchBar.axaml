@@ -1,15 +1,15 @@
 ﻿<Styles
     xmlns="https://github.com/avaloniaui"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:controls="using:TagTool.App.Styles">
+    xmlns:templatedControls="clr-namespace:TagTool.App.Views.TemplatedControls">
 
     <Design.PreviewWith>
-        <controls:TagSearchBar />
+        <templatedControls:TagSearchBar />
     </Design.PreviewWith>
 
-    <Style Selector="controls|TagSearchBar">
+    <Style Selector="templatedControls|TagSearchBar">
         <!-- Set Defaults -->
-        <Setter Property="MaxWidth" Value="100"></Setter>
+        <Setter Property="MaxWidth" Value="100" />
         <Setter Property="Template">
             <ControlTemplate>
                 <Panel>

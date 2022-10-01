@@ -2,21 +2,21 @@
     xmlns="https://github.com/avaloniaui"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
-    xmlns:styles="clr-namespace:TagTool.App.Styles">
+    xmlns:templatedControls="clr-namespace:TagTool.App.Views.TemplatedControls">
 
     <Design.PreviewWith>
         <StackPanel Margin="20">
             <StackPanel Orientation="Horizontal">
-                <styles:TagChip />
-                <styles:TagChip Classes="Medium" />
-                <styles:TagChip Classes="Small" />
+                <templatedControls:TagChip />
+                <templatedControls:TagChip Classes="Medium" />
+                <templatedControls:TagChip Classes="Small" />
             </StackPanel>
-            <styles:TagChip Text="Test" IsDeletable="True" />
-            <styles:TagChip Text="Test" IsDeletable="False" />
+            <templatedControls:TagChip Text="Test" IsDeletable="True" />
+            <templatedControls:TagChip Text="Test" IsDeletable="False" />
         </StackPanel>
     </Design.PreviewWith>
 
-    <Style Selector="styles|TagChip">
+    <Style Selector="templatedControls|TagChip">
         <Setter Property="FontSize" Value="22" />
         <Setter Property="FontWeight" Value="Bold" />
         <Setter Property="Foreground" Value="#151515" />
@@ -91,23 +91,23 @@
         </Setter>
     </Style>
 
-    <Style Selector="styles|TagChip.Medium">
+    <Style Selector="templatedControls|TagChip.Medium">
         <Setter Property="FontSize" Value="14" />
         <Setter Property="Margin" Value="3" />
     </Style>
 
-    <Style Selector="styles|TagChip.Medium /template/ Button#PART_DeleteButton">
+    <Style Selector="templatedControls|TagChip.Medium /template/ Button#PART_DeleteButton">
         <Setter Property="Height" Value="12" />
         <Setter Property="Width" Value="12" />
         <Setter Property="Margin" Value="-8 0 6 0" />
     </Style>
 
-    <Style Selector="styles|TagChip.Small">
+    <Style Selector="templatedControls|TagChip.Small">
         <Setter Property="FontSize" Value="9" />
         <Setter Property="Margin" Value="2" />
     </Style>
 
-    <Style Selector="styles|TagChip.Small /template/ Button#PART_DeleteButton">
+    <Style Selector="templatedControls|TagChip.Small /template/ Button#PART_DeleteButton">
         <Setter Property="Height" Value="8" />
         <Setter Property="Width" Value="8" />
         <Setter Property="Margin" Value="-8 0 4 0" />
@@ -118,7 +118,7 @@
     <!--     <Setter Property="Height" Value="12"></Setter> -->
     <!-- </Style> -->
 
-    <Style Selector="styles|TagChip.test">
+    <Style Selector="templatedControls|TagChip.test">
         <Setter Property="FontSize" Value="13" />
         <Setter Property="Background" Value="#5317d8" />
         <Setter Property="Margin" Value="4" />

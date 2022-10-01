@@ -2,8 +2,9 @@
 using CommunityToolkit.Mvvm.Input;
 using Dock.Model.Mvvm.Controls;
 using TagTool.App.Extensions;
+using TagTool.App.ViewModels.UserControls;
 
-namespace TagTool.App.ViewModels.Docks;
+namespace TagTool.App.Docks;
 
 public class FilesDocumentDock : DocumentDock
 {

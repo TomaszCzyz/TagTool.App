@@ -3,14 +3,14 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:viewModels="clr-namespace:TagTool.App.ViewModels"
-    xmlns:styles="clr-namespace:TagTool.App.Styles"
+    xmlns:templatedControls="clr-namespace:TagTool.App.Views.TemplatedControls"
+    xmlns:userControls="clr-namespace:TagTool.App.ViewModels.UserControls"
     mc:Ignorable="d" d:DesignWidth="100" d:DesignHeight="25"
-    x:Class="TagTool.App.UserControls.NewSearchTagTextBox"
-    x:DataType="viewModels:TabContentViewModel">
+    x:Class="TagTool.App.Views.UserControls.NewSearchTagTextBox"
+    x:DataType="userControls:TabContentViewModel">
 
     <Design.DataContext>
-        <viewModels:TabContentViewModel />
+        <userControls:TabContentViewModel />
     </Design.DataContext>
 
     <UserControl.KeyBindings>
@@ -51,7 +51,7 @@
                     ScrollViewer.VerticalScrollBarVisibility="Disabled">
                     <ListBox.ItemTemplate>
                         <DataTemplate>
-                            <styles:TagChip
+                            <templatedControls:TagChip
                                 Text="{Binding MatchedText}"
                                 IsDeletable="False" />
 

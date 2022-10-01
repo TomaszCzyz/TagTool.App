@@ -1,7 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using Dock.Model.Mvvm.Controls;
 
-namespace TagTool.App.ViewModels;
+namespace TagTool.App.ViewModels.UserControls;
 
 public partial class FileViewModel : Document
 {

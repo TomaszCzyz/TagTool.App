@@ -3,15 +3,15 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:viewModels="clr-namespace:TagTool.App.ViewModels"
-    xmlns:userControls="clr-namespace:TagTool.App.UserControls"
-    xmlns:styles="clr-namespace:TagTool.App.Styles"
     xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+    xmlns:userControls="clr-namespace:TagTool.App.Views.UserControls"
+    xmlns:templatedControls="clr-namespace:TagTool.App.Views.TemplatedControls"
+    xmlns:userControls1="clr-namespace:TagTool.App.ViewModels.UserControls"
     mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="350"
-    x:Class="TagTool.App.Views.TabContentView">
+    x:Class="TagTool.App.Views.UserControls.TabContentView">
 
     <Design.DataContext>
-        <viewModels:TabContentViewModel />
+        <userControls1:TabContentViewModel />
     </Design.DataContext>
 
     <Grid
@@ -53,8 +53,8 @@
                             <!-- </ListBox.Styles> -->
 
                             <ItemsControl.DataTemplates>
-                                <DataTemplate DataType="viewModels:Tag">
-                                    <styles:TagChip Text="{Binding Name}" />
+                                <DataTemplate DataType="userControls1:Tag">
+                                    <templatedControls:TagChip Text="{Binding Name}" />
                                 </DataTemplate>
                                 <DataTemplate DataType="userControls:NewSearchTagTextBox">
                                     <userControls:NewSearchTagTextBox />

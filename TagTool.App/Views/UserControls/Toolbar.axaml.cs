@@ -1,11 +1,11 @@
 ﻿using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
 
-namespace TagTool.App.Views;
+namespace TagTool.App.Views.UserControls;
 
-public partial class ToolbarView : UserControl
+public partial class Toolbar : UserControl
 {
-    public ToolbarView()
+    public Toolbar()
     {
         InitializeComponent();
     }

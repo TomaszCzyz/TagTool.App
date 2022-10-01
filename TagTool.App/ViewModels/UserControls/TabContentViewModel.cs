@@ -14,7 +14,7 @@ using TagTool.App.Extensions;
 using TagTool.Backend;
 using File = TagTool.App.Models.File;
 
-namespace TagTool.App.ViewModels;
+namespace TagTool.App.ViewModels.UserControls;
 
 public class Tag
 {

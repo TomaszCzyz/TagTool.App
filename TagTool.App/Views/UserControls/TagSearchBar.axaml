@@ -4,14 +4,14 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
-    xmlns:styles="clr-namespace:TagTool.App.Styles"
-    xmlns:viewModels="clr-namespace:TagTool.App.ViewModels"
     xmlns:system="clr-namespace:System;assembly=System.Runtime"
+    xmlns:templatedControls="clr-namespace:TagTool.App.Views.TemplatedControls"
+    xmlns:userControls="clr-namespace:TagTool.App.ViewModels.UserControls"
     mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-    x:Class="TagTool.App.UserControls.TagSearchBar">
+    x:Class="TagTool.App.Views.UserControls.TagSearchBar">
 
     <Design.DataContext>
-        <viewModels:TabContentViewModel />
+        <userControls:TabContentViewModel />
     </Design.DataContext>
 
     <StackPanel>
@@ -32,8 +32,8 @@
                         VerticalAlignment="Center">
 
                         <ItemsControl.DataTemplates>
-                            <DataTemplate DataType="viewModels:Tag">
-                                <styles:TagChip BorderBrush="Red" BorderThickness="1" Text="{Binding Name}" />
+                            <DataTemplate DataType="userControls:Tag">
+                                <templatedControls:TagChip BorderBrush="Red" BorderThickness="1" Text="{Binding Name}" />
                             </DataTemplate>
                             <DataTemplate DataType="system:String">
                                 <TextBox
@@ -48,11 +48,8 @@
                                 <WrapPanel />
                             </ItemsPanelTemplate>
                         </ItemsControl.ItemsPanel>
-
                     </ItemsControl>
-
                 </Panel>
-
             </Grid>
         </Border>
     </StackPanel>

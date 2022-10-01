@@ -6,9 +6,9 @@ using Dock.Model.Core;
 using Dock.Model.Mvvm;
 using Dock.Model.Mvvm.Controls;
 using TagTool.App.Extensions;
-using TagTool.App.ViewModels.Docks;
+using TagTool.App.ViewModels.UserControls;
 
-namespace TagTool.App.ViewModels;
+namespace TagTool.App.Docks;
 
 public class NotepadFactory : Factory
 {

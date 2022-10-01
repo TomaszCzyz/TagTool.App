@@ -1,6 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using Dock.Model.Controls;
 using Dock.Model.Core;
+using TagTool.App.Docks;
 
 namespace TagTool.App.ViewModels;
 

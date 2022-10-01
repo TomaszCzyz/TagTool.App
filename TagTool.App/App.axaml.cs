@@ -5,6 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Serilog;
 using TagTool.App.Core.Services;
 using TagTool.App.ViewModels;
+using TagTool.App.ViewModels.UserControls;
 using TagTool.App.Views;
 
 namespace TagTool.App;

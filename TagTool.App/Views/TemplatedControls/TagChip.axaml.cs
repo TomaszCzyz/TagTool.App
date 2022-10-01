@@ -3,7 +3,7 @@ using Avalonia;
 using Avalonia.Controls.Documents;
 using Avalonia.Controls.Primitives;
 
-namespace TagTool.App.Styles;
+namespace TagTool.App.Views.TemplatedControls;
 
 // [TemplatePart(Name = DeleteButtonPartName, Type = typeof(Button))]
 public class TagChip : TemplatedControl
