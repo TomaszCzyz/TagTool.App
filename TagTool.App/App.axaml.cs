@@ -4,6 +4,7 @@ using Avalonia.Markup.Xaml;
 using Microsoft.Extensions.DependencyInjection;
 using Serilog;
 using TagTool.App.Core.Services;
+using TagTool.App.Docks;
 using TagTool.App.ViewModels;
 using TagTool.App.ViewModels.UserControls;
 using TagTool.App.Views;
@@ -12,17 +13,19 @@ namespace TagTool.App;
 
 public class App : Application
 {
+    private IServiceProvider _serviceProvider = null!;
+
     public override void Initialize()
     {
         AvaloniaXamlLoader.Load(this);
 
-        var services = ConfigureServices();
-        Resources[typeof(IServiceProvider)] = services;
+        _serviceProvider = ConfigureServices();
+        Resources[typeof(IServiceProvider)] = _serviceProvider;
     }
 
     public override void OnFrameworkInitializationCompleted()
     {
-        var mainWindowViewModel = new MainWindowViewModel();
+        var mainWindowViewModel = _serviceProvider.GetRequiredService<MainWindowViewModel>();
 
         if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktopLifetime)
         {
@@ -44,6 +47,8 @@ public class App : Application
 
         services.AddSingleton<TagSearchServiceFactory>();
         services.AddSingleton<TagServiceFactory>();
+        services.AddTransient<NotepadFactory>();
+        services.AddTransient<FilesDocumentDock>();
 
         services.AddSingleton(Log.Logger);
         services.AddTransient<TabContentViewModel>();

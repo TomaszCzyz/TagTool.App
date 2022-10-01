@@ -1,15 +1,17 @@
-﻿using Avalonia;
-using CommunityToolkit.Mvvm.Input;
+﻿using CommunityToolkit.Mvvm.Input;
 using Dock.Model.Mvvm.Controls;
-using TagTool.App.Extensions;
+using Microsoft.Extensions.DependencyInjection;
 using TagTool.App.ViewModels.UserControls;
 
 namespace TagTool.App.Docks;
 
 public class FilesDocumentDock : DocumentDock
 {
-    public FilesDocumentDock()
+    private readonly IServiceProvider _serviceProvider;
+
+    public FilesDocumentDock(IServiceProvider serviceProvider)
     {
+        _serviceProvider = serviceProvider;
         CreateDocument = new RelayCommand(CreateNewDocument);
     }
 
@@ -28,7 +30,7 @@ public class FilesDocumentDock : DocumentDock
         //     Encoding = Encoding.Default.WebName
         // };
 
-        var document = Application.Current?.CreateInstance<TabContentViewModel>()!;
+        var document = _serviceProvider.GetRequiredService<TabContentViewModel>();
         document.Title = "Untitled";
 
         Factory?.AddDockable(this, document);

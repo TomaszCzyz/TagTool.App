@@ -1,38 +1,39 @@
-﻿using System.Text;
-using Avalonia;
-using Dock.Avalonia.Controls;
+﻿using Dock.Avalonia.Controls;
 using Dock.Model.Controls;
 using Dock.Model.Core;
 using Dock.Model.Mvvm;
 using Dock.Model.Mvvm.Controls;
-using TagTool.App.Extensions;
+using Microsoft.Extensions.DependencyInjection;
 using TagTool.App.ViewModels.UserControls;
 
 namespace TagTool.App.Docks;
 
 public class NotepadFactory : Factory
 {
+    private readonly IServiceProvider _serviceProvider;
     private IRootDock? _rootDock;
     private IDocumentDock? _documentDock;
 
-    public override IDocumentDock CreateDocumentDock() => new FilesDocumentDock();
+    public NotepadFactory(IServiceProvider serviceProvider)
+    {
+        _serviceProvider = serviceProvider;
+    }
+
+    public override IDocumentDock CreateDocumentDock() => _serviceProvider.GetRequiredService<FilesDocumentDock>();
 
     public override IRootDock CreateLayout()
     {
         var untitledFileViewModel = new FileViewModel
         {
-            Path = string.Empty,
-            Title = "Untitled",
-            Text = "",
-            Encoding = Encoding.Default.WebName
+            Title = "fileViewModel"
         };
 
-        var untitledTabContentViewModel = Application.Current?.CreateInstance<TabContentViewModel>()!;
+        var untitledTabContentViewModel = _serviceProvider.GetRequiredService<TabContentViewModel>();
         untitledTabContentViewModel.Title = "Untitled";
-        var untitledTabContentViewModel2 = Application.Current?.CreateInstance<TabContentViewModel>()!;
+        var untitledTabContentViewModel2 = _serviceProvider.GetRequiredService<TabContentViewModel>();
         untitledTabContentViewModel2.Title = "Untitled";
 
-        var documentDock = new FilesDocumentDock
+        var documentDock = new FilesDocumentDock(_serviceProvider)
         {
             Id = "Files",
             Title = "Files",
@@ -44,10 +45,10 @@ public class NotepadFactory : Factory
                 untitledFileViewModel,
                 untitledTabContentViewModel
             ),
-            CanCreateDocument = true
+            CanCreateDocument = false
         };
 
-        var documentDock2 = new FilesDocumentDock
+        var documentDock2 = new FilesDocumentDock(_serviceProvider)
         {
             Id = "Files",
             Title = "Files",
@@ -55,7 +56,7 @@ public class NotepadFactory : Factory
             Proportion = double.NaN,
             ActiveDockable = untitledFileViewModel,
             VisibleDockables = CreateList<IDockable>(untitledTabContentViewModel2),
-            CanCreateDocument = true
+            CanCreateDocument = false
         };
 
         // var tools = new ProportionalDock

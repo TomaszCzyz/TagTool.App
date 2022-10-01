@@ -17,7 +17,6 @@
         <StyleInclude Source="/Views/TemplatedControls/TagSearchBar.axaml" />
         <StyleInclude Source="/Views/Styles/AutoCompleteBox.axaml" />
         <StyleInclude Source="/Views/Styles/Button.axaml" />
-        <StyleInclude Source="/Views/Styles/ListBox.axaml" />
         <StyleInclude Source="/Views/Styles/TextBox.axaml" />
     </Application.Styles>
 </Application>
