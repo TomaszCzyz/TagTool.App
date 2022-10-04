@@ -12,6 +12,7 @@ public partial class MainWindow : Window
         InitializeComponent();
 #if DEBUG
         this.AttachDevTools();
+        Renderer.DrawFps = true;
 #endif
         DataContext = this.CreateInstance<MainWindowViewModel>();
     }

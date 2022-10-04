@@ -3,9 +3,10 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
 
     <Design.PreviewWith>
-        <Border Padding="20">
-            <StackPanel>
-                <AutoCompleteBox Classes="wrapped" />
+        <Border Padding="20" Background="#a7a7a7">
+            <StackPanel Spacing="10">
+                <AutoCompleteBox />
+                <AutoCompleteBox Classes="TransparentBackground" />
                 <AutoCompleteBox Classes="wrapped" />
             </StackPanel>
         </Border>
@@ -16,8 +17,8 @@
         <Setter Property="BorderBrush" Value="{DynamicResource MaterialDesignTextBoxBorder}" />
         <Setter Property="BorderThickness" Value="0 0 0 1" />
         <Setter Property="Padding" Value="4" />
-        <Setter Property="FilterMode" Value="None"/>
-        <Setter Property="Margin" Value="4"/>
+        <Setter Property="FilterMode" Value="None" />
+        <Setter Property="Margin" Value="4" />
         <Setter Property="Template">
             <ControlTemplate>
                 <Panel>
@@ -59,6 +60,45 @@
                 </Panel>
             </ControlTemplate>
         </Setter>
+    </Style>
+
+
+    <Style Selector="AutoCompleteBox.TransparentBackground">
+        <Setter Property="BorderThickness" Value="0" />
+        <Setter Property="Background" Value="Transparent" />
+
+        <!-- pointerover -->
+        <Style Selector="^:pointerover">
+            <Style Selector="^ /template/ TextBox#PART_TextBox">
+                <Style Selector="^ /template/ Border#PART_BorderElement">
+                    <Setter Property="Background" Value="Transparent" />
+                    <Setter Property="BorderThickness" Value="0" />
+                </Style>
+            </Style>
+        </Style>
+
+        <!-- focused -->
+        <Style Selector="^:focus-within, ^:focus">
+            <Style Selector="^ /template/ TextBox#PART_TextBox">
+                <Style Selector="^ /template/ Border#PART_BorderElement">
+                    <Setter Property="Background" Value="Transparent" />
+                    <Setter Property="BorderThickness" Value="0" />
+                </Style>
+            </Style>
+        </Style>
+    </Style>
+
+    <Style Selector="AutoCompleteBox.WrappedPanel">
+        <Style Selector="^ /template/ ListBox#PART_SelectingItemsControl">
+            <Setter Property="ItemsPanel">
+                <ItemsPanelTemplate>
+                    <WrapPanel />
+                </ItemsPanelTemplate>
+            </Setter>
+        </Style>
+        <Style Selector="^ /template/ Popup#PART_Popup">
+            <Setter Property="MaxWidth" Value="450" />
+        </Style>
     </Style>
 
 </Styles>

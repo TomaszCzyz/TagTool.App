@@ -1,6 +1,4 @@
-﻿using Avalonia.Controls.Documents;
-
-namespace TagTool.App.Core.Models;
+﻿namespace TagTool.App.Core.Models;
 
 public record HighlightInfo(int StartIndex, int Length);
 
@@ -8,7 +6,7 @@ public class HighlightedMatch
 {
     public string? MatchedText { get; set; } = "default";
 
-    public InlineCollection? Inlines { get; set; }
+    // public InlineCollection? Inlines { get; set; }
 
     public int Score { get; init; }
 
@@ -24,4 +22,6 @@ public class HighlightedMatch
     }
 
     public static IComparer<HighlightedMatch> ScoreComparer { get; } = new ScoreRelationalComparer();
+
+    public override string ToString() => MatchedText ?? "EmptyTag";
 }

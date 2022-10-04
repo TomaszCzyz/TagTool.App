@@ -55,6 +55,7 @@ public class App : Application
         services.AddTransient<FileViewModel>();
         services.AddTransient<MainWindowViewModel>();
         services.AddTransient<TabContentViewModel>();
+        services.AddTransient<TagSearchBoxViewModel>();
 
         return services.BuildServiceProvider();
     }

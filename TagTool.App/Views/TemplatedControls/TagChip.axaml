@@ -18,19 +18,20 @@
 
     <Style Selector="templatedControls|TagChip">
         <Setter Property="FontSize" Value="22" />
-        <Setter Property="FontWeight" Value="Bold" />
         <Setter Property="Foreground" Value="#151515" />
+        <Setter Property="FontWeight" Value="Medium" />
+        <Setter Property="RenderTransform" Value="skewX(-14deg)" />
         <Setter Property="Margin" Value="4" />
         <Setter Property="HorizontalAlignment" Value="Left" />
         <Setter Property="FontFamily" Value="avares://TagTool.App/Assets/Fonts#Lato" />
         <Setter Property="Background">
-            <LinearGradientBrush StartPoint="49%,0%" EndPoint="51%,100%">
+            <LinearGradientBrush StartPoint="49%,0%" EndPoint="51%,100%" Opacity="0.9">
                 <GradientStop Color="#FFBE74" Offset="0.6" />
                 <GradientStop Color="#D77216" Offset="1" />
             </LinearGradientBrush>
         </Setter>
         <Setter Property="BorderThickness" Value="2" />
-        <Setter Property="BorderBrush" Value="#D77216" />
+        <Setter Property="BorderBrush" Value="#FFBE74" />
         <!-- <Setter Property="Inlines"> -->
         <!--     <Setter.Value> -->
         <!--         <Run FontWeight="Bold" FontStyle="Italic" Text="asdads"></Run> -->
@@ -40,8 +41,9 @@
             <ControlTemplate>
                 <Grid ColumnDefinitions="Auto,Auto" RowDefinitions="Auto">
                     <Border
+                        Name="BorderBg"
                         Grid.ColumnSpan="2"
-                        CornerRadius="16"
+                        CornerRadius="5"
                         Background="{TemplateBinding Background}"
                         BorderBrush="{TemplateBinding BorderBrush}"
                         BorderThickness="{TemplateBinding BorderThickness}"
@@ -67,12 +69,12 @@
                         Height="16">
                         <Button.Template>
                             <ControlTemplate>
-                                <Panel>
+                                <Panel Opacity="0.6">
                                     <Ellipse
-                                        x:Name="Bg"
+                                        Name="DeleteButtonBg"
                                         Fill="#FFA6A6A6"
-                                        Stroke="#FF009587"
-                                        StrokeThickness="0" />
+                                        Stroke="#7E7E7E"
+                                        StrokeThickness="1" />
 
                                     <avalonia:MaterialIcon
                                         Kind="Close"

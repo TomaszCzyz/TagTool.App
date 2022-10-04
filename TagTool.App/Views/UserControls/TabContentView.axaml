@@ -3,9 +3,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
     xmlns:userControls="clr-namespace:TagTool.App.Views.UserControls"
-    xmlns:templatedControls="clr-namespace:TagTool.App.Views.TemplatedControls"
     xmlns:userControls1="clr-namespace:TagTool.App.ViewModels.UserControls"
     mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="350"
     x:Class="TagTool.App.Views.UserControls.TabContentView">
@@ -19,6 +17,7 @@
         RowDefinitions="Auto,Auto,*"
         Margin="4">
 
+        <!-- Toolbar -->
         <StackPanel
             Grid.Row="0"
             Orientation="Horizontal"
@@ -29,47 +28,9 @@
         </StackPanel>
 
         <!-- SearchBar -->
-        <Panel Grid.Row="1">
-            <Border BorderThickness="1" BorderBrush="Green" CornerRadius="30">
-                <Grid ColumnDefinitions="Auto,*">
-                    <avalonia:MaterialIcon
-                        Kind="Magnify"
-                        Margin="15 0 5 0"
-                        HorizontalAlignment="Center"
-                        VerticalAlignment="Center"
-                        Width="20"
-                        Height="20" />
+        <userControls:TagSearchBar Grid.Row="1" />
 
-                    <Panel Grid.Column="1">
-                        <ItemsControl
-                            Name="SearchTagsItemsControl"
-                            Items="{Binding EnteredTags}"
-                            HorizontalAlignment="Left"
-                            VerticalAlignment="Center">
-                            <!-- <ListBox.Styles> -->
-                            <!--     <Style Selector="ListBoxItem"> -->
-                            <!--         <Setter Property="Padding" Value="2"></Setter> -->
-                            <!--     </Style> -->
-                            <!-- </ListBox.Styles> -->
-
-                            <ItemsControl.DataTemplates>
-                                <DataTemplate DataType="userControls1:Tag">
-                                    <templatedControls:TagChip Text="{Binding Name}" />
-                                </DataTemplate>
-                                <DataTemplate DataType="userControls:NewSearchTagTextBox">
-                                    <userControls:NewSearchTagTextBox />
-                                </DataTemplate>
-                            </ItemsControl.DataTemplates>
-                            <ItemsControl.ItemsPanel>
-                                <ItemsPanelTemplate>
-                                    <WrapPanel />
-                                </ItemsPanelTemplate>
-                            </ItemsControl.ItemsPanel>
-                        </ItemsControl>
-                    </Panel>
-                </Grid>
-            </Border>
-        </Panel>
+        <!-- SearchResults -->
         <Grid Grid.Row="2">
             <DataGrid
                 Name="MyDataGrid"

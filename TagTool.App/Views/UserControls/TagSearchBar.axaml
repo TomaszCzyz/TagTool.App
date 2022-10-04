@@ -4,54 +4,73 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
-    xmlns:system="clr-namespace:System;assembly=System.Runtime"
     xmlns:templatedControls="clr-namespace:TagTool.App.Views.TemplatedControls"
     xmlns:userControls="clr-namespace:TagTool.App.ViewModels.UserControls"
-    mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+    mc:Ignorable="d" d:DesignWidth="550" d:DesignHeight="300"
     x:Class="TagTool.App.Views.UserControls.TagSearchBar">
 
     <Design.DataContext>
         <userControls:TabContentViewModel />
     </Design.DataContext>
 
-    <StackPanel>
-        <Border BorderThickness="1" BorderBrush="Green" CornerRadius="30">
-            <Grid ColumnDefinitions="Auto,*">
-                <avalonia:MaterialIcon
-                    Kind="Magnify"
-                    Margin="15 0 5 0"
-                    HorizontalAlignment="Center"
-                    VerticalAlignment="Center"
-                    Width="20"
-                    Height="20" />
+    <UserControl.Styles>
+        <Style Selector="ListBox">
+            <Setter Property="Background" Value="Transparent" />
+        </Style>
+        <Style Selector="ListBoxItem">
+            <Setter Property="Padding" Value="0" />
+        </Style>
+    </UserControl.Styles>
 
-                <Panel Grid.Column="1">
-                    <ItemsControl
-                        Items="{Binding EnteredTags}"
-                        HorizontalAlignment="Left"
-                        VerticalAlignment="Center">
+    <Panel
+        HorizontalAlignment="Stretch"
+        VerticalAlignment="Top">
 
-                        <ItemsControl.DataTemplates>
-                            <DataTemplate DataType="userControls:Tag">
-                                <templatedControls:TagChip BorderBrush="Red" BorderThickness="1" Text="{Binding Name}" />
-                            </DataTemplate>
-                            <DataTemplate DataType="system:String">
-                                <TextBox
-                                    Margin="4"
-                                    BorderThickness="0"
-                                    Watermark="Next Tag..." />
+        <Grid ColumnDefinitions="Auto,*" RowDefinitions="Auto">
+            <Border
+                Grid.ColumnSpan="2"
+                Name="Bg"
+                CornerRadius="8">
+                <Border.Background>
+                    <LinearGradientBrush StartPoint="49%,0%" EndPoint="50%,100%" Opacity="0.4">
+                        <GradientStop Color="#FFFFFF" Offset="0.3" />
+                        <GradientStop Color="#FFC3EB" Offset="0.7" />
+                        <GradientStop Color="#FF56A5" Offset="1" />
+                    </LinearGradientBrush>
+                </Border.Background>
+            </Border>
 
-                            </DataTemplate>
-                        </ItemsControl.DataTemplates>
-                        <ItemsControl.ItemsPanel>
-                            <ItemsPanelTemplate>
-                                <WrapPanel />
-                            </ItemsPanelTemplate>
-                        </ItemsControl.ItemsPanel>
-                    </ItemsControl>
-                </Panel>
-            </Grid>
-        </Border>
-    </StackPanel>
+            <avalonia:MaterialIcon
+                Grid.Column="0"
+                Kind="Magnify"
+                Margin="10 0 5 0"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                Width="20"
+                Height="20" />
+
+            <ListBox
+                Grid.Column="1"
+                Items="{Binding EnteredTags}"
+                HorizontalAlignment="Left"
+                ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                VerticalAlignment="Center">
+
+                <ListBox.DataTemplates>
+                    <DataTemplate DataType="userControls:Tag">
+                        <templatedControls:TagChip Text="{Binding Name}" Margin="4 2" />
+                    </DataTemplate>
+                    <!-- <DataTemplate DataType="userControls1:TagSearchBoxViewModel"> -->
+                    <!--     <userControls1:TagSearchBox /> -->
+                    <!-- </DataTemplate> -->
+                </ListBox.DataTemplates>
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <WrapPanel />
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+            </ListBox>
+        </Grid>
+    </Panel>
 
 </UserControl>

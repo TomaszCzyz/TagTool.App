@@ -7,7 +7,7 @@ using TagTool.App.Extensions;
 
 namespace TagTool.App.ViewModels;
 
-public partial class MainWindowViewModel : ObservableObject
+public partial class MainWindowViewModel : ViewModelBase
 {
     [ObservableProperty]
     private IRootDock? _layout;
