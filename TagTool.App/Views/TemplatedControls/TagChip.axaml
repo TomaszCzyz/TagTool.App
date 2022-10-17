@@ -11,27 +11,37 @@
                 <templatedControls:TagChip Classes="Medium" />
                 <templatedControls:TagChip Classes="Small" />
             </StackPanel>
+
             <templatedControls:TagChip Text="Test" IsDeletable="True" />
             <templatedControls:TagChip Text="Test" IsDeletable="False" />
+
+            <StackPanel Orientation="Horizontal">
+                <templatedControls:TagChip Text="Test" IsDeletable="False" FontFamily="avares://TagTool.App/Assets/Fonts#Lato" />
+                <templatedControls:TagChip Text="Test" IsDeletable="False" FontFamily="avares://TagTool.App/Assets/Fonts#Inter" />
+                <templatedControls:TagChip Text="Test" IsDeletable="False" FontFamily="avares://TagTool.App/Assets/Fonts#Roboto" FontWeight="Black" FontStretch="Condensed"/>
+                <templatedControls:TagChip Text="Test" IsDeletable="False" FontFamily="avares://TagTool.App/Assets/Fonts#JetBrains" FontWeight="Bold" />
+            </StackPanel>
         </StackPanel>
     </Design.PreviewWith>
 
     <Style Selector="templatedControls|TagChip">
-        <Setter Property="FontSize" Value="22" />
-        <Setter Property="Foreground" Value="#151515" />
-        <Setter Property="FontWeight" Value="Medium" />
-        <Setter Property="RenderTransform" Value="skewX(-14deg)" />
+        <!-- <Setter Property="RenderTransform" Value="skewX(-14deg)" /> -->
         <Setter Property="Margin" Value="4" />
         <Setter Property="HorizontalAlignment" Value="Left" />
-        <Setter Property="FontFamily" Value="avares://TagTool.App/Assets/Fonts#Lato" />
-        <Setter Property="Background">
-            <LinearGradientBrush StartPoint="49%,0%" EndPoint="51%,100%" Opacity="0.9">
-                <GradientStop Color="#FFBE74" Offset="0.6" />
-                <GradientStop Color="#D77216" Offset="1" />
-            </LinearGradientBrush>
+        <Setter Property="FontSize" Value="22" />
+        <Setter Property="FontWeight" Value="Bold" />
+        <Setter Property="FontStretch" Value="Condensed" />
+        <Setter Property="FontFamily" Value="avares://TagTool.App/Assets/Fonts#Roboto" />
+        <Setter Property="Foreground" Value="#4CAF50" />
+        <Setter Property="Background" Value="#1B5E20">
+
+            <!-- <LinearGradientBrush StartPoint="49%,0%" EndPoint="51%,100%" Opacity="0.9"> -->
+            <!--     <GradientStop Color="#FFBE74" Offset="0.6" /> -->
+            <!--     <GradientStop Color="#D77216" Offset="1" /> -->
+            <!-- </LinearGradientBrush> -->
         </Setter>
-        <Setter Property="BorderThickness" Value="2" />
-        <Setter Property="BorderBrush" Value="#FFBE74" />
+        <Setter Property="BorderThickness" Value="1" />
+        <Setter Property="BorderBrush" Value="#4CAF50" />
         <!-- <Setter Property="Inlines"> -->
         <!--     <Setter.Value> -->
         <!--         <Run FontWeight="Bold" FontStyle="Italic" Text="asdads"></Run> -->
@@ -55,10 +65,8 @@
                         Text="{TemplateBinding Text}"
                         IsTabStop="False"
                         VerticalAlignment="Center"
-                        Margin="10 0 10 0">
+                        Margin="10 0 10 0" />
 
-                        <!-- <Run FontStyle="Italic" FontSize="20" Text="asdasd"></Run> -->
-                    </RichTextBlock>
                     <Button
                         Name="PART_DeleteButton"
                         Grid.Column="1"
@@ -72,9 +80,7 @@
                                 <Panel Opacity="0.6">
                                     <Ellipse
                                         Name="DeleteButtonBg"
-                                        Fill="#FFA6A6A6"
-                                        Stroke="#7E7E7E"
-                                        StrokeThickness="1" />
+                                        Fill="#FFA6A6A6" />
 
                                     <avalonia:MaterialIcon
                                         Kind="Close"
