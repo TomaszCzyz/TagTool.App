@@ -5,7 +5,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:viewModels="clr-namespace:TagTool.App.ViewModels"
     xmlns:userControls="clr-namespace:TagTool.App.Views.UserControls"
-    mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+    mc:Ignorable="d" d:DesignWidth="1600" d:DesignHeight="800"
     x:Class="TagTool.App.Views.UserControls.MainPanel">
 
     <Design.DataContext>
@@ -17,8 +17,27 @@
         <!--     x:Name="DockControl" -->
         <!--     Layout="{Binding Layout}" -->
         <!--     Margin="4" /> -->
-        
-        <userControls:TabContentView />
+        <Grid ColumnDefinitions="*, 2, *">
+            <Grid
+                Grid.Column="0"
+                RowDefinitions="*, 2, *">
+
+                <userControls:TabContentView Grid.Row="0" />
+                <GridSplitter
+                    Grid.Row="1"
+                    Background="Black"
+                    ResizeDirection="Rows" />
+
+                <userControls:TabContentView Grid.Row="2" />
+            </Grid>
+            <GridSplitter
+                Grid.Column="1"
+                Background="Black"
+                ResizeDirection="Columns" />
+
+            <userControls:TabContentView Grid.Column="2" />
+        </Grid>
+
 
     </Panel>
 </UserControl>
