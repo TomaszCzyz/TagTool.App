@@ -1,54 +1,22 @@
 ﻿using System.Collections.ObjectModel;
-using CommunityToolkit.Mvvm.Input;
-using Dock.Model.Mvvm.Controls;
 using DynamicData;
-using TagTool.App.Core.Models;
 using File = TagTool.App.Core.Models.File;
 
 namespace TagTool.App.ViewModels.UserControls;
 
-public partial class TabContentViewModel : Document
+public class FileSystemViewModel
 {
+    // [ObservableProperty]
+    // private ObservableCollection<File> _files = new();
+
     public ObservableCollection<File> Files { get; set; } = new();
 
-    public ObservableCollection<object> EnteredTags { get; set; } = new();
-
-    public TabContentViewModel()
+    public FileSystemViewModel()
     {
         Files.AddRange(_exampleFiles);
-        EnteredTags.AddRange(
-            new Tag[] { new("Tag1"), new("Audio"), new("Dog"), new("Picture"), new("Colleague"), new("Tag6"), new("Tag7"), new("LastTag") });
-        EnteredTags.Add(new TagSearchBoxViewModel());
     }
 
-    // [RelayCommand]
-    // public void AddSearchTag(KeyEventArgs e)
-    // {
-    //     switch (e.Key)
-    //     {
-    //         case Key.Enter:
-    //             if (string.IsNullOrWhiteSpace(NewSearchTag)) return;
-    //
-    //             EnteredTags.Insert(EnteredTags.Count - 1, new Tag(NewSearchTag));
-    //             NewSearchTag = string.Empty;
-    //             return;
-    //         case Key.Back: // TODO: Key.Back event is consumed by TextBox, so this case is unreachable
-    //             if (!string.IsNullOrWhiteSpace(NewSearchTag)) return;
-    //
-    //             EnteredTags.RemoveAt(EnteredTags.Count - 2);
-    //             return;
-    //     }
-    // }
-
-    [RelayCommand]
-    public void RemoveLastTag()
-    {
-        if (EnteredTags.Count <= 1) return;
-
-        EnteredTags.RemoveAt(EnteredTags.Count - 2);
-    }
-
-    private readonly File[] _exampleFiles =
+    private static readonly File[] _exampleFiles =
     {
         new(1, "File1.txt", 1234, new DateTime(2022, 12, 12), new DateTime(2022, 12, 12), @"C:\Program Files"),
         new(1, "File2.txt", 12311111114, new DateTime(2022, 12, 12), new DateTime(2022, 12, 12), @"C:\Program Files"),

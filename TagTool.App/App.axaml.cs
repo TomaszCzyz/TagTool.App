@@ -52,6 +52,7 @@ public class App : Application
 
         services.AddSingleton(Log.Logger);
         services.AddTransient<TabContentViewModel>();
+        services.AddTransient<FileSystemViewModel>();
         services.AddTransient<MainWindowViewModel>();
         services.AddTransient<TabContentViewModel>();
         services.AddTransient<TagSearchBoxViewModel>();

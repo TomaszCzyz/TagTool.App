@@ -39,15 +39,14 @@
         <!-- SearchResults -->
         <DataGrid
             Grid.Row="2"
-            Name="MyDataGrid"
             FontFamily="avares://TagTool.App/Assets/Fonts#JetBrains"
             CanUserResizeColumns="True"
             CanUserReorderColumns="True"
             RowBackground="Transparent"
             Background="Transparent"
             CanUserSortColumns="True"
-            Items="{Binding Files}"
-            RowDetailsVisibilityMode="Visible">
+            RowDetailsVisibilityMode="Visible"
+            Items="{Binding Files}">
             <DataGrid.RowDetailsTemplate>
                 <DataTemplate>
                     <StackPanel Orientation="Horizontal">
@@ -74,7 +73,7 @@
                 </DataTemplate>
             </DataGrid.RowDetailsTemplate>
             <DataGrid.Columns>
-                <DataGridCheckBoxColumn Width="60" Header="✔" />
+                <DataGridCheckBoxColumn Width="60" Header="✔" CanUserResize="False"/>
                 <DataGridTextColumn IsReadOnly="True" Header="Name" Width="*" Binding="{Binding Name}" />
                 <DataGridTextColumn IsReadOnly="True" Header="Date Modified" Binding="{Binding DateModified, StringFormat=\{0:yyyy/MM/dd hh:mm:ss\}}" />
                 <DataGridTextColumn IsReadOnly="True" Header="Size" Binding="{Binding Length, Converter={StaticResource FileSizeToStringConverter}}" />

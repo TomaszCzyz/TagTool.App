@@ -1,0 +1,38 @@
+﻿<UserControl
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:userControls="clr-namespace:TagTool.App.ViewModels.UserControls"
+    xmlns:converters="clr-namespace:TagTool.App.Converters"
+    mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+    x:Class="TagTool.App.Views.UserControls.FileSystemView">
+
+    <UserControl.Resources>
+        <converters:FileSizeToStringConverter x:Key="FileSizeToStringConverter" />
+    </UserControl.Resources>
+
+    <Design.DataContext>
+        <userControls:FileSystemViewModel />
+    </Design.DataContext>
+
+    <DataGrid
+        FontFamily="avares://TagTool.App/Assets/Fonts#JetBrains"
+        SelectionMode="Extended"
+        CanUserResizeColumns="True"
+        CanUserReorderColumns="True"
+        RowBackground="Transparent"
+        Background="Transparent"
+        CanUserSortColumns="True"
+        RowDetailsVisibilityMode="Visible"
+        Items="{Binding Files}">
+        <DataGrid.Columns>
+            <DataGridCheckBoxColumn Width="60" Header="✔" CanUserResize="False" />
+            <DataGridTextColumn IsReadOnly="True" Header="Name" Width="*" Binding="{Binding Name}" />
+            <DataGridTextColumn IsReadOnly="True" Header="Date Created" Binding="{Binding DateCreated, StringFormat=\{0:yyyy/MM/dd hh:mm:ss\}}" />
+            <DataGridTextColumn IsReadOnly="True" Header="Date Modified" Binding="{Binding DateModified, StringFormat=\{0:yyyy/MM/dd hh:mm:ss\}}" />
+            <DataGridTextColumn IsReadOnly="True" Header="Size" Binding="{Binding Length, Converter={StaticResource FileSizeToStringConverter}}" />
+        </DataGrid.Columns>
+    </DataGrid>
+
+</UserControl>

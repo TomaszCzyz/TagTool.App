@@ -7,6 +7,7 @@
     xmlns:templatedControls="clr-namespace:TagTool.App.Views.TemplatedControls"
     xmlns:userControls="clr-namespace:TagTool.App.ViewModels.UserControls"
     xmlns:userControls1="clr-namespace:TagTool.App.Views.UserControls"
+    xmlns:models="clr-namespace:TagTool.App.Core.Models;assembly=TagTool.App.Core"
     mc:Ignorable="d" d:DesignWidth="350" d:DesignHeight="300"
     x:Class="TagTool.App.Views.UserControls.TagSearchBar">
 
@@ -55,7 +56,7 @@
                 VerticalAlignment="Center"
                 Items="{Binding EnteredTags}">
                 <ListBox.DataTemplates>
-                    <DataTemplate DataType="userControls:Tag">
+                    <DataTemplate DataType="models:Tag">
                         <templatedControls:TagChip Text="{Binding Name}" Margin="4 2" />
                     </DataTemplate>
                     <DataTemplate DataType="userControls:TagSearchBoxViewModel">
