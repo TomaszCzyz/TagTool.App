@@ -1,10 +1,17 @@
 ﻿<Styles
     xmlns="https://github.com/avaloniaui"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia">
+    xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+    xmlns:system="clr-namespace:System;assembly=System.Runtime">
+
+    <Styles.Resources>
+        <system:Double x:Key="ButtonHoveredOpacity">0.12</system:Double>
+        <system:Double x:Key="ButtonDisabledOpacity">0.38</system:Double>
+        <system:Double x:Key="ButtonPressedOpacity">0.26</system:Double>
+    </Styles.Resources>
 
     <Design.PreviewWith>
-        <Border Padding="20" Background="#c6c6c6">
+        <Border Padding="20" Background="#D1D1D1">
             <StackPanel Orientation="Horizontal">
                 <Button Classes="addTag" />
                 <Button Classes="addTag" Foreground="Green" />
@@ -12,9 +19,63 @@
                 <Button Classes="deleteTag" />
                 <Line StartPoint="0,0" EndPoint="0,35" Stroke="Black" StrokeThickness="0.5" Margin="5,0,10,0" />
                 <Button Content="SomeContent" />
+
+                <Button Classes="InCircle" Height="33" Width="33">
+                    <avalonia:MaterialIcon
+                        Kind="Close"
+                        Height="{Binding $parent.Height}"
+                        Width="{Binding $parent.Width}"
+                        Foreground="#999999" />
+
+                </Button>
             </StackPanel>
         </Border>
     </Design.PreviewWith>
+
+    <Style Selector="Button.InCircle">
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="BorderBrush" Value="Transparent" />
+        <Setter Property="Foreground" Value="Transparent" />
+        <Setter Property="Template">
+            <ControlTemplate>
+                <Grid>
+                    <Ellipse
+                        Name="PART_HoverIndicator"
+                        Width="{TemplateBinding Width}"
+                        Height="{TemplateBinding Height}"
+                        VerticalAlignment="Center"
+                        HorizontalAlignment="Center"
+                        Opacity="0.7"
+                        Fill="{TemplateBinding Foreground}"
+                        IsHitTestVisible="False" />
+
+                    <Border
+                        Width="{TemplateBinding Width}"
+                        Height="{TemplateBinding Height}"
+                        VerticalAlignment="Center"
+                        HorizontalAlignment="Center"
+                        ClipToBounds="True"
+                        CornerRadius="1000000">
+
+                        <ContentPresenter
+                            Name="PART_ContentPresenter"
+                            CornerRadius="{TemplateBinding CornerRadius}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            ContentTemplate="{TemplateBinding ContentTemplate}"
+                            Content="{TemplateBinding Content}"
+                            HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
+                            VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}" />
+
+                    </Border>
+                </Grid>
+            </ControlTemplate>
+        </Setter>
+
+        <Style Selector="^:pointerover">
+            <Setter Property="Foreground" Value="#BBBBBB" />
+        </Style>
+    </Style>
 
     <Style Selector="Button.addTag">
         <Setter Property="Margin" Value="4" />

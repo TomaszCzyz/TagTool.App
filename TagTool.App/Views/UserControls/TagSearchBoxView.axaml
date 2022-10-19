@@ -15,13 +15,14 @@
 
     <Panel>
         <AutoCompleteBox
-            Name="AutoCompleteBox"
+            Name="PART_AutoCompleteBox"
             Classes="TransparentBackground WrappedPanel"
-            Text="{Binding SearchText}"
-            Items="{Binding TagsSearchResults}"
+            FontFamily="avares://TagTool.App/Assets/Fonts#Roboto"
             Margin="2 0"
             Watermark="Next Tag..."
-            FilterMode="None">
+            FilterMode="None"
+            Text="{Binding SearchText}"
+            Items="{Binding TagsSearchResults}">
             <AutoCompleteBox.ItemTemplate>
                 <DataTemplate DataType="models:HighlightedMatch">
                     <templatedControls:TagChip Text="{Binding MatchedText}" />
@@ -36,11 +37,8 @@
                 <!--         TargetObject="AutoCompleteBox" -->
                 <!--         PropertyName="Background" -->
                 <!--         Value="Red" /> -->
-                <!-- -->
                 <!-- </EventTriggerBehavior> -->
-
             </Interaction.Behaviors>
-
         </AutoCompleteBox>
     </Panel>
 

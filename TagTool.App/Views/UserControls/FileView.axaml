@@ -9,18 +9,13 @@
 
     <Grid RowDefinitions="*,Auto">
         <TextBox
-            BorderThickness="0"
+            Grid.Row="0"
             AcceptsReturn="True"
             AcceptsTab="True"
-            FontFamily="Consolas, Inconsolata"
             FontWeight="Light"
             FontSize="14"
-            SelectionStart="{Binding SelectionStart, Mode=TwoWay}"
-            SelectionEnd="{Binding SelectionEnd, Mode=TwoWay}"
-            CaretIndex="{Binding CaretIndex, Mode=TwoWay}"
             TextWrapping="NoWrap"
-            Text="{Binding Text}"
-            Grid.Row="0" />
+            Text="{Binding Text}" />
 
         <Grid Grid.Row="1" ColumnDefinitions="*,Auto">
             <TextBlock

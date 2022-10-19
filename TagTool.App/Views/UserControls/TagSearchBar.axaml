@@ -6,7 +6,8 @@
     xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
     xmlns:templatedControls="clr-namespace:TagTool.App.Views.TemplatedControls"
     xmlns:userControls="clr-namespace:TagTool.App.ViewModels.UserControls"
-    mc:Ignorable="d" d:DesignWidth="550" d:DesignHeight="300"
+    xmlns:userControls1="clr-namespace:TagTool.App.Views.UserControls"
+    mc:Ignorable="d" d:DesignWidth="350" d:DesignHeight="300"
     x:Class="TagTool.App.Views.UserControls.TagSearchBar">
 
     <Design.DataContext>
@@ -19,6 +20,7 @@
         </Style>
         <Style Selector="ListBoxItem">
             <Setter Property="Padding" Value="0" />
+            <Setter Property="MaxHeight" Value="30" />
         </Style>
     </UserControl.Styles>
 
@@ -29,16 +31,12 @@
         <Grid ColumnDefinitions="Auto,*" RowDefinitions="Auto">
             <Border
                 Grid.ColumnSpan="2"
-                Name="Bg"
-                CornerRadius="8">
-                <Border.Background>
-                    <LinearGradientBrush StartPoint="49%,0%" EndPoint="50%,100%" Opacity="0.4">
-                        <GradientStop Color="#FFFFFF" Offset="0.3" />
-                        <GradientStop Color="#FFC3EB" Offset="0.7" />
-                        <GradientStop Color="#FF56A5" Offset="1" />
-                    </LinearGradientBrush>
-                </Border.Background>
-            </Border>
+                Name="PART_BorderBackground"
+                CornerRadius="8"
+                Background="#6692B1"
+                BorderBrush="#6692B1"
+                BorderThickness="2"
+                Opacity="0.5" />
 
             <avalonia:MaterialIcon
                 Grid.Column="0"
@@ -51,18 +49,20 @@
 
             <ListBox
                 Grid.Column="1"
-                Items="{Binding EnteredTags}"
-                HorizontalAlignment="Left"
                 ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-                VerticalAlignment="Center">
-
+                Margin="2"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Center"
+                Items="{Binding EnteredTags}">
                 <ListBox.DataTemplates>
                     <DataTemplate DataType="userControls:Tag">
                         <templatedControls:TagChip Text="{Binding Name}" Margin="4 2" />
                     </DataTemplate>
-                    <!-- <DataTemplate DataType="userControls1:TagSearchBoxViewModel"> -->
-                    <!--     <userControls1:TagSearchBox /> -->
-                    <!-- </DataTemplate> -->
+                    <DataTemplate DataType="userControls:TagSearchBoxViewModel">
+                        <Border>
+                            <userControls1:TagSearchBoxView HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                    </DataTemplate>
                 </ListBox.DataTemplates>
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>

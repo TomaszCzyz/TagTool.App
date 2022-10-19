@@ -5,7 +5,8 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:userControls="clr-namespace:TagTool.App.Views.UserControls"
     xmlns:userControls1="clr-namespace:TagTool.App.ViewModels.UserControls"
-    mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="350"
+    xmlns:templatedControls="clr-namespace:TagTool.App.Views.TemplatedControls"
+    mc:Ignorable="d" d:DesignWidth="600" d:DesignHeight="350"
     x:Class="TagTool.App.Views.UserControls.TabContentView">
 
     <Design.DataContext>
@@ -31,20 +32,49 @@
         <userControls:TagSearchBar Grid.Row="1" />
 
         <!-- SearchResults -->
-        <Grid Grid.Row="2">
-            <DataGrid
-                Name="MyDataGrid"
-                Items="{Binding Files}"
-                CanUserResizeColumns="True"
-                CanUserReorderColumns="True"
-                CanUserSortColumns="True"
-                AutoGenerateColumns="True">
-                <!-- <DataGrid.Columns> -->
-                <!--     <DataGridTextColumn Header="Forename"  Binding="{Binding SearchText}"/> -->
-                <!--     <DataGridTextColumn Header="Surname" Binding="{Binding LastName}" /> -->
-                <!-- </DataGrid.Columns> -->
-            </DataGrid>
-        </Grid>
+        <DataGrid
+            Grid.Row="2"
+            Name="MyDataGrid"
+            FontFamily="avares://TagTool.App/Assets/Fonts#JetBrains"
+            CanUserResizeColumns="True"
+            CanUserReorderColumns="True"
+            RowBackground="Transparent"
+            Background="Transparent"
+            CanUserSortColumns="True"
+            Items="{Binding Files}"
+            RowDetailsVisibilityMode="Visible">
+            <DataGrid.RowDetailsTemplate>
+                <DataTemplate>
+                    <StackPanel Orientation="Horizontal">
+                        <StackPanel.Styles>
+                            <Style Selector="templatedControls|TagChip">
+                                <Setter Property="FontFamily" Value="avares://TagTool.App/Assets/Fonts#J" />
+                                <Setter Property="FontWeight" Value="Regular" />
+                                <Setter Property="IsDeletable" Value="False" />
+                                <Setter Property="Opacity" Value="0.6" />
+                                <Setter Property="BorderThickness" Value="1" />
+                                <Setter Property="BorderBrush" Value="#8800E5FF" />
+                            </Style>
+                        </StackPanel.Styles>
+
+                        <Rectangle Width="60" Height="0" Margin="0" Fill="Transparent" />
+                        <templatedControls:TagChip Classes="Medium" Text="Tag" />
+                        <templatedControls:TagChip Classes="Medium" Text="Picture" />
+                        <templatedControls:TagChip Classes="Medium" Text="Audio" />
+                        <templatedControls:TagChip Classes="Medium" Text="Something" />
+                        <templatedControls:TagChip Classes="Medium" Text="LongLongLongTag" />
+                        <templatedControls:TagChip Classes="Medium" Text="Tag2" />
+                        <templatedControls:TagChip Classes="Medium" Text="Tag3" />
+                    </StackPanel>
+                </DataTemplate>
+            </DataGrid.RowDetailsTemplate>
+            <DataGrid.Columns>
+                <DataGridCheckBoxColumn Width="60" Header="✔" IsThreeState="True" />
+                <DataGridTextColumn IsReadOnly="True" Header="Name" Width="*" Binding="{Binding Name}" />
+                <DataGridTextColumn IsReadOnly="True" Header="Date Modified" Binding="{Binding DateModified, StringFormat=\{0:yyyy/MM/dd hh:mm:ss\}}" />
+                <DataGridTextColumn IsReadOnly="True" Header="Size" Binding="{Binding Length}" />
+            </DataGrid.Columns>
+        </DataGrid>
     </Grid>
 
 </UserControl>

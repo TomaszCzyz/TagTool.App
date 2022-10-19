@@ -18,5 +18,6 @@
         <StyleInclude Source="/Views/Styles/AutoCompleteBox.axaml" />
         <StyleInclude Source="/Views/Styles/Button.axaml" />
         <StyleInclude Source="/Views/Styles/TextBox.axaml" />
+        <StyleInclude Source="/Views/Styles/DataGridRow.axaml" />
     </Application.Styles>
 </Application>

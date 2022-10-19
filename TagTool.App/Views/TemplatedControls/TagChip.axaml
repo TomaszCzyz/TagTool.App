@@ -2,7 +2,14 @@
     xmlns="https://github.com/avaloniaui"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
-    xmlns:templatedControls="clr-namespace:TagTool.App.Views.TemplatedControls">
+    xmlns:templatedControls="clr-namespace:TagTool.App.Views.TemplatedControls"
+    xmlns:system="clr-namespace:System;assembly=System.Runtime">
+
+    <Styles.Resources>
+        <system:Double x:Key="ButtonHoveredOpacity">0.12</system:Double>
+        <system:Double x:Key="ButtonDisabledOpacity">0.38</system:Double>
+        <system:Double x:Key="ButtonPressedOpacity">0.26</system:Double>
+    </Styles.Resources>
 
     <Design.PreviewWith>
         <StackPanel Margin="20">
@@ -14,135 +21,116 @@
 
             <templatedControls:TagChip Text="Test" IsDeletable="True" />
             <templatedControls:TagChip Text="Test" IsDeletable="False" />
-
-            <StackPanel Orientation="Horizontal">
-                <templatedControls:TagChip Text="Test" IsDeletable="False" FontFamily="avares://TagTool.App/Assets/Fonts#Lato" />
-                <templatedControls:TagChip Text="Test" IsDeletable="False" FontFamily="avares://TagTool.App/Assets/Fonts#Inter" />
-                <templatedControls:TagChip Text="Test" IsDeletable="False" FontFamily="avares://TagTool.App/Assets/Fonts#Roboto" FontWeight="Black" FontStretch="Condensed"/>
-                <templatedControls:TagChip Text="Test" IsDeletable="False" FontFamily="avares://TagTool.App/Assets/Fonts#JetBrains" FontWeight="Bold" />
-            </StackPanel>
         </StackPanel>
     </Design.PreviewWith>
 
+
     <Style Selector="templatedControls|TagChip">
         <!-- <Setter Property="RenderTransform" Value="skewX(-14deg)" /> -->
-        <Setter Property="Margin" Value="4" />
+        <!-- <Setter Property="BorderBrush" Value="#4CAF50" /> -->
+        <Setter Property="Margin" Value="1" />
         <Setter Property="HorizontalAlignment" Value="Left" />
-        <Setter Property="FontSize" Value="22" />
+        <Setter Property="FontSize" Value="18" />
+        <Setter Property="FontFamily" Value="avares://TagTool.App/Assets/Fonts#Roboto" />
         <Setter Property="FontWeight" Value="Bold" />
         <Setter Property="FontStretch" Value="Condensed" />
-        <Setter Property="FontFamily" Value="avares://TagTool.App/Assets/Fonts#Roboto" />
-        <Setter Property="Foreground" Value="#4CAF50" />
-        <Setter Property="Background" Value="#1B5E20">
-
-            <!-- <LinearGradientBrush StartPoint="49%,0%" EndPoint="51%,100%" Opacity="0.9"> -->
-            <!--     <GradientStop Color="#FFBE74" Offset="0.6" /> -->
-            <!--     <GradientStop Color="#D77216" Offset="1" /> -->
-            <!-- </LinearGradientBrush> -->
-        </Setter>
-        <Setter Property="BorderThickness" Value="1" />
-        <Setter Property="BorderBrush" Value="#4CAF50" />
-        <!-- <Setter Property="Inlines"> -->
-        <!--     <Setter.Value> -->
-        <!--         <Run FontWeight="Bold" FontStyle="Italic" Text="asdads"></Run> -->
-        <!--     </Setter.Value> -->
-        <!-- </Setter> -->
+        <Setter Property="Foreground" Value="#00E5FF" />
+        <Setter Property="Background" Value="#0097A7" />
+        <Setter Property="BorderThickness" Value="0" />
+        <Setter Property="CornerRadius" Value="4" />
         <Setter Property="Template">
             <ControlTemplate>
-                <Grid ColumnDefinitions="Auto,Auto" RowDefinitions="Auto">
+                <Grid ColumnDefinitions="Auto,*" RowDefinitions="Auto">
                     <Border
-                        Name="BorderBg"
                         Grid.ColumnSpan="2"
-                        CornerRadius="5"
+                        Name="PART_Border"
+                        CornerRadius="{TemplateBinding CornerRadius}"
                         Background="{TemplateBinding Background}"
                         BorderBrush="{TemplateBinding BorderBrush}"
-                        BorderThickness="{TemplateBinding BorderThickness}"
-                        Opacity="0.8" />
+                        BorderThickness="{TemplateBinding BorderThickness}" />
 
                     <RichTextBlock
                         Grid.Column="0"
-                        Inlines="{TemplateBinding Inlines}"
-                        Text="{TemplateBinding Text}"
-                        IsTabStop="False"
+                        Name="PART_RichTextBlock"
                         VerticalAlignment="Center"
-                        Margin="10 0 10 0" />
+                        IsTabStop="False"
+                        Margin="4 1"
+                        Inlines="{TemplateBinding Inlines}"
+                        Text="{TemplateBinding Text}" />
 
                     <Button
-                        Name="PART_DeleteButton"
                         Grid.Column="1"
-                        IsVisible="{TemplateBinding IsDeletable}"
-                        VerticalAlignment="Center"
-                        Margin="-6 0 8 0"
-                        Width="16"
-                        Height="16">
-                        <Button.Template>
-                            <ControlTemplate>
-                                <Panel Opacity="0.6">
-                                    <Ellipse
-                                        Name="DeleteButtonBg"
-                                        Fill="#FFA6A6A6" />
+                        Name="PART_DeleteButton"
+                        Classes="InCircle"
+                        Margin="-4 2 4 2"
+                        Height="14"
+                        Width="14"
+                        IsVisible="{TemplateBinding IsDeletable}">
 
-                                    <avalonia:MaterialIcon
-                                        Kind="Close"
-                                        Width="{Binding $parent.Width}"
-                                        Height="{Binding $parent.Height}"
-                                        HorizontalAlignment="Center"
-                                        VerticalAlignment="Center" />
+                        <avalonia:MaterialIcon
+                            Kind="Close"
+                            Foreground="#999999"
+                            Height="{Binding $parent.Height}"
+                            Width="{Binding $parent.Width}" />
 
-                                </Panel>
-                            </ControlTemplate>
-                        </Button.Template>
                     </Button>
-
                 </Grid>
             </ControlTemplate>
         </Setter>
+
+        <Style Selector="^:pointerover">
+            <Setter Property="Opacity" Value="0.9" />
+        </Style>
     </Style>
+
 
     <Style Selector="templatedControls|TagChip.Medium">
         <Setter Property="FontSize" Value="14" />
-        <Setter Property="Margin" Value="3" />
-    </Style>
+        <Setter Property="CornerRadius" Value="3" />
 
-    <Style Selector="templatedControls|TagChip.Medium /template/ Button#PART_DeleteButton">
-        <Setter Property="Height" Value="12" />
-        <Setter Property="Width" Value="12" />
-        <Setter Property="Margin" Value="-8 0 6 0" />
+        <Style Selector="^ /template/ RichTextBlock#PART_RichTextBlock">
+            <Setter Property="Margin" Value="3 0" />
+        </Style>
+
+        <Style Selector="^ /template/ Button#PART_DeleteButton">
+            <Setter Property="Height" Value="12" />
+            <Setter Property="Width" Value="12" />
+            <Setter Property="Margin" Value="-3 3 3 3" />
+        </Style>
     </Style>
 
     <Style Selector="templatedControls|TagChip.Small">
         <Setter Property="FontSize" Value="9" />
-        <Setter Property="Margin" Value="2" />
+        <Setter Property="CornerRadius" Value="2" />
+
+        <Style Selector="^ /template/ RichTextBlock#PART_RichTextBlock">
+            <Setter Property="Margin" Value="2 1" />
+        </Style>
+
+        <Style Selector="^ /template/ Button#PART_DeleteButton">
+            <Setter Property="Height" Value="8" />
+            <Setter Property="Width" Value="8" />
+            <Setter Property="Margin" Value="-2 2 2 2" />
+        </Style>
     </Style>
 
-    <Style Selector="templatedControls|TagChip.Small /template/ Button#PART_DeleteButton">
-        <Setter Property="Height" Value="8" />
-        <Setter Property="Width" Value="8" />
-        <Setter Property="Margin" Value="-8 0 4 0" />
-    </Style>
-
-    <!-- <Style Selector="styles|TagChip.Small /template/ Button#PART_DeleteButton"> -->
-    <!--     <Setter Property="Width" Value="12"></Setter> -->
-    <!--     <Setter Property="Height" Value="12"></Setter> -->
+    <!-- <Style Selector="templatedControls|TagChip.test"> -->
+    <!--     <Setter Property="FontSize" Value="13" /> -->
+    <!--     <Setter Property="Background" Value="#5317d8" /> -->
+    <!--     <Setter Property="Margin" Value="4" /> -->
+    <!--     <Setter Property="Template"> -->
+    <!--         <ControlTemplate> -->
+    <!--             <RichTextBlock -->
+    <!--                 Inlines="{TemplateBinding Inlines}" -->
+    <!--                 Text="{TemplateBinding Text}" -->
+    <!--                 VerticalAlignment="Center" -->
+    <!--                 Margin="8 0 8 0"> -->
+    <!-- -->
+    <!--                 ~1~ <Span Inlines="{TemplateBinding Inlines}" /> @1@ -->
+    <!--                 <Run FontStyle="Italic" FontSize="20" Text="asdxcxcxcxcasd" /> -->
+    <!--             </RichTextBlock> -->
+    <!--         </ControlTemplate> -->
+    <!--     </Setter> -->
     <!-- </Style> -->
-
-    <Style Selector="templatedControls|TagChip.test">
-        <Setter Property="FontSize" Value="13" />
-        <Setter Property="Background" Value="#5317d8" />
-        <Setter Property="Margin" Value="4" />
-        <Setter Property="Template">
-            <ControlTemplate>
-                <RichTextBlock
-                    Inlines="{TemplateBinding Inlines}"
-                    Text="{TemplateBinding Text}"
-                    VerticalAlignment="Center"
-                    Margin="8 0 8 0">
-
-                    <!-- <Span Inlines="{TemplateBinding Inlines}" /> -->
-                    <Run FontStyle="Italic" FontSize="20" Text="asdxcxcxcxcasd" />
-                </RichTextBlock>
-            </ControlTemplate>
-        </Setter>
-    </Style>
 
 </Styles>
