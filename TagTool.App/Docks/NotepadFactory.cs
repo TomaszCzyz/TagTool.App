@@ -23,10 +23,10 @@ public class NotepadFactory : Factory
 
     public override IRootDock CreateLayout()
     {
-        var untitledFileViewModel = new FileViewModel
-        {
-            Title = "fileViewModel"
-        };
+        // var untitledFileViewModel = new FileViewModel
+        // {
+        //     Title = "fileViewModel"
+        // };
 
         var untitledTabContentViewModel = _serviceProvider.GetRequiredService<TabContentViewModel>();
         untitledTabContentViewModel.Title = "Untitled";
@@ -39,10 +39,10 @@ public class NotepadFactory : Factory
             Title = "Files",
             IsCollapsable = false,
             Proportion = double.NaN,
-            ActiveDockable = untitledFileViewModel,
+            // ActiveDockable = untitledFileViewModel,
             VisibleDockables = CreateList<IDockable>
             (
-                untitledFileViewModel,
+                // untitledFileViewModel,
                 untitledTabContentViewModel
             ),
             CanCreateDocument = false
@@ -54,7 +54,7 @@ public class NotepadFactory : Factory
             Title = "Files",
             IsCollapsable = false,
             Proportion = double.NaN,
-            ActiveDockable = untitledFileViewModel,
+            // ActiveDockable = untitledFileViewModel,
             VisibleDockables = CreateList<IDockable>(untitledTabContentViewModel2),
             CanCreateDocument = false
         };
