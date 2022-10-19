@@ -6,8 +6,13 @@
     xmlns:userControls="clr-namespace:TagTool.App.Views.UserControls"
     xmlns:userControls1="clr-namespace:TagTool.App.ViewModels.UserControls"
     xmlns:templatedControls="clr-namespace:TagTool.App.Views.TemplatedControls"
+    xmlns:converters="clr-namespace:TagTool.App.Converters"
     mc:Ignorable="d" d:DesignWidth="600" d:DesignHeight="350"
     x:Class="TagTool.App.Views.UserControls.TabContentView">
+
+    <UserControl.Resources>
+        <converters:FileSizeToStringConverter x:Key="FileSizeToStringConverter" />
+    </UserControl.Resources>
 
     <Design.DataContext>
         <userControls1:TabContentViewModel />
@@ -69,10 +74,10 @@
                 </DataTemplate>
             </DataGrid.RowDetailsTemplate>
             <DataGrid.Columns>
-                <DataGridCheckBoxColumn Width="60" Header="✔" IsThreeState="True" />
+                <DataGridCheckBoxColumn Width="60" Header="✔" />
                 <DataGridTextColumn IsReadOnly="True" Header="Name" Width="*" Binding="{Binding Name}" />
                 <DataGridTextColumn IsReadOnly="True" Header="Date Modified" Binding="{Binding DateModified, StringFormat=\{0:yyyy/MM/dd hh:mm:ss\}}" />
-                <DataGridTextColumn IsReadOnly="True" Header="Size" Binding="{Binding Length}" />
+                <DataGridTextColumn IsReadOnly="True" Header="Size" Binding="{Binding Length, Converter={StaticResource FileSizeToStringConverter}}" />
             </DataGrid.Columns>
         </DataGrid>
     </Grid>
