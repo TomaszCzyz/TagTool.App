@@ -3,13 +3,12 @@ using CommunityToolkit.Mvvm.Input;
 using Dock.Model.Mvvm.Controls;
 using DynamicData;
 using TagTool.App.Core.Models;
-using File = TagTool.App.Core.Models.File;
 
 namespace TagTool.App.ViewModels.UserControls;
 
 public partial class TabContentViewModel : Document
 {
-    public ObservableCollection<File> Files { get; set; } = new();
+    public ObservableCollection<Core.Models.File> Files { get; set; } = new();
 
     public ObservableCollection<object> EnteredTags { get; set; } = new();
 
@@ -17,7 +16,15 @@ public partial class TabContentViewModel : Document
     {
         Files.AddRange(_exampleFiles);
         EnteredTags.AddRange(
-            new Tag[] { new("Tag1"), new("Audio"), new("Dog"), new("Picture"), new("Colleague"), new("Tag6"), new("Tag7"), new("LastTag") });
+            new Tag[] {
+                new("Tag1"),
+                new("Audio"),
+                new("Dog"),
+                new("Picture"),
+                new("Colleague"),
+                new("Tag6"),
+                new("Tag7"),
+                new("LastTag") });
         EnteredTags.Add(new TagSearchBoxViewModel());
     }
 
@@ -48,7 +55,7 @@ public partial class TabContentViewModel : Document
         EnteredTags.RemoveAt(EnteredTags.Count - 2);
     }
 
-    private readonly File[] _exampleFiles =
+    private readonly Core.Models.File[] _exampleFiles =
     {
         new(1, "File1.txt", 1234, new DateTime(2022, 12, 12), new DateTime(2022, 12, 12), @"C:\Program Files"),
         new(1, "File2.txt", 12311111114, new DateTime(2022, 12, 12), new DateTime(2022, 12, 12), @"C:\Program Files"),

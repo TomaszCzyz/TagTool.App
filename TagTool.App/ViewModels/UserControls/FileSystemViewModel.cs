@@ -1,22 +1,81 @@
 ﻿using System.Collections.ObjectModel;
+using System.ComponentModel;
+using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 using DynamicData;
-using File = TagTool.App.Core.Models.File;
 
 namespace TagTool.App.ViewModels.UserControls;
 
-public class FileSystemViewModel
+public partial class FileSystemViewModel : ObservableObject
 {
-    // [ObservableProperty]
-    // private ObservableCollection<File> _files = new();
+    public ObservableCollection<Core.Models.File> Files { get; set; } = new();
 
-    public ObservableCollection<File> Files { get; set; } = new();
+    public ObservableCollection<AddressSegmentViewModel> AddressSegments { get; set; } = new();
+
+    [ObservableProperty]
+    private bool _isEditing;
+
+    [ObservableProperty]
+    private string _address = string.Empty;
+
+    [EditorBrowsable(EditorBrowsableState.Never)]
+    [ObservableProperty]
+    private string _textBoxAddress = string.Empty;
 
     public FileSystemViewModel()
     {
         Files.AddRange(_exampleFiles);
+        AddressSegments.Add(new AddressSegmentViewModel(new Folder(new DirectoryInfo(@"C:\"))));
+        AddressSegments.Add(new AddressSegmentViewModel(new Folder(new DirectoryInfo(@"C:\Users"))));
+        AddressSegments.Add(new AddressSegmentViewModel(new Folder(new DirectoryInfo(@"C:\Users\tczyz"))));
+        AddressSegments.Add(new AddressSegmentViewModel(new Folder(new DirectoryInfo(@"C:\Users\tczyz\MyFiles"))));
     }
 
-    private static readonly File[] _exampleFiles =
+    [RelayCommand]
+    private void NavigateToAddress(string address) => Address = address;
+
+    partial void OnAddressChanged(string value)
+    {
+        _textBoxAddress = value;
+        AddressSegments.AddRange(GetAddressSegments(value));
+    }
+
+    public void CancelNavigation()
+    {
+        TextBoxAddress = Address;
+        IsEditing = false;
+    }
+
+    public void CommitNavigation()
+    {
+        Address = TextBoxAddress;
+        IsEditing = false;
+    }
+
+    private IEnumerable<AddressSegmentViewModel> GetAddressSegments(string address)
+    {
+        if (!Directory.Exists(address)) return Enumerable.Empty<AddressSegmentViewModel>();
+
+        var path = Path.GetFullPath(address);
+        var directory = new DirectoryInfo(path);
+
+        return GetAddressSegments(new Folder(directory));
+    }
+
+    private IEnumerable<AddressSegmentViewModel> GetAddressSegments(Folder folder)
+    {
+        if (folder.Parent is { } parent)
+        {
+            foreach (var segment in GetAddressSegments(parent))
+            {
+                yield return segment;
+            }
+        }
+
+        yield return new AddressSegmentViewModel(folder);
+    }
+
+    private static readonly Core.Models.File[] _exampleFiles =
     {
         new(1, "File1.txt", 1234, new DateTime(2022, 12, 12), new DateTime(2022, 12, 12), @"C:\Program Files"),
         new(1, "File2.txt", 12311111114, new DateTime(2022, 12, 12), new DateTime(2022, 12, 12), @"C:\Program Files"),
