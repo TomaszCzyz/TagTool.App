@@ -1,4 +1,5 @@
 ﻿using Avalonia;
+using Avalonia.Svg.Skia;
 using Serilog;
 using Serilog.Core.Enrichers;
 using Serilog.Events;
@@ -17,6 +18,8 @@ public static class Program
     {
         SetupSerilog();
 
+        GC.KeepAlive(typeof(SvgImageExtension).Assembly);
+        GC.KeepAlive(typeof(Avalonia.Svg.Skia.Svg).Assembly);
         var appBuilder = AppBuilder
             .Configure<App>()
             .UsePlatformDetect()

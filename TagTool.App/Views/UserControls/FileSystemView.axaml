@@ -5,33 +5,82 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:userControls="clr-namespace:TagTool.App.ViewModels.UserControls"
     xmlns:converters="clr-namespace:TagTool.App.Converters"
+    xmlns:models="clr-namespace:TagTool.App.Core.Models;assembly=TagTool.App.Core"
     mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-    x:Class="TagTool.App.Views.UserControls.FileSystemView">
+    x:Name="Root"
+    x:Class="TagTool.App.Views.UserControls.FileSystemView"
+    x:DataType="userControls:FileSystemViewModel">
 
     <UserControl.Resources>
         <converters:FileSizeToStringConverter x:Key="FileSizeToStringConverter" />
     </UserControl.Resources>
 
+    <UserControl.Styles>
+        <Style Selector="Button.Transparent">
+            <Setter Property="Background" Value="Transparent" />
+        </Style>
+    </UserControl.Styles>
+
     <Design.DataContext>
         <userControls:FileSystemViewModel />
     </Design.DataContext>
 
-    <!-- Address bar -->
-    <Grid RowDefinitions="Auto,*">
-        <Panel>
+    <Grid RowDefinitions="30,*">
+
+        <!-- Address bar -->
+        <Grid Grid.Row="0" ColumnDefinitions="Auto,Auto,Auto,*">
+            <Grid.Styles>
+                <Style Selector="Button.NavigationButton">
+                    <Setter Property="Background" Value="#464646" />
+                    <Setter Property="Margin" Value="1 4" />
+                    <Setter Property="Padding" Value="1" />
+                    <Setter Property="CornerRadius" Value="6" />
+                </Style>
+            </Grid.Styles>
+            <Button
+                Grid.Column="0"
+                Classes="NavigationButton"
+                Command="{Binding NavigateBackCommand}">
+
+                <Svg Path="/Assets/Svgs/arrow_back_black_24dp.svg" />
+            </Button>
+
+            <Button
+                Grid.Column="1"
+                Classes="NavigationButton"
+                Command="{Binding NavigateForwardCommand}">
+
+                <Svg Path="/Assets/Svgs/arrow_forward_black_24dp.svg" />
+            </Button>
+
+            <Button
+                Grid.Column="2"
+                Classes="NavigationButton"
+                Command="{Binding NavigateUpCommand}">
+                
+                <Svg Path="/Assets/Svgs/arrow_upward_black_24dp.svg" />
+            </Button>
+
             <TextBox
-                BorderThickness="1"
-                BorderBrush="Green"
+                Grid.Column="3"
+                Name="AddressTextBox"
+                Margin="5 0 0 0"
+                BorderThickness="0"
                 VerticalContentAlignment="Center"
                 IsVisible="{Binding IsEditing}"
-                Text="{Binding TextBoxAddress}">
+                Text="{Binding TextBoxAddress}"
+                LostFocus="AddressTextBox_OnLostFocus">
                 <TextBox.KeyBindings>
-                    <KeyBinding Gesture="Escape" Command="{ReflectionBinding CancelNavigation}" />
-                    <KeyBinding Gesture="Enter" Command="{ReflectionBinding CommitNavigation}" />
+                    <KeyBinding Gesture="Escape" Command="{CompiledBinding CancelNavigationCommand}" />
+                    <KeyBinding Gesture="Enter" Command="{CompiledBinding CommitNavigationCommand}" />
                 </TextBox.KeyBindings>
             </TextBox>
 
-            <DockPanel IsVisible="{Binding !IsEditing}">
+            <DockPanel
+                Grid.Column="3"
+                Margin="5 0 0 0"
+                IsVisible="{Binding !IsEditing}">
+
                 <ItemsControl
                     DockPanel.Dock="Left"
                     HorizontalAlignment="Left"
@@ -42,7 +91,7 @@
                         </ItemsPanelTemplate>
                     </ItemsControl.ItemsPanel>
                     <ItemsControl.ItemTemplate>
-                        <DataTemplate>
+                        <DataTemplate DataType="userControls:AddressSegmentViewModel">
                             <StackPanel Orientation="Horizontal">
                                 <StackPanel.Styles>
                                     <Style Selector="Button.ButtonAddressBar">
@@ -51,14 +100,11 @@
                                         <Setter Property="VerticalAlignment" Value="Stretch" />
                                         <Setter Property="VerticalContentAlignment" Value="Center" />
                                     </Style>
-                                    <Style Selector="Button.Transparent">
-                                        <Setter Property="Background" Value="Transparent" />
-                                    </Style>
                                 </StackPanel.Styles>
                                 <Button
                                     Classes="ButtonAddressBar Transparent"
                                     Content="{Binding Name}"
-                                    Command="{ReflectionBinding #root.DataContext.NavigateToAddressCommand}"
+                                    Command="{ReflectionBinding #Root.DataContext.ChangeAddressCommand}"
                                     CommandParameter="{Binding Address}" />
 
                                 <Button
@@ -75,7 +121,7 @@
                                         <ContextMenu.Styles>
                                             <Style Selector="MenuItem">
                                                 <Setter Property="Header" Value="{Binding Name}" />
-                                                <Setter Property="Command" Value="{ReflectionBinding #root.DataContext.NavigateToAddressCommand}" />
+                                                <Setter Property="Command" Value="{ReflectionBinding #Root.DataContext.ChangeAddressCommand}" />
                                                 <Setter Property="CommandParameter" Value="{Binding Address}" />
                                             </Style>
                                         </ContextMenu.Styles>
@@ -86,11 +132,15 @@
                     </ItemsControl.ItemTemplate>
                 </ItemsControl>
 
-                <!-- <Border Background="Transparent" HorizontalAlignment="Stretch" /> -->
+                <Border
+                    Background="Transparent"
+                    HorizontalAlignment="Stretch"
+                    PointerPressed="InputElement_OnPointerPressed" />
+
             </DockPanel>
-        </Panel>
+        </Grid>
 
-
+        <!-- File system data grid -->
         <DataGrid
             Grid.Row="1"
             FontFamily="avares://TagTool.App/Assets/Fonts#JetBrains"
@@ -104,12 +154,34 @@
             Items="{Binding Files}">
             <DataGrid.Columns>
                 <DataGridCheckBoxColumn Width="60" Header="✔" CanUserResize="False" />
-                <DataGridTextColumn IsReadOnly="True" Header="Name" Width="*" Binding="{Binding Name}" />
-                <DataGridTextColumn IsReadOnly="True" Header="Date Created" Binding="{Binding DateCreated, StringFormat=\{0:yyyy/MM/dd hh:mm:ss\}}" />
-                <DataGridTextColumn IsReadOnly="True" Header="Date Modified" Binding="{Binding DateModified, StringFormat=\{0:yyyy/MM/dd hh:mm:ss\}}" />
-                <DataGridTextColumn IsReadOnly="True" Header="Size" Binding="{Binding Length, Converter={StaticResource FileSizeToStringConverter}}" />
+                <DataGridTextColumn
+                    Header="Name"
+                    IsReadOnly="True"
+                    Width="*"
+                    Binding="{Binding Name}" />
+                <DataGridTextColumn
+                    Header="Date Created"
+                    IsReadOnly="True"
+                    Binding="{Binding DateCreated, StringFormat=\{0:yyyy/MM/dd hh:mm:ss\}}" />
+
+                <DataGridTextColumn
+                    Header="Date Modified"
+                    IsReadOnly="True"
+                    Binding="{Binding DateModified, StringFormat=\{0:yyyy/MM/dd hh:mm:ss\}}" />
+
+                <DataGridTemplateColumn
+                    Header="Size"
+                    IsReadOnly="True">
+                    <DataTemplate DataType="models:File">
+                        <TextBlock
+                            TextAlignment="Right"
+                            Text="{Binding Length, Converter={StaticResource FileSizeToStringConverter}}" />
+
+                    </DataTemplate>
+
+                </DataGridTemplateColumn>
+
             </DataGrid.Columns>
         </DataGrid>
     </Grid>
-
 </UserControl>
