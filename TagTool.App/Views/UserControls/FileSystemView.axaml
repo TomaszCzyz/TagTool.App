@@ -159,7 +159,10 @@
                     Width="*">
                     <DataTemplate DataType="models:FileSystemEntry">
                         <Grid ColumnDefinitions="25,*">
-                            <Image Source="{Binding FullName, Converter={StaticResource IconToBitmapConverter}}" Margin="0 0 2 0"/>
+                            <Image
+                                Source="{Binding FullName, Converter={StaticResource IconToBitmapConverter}, ConverterParameter=25}"
+                                Margin="0 0 2 0" />
+
                             <TextBlock
                                 Grid.Column="1"
                                 Name="TextBlockDataGridItem"
@@ -168,7 +171,6 @@
                                 DoubleTapped="TextBlockDataGridItem_OnDoubleTapped" />
 
                         </Grid>
-
                     </DataTemplate>
                 </DataGridTemplateColumn>
                 <DataGridTextColumn

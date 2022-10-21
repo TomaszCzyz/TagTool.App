@@ -25,6 +25,7 @@ public class IconToBitmapConverter : IValueConverter
             return _defaultFolderIcon;
         }
 
+#pragma warning disable CA1416
         var bitmap = _defaultFileIconProvider.GetFileIcon(path)?.ToBitmap();
         if (bitmap is null)
         {
@@ -36,12 +37,10 @@ public class IconToBitmapConverter : IValueConverter
         memoryStream.Flush();
         memoryStream.Seek(0, SeekOrigin.Begin);
 
-        return new Bitmap(memoryStream);
-
-        // await using (var imageStream =await _album.LoadCoverBitmapAsync())
-        // {
-        //     Cover = await Task.Run(() => Bitmap.DecodeToWidth(imageStream, 400));
-        // }
+        return parameter is string s && int.TryParse(s, out var length)
+            ? Bitmap.DecodeToWidth(memoryStream, length)
+            : new Bitmap(memoryStream);
+#pragma warning restore CA1416
     }
 
     public object? ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)
