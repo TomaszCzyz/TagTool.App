@@ -8,7 +8,7 @@ namespace TagTool.App.ViewModels.UserControls;
 
 public partial class TabContentViewModel : Document
 {
-    public ObservableCollection<Core.Models.File> Files { get; set; } = new();
+    public ObservableCollection<SimpleFile> Files { get; set; } = new();
 
     public ObservableCollection<object> EnteredTags { get; set; } = new();
 
@@ -55,7 +55,7 @@ public partial class TabContentViewModel : Document
         EnteredTags.RemoveAt(EnteredTags.Count - 2);
     }
 
-    private readonly Core.Models.File[] _exampleFiles =
+    private readonly SimpleFile[] _exampleFiles =
     {
         new(1, "File1.txt", 1234, new DateTime(2022, 12, 12), new DateTime(2022, 12, 12), @"C:\Program Files"),
         new(1, "File2.txt", 12311111114, new DateTime(2022, 12, 12), new DateTime(2022, 12, 12), @"C:\Program Files"),

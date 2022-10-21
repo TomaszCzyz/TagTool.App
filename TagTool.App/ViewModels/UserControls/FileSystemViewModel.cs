@@ -4,20 +4,23 @@ using System.Diagnostics;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using DynamicData;
+using TagTool.App.Core.Models;
 
 namespace TagTool.App.ViewModels.UserControls;
 
 public partial class FileSystemViewModel : ObservableObject
 {
-    private readonly Stack<Folder> _navigationHistoryBack = new();
-    private readonly Stack<Folder> _navigationHistoryForward = new();
+    // private readonly IServiceProvider _serviceProvider = Application.Current?.CreateInstance<IServiceProvider>()!;
+    // private readonly IFileIconProvider _fileIconProvider;
+    private readonly Stack<DirectoryInfo> _navigationHistoryBack = new();
+    private readonly Stack<DirectoryInfo> _navigationHistoryForward = new();
 
-    public ObservableCollection<FileSystemInfo> Items { get; set; } = new();
+    public ObservableCollection<FileSystemEntry> Items { get; set; } = new();
 
     public ObservableCollection<AddressSegmentViewModel> AddressSegments { get; set; } = new();
 
     [ObservableProperty]
-    private Folder _currentFolder = new(new DirectoryInfo(@"C:\"));
+    private DirectoryInfo _currentFolder = new(@"C:\");
 
     [ObservableProperty]
     private bool _isEditing;
@@ -35,7 +38,8 @@ public partial class FileSystemViewModel : ObservableObject
 
     public FileSystemViewModel()
     {
-        CurrentFolder = new Folder(new DirectoryInfo(@"C:\Users\tczyz\MyFiles"));
+        // _fileIconProvider = _serviceProvider.GetRequiredService<IFileIconProvider>();
+        CurrentFolder = new DirectoryInfo(@"C:\Users\tczyz\MyFiles");
     }
 
     [RelayCommand]
@@ -94,26 +98,49 @@ public partial class FileSystemViewModel : ObservableObject
     {
         if (info is DirectoryInfo directoryInfo)
         {
-            NavigateTo(new Folder(directoryInfo));
+            NavigateTo(directoryInfo);
         }
     }
 
     partial void OnAddressChanged(string value)
     {
         TextBoxAddress = value;
-        AddressSegments.Clear();
-        AddressSegments.AddRange(GetAddressSegments(value));
         NavigateToAddress(value);
+        AddressSegments.Clear();
+        AddressSegments.AddRange(CurrentFolder.GetAncestors().Select(folder => new AddressSegmentViewModel(folder)));
     }
 
-    partial void OnCurrentFolderChanged(Folder value)
+    partial void OnCurrentFolderChanged(DirectoryInfo value)
     {
-        Address = value.FullPath;
+        Address = value.FullName;
         Items.Clear();
-        Items.AddRange(value.Entries);
+        Items.AddRange(value.EnumerateFileSystemInfos().Select(info => new FileSystemEntry(info)));
     }
 
-    private void NavigateTo(Folder folder, bool isHistoryNavigation = false)
+    private void NavigateToAddress(string address)
+    {
+        if (Directory.Exists(address))
+        {
+            var path = Path.GetFullPath(address);
+            var folder = new DirectoryInfo(path);
+
+            NavigateTo(folder);
+
+            return;
+        }
+
+        if (File.Exists(address))
+        {
+            using var process = new Process();
+
+            process.StartInfo.FileName = address;
+            process.StartInfo.UseShellExecute = true;
+
+            process.Start();
+        }
+    }
+
+    private void NavigateTo(DirectoryInfo folder, bool isHistoryNavigation = false)
     {
         if (!CurrentFolder.Equals(folder) && !isHistoryNavigation)
         {
@@ -125,54 +152,5 @@ public partial class FileSystemViewModel : ObservableObject
         }
 
         CurrentFolder = folder;
-    }
-
-    private IEnumerable<AddressSegmentViewModel> GetAddressSegments(string address)
-    {
-        if (!Directory.Exists(address))
-        {
-            return Enumerable.Empty<AddressSegmentViewModel>();
-        }
-
-        var path = Path.GetFullPath(address);
-        var directory = new DirectoryInfo(path);
-
-        return GetAddressSegments(new Folder(directory));
-    }
-
-    private IEnumerable<AddressSegmentViewModel> GetAddressSegments(Folder folder)
-    {
-        if (folder.Parent is { } parent)
-        {
-            foreach (var segment in GetAddressSegments(parent))
-            {
-                yield return segment;
-            }
-        }
-
-        yield return new AddressSegmentViewModel(folder);
-    }
-
-    private void NavigateToAddress(string address)
-    {
-        if (Directory.Exists(address))
-        {
-            var path = Path.GetFullPath(address);
-            var folder = new Folder(new DirectoryInfo(path));
-
-            NavigateTo(folder);
-
-            return;
-        }
-
-        if (System.IO.File.Exists(address))
-        {
-            using var process = new Process();
-
-            process.StartInfo.FileName = address;
-            process.StartInfo.UseShellExecute = true;
-
-            process.Start();
-        }
     }
 }

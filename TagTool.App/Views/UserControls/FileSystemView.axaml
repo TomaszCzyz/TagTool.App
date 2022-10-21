@@ -5,7 +5,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:userControls="clr-namespace:TagTool.App.ViewModels.UserControls"
     xmlns:converters="clr-namespace:TagTool.App.Converters"
-    xmlns:io="clr-namespace:System.IO;assembly=System.Runtime"
+    xmlns:models="clr-namespace:TagTool.App.Core.Models;assembly=TagTool.App.Core"
     mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
     x:Name="Root"
     x:Class="TagTool.App.Views.UserControls.FileSystemView"
@@ -13,6 +13,7 @@
 
     <UserControl.Resources>
         <converters:FileSizeToStringConverter x:Key="FileSizeToStringConverter" />
+        <converters:IconToBitmapConverter x:Key="IconToBitmapConverter" />
     </UserControl.Resources>
 
     <UserControl.Styles>
@@ -151,34 +152,39 @@
             Items="{Binding Items}">
             <DataGrid.Columns>
                 <DataGridCheckBoxColumn Width="60" Header="✔" CanUserResize="False" />
+                <!-- todo: sorting does not work, probably comparer has to be specified explicitly -->
                 <DataGridTemplateColumn
                     Header="Name"
                     IsReadOnly="True"
                     Width="*">
-                    <DataTemplate DataType="io:FileSystemInfo">
+                    <DataTemplate DataType="models:FileSystemEntry">
+                        <Grid ColumnDefinitions="25,*">
+                            <Image Source="{Binding FullName, Converter={StaticResource IconToBitmapConverter}}" Margin="0 0 2 0"/>
+                            <TextBlock
+                                Grid.Column="1"
+                                Name="TextBlockDataGridItem"
+                                VerticalAlignment="Center"
+                                Text="{Binding Name}"
+                                DoubleTapped="TextBlockDataGridItem_OnDoubleTapped" />
 
-                        <TextBlock
-                            Name="TextBlockDataGridItem"
-                            VerticalAlignment="Center"
-                            Text="{Binding Name}"
-                            DoubleTapped="TextBlockDataGridItem_OnDoubleTapped" />
+                        </Grid>
 
                     </DataTemplate>
                 </DataGridTemplateColumn>
                 <DataGridTextColumn
                     Header="Date Created"
                     IsReadOnly="True"
-                    Binding="{Binding CreationTime, StringFormat=\{0:yyyy/MM/dd hh:mm:ss\}}" />
+                    Binding="{Binding DateCreated, StringFormat=\{0:yyyy/MM/dd hh:mm:ss\}}" />
 
                 <DataGridTextColumn
                     Header="Date Modified"
                     IsReadOnly="True"
-                    Binding="{Binding LastWriteTime, StringFormat=\{0:yyyy/MM/dd hh:mm:ss\}}" />
+                    Binding="{Binding ModifiedDate, StringFormat=\{0:yyyy/MM/dd hh:mm:ss\}}" />
 
                 <DataGridTemplateColumn
                     Header="Size"
                     IsReadOnly="True">
-                    <DataTemplate DataType="io:FileSystemInfo">
+                    <DataTemplate DataType="models:FileSystemEntry">
                         <TextBlock
                             TextAlignment="Right"
                             VerticalAlignment="Center"

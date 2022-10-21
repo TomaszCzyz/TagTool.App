@@ -45,6 +45,7 @@ public class App : Application
     {
         var services = new ServiceCollection();
 
+        services.AddSingleton<IFileIconProvider, DefaultFileIconProvider>();
         services.AddSingleton<TagSearchServiceFactory>();
         services.AddSingleton<TagServiceFactory>();
         services.AddTransient<NotepadFactory>();

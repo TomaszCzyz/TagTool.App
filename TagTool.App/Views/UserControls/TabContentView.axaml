@@ -78,7 +78,7 @@
                 <DataGridTextColumn IsReadOnly="True" Header="Name" Width="*" Binding="{Binding Name}" />
                 <DataGridTextColumn IsReadOnly="True" Header="Date Modified" Binding="{Binding DateModified, StringFormat=\{0:yyyy/MM/dd hh:mm:ss\}}" />
                 <DataGridTemplateColumn IsReadOnly="True" Header="Size">
-                    <DataTemplate DataType="models:File">
+                    <DataTemplate DataType="models:SimpleFile">
                         <TextBlock TextAlignment="Right" Text="{Binding Length, Converter={StaticResource FileSizeToStringConverter}}" />
                     </DataTemplate>
                 </DataGridTemplateColumn>
