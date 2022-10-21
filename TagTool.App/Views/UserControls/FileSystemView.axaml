@@ -5,7 +5,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:userControls="clr-namespace:TagTool.App.ViewModels.UserControls"
     xmlns:converters="clr-namespace:TagTool.App.Converters"
-    xmlns:models="clr-namespace:TagTool.App.Core.Models;assembly=TagTool.App.Core"
+    xmlns:io="clr-namespace:System.IO;assembly=System.Runtime"
     mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
     x:Name="Root"
     x:Class="TagTool.App.Views.UserControls.FileSystemView"
@@ -57,7 +57,7 @@
                 Grid.Column="2"
                 Classes="NavigationButton"
                 Command="{Binding NavigateUpCommand}">
-                
+
                 <Svg Path="/Assets/Svgs/arrow_upward_black_24dp.svg" />
             </Button>
 
@@ -135,7 +135,7 @@
                 <Border
                     Background="Transparent"
                     HorizontalAlignment="Stretch"
-                    PointerPressed="InputElement_OnPointerPressed" />
+                    PointerPressed="Border_OnPointerPressed" />
 
             </DockPanel>
         </Grid>
@@ -147,34 +147,41 @@
             SelectionMode="Extended"
             CanUserResizeColumns="True"
             CanUserReorderColumns="True"
-            RowBackground="Transparent"
-            Background="Transparent"
             CanUserSortColumns="True"
-            RowDetailsVisibilityMode="Visible"
-            Items="{Binding Files}">
+            Items="{Binding Items}">
             <DataGrid.Columns>
                 <DataGridCheckBoxColumn Width="60" Header="✔" CanUserResize="False" />
-                <DataGridTextColumn
+                <DataGridTemplateColumn
                     Header="Name"
                     IsReadOnly="True"
-                    Width="*"
-                    Binding="{Binding Name}" />
+                    Width="*">
+                    <DataTemplate DataType="io:FileSystemInfo">
+
+                        <TextBlock
+                            Name="TextBlockDataGridItem"
+                            VerticalAlignment="Center"
+                            Text="{Binding Name}"
+                            DoubleTapped="TextBlockDataGridItem_OnDoubleTapped" />
+
+                    </DataTemplate>
+                </DataGridTemplateColumn>
                 <DataGridTextColumn
                     Header="Date Created"
                     IsReadOnly="True"
-                    Binding="{Binding DateCreated, StringFormat=\{0:yyyy/MM/dd hh:mm:ss\}}" />
+                    Binding="{Binding CreationTime, StringFormat=\{0:yyyy/MM/dd hh:mm:ss\}}" />
 
                 <DataGridTextColumn
                     Header="Date Modified"
                     IsReadOnly="True"
-                    Binding="{Binding DateModified, StringFormat=\{0:yyyy/MM/dd hh:mm:ss\}}" />
+                    Binding="{Binding LastWriteTime, StringFormat=\{0:yyyy/MM/dd hh:mm:ss\}}" />
 
                 <DataGridTemplateColumn
                     Header="Size"
                     IsReadOnly="True">
-                    <DataTemplate DataType="models:File">
+                    <DataTemplate DataType="io:FileSystemInfo">
                         <TextBlock
                             TextAlignment="Right"
+                            VerticalAlignment="Center"
                             Text="{Binding Length, Converter={StaticResource FileSizeToStringConverter}}" />
 
                     </DataTemplate>

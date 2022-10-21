@@ -12,12 +12,12 @@ public partial class FileSystemViewModel : ObservableObject
     private readonly Stack<Folder> _navigationHistoryBack = new();
     private readonly Stack<Folder> _navigationHistoryForward = new();
 
-    public ObservableCollection<Core.Models.File> Files { get; set; } = new();
+    public ObservableCollection<FileSystemInfo> Items { get; set; } = new();
 
     public ObservableCollection<AddressSegmentViewModel> AddressSegments { get; set; } = new();
 
     [ObservableProperty]
-    private Folder _currentFolder;
+    private Folder _currentFolder = new(new DirectoryInfo(@"C:\"));
 
     [ObservableProperty]
     private bool _isEditing;
@@ -35,13 +35,7 @@ public partial class FileSystemViewModel : ObservableObject
 
     public FileSystemViewModel()
     {
-        _currentFolder = new Folder(new DirectoryInfo(Environment.GetFolderPath(Environment.SpecialFolder.Desktop)));
-
-        Files.AddRange(_exampleFiles);
-        AddressSegments.Add(new AddressSegmentViewModel(new Folder(new DirectoryInfo(@"C:\"))));
-        AddressSegments.Add(new AddressSegmentViewModel(new Folder(new DirectoryInfo(@"C:\Users"))));
-        AddressSegments.Add(new AddressSegmentViewModel(new Folder(new DirectoryInfo(@"C:\Users\tczyz"))));
-        AddressSegments.Add(new AddressSegmentViewModel(new Folder(new DirectoryInfo(@"C:\Users\tczyz\MyFiles"))));
+        CurrentFolder = new Folder(new DirectoryInfo(@"C:\Users\tczyz\MyFiles"));
     }
 
     [RelayCommand]
@@ -96,6 +90,14 @@ public partial class FileSystemViewModel : ObservableObject
         NavigateTo(directory, true);
     }
 
+    public void OpenItem(FileSystemInfo info)
+    {
+        if (info is DirectoryInfo directoryInfo)
+        {
+            NavigateTo(new Folder(directoryInfo));
+        }
+    }
+
     partial void OnAddressChanged(string value)
     {
         TextBoxAddress = value;
@@ -107,6 +109,8 @@ public partial class FileSystemViewModel : ObservableObject
     partial void OnCurrentFolderChanged(Folder value)
     {
         Address = value.FullPath;
+        Items.Clear();
+        Items.AddRange(value.Entries);
     }
 
     private void NavigateTo(Folder folder, bool isHistoryNavigation = false)
@@ -171,24 +175,4 @@ public partial class FileSystemViewModel : ObservableObject
             process.Start();
         }
     }
-
-    private static readonly Core.Models.File[] _exampleFiles =
-    {
-        new(1, "File1.txt", 1234, new DateTime(2022, 12, 12), new DateTime(2022, 12, 12), @"C:\Program Files"),
-        new(1, "File2.txt", 12311111114, new DateTime(2022, 12, 12), new DateTime(2022, 12, 12), @"C:\Program Files"),
-        new(1, "File3.txt", 1234, new DateTime(2022, 12, 12), new DateTime(2022, 12, 12), @"C:\Program Files"),
-        new(1, "File4.txt", 1212312334, new DateTime(2022, 12, 12), new DateTime(2022, 12, 12), @"C:\Program Files"),
-        new(1, "File5.txt", 1234, new DateTime(2022, 12, 12), new DateTime(2022, 12, 12), @"C:\Program Files"),
-        new(1, "File6.txt", 1222234, new DateTime(2022, 12, 12), new DateTime(2022, 12, 12), @"C:\Program Files"),
-        new(1, "File1.txt", 1234, new DateTime(2022, 12, 12), new DateTime(2022, 12, 12), @"C:\Program Files"),
-        new(1, "File1.txt", 1234, new DateTime(2022, 12, 12), new DateTime(2022, 12, 12), @"C:\Program Files"),
-        new(1, "File1.txt", 1234, new DateTime(2022, 12, 12), new DateTime(2022, 12, 12), @"C:\Program Files"),
-        new(1, "File1.txt", 1212334, new DateTime(2022, 12, 12), new DateTime(2022, 12, 12), @"C:\Program Files"),
-        new(1, "File1.txt", 1234, new DateTime(2022, 12, 12), new DateTime(2022, 12, 12), @"C:\Program Files"),
-        new(1, "File1.txt", 1234, new DateTime(2022, 12, 12), new DateTime(2022, 12, 12), @"C:\Program Files"),
-        new(2, "File2.txt", 1234, new DateTime(1999, 1, 1), new DateTime(1999, 1, 1), @"C:\Users\tczyz\Source\repos\LayersTraversing"),
-        new(3, "File3.txt", 144234, new DateTime(2022, 2, 12), null, @"C:\Program Files"),
-        new(4, "FileFile4", 13234, new DateTime(202, 12, 30), null, @"C:\Users\tczyz\Source"),
-        new(5, "File5", 122334, new DateTime(1990, 12, 30), null, @"C:\Users\tczyz\Source\repos\LayersTraversing\file.txt")
-    };
 }

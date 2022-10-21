@@ -47,6 +47,16 @@ public sealed class Folder : IEquatable<Folder>
 
     public Folder? Parent => _info.Parent is { } parent ? new Folder(parent) : null;
 
+    public IEnumerable<FileSystemInfo> Entries
+    {
+        get
+        {
+            var fileSystemInfos1 = Folders.Select(folder => (FileSystemInfo)folder._info);
+            var fileSystemInfos2 = Files.Select(file => (FileSystemInfo)file.Info);
+            return fileSystemInfos1.Concat(fileSystemInfos2);
+        }
+    }
+
     public IEnumerable<Folder> Folders => GetFolders();
 
     public IEnumerable<File> Files => GetFiles();
@@ -76,20 +86,20 @@ public sealed class Folder : IEquatable<Folder>
 
 public sealed class File : IEquatable<File>
 {
-    private readonly FileInfo _info;
+    public FileInfo Info { get; }
 
     public File(FileInfo info)
     {
-        _info = info;
+        Info = info;
     }
 
-    public string Name => _info.Name;
+    public string Name => Info.Name;
 
-    public string FullPath => _info.FullName;
+    public string FullPath => Info.FullName;
 
     public Task DeleteAsync()
     {
-        _info.Delete();
+        Info.Delete();
         return Task.CompletedTask;
     }
 

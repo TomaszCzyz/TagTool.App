@@ -22,7 +22,7 @@ public partial class FileSystemView : UserControl
         _vm.CancelNavigationCommand.Execute(e);
     }
 
-    private void InputElement_OnPointerPressed(object? sender, PointerPressedEventArgs e)
+    private void Border_OnPointerPressed(object? sender, PointerPressedEventArgs e)
     {
         if (sender is not InputElement element) return;
 
@@ -33,5 +33,17 @@ public partial class FileSystemView : UserControl
         _vm.IsEditing = true;
         AddressTextBox?.Focus();
         AddressTextBox?.SelectAll();
+    }
+
+    private void TextBlockDataGridItem_OnDoubleTapped(object? sender, TappedEventArgs tappedEventArgs)
+    {
+        if (sender is not TextBlock textBlock) return;
+
+        var path = Path.Join(_vm.Address, textBlock.Text);
+
+        if (!Directory.Exists(path)) return;
+
+        var directoryInfo = new DirectoryInfo(path);
+        _vm.OpenItem(directoryInfo);
     }
 }
