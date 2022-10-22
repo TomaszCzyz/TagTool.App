@@ -150,7 +150,8 @@
             CanUserReorderColumns="True"
             CanUserSortColumns="True"
             SelectedItem="{Binding SelectedItem}"
-            Items="{Binding Items}">
+            Items="{Binding Items}"
+            DoubleTapped="DataGrid_OnDoubleTapped">
             <DataGrid.KeyBindings>
                 <KeyBinding Gesture="Enter" Command="{CompiledBinding OpenItemCommand}" />
                 <KeyBinding Gesture="Back" Command="{CompiledBinding NavigateUpCommand}" />
@@ -166,12 +167,6 @@
 
                     <DataTemplate DataType="models:FileSystemEntry">
                         <Grid ColumnDefinitions="25,*">
-
-                            <Border
-                                Grid.ColumnSpan="2"
-                                Background="Transparent"
-                                DoubleTapped="BorderNameCell_OnDoubleTapped" />
-
                             <Image
                                 Grid.Column="0"
                                 Margin="0 0 2 0"

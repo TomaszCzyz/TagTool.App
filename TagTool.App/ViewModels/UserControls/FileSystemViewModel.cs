@@ -98,14 +98,8 @@ public partial class FileSystemViewModel : ObservableObject
     }
 
     [RelayCommand]
-    public void OpenItem(FileSystemInfo info)
+    public void OpenItem()
     {
-        if (info is DirectoryInfo directoryInfo)
-        {
-            NavigateTo(directoryInfo);
-            return;
-        }
-
         if (SelectedItem is FileSystemEntry fileSystemEntry)
         {
             NavigateTo(new DirectoryInfo(fileSystemEntry.FullName));
