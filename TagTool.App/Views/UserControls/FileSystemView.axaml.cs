@@ -19,27 +19,26 @@ public partial class FileSystemView : UserControl
 
     private void AddressTextBox_OnLostFocus(object? sender, RoutedEventArgs e)
     {
-        _vm.CancelNavigationCommand.Execute(e);
+        if (sender is not TextBox { DataContext: FileSystemViewModel fileSystem }) return;
+
+        fileSystem.CancelNavigationCommand.Execute(e);
     }
 
     private void Border_OnPointerPressed(object? sender, PointerPressedEventArgs e)
     {
-        if (sender is not InputElement element) return;
+        if (sender is not Border { DataContext: FileSystemViewModel fileSystem } border) return;
 
-        var currentPoint = e.GetCurrentPoint(element);
+        if (e.GetCurrentPoint(border).Properties.PointerUpdateKind != PointerUpdateKind.LeftButtonPressed) return;
 
-        if (currentPoint.Properties.PointerUpdateKind != PointerUpdateKind.LeftButtonPressed) return;
-
-        _vm.IsEditing = true;
+        fileSystem.IsEditing = true;
         AddressTextBox?.Focus();
         AddressTextBox?.SelectAll();
     }
 
     private void DataGrid_OnDoubleTapped(object? sender, TappedEventArgs e)
     {
-        if (sender is DataGrid { DataContext: FileSystemViewModel fileSystem })
-        {
-            fileSystem.OpenItemCommand.Execute(null);
-        }
+        if (sender is not DataGrid { DataContext: FileSystemViewModel fileSystem }) return;
+
+        fileSystem.OpenItemCommand.Execute(null);
     }
 }
