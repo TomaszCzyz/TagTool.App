@@ -10,8 +10,6 @@ namespace TagTool.App.ViewModels.UserControls;
 
 public partial class FileSystemViewModel : ObservableObject
 {
-    // private readonly IServiceProvider _serviceProvider = Application.Current?.CreateInstance<IServiceProvider>()!;
-    // private readonly IFileIconProvider _fileIconProvider;
     private readonly Stack<DirectoryInfo> _navigationHistoryBack = new();
     private readonly Stack<DirectoryInfo> _navigationHistoryForward = new();
 
@@ -41,7 +39,6 @@ public partial class FileSystemViewModel : ObservableObject
 
     public FileSystemViewModel()
     {
-        // _fileIconProvider = _serviceProvider.GetRequiredService<IFileIconProvider>();
         CurrentFolder = new DirectoryInfo(@"C:\Users\tczyz\MyFiles");
     }
 
@@ -100,7 +97,7 @@ public partial class FileSystemViewModel : ObservableObject
     [RelayCommand]
     public void OpenItem()
     {
-        if (SelectedItem is FileSystemEntry fileSystemEntry)
+        if (SelectedItem is FileSystemEntry { IsDir: true } fileSystemEntry)
         {
             NavigateTo(new DirectoryInfo(fileSystemEntry.FullName));
         }

@@ -27,7 +27,7 @@
         <userControls:FileSystemViewModel />
     </Design.DataContext>
 
-    <Grid RowDefinitions="30,*">
+    <Grid RowDefinitions="30,*,Auto">
 
         <!-- Address bar -->
         <Grid Grid.Row="0" ColumnDefinitions="Auto,Auto,Auto,*">
@@ -144,6 +144,7 @@
         <!-- File system data grid -->
         <DataGrid
             Grid.Row="1"
+            Name="DataGrid"
             FontFamily="avares://TagTool.App/Assets/Fonts#JetBrains"
             SelectionMode="Extended"
             CanUserResizeColumns="True"
@@ -151,15 +152,13 @@
             CanUserSortColumns="True"
             SelectedItem="{Binding SelectedItem}"
             Items="{Binding Items}"
-            DoubleTapped="DataGrid_OnDoubleTapped">
+            SelectionChanged="DataGrid_OnSelectionChanged">
             <DataGrid.KeyBindings>
                 <KeyBinding Gesture="Enter" Command="{CompiledBinding OpenItemCommand}" />
                 <KeyBinding Gesture="Back" Command="{CompiledBinding NavigateUpCommand}" />
             </DataGrid.KeyBindings>
             <DataGrid.Columns>
                 <DataGridCheckBoxColumn Width="60" Header="✔" CanUserResize="False" />
-
-                <!-- todo: sorting does not work, probably comparer has to be specified explicitly -->
                 <DataGridTemplateColumn
                     Header="Name"
                     IsReadOnly="True"
@@ -168,7 +167,11 @@
                     CustomSortComparer="{StaticResource FileSystemEntryComparer}">
 
                     <DataTemplate DataType="models:FileSystemEntry">
-                        <Grid ColumnDefinitions="25,*">
+                        <Grid
+                            Name="GridFileEntryName"
+                            ColumnDefinitions="25,*"
+                            AttachedToVisualTree="Visual_OnAttachedToVisualTree">
+
                             <Image
                                 Grid.Column="0"
                                 Margin="0 0 2 0"
@@ -203,10 +206,27 @@
                             Text="{Binding Length, Converter={StaticResource FileSizeToStringConverter}}" />
 
                     </DataTemplate>
-
                 </DataGridTemplateColumn>
-
             </DataGrid.Columns>
         </DataGrid>
+
+        <StackPanel Grid.Row="2" Orientation="Horizontal">
+            <TextBlock
+                Margin="5 2 0 0 "
+                FontSize="12"
+                Text="{Binding Items.Count, StringFormat=\{0\} items |}" />
+
+            <TextBlock
+                Name="TextBlockSelectedItems"
+                Margin="5 2 0 0 "
+                FontSize="12"
+                Text="" />
+
+        </StackPanel>
+        <ProgressBar
+            Grid.Row="2"
+            IsIndeterminate="True"
+            IsVisible="False" />
+
     </Grid>
 </UserControl>

@@ -2,6 +2,7 @@
 using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Interactivity;
+using Avalonia.VisualTree;
 using TagTool.App.Extensions;
 using TagTool.App.ViewModels.UserControls;
 
@@ -15,6 +16,8 @@ public partial class FileSystemView : UserControl
     {
         DataContext = _vm;
         InitializeComponent();
+
+        // DoubleTappedEvent.AddClassHandler<Grid>(Grid_OnDoubleTapped, RoutingStrategies.Bubble);
     }
 
     private void AddressTextBox_OnLostFocus(object? sender, RoutedEventArgs e)
@@ -35,10 +38,15 @@ public partial class FileSystemView : UserControl
         AddressTextBox?.SelectAll();
     }
 
-    private void DataGrid_OnDoubleTapped(object? sender, TappedEventArgs e)
+    private void DataGrid_OnSelectionChanged(object? sender, SelectionChangedEventArgs e)
     {
-        if (sender is not DataGrid { DataContext: FileSystemViewModel fileSystem }) return;
+        TextBlockSelectedItems.Text = $"{DataGrid.SelectedItems.Count} selected |";
+    }
 
-        fileSystem.OpenItemCommand.Execute(null);
+    private void Visual_OnAttachedToVisualTree(object? sender, VisualTreeAttachmentEventArgs e)
+    {
+        var dataGridCell = e.Parent.FindAncestorOfType<DataGridCell>()!;
+
+        dataGridCell.DoubleTapped += (_, _) => _vm.OpenItemCommand.Execute(null);
     }
 }
