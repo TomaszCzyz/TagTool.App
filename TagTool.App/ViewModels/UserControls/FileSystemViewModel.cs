@@ -32,6 +32,9 @@ public partial class FileSystemViewModel : ObservableObject
     [ObservableProperty]
     private string _textBoxAddress = string.Empty;
 
+    [ObservableProperty]
+    private object? _selectedItem;
+
     public bool CanNavigateBack => _navigationHistoryBack.Count > 0;
 
     public bool CanNavigateForward => _navigationHistoryForward.Count > 0;
@@ -94,11 +97,18 @@ public partial class FileSystemViewModel : ObservableObject
         NavigateTo(directory, true);
     }
 
+    [RelayCommand]
     public void OpenItem(FileSystemInfo info)
     {
         if (info is DirectoryInfo directoryInfo)
         {
             NavigateTo(directoryInfo);
+            return;
+        }
+
+        if (SelectedItem is FileSystemEntry fileSystemEntry)
+        {
+            NavigateTo(new DirectoryInfo(fileSystemEntry.FullName));
         }
     }
 

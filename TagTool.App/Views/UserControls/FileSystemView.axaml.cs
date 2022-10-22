@@ -35,15 +35,19 @@ public partial class FileSystemView : UserControl
         AddressTextBox?.SelectAll();
     }
 
-    private void TextBlockDataGridItem_OnDoubleTapped(object? sender, TappedEventArgs tappedEventArgs)
+    private void BorderNameCell_OnDoubleTapped(object? sender, TappedEventArgs e)
     {
-        if (sender is not TextBlock textBlock) return;
+        if (sender is null) return;
 
-        var path = Path.Join(_vm.Address, textBlock.Text);
+        var border = (Border)sender;
+        var grid = (Grid)border.Parent!;
+        var textBlock = (TextBlock)grid.Children.First(child => child.GetType() == typeof(TextBlock));
 
-        if (!Directory.Exists(path)) return;
+        var directoryInfo = new DirectoryInfo(Path.Join(_vm.Address, textBlock.Text));
 
-        var directoryInfo = new DirectoryInfo(path);
-        _vm.OpenItem(directoryInfo);
+        if (directoryInfo.Exists)
+        {
+            _vm.OpenItem(directoryInfo);
+        }
     }
 }

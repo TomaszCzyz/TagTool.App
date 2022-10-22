@@ -149,26 +149,39 @@
             CanUserResizeColumns="True"
             CanUserReorderColumns="True"
             CanUserSortColumns="True"
+            SelectedItem="{Binding SelectedItem}"
             Items="{Binding Items}">
+            <DataGrid.KeyBindings>
+                <KeyBinding Gesture="Enter" Command="{CompiledBinding OpenItemCommand}" />
+                <KeyBinding Gesture="Back" Command="{CompiledBinding NavigateUpCommand}" />
+            </DataGrid.KeyBindings>
             <DataGrid.Columns>
                 <DataGridCheckBoxColumn Width="60" Header="✔" CanUserResize="False" />
+
                 <!-- todo: sorting does not work, probably comparer has to be specified explicitly -->
                 <DataGridTemplateColumn
                     Header="Name"
                     IsReadOnly="True"
                     Width="*">
+
                     <DataTemplate DataType="models:FileSystemEntry">
                         <Grid ColumnDefinitions="25,*">
+
+                            <Border
+                                Grid.ColumnSpan="2"
+                                Background="Transparent"
+                                DoubleTapped="BorderNameCell_OnDoubleTapped" />
+
                             <Image
-                                Source="{Binding FullName, Converter={StaticResource IconToBitmapConverter}, ConverterParameter=25}"
-                                Margin="0 0 2 0" />
+                                Grid.Column="0"
+                                Margin="0 0 2 0"
+                                Source="{Binding FullName, Converter={StaticResource IconToBitmapConverter}, ConverterParameter=25}" />
 
                             <TextBlock
                                 Grid.Column="1"
-                                Name="TextBlockDataGridItem"
                                 VerticalAlignment="Center"
-                                Text="{Binding Name}"
-                                DoubleTapped="TextBlockDataGridItem_OnDoubleTapped" />
+                                HorizontalAlignment="Stretch"
+                                Text="{Binding Name}" />
 
                         </Grid>
                     </DataTemplate>
