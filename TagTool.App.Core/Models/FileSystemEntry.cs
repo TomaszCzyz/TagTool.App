@@ -1,8 +1,23 @@
-﻿namespace TagTool.App.Core.Models;
+﻿using System.Collections;
+
+namespace TagTool.App.Core.Models;
 
 public class FileSystemEntry
 {
     private readonly FileSystemInfo _info;
+
+    public FileSystemEntry(FileSystemInfo info)
+    {
+        _info = info;
+        IsDir = info is DirectoryInfo;
+        IsFile = info is FileInfo;
+    }
+
+    public bool IsDir { get; }
+
+    public bool IsFile { get; }
+
+    public Type Type => _info.GetType();
 
     public string Name => _info.Name;
 
@@ -15,10 +30,21 @@ public class FileSystemEntry
     public DateTime DateCreated => _info.CreationTime;
 
     public DateTime DateModified => _info.LastWriteTime;
+}
 
-    public FileSystemEntry(FileSystemInfo info)
+public class FileSystemEntryComparer : IComparer
+{
+    public int Compare(object? x, object? y)
     {
-        _info = info;
+        if (x is not FileSystemEntry xEntry || y is not FileSystemEntry yEntry)
+        {
+            return Comparer.Default.Compare(x, y);
+        }
+
+        if (xEntry.IsDir && yEntry.IsFile) return 1;
+        if (xEntry.IsFile && yEntry.IsDir) return -1;
+
+        return string.CompareOrdinal(xEntry.Name, yEntry.Name);
     }
 }
 

@@ -14,6 +14,7 @@
     <UserControl.Resources>
         <converters:FileSizeToStringConverter x:Key="FileSizeToStringConverter" />
         <converters:IconToBitmapConverter x:Key="IconToBitmapConverter" />
+        <models:FileSystemEntryComparer x:Key="FileSystemEntryComparer" />
     </UserControl.Resources>
 
     <UserControl.Styles>
@@ -162,7 +163,9 @@
                 <DataGridTemplateColumn
                     Header="Name"
                     IsReadOnly="True"
-                    Width="*">
+                    CanUserSort="True"
+                    Width="*"
+                    CustomSortComparer="{StaticResource FileSystemEntryComparer}">
 
                     <DataTemplate DataType="models:FileSystemEntry">
                         <Grid ColumnDefinitions="25,*">
