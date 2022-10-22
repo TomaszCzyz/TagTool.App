@@ -41,7 +41,7 @@ public static class Program
             .MinimumLevel.Override("Microsoft", LogEventLevel.Warning)
             .Enrich.FromLogContext()
             .Enrich.With(new PropertyEnricher("ApplicationName", "TagToolApp"))
-            .WriteTo.SQLite(logsDbPath, storeTimestampInUtc: true, batchSize: 1)
+            .WriteTo.SQLite(logsDbPath, storeTimestampInUtc: true, batchSize: 100)
             .CreateLogger();
     }
 }

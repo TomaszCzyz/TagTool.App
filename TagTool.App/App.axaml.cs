@@ -36,6 +36,7 @@ public class App : Application
             desktopLifetime.MainWindow = mainWindow;
 
             desktopLifetime.Exit += (_, _) => mainWindowViewModel.CloseLayout();
+            desktopLifetime.Exit += (_, _) => Log.CloseAndFlush();
         }
 
         base.OnFrameworkInitializationCompleted();
