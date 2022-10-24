@@ -5,28 +5,33 @@ namespace TagTool.App.ViewModels.UserControls;
 
 public partial class AddressSegmentViewModel : ObservableObject
 {
+    private readonly FileSystemViewModel _owner;
     private readonly DirectoryInfo _folder;
 
     [ObservableProperty]
     private bool _isPopupOpen;
 
-    public AddressSegmentViewModel(DirectoryInfo folder)
-    {
-        _folder = folder;
-    }
-
     public string Name => _folder.Name;
 
     public string Address => _folder.FullName;
 
+    public AddressSegmentViewModel(DirectoryInfo folder, FileSystemViewModel owner)
+    {
+        _folder = folder;
+        _owner = owner;
+    }
+
     public IEnumerable<AddressSegmentViewModel> Children
         => _folder
             .EnumerateDirectories("*", new EnumerationOptions { IgnoreInaccessible = true })
-            .Select(x => new AddressSegmentViewModel(x));
+            .Select(x => new AddressSegmentViewModel(x, _owner));
 
     [RelayCommand]
-    public void OpenPopupCommand()
+    private void OpenPopup() => IsPopupOpen = true;
+
+    [RelayCommand]
+    private void NavigateHere()
     {
-        IsPopupOpen = true;
+        _owner.NavigateToCommand.Execute(_folder);
     }
 }

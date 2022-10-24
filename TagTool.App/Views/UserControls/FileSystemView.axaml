@@ -106,8 +106,7 @@
                                 <Button
                                     Classes="ButtonAddressBar Transparent"
                                     Content="{Binding Name}"
-                                    Command="{ReflectionBinding #Root.DataContext.ChangeAddressCommand}"
-                                    CommandParameter="{Binding Address}" />
+                                    Command="{Binding NavigateHereCommand}" />
 
                                 <Button
                                     x:Name="PopupButton"
@@ -123,7 +122,7 @@
                                         <ContextMenu.Styles>
                                             <Style Selector="MenuItem">
                                                 <Setter Property="Header" Value="{Binding Name}" />
-                                                <Setter Property="Command" Value="{ReflectionBinding #Root.DataContext.ChangeAddressCommand}" />
+                                                <Setter Property="Command" Value="{Binding NavigateHereCommand}" />
                                                 <Setter Property="CommandParameter" Value="{Binding Address}" />
                                             </Style>
                                         </ContextMenu.Styles>

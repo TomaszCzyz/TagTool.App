@@ -23,9 +23,6 @@ public partial class FileSystemViewModel : ObservableObject
     [ObservableProperty]
     private bool _isEditing;
 
-    [ObservableProperty]
-    private string _address = string.Empty;
-
     [EditorBrowsable(EditorBrowsableState.Never)]
     [ObservableProperty]
     private string _textBoxAddress = string.Empty;
@@ -43,24 +40,42 @@ public partial class FileSystemViewModel : ObservableObject
     }
 
     [RelayCommand]
-    private void ChangeAddress(string address) => Address = address;
-
-    [RelayCommand]
-    public void CancelNavigation()
+    private void CancelNavigation()
     {
-        TextBoxAddress = Address;
+        TextBoxAddress = CurrentFolder.FullName;
         IsEditing = false;
     }
 
     [RelayCommand]
-    public void CommitNavigation()
+    private void CommitNavigation()
     {
-        Address = TextBoxAddress;
+        if (File.Exists(TextBoxAddress))
+        {
+            using var process = new Process();
+
+            process.StartInfo.FileName = TextBoxAddress;
+            process.StartInfo.UseShellExecute = true;
+
+            process.Start();
+
+            NavigateTo(new DirectoryInfo(Path.GetDirectoryName(TextBoxAddress)!));
+            IsEditing = false;
+            return;
+        }
+
+        if (Directory.Exists(TextBoxAddress))
+        {
+            NavigateTo(new DirectoryInfo(TextBoxAddress));
+            IsEditing = false;
+            return;
+        }
+
+        TextBoxAddress = CurrentFolder.FullName;
         IsEditing = false;
     }
 
     [RelayCommand]
-    public void NavigateUp()
+    private void NavigateUp()
     {
         if (CurrentFolder.Parent is { } parent)
         {
@@ -69,7 +84,7 @@ public partial class FileSystemViewModel : ObservableObject
     }
 
     [RelayCommand(CanExecute = nameof(CanNavigateBack))]
-    public void NavigateBack()
+    private void NavigateBack()
     {
         if (!_navigationHistoryBack.TryPop(out var directory)) return;
 
@@ -82,7 +97,7 @@ public partial class FileSystemViewModel : ObservableObject
     }
 
     [RelayCommand(CanExecute = nameof(CanNavigateForward))]
-    public void NavigateForward()
+    private void NavigateForward()
     {
         if (!_navigationHistoryForward.TryPop(out var directory)) return;
 
@@ -95,7 +110,7 @@ public partial class FileSystemViewModel : ObservableObject
     }
 
     [RelayCommand]
-    public void OpenItem()
+    private void OpenItem()
     {
         if (SelectedItem is FileSystemEntry { IsDir: true } fileSystemEntry)
         {
@@ -103,45 +118,24 @@ public partial class FileSystemViewModel : ObservableObject
         }
     }
 
-    partial void OnAddressChanged(string value)
-    {
-        TextBoxAddress = value;
-        NavigateToAddress(value);
-        AddressSegments.Clear();
-        AddressSegments.AddRange(CurrentFolder.GetAncestors().Select(folder => new AddressSegmentViewModel(folder)));
-    }
-
     partial void OnCurrentFolderChanged(DirectoryInfo value)
     {
-        Address = value.FullName;
+        TextBoxAddress = CurrentFolder.FullName;
+
         Items.Clear();
         Items.AddRange(value.EnumerateFileSystemInfos().Select(info => new FileSystemEntry(info)));
+
+        AddressSegments.Clear();
+        AddressSegments.AddRange(CurrentFolder.GetAncestors().Select(folder => new AddressSegmentViewModel(folder, this)));
     }
 
-    private void NavigateToAddress(string address)
+    [RelayCommand]
+    private void NavigateTo(DirectoryInfo folder)
     {
-        if (Directory.Exists(address))
-        {
-            var path = Path.GetFullPath(address);
-            var folder = new DirectoryInfo(path);
-
-            NavigateTo(folder);
-
-            return;
-        }
-
-        if (File.Exists(address))
-        {
-            using var process = new Process();
-
-            process.StartInfo.FileName = address;
-            process.StartInfo.UseShellExecute = true;
-
-            process.Start();
-        }
+        NavigateTo(folder, false);
     }
 
-    private void NavigateTo(DirectoryInfo folder, bool isHistoryNavigation = false)
+    private void NavigateTo(DirectoryInfo folder, bool isHistoryNavigation)
     {
         if (!CurrentFolder.Equals(folder) && !isHistoryNavigation)
         {
