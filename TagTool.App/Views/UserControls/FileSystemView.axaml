@@ -83,11 +83,6 @@
                 Margin="5 0 0 0"
                 IsVisible="{Binding !IsEditing}">
 
-                <Border
-                    Background="Transparent"
-                    HorizontalAlignment="Stretch"
-                    PointerPressed="Border_OnPointerPressed" />
-
                 <ItemsControl
                     DockPanel.Dock="Left"
                     HorizontalAlignment="Left"
@@ -138,6 +133,12 @@
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>
                 </ItemsControl>
+
+                <Border
+                    Background="Transparent"
+                    HorizontalAlignment="Stretch"
+                    PointerPressed="Border_OnPointerPressed" />
+
             </DockPanel>
         </Grid>
 

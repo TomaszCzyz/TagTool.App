@@ -16,8 +16,6 @@ public partial class FileSystemView : UserControl
     {
         DataContext = _vm;
         InitializeComponent();
-
-        // DoubleTappedEvent.AddClassHandler<Grid>(Grid_OnDoubleTapped, RoutingStrategies.Bubble);
     }
 
     private void AddressTextBox_OnLostFocus(object? sender, RoutedEventArgs e)
