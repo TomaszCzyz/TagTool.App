@@ -7,6 +7,7 @@
     xmlns:userControls="clr-namespace:TagTool.App.ViewModels.UserControls"
     xmlns:models="clr-namespace:TagTool.App.Core.Models;assembly=TagTool.App.Core"
     mc:Ignorable="d" d:DesignWidth="550" d:DesignHeight="300"
+    x:Name="UserControlRoot"
     x:Class="TagTool.App.Views.UserControls.SimpleTagsBar"
     x:DataType="userControls:SimpleTagsBarViewModel">
 
@@ -24,7 +25,9 @@
         </Style>
     </UserControl.Styles>
 
-    <Panel
+    <ScrollViewer
+        MaxHeight="250"
+        VerticalScrollBarVisibility="Visible"
         HorizontalAlignment="Stretch"
         VerticalAlignment="Top">
 
@@ -37,7 +40,12 @@
             Items="{Binding EnteredTags}">
             <ListBox.DataTemplates>
                 <DataTemplate DataType="models:Tag">
-                    <templatedControls:TagChip Margin="4 2" Text="{Binding Name}" />
+                    <templatedControls:TagChip
+                        Margin="4 2"
+                        Text="{Binding Name}"
+                        DeleteCommand="{Binding #UserControlRoot.DataContext.RemoveTagCommand, FallbackValue=null}"
+                        DeleteCommandParameter="{Binding .}" />
+
                 </DataTemplate>
                 <DataTemplate DataType="userControls:TagSearchBoxViewModel">
                     <AutoCompleteBox
@@ -55,7 +63,8 @@
                             <KeyBinding
                                 Gesture="Back"
                                 Command="{Binding RemoveTagCommand}"
-                                CommandParameter="{Binding #TagSearchAutoCompleteBox}"/>
+                                CommandParameter="{Binding #TagSearchAutoCompleteBox}" />
+
                         </AutoCompleteBox.KeyBindings>
                         <AutoCompleteBox.ItemTemplate>
                             <DataTemplate DataType="models:HighlightedMatch">
@@ -71,6 +80,5 @@
                 </ItemsPanelTemplate>
             </ItemsControl.ItemsPanel>
         </ListBox>
-    </Panel>
-
+    </ScrollViewer>
 </UserControl>

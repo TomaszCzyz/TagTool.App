@@ -1,4 +1,5 @@
 ﻿using System.Collections.ObjectModel;
+using CommunityToolkit.Mvvm.Input;
 using DynamicData;
 using TagTool.App.Core.Models;
 
@@ -8,10 +9,12 @@ public interface ITagsContainer
 {
     void AddTag(Tag tag);
 
+    void Remove(Tag tag);
+
     void RemoveLast();
 }
 
-public class SimpleTagsBarViewModel : ViewModelBase, ITagsContainer
+public partial class SimpleTagsBarViewModel : ViewModelBase, ITagsContainer
 {
     public ObservableCollection<object> EnteredTags { get; set; } = new(); // Tag or TagSearchBox
 
@@ -22,6 +25,12 @@ public class SimpleTagsBarViewModel : ViewModelBase, ITagsContainer
 
         var tagSearchBoxViewModel = new TagSearchBoxViewModel(this);
         EnteredTags.Add(tagSearchBoxViewModel);
+    }
+
+    [RelayCommand]
+    private void RemoveTag(Tag tag)
+    {
+        Remove(tag);
     }
 
     public void AddTag(Tag tag)
@@ -37,6 +46,11 @@ public class SimpleTagsBarViewModel : ViewModelBase, ITagsContainer
 
             EnteredTags.Insert(EnteredTags.Count - 1, tag);
         }
+    }
+
+    public void Remove(Tag tag)
+    {
+        EnteredTags.Remove(tag);
     }
 
     public void RemoveLast()

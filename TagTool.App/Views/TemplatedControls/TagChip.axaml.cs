@@ -1,16 +1,20 @@
 ﻿using System.Windows.Input;
 using Avalonia;
+using Avalonia.Controls;
 using Avalonia.Controls.Documents;
+using Avalonia.Controls.Metadata;
 using Avalonia.Controls.Primitives;
+using Avalonia.Interactivity;
+using Avalonia.VisualTree;
 
 namespace TagTool.App.Views.TemplatedControls;
 
-// [TemplatePart(Name = DeleteButtonPartName, Type = typeof(Button))]
-public class TagChip : TemplatedControl
+[TemplatePart(Name = DeleteButtonPartName, Type = typeof(Button))]
+public sealed class TagChip : TemplatedControl
 {
-    // public const string DeleteButtonPartName = "PART_DeleteButton";
+    public const string DeleteButtonPartName = "PART_DeleteButton";
 
-    // private ButtonBase? _deleteButton;
+    private Button? _deleteButton;
 
     public static readonly StyledProperty<InlineCollection?> InlinesProperty
         = AvaloniaProperty.Register<TagChip, InlineCollection?>(nameof(Inlines));
@@ -60,46 +64,45 @@ public class TagChip : TemplatedControl
         set => SetValue(DeleteCommandParameterProperty, value);
     }
 
-    // [Category("Behavior")]
-    // public event RoutedEventHandler DeleteClick
-    // {
-    //     add => AddHandler(DeleteClickEvent, value);
-    //     remove => RemoveHandler(DeleteClickEvent, value);
-    // }
-    //
-    // public static readonly RoutedEvent DeleteClickEvent
-    //     = EventManager.RegisterRoutedEvent(nameof(DeleteClick), RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(Chip));
+    public event EventHandler<RoutedEventArgs> DeleteClick
+    {
+        add => AddHandler(DeleteClickEvent, value);
+        remove => RemoveHandler(DeleteClickEvent, value);
+    }
 
-    // public override void OnApplyTemplate()
-    // {
-    //     if (_deleteButton != null)
-    //     {
-    //         _deleteButton.Click -= DeleteButtonOnClick;
-    //     }
-    //
-    //     _deleteButton = GetTemplateChild(DeleteButtonPartName) as ButtonBase;
-    //
-    //     if (_deleteButton != null)
-    //     {
-    //         _deleteButton.Click += DeleteButtonOnClick;
-    //     }
-    //
-    //     base.OnApplyTemplate();
-    // }
-    //
-    // protected virtual void OnDeleteClick()
-    // {
-    //     RaiseEvent(new RoutedEventArgs(DeleteClickEvent, this));
-    //
-    //     if (DeleteCommand?.CanExecute(DeleteCommandParameter) ?? false)
-    //     {
-    //         DeleteCommand.Execute(DeleteCommandParameter);
-    //     }
-    // }
-    //
-    // private void DeleteButtonOnClick(object sender, RoutedEventArgs routedEventArgs)
-    // {
-    //     OnDeleteClick();
-    //     routedEventArgs.Handled = true;
-    // }
+    public static readonly RoutedEvent<RoutedEventArgs> DeleteClickEvent
+        = RoutedEvent.Register<TagChip, RoutedEventArgs>(nameof(DeleteClick), RoutingStrategies.Bubble);
+
+    protected override void OnApplyTemplate(TemplateAppliedEventArgs e)
+    {
+        if (_deleteButton != null)
+        {
+            _deleteButton.Click -= DeleteButtonOnClick;
+        }
+
+        _deleteButton = this.FindDescendantOfType<Button>();
+
+        if (_deleteButton != null)
+        {
+            _deleteButton.Click += DeleteButtonOnClick;
+        }
+
+        base.OnApplyTemplate(e);
+    }
+
+    private void OnDeleteClick()
+    {
+        RaiseEvent(new RoutedEventArgs(DeleteClickEvent, this));
+
+        if (DeleteCommand?.CanExecute(DeleteCommandParameter) ?? false)
+        {
+            DeleteCommand.Execute(DeleteCommandParameter);
+        }
+    }
+
+    private void DeleteButtonOnClick(object? sender, RoutedEventArgs routedEventArgs)
+    {
+        OnDeleteClick();
+        routedEventArgs.Handled = true;
+    }
 }
