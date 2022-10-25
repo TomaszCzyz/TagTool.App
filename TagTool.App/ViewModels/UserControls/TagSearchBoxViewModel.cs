@@ -1,6 +1,8 @@
 ﻿using System.Collections.ObjectModel;
+using Avalonia.Controls;
 using Avalonia.Controls.Documents;
 using Avalonia.Media;
+using Avalonia.VisualTree;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Grpc.Core;
@@ -17,6 +19,9 @@ public partial class TagSearchBoxViewModel : ViewModelBase, IDisposable
 
     [ObservableProperty]
     private string? _searchText;
+
+    [ObservableProperty]
+    private string? _text;
 
     [ObservableProperty]
     private HighlightedMatch? _selectedItem;
@@ -40,6 +45,20 @@ public partial class TagSearchBoxViewModel : ViewModelBase, IDisposable
 
         _tagsContainer.AddTag(new Tag(SelectedItem.MatchedText));
         SearchText = "";
+        Text = "";
+    }
+
+    [RelayCommand]
+    private void RemoveTag(object? value)
+    {
+        var autoCompleteBox = value as AutoCompleteBox;
+        var textBox = autoCompleteBox!.FindDescendantOfType<TextBox>();
+        var textBoxCaretIndex = textBox!.CaretIndex;
+
+        if (textBoxCaretIndex == 0)
+        {
+            _tagsContainer.RemoveLast();
+        }
     }
 
     private CancellationTokenSource? _cts;

@@ -47,11 +47,15 @@
                         Classes="TransparentBackground WrappedPanel"
                         Watermark="Next Tag..."
                         FilterMode="None"
-                        Text="{Binding SearchText}"
                         Items="{Binding TagsSearchResults}"
+                        SearchText="{Binding SearchText, Mode=OneWayToSource}"
                         SelectedItem="{Binding SelectedItem, Mode=TwoWay}">
                         <AutoCompleteBox.KeyBindings>
-                            <KeyBinding Gesture="Enter" Command="{Binding CommitTagCommand}" CommandParameter="{Binding #TagSearchAutoCompleteBox}" />
+                            <KeyBinding Gesture="Enter" Command="{Binding CommitTagCommand}" />
+                            <KeyBinding
+                                Gesture="Back"
+                                Command="{Binding RemoveTagCommand}"
+                                CommandParameter="{Binding #TagSearchAutoCompleteBox}"/>
                         </AutoCompleteBox.KeyBindings>
                         <AutoCompleteBox.ItemTemplate>
                             <DataTemplate DataType="models:HighlightedMatch">

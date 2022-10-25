@@ -8,7 +8,7 @@ public interface ITagsContainer
 {
     void AddTag(Tag tag);
 
-    void RemoveTag(Tag tag);
+    void RemoveLast();
 }
 
 public class SimpleTagsBarViewModel : ViewModelBase, ITagsContainer
@@ -39,5 +39,12 @@ public class SimpleTagsBarViewModel : ViewModelBase, ITagsContainer
         }
     }
 
-    public void RemoveTag(Tag tag) => throw new NotImplementedException();
+    public void RemoveLast()
+    {
+        var lastTag = EnteredTags.LastOrDefault(o => o.GetType() == typeof(Tag));
+
+        if (lastTag is null) return;
+
+        EnteredTags.Remove(lastTag);
+    }
 }
