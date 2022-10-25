@@ -2,6 +2,7 @@
 using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Interactivity;
+using Avalonia.Markup.Xaml;
 using Avalonia.VisualTree;
 using TagTool.App.Extensions;
 using TagTool.App.ViewModels.UserControls;
@@ -46,5 +47,10 @@ public partial class FileSystemView : UserControl
         var dataGridCell = e.Parent.FindAncestorOfType<DataGridCell>()!;
 
         dataGridCell.DoubleTapped += (_, _) => _vm.OpenItemCommand.Execute(null);
+    }
+
+    private void InitializeComponent()
+    {
+        AvaloniaXamlLoader.Load(this);
     }
 }

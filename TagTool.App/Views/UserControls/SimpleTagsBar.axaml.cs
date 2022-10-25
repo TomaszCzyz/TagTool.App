@@ -6,12 +6,12 @@ using TagTool.App.ViewModels.UserControls;
 
 namespace TagTool.App.Views.UserControls;
 
-public partial class TagSearchBoxView : UserControl
+public partial class SimpleTagsBar : UserControl
 {
-    public TagSearchBoxView()
+    public SimpleTagsBar()
     {
+        DataContext = Application.Current?.CreateInstance<SimpleTagsBarViewModel>();
         InitializeComponent();
-        DataContext = Application.Current?.CreateInstance<TagSearchBoxViewModel>();
     }
 
     private void InitializeComponent()

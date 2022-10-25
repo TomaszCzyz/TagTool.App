@@ -8,7 +8,7 @@ using TagTool.App.Core.Models;
 
 namespace TagTool.App.ViewModels.UserControls;
 
-public partial class FileSystemViewModel : ObservableObject
+public partial class FileSystemViewModel : ViewModelBase
 {
     private readonly Stack<DirectoryInfo> _navigationHistoryBack = new();
     private readonly Stack<DirectoryInfo> _navigationHistoryForward = new();

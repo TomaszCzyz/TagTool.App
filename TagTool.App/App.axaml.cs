@@ -6,6 +6,7 @@ using Serilog;
 using TagTool.App.Core.Services;
 using TagTool.App.Docks;
 using TagTool.App.ViewModels;
+using TagTool.App.ViewModels.Dialogs;
 using TagTool.App.ViewModels.UserControls;
 using TagTool.App.Views;
 
@@ -54,10 +55,12 @@ public class App : Application
 
         services.AddSingleton(Log.Logger);
         services.AddTransient<TabContentViewModel>();
+        services.AddTransient<TagSearchBoxViewModel>();
+        services.AddTransient<AddFileDialogViewModel>();
         services.AddTransient<FileSystemViewModel>();
         services.AddTransient<MainWindowViewModel>();
         services.AddTransient<TabContentViewModel>();
-        services.AddTransient<TagSearchBoxViewModel>();
+        services.AddTransient<SimpleTagsBarViewModel>();
 
         return services.BuildServiceProvider();
     }

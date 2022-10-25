@@ -1,51 +1,55 @@
 ﻿using System.Collections.ObjectModel;
-using Avalonia;
 using Avalonia.Controls.Documents;
 using Avalonia.Media;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Grpc.Core;
-using JetBrains.Annotations;
 using TagTool.App.Core.Models;
 using TagTool.App.Core.Services;
-using TagTool.App.Extensions;
 using TagTool.Backend;
 
 namespace TagTool.App.ViewModels.UserControls;
 
 public partial class TagSearchBoxViewModel : ViewModelBase, IDisposable
 {
+    private readonly ITagsContainer _tagsContainer;
     private readonly TagSearchService.TagSearchServiceClient _tagSearchServiceClient;
 
     [ObservableProperty]
     private string? _searchText;
 
+    [ObservableProperty]
+    private HighlightedMatch? _selectedItem;
+
     public ObservableCollection<HighlightedMatch> TagsSearchResults { get; set; } = new();
 
-    public TagSearchBoxViewModel() : this(Application.Current?.CreateInstance<TagSearchServiceFactory>()!)
+    public TagSearchBoxViewModel(ITagsContainer tagsContainer)
     {
+        _tagsContainer = tagsContainer;
+        _tagSearchServiceClient = new TagSearchServiceFactory().Create();
+
+        TagsSearchResults.Add(new HighlightedMatch { MatchedText = "someMatch" });
+        TagsSearchResults.Add(new HighlightedMatch { MatchedText = "NewTag" });
+        TagsSearchResults.Add(new HighlightedMatch { MatchedText = "someOtherMatch" });
     }
 
-    [UsedImplicitly]
-    public TagSearchBoxViewModel(TagSearchServiceFactory tagSearchServiceFactory)
+    [RelayCommand]
+    private void CommitTag()
     {
-        _tagSearchServiceClient = tagSearchServiceFactory.Create();
+        if (SelectedItem is null) return;
 
-        TagsSearchResults.Add(new HighlightedMatch { MatchedText = "someMatch" });
-        TagsSearchResults.Add(new HighlightedMatch { MatchedText = "someMatch" });
-        // TagsSearchResults.Add("someMatch");
-        // TagsSearchResults.Add("someMatch");
+        _tagsContainer.AddTag(new Tag(SelectedItem.MatchedText));
+        SearchText = "";
     }
 
     private CancellationTokenSource? _cts;
 
-    [RelayCommand]
-    public async Task DoSearchRelay()
+    private async Task DoSearchRelay()
     {
         await DoSearch(SearchText);
     }
 
-    public async Task DoSearch(string? value)
+    private async Task DoSearch(string? value)
     {
         _cts?.Cancel();
         _cts?.Dispose();

@@ -3,7 +3,7 @@ using CommunityToolkit.Mvvm.Input;
 
 namespace TagTool.App.ViewModels.UserControls;
 
-public partial class AddressSegmentViewModel : ObservableObject
+public partial class AddressSegmentViewModel : ViewModelBase
 {
     private readonly FileSystemViewModel _owner;
     private readonly DirectoryInfo _folder;

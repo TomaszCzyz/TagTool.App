@@ -1,0 +1,63 @@
+﻿<Window
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:dialogs="clr-namespace:TagTool.App.ViewModels.Dialogs"
+    xmlns:userControls="clr-namespace:TagTool.App.Views.UserControls"
+    mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+    x:Class="TagTool.App.Views.Dialogs.AddFileDialog"
+    Title="AddFileDialog"
+    WindowStartupLocation="CenterOwner">
+
+    <Design.DataContext>
+        <dialogs:AddFileDialogViewModel />
+    </Design.DataContext>
+
+    <Grid
+        RowDefinitions="Auto, Auto"
+        ColumnDefinitions="Auto,450,*"
+        HorizontalAlignment="Center"
+        Margin="0 20">
+        
+        <!-- first row -->
+        <TextBlock
+            Text="File to tag:"
+            VerticalAlignment="Center"
+            HorizontalAlignment="Right"
+            Margin="10 0" />
+
+        <TextBox
+            Grid.Row="0"
+            Grid.Column="1"
+            Name="SelectFileTextBox"
+            UseFloatingWatermark="True"
+            Watermark="Select file"
+            Margin="0 10"
+            Text="{Binding Text}">
+            <TextBox.InnerRightContent>
+                <Button
+                    Name="OpenFilePickerButton"
+                    Background="Transparent"
+                    Padding="4">
+
+                    <Svg Path="/Assets/Svgs/opened-folder-filled.svg" Width="24" Height="24" />
+                </Button>
+            </TextBox.InnerRightContent>
+        </TextBox>
+
+        <!-- second row -->
+        <TextBlock
+            Grid.Row="1"
+            Grid.Column="0"
+            Margin="0 10"
+            Text="Tags"
+            HorizontalAlignment="Right" />
+
+        <userControls:SimpleTagsBar
+            Grid.Row="1"
+            Grid.Column="1" />
+
+    </Grid>
+
+</Window>

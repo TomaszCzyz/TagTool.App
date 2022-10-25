@@ -1,0 +1,72 @@
+﻿<UserControl
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:templatedControls="clr-namespace:TagTool.App.Views.TemplatedControls"
+    xmlns:userControls="clr-namespace:TagTool.App.ViewModels.UserControls"
+    xmlns:models="clr-namespace:TagTool.App.Core.Models;assembly=TagTool.App.Core"
+    mc:Ignorable="d" d:DesignWidth="550" d:DesignHeight="300"
+    x:Class="TagTool.App.Views.UserControls.SimpleTagsBar"
+    x:DataType="userControls:SimpleTagsBarViewModel">
+
+    <Design.DataContext>
+        <userControls:SimpleTagsBarViewModel />
+    </Design.DataContext>
+
+    <UserControl.Styles>
+        <Style Selector="ListBox">
+            <Setter Property="Background" Value="Transparent" />
+        </Style>
+        <Style Selector="ListBoxItem">
+            <Setter Property="Padding" Value="0" />
+            <Setter Property="MaxHeight" Value="30" />
+        </Style>
+    </UserControl.Styles>
+
+    <Panel
+        HorizontalAlignment="Stretch"
+        VerticalAlignment="Top">
+
+        <ListBox
+            ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+            Name="TagsListBox"
+            Margin="2"
+            HorizontalAlignment="Left"
+            VerticalAlignment="Center"
+            Items="{Binding EnteredTags}">
+            <ListBox.DataTemplates>
+                <DataTemplate DataType="models:Tag">
+                    <templatedControls:TagChip Margin="4 2" Text="{Binding Name}" />
+                </DataTemplate>
+                <DataTemplate DataType="userControls:TagSearchBoxViewModel">
+                    <AutoCompleteBox
+                        Name="TagSearchAutoCompleteBox"
+                        Margin="2 0"
+                        IsTextCompletionEnabled="True"
+                        Classes="TransparentBackground WrappedPanel"
+                        Watermark="Next Tag..."
+                        FilterMode="None"
+                        Text="{Binding SearchText}"
+                        Items="{Binding TagsSearchResults}"
+                        SelectedItem="{Binding SelectedItem, Mode=TwoWay}">
+                        <AutoCompleteBox.KeyBindings>
+                            <KeyBinding Gesture="Enter" Command="{Binding CommitTagCommand}" CommandParameter="{Binding #TagSearchAutoCompleteBox}" />
+                        </AutoCompleteBox.KeyBindings>
+                        <AutoCompleteBox.ItemTemplate>
+                            <DataTemplate DataType="models:HighlightedMatch">
+                                <templatedControls:TagChip Text="{Binding MatchedText}" />
+                            </DataTemplate>
+                        </AutoCompleteBox.ItemTemplate>
+                    </AutoCompleteBox>
+                </DataTemplate>
+            </ListBox.DataTemplates>
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <WrapPanel />
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+        </ListBox>
+    </Panel>
+
+</UserControl>

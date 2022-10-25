@@ -8,6 +8,7 @@
     xmlns:templatedControls="clr-namespace:TagTool.App.Views.TemplatedControls"
     xmlns:converters="clr-namespace:TagTool.App.Converters"
     xmlns:models="clr-namespace:TagTool.App.Core.Models;assembly=TagTool.App.Core"
+    xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
     mc:Ignorable="d" d:DesignWidth="600" d:DesignHeight="350"
     x:Class="TagTool.App.Views.UserControls.TabContentView">
 
@@ -35,7 +36,31 @@
         </StackPanel>
 
         <!-- SearchBar -->
-        <userControls:TagSearchBar Grid.Row="1" />
+        <Grid
+            Grid.Row="1"
+            ColumnDefinitions="Auto,*"
+            RowDefinitions="Auto">
+
+            <Border
+                Grid.ColumnSpan="2"
+                Name="PART_BorderBackground"
+                CornerRadius="8"
+                Background="#6692B1"
+                BorderBrush="#6692B1"
+                BorderThickness="2"
+                Opacity="0.5" />
+
+            <avalonia:MaterialIcon
+                Grid.Column="0"
+                Kind="Magnify"
+                Margin="10 0 5 0"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                Width="20"
+                Height="20" />
+
+            <userControls:SimpleTagsBar Grid.Column="1" />
+        </Grid>
 
         <!-- SearchResults -->
         <DataGrid

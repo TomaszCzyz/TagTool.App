@@ -8,6 +8,8 @@
     <BuiltInComInteropSupport>true</BuiltInComInteropSupport>
 
     <NoWarn>CA1848</NoWarn>
+
+    <AvaloniaNameGeneratorBehavior>OnlyProperties</AvaloniaNameGeneratorBehavior>
   </PropertyGroup>
 
   <ItemGroup>
