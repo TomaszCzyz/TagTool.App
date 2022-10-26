@@ -26,7 +26,6 @@
     </UserControl.Styles>
 
     <ScrollViewer
-        MaxHeight="250"
         VerticalScrollBarVisibility="Visible"
         HorizontalAlignment="Stretch"
         VerticalAlignment="Top">

@@ -59,7 +59,7 @@
                 Width="20"
                 Height="20" />
 
-            <userControls:SimpleTagsBar Grid.Column="1" />
+            <userControls:SimpleTagsBar MaxHeight="250" Grid.Column="1" />
         </Grid>
 
         <!-- SearchResults -->

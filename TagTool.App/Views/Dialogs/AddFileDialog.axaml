@@ -5,41 +5,60 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:dialogs="clr-namespace:TagTool.App.ViewModels.Dialogs"
     xmlns:userControls="clr-namespace:TagTool.App.Views.UserControls"
-    mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+    xmlns:converters="clr-namespace:TagTool.App.Converters"
+    mc:Ignorable="d" d:DesignWidth="600" d:DesignHeight="350"
     x:Class="TagTool.App.Views.Dialogs.AddFileDialog"
     Title="AddFileDialog"
-    WindowStartupLocation="CenterOwner">
+    WindowStartupLocation="CenterOwner"
+    ExtendClientAreaChromeHints="NoChrome"
+    ExtendClientAreaToDecorationsHint="True"
+    ExtendClientAreaTitleBarHeightHint="-1"
+    ShowInTaskbar="True"
+    SizeToContent="WidthAndHeight"
+    Background="{x:Null}"
+    TransparencyLevelHint="AcrylicBlur">
+
+    <Window.Resources>
+        <converters:ArraySizeToBooleanConverter x:Key="ArraySizeToBooleanConverter" Threshold="1" />
+    </Window.Resources>
 
     <Design.DataContext>
         <dialogs:AddFileDialogViewModel />
     </Design.DataContext>
 
     <Grid
-        RowDefinitions="Auto, Auto"
-        ColumnDefinitions="Auto,450,*"
+        RowDefinitions="Auto,5,1*,5,1*,5,Auto"
+        ColumnDefinitions="Auto,5,450,*"
         HorizontalAlignment="Center"
-        Margin="0 20">
-        
+        Margin="20"
+        ShowGridLines="False">
+        <Grid.Styles>
+            <Style Selector="Border.Outline">
+                <Setter Property="CornerRadius" Value="4" />
+                <Setter Property="BorderBrush" Value="Gray" />
+                <Setter Property="BorderThickness" Value="1" />
+            </Style>
+        </Grid.Styles>
+
         <!-- first row -->
         <TextBlock
             Text="File to tag:"
             VerticalAlignment="Center"
-            HorizontalAlignment="Right"
-            Margin="10 0" />
+            HorizontalAlignment="Right" />
 
         <TextBox
             Grid.Row="0"
-            Grid.Column="1"
+            Grid.Column="2"
             Name="SelectFileTextBox"
             UseFloatingWatermark="True"
             Watermark="Select file"
-            Margin="0 10"
             Text="{Binding Text}">
             <TextBox.InnerRightContent>
                 <Button
                     Name="OpenFilePickerButton"
                     Background="Transparent"
-                    Padding="4">
+                    Padding="4"
+                    Click="OpenFilePickerButton_OnClick">
 
                     <Svg Path="/Assets/Svgs/opened-folder-filled.svg" Width="24" Height="24" />
                 </Button>
@@ -48,15 +67,67 @@
 
         <!-- second row -->
         <TextBlock
-            Grid.Row="1"
+            Grid.Row="2"
             Grid.Column="0"
-            Margin="0 10"
-            Text="Tags"
+            Text="Tags:"
+            VerticalAlignment="Center"
             HorizontalAlignment="Right" />
 
-        <userControls:SimpleTagsBar
-            Grid.Row="1"
-            Grid.Column="1" />
+        <Border
+            Grid.Row="2"
+            Grid.Column="2"
+            Classes="Outline">
+
+            <userControls:SimpleTagsBar Name="TagsToApplySimpleTagsBar" MaxHeight="150" />
+        </Border>
+
+        <!-- third row -->
+        <TextBlock
+            Grid.Row="4"
+            Grid.Column="0"
+            Text="Implicit tags:"
+            VerticalAlignment="Center"
+            HorizontalAlignment="Right" />
+
+        <Border
+            Grid.Row="4"
+            Grid.Column="2"
+            Classes="Outline">
+
+            <userControls:SimpleTagsBar MaxHeight="150" />
+        </Border>
+
+        <!-- fourth row -->
+        <StackPanel
+            Grid.Row="6"
+            Grid.Column="2"
+            HorizontalAlignment="Right"
+            Orientation="Horizontal"
+            Spacing="10">
+
+            <Button
+                Name="TagButton"
+                Content="Tag"
+                Click="TagButton_OnClick">
+                <Button.IsEnabled>
+                    <MultiBinding Converter="{x:Static BoolConverters.And}">
+                        <Binding ElementName="SelectFileTextBox" Path="Text" Converter="{x:Static StringConverters.IsNotNullOrEmpty}" />
+                        <Binding ElementName="SelectFileTextBox" Path="!(DataValidationErrors.HasErrors)" />
+                        <Binding
+                            ElementName="TagsToApplySimpleTagsBar"
+                            Path="TagsListBox.Items.Count"
+                            Converter="{StaticResource ArraySizeToBooleanConverter}" />
+
+                    </MultiBinding>
+                </Button.IsEnabled>
+            </Button>
+
+            <Button
+                Name="CancelButton"
+                Content="Cancel"
+                Click="CancelButton_OnClick" />
+
+        </StackPanel>
 
     </Grid>
 

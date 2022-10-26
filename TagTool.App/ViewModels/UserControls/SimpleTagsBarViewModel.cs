@@ -16,12 +16,14 @@ public interface ITagsContainer
 
 public partial class SimpleTagsBarViewModel : ViewModelBase, ITagsContainer
 {
+    public Tag[] Tags => EnteredTags.Where(o => o.GetType() == typeof(Tag)).Cast<Tag>().ToArray();
+
     public ObservableCollection<object> EnteredTags { get; set; } = new(); // Tag or TagSearchBox
 
     public SimpleTagsBarViewModel()
     {
-        EnteredTags.AddRange(
-            new Tag[] { new("Tag1"), new("Audio"), new("Dog"), new("Picture"), new("Colleague"), new("Tag6"), new("LastTag") });
+        var tags = new Tag[] { new("Tag1"), new("Audio"), new("Dog"), new("Picture"), new("Colleague"), new("Tag6"), new("LastTag") };
+        EnteredTags.AddRange(tags);
 
         var tagSearchBoxViewModel = new TagSearchBoxViewModel(this);
         EnteredTags.Add(tagSearchBoxViewModel);

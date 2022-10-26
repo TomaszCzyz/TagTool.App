@@ -1,9 +1,11 @@
 ﻿using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Interactivity;
 using Avalonia.Markup.Xaml;
 using Avalonia.Platform.Storage;
 using TagTool.App.Extensions;
 using TagTool.App.ViewModels.Dialogs;
+using TagTool.App.ViewModels.UserControls;
 
 namespace TagTool.App.Views.Dialogs;
 
@@ -16,25 +18,18 @@ public partial class AddFileDialog : Window
         DataContext = _vm;
         InitializeComponent();
 
-        IStorageFolder? lastSelectedDirectory = null;
+        // IStorageFolder? lastSelectedDirectory = null;
+    }
 
-        var selectedFileTextBox = this.Get<TextBox>(nameof(SelectFileTextBox));
+    private async void OpenFilePickerButton_OnClick(object? sender, RoutedEventArgs e)
+    {
+        var options = new FilePickerOpenOptions { Title = "Open file", FileTypeFilter = new[] { FilePickerFileTypes.All }, AllowMultiple = false };
 
-        this.Get<Button>(nameof(OpenFilePickerButton)).Click += async delegate
-        {
-            var result = await GetStorageProvider().OpenFilePickerAsync(
-                new FilePickerOpenOptions
-                {
-                    Title = "Open file",
-                    FileTypeFilter = new[] { FilePickerFileTypes.All },
-                    SuggestedStartLocation = lastSelectedDirectory,
-                    AllowMultiple = false
-                });
+        var result = await GetStorageProvider().OpenFilePickerAsync(options);
 
-            if (result.Count == 0) return;
+        if (result.Count == 0) return;
 
-            selectedFileTextBox.Text = result[0].Name;
-        };
+        SelectFileTextBox.Text = result[0].Name;
     }
 
     private IStorageProvider GetStorageProvider()
@@ -47,5 +42,18 @@ public partial class AddFileDialog : Window
     private void InitializeComponent()
     {
         AvaloniaXamlLoader.Load(this);
+    }
+
+    private void CancelButton_OnClick(object? sender, RoutedEventArgs e)
+    {
+        Close();
+    }
+
+    private void TagButton_OnClick(object? sender, RoutedEventArgs e)
+    {
+        var simpleTagsBarViewModel = TagsToApplySimpleTagsBar.DataContext as SimpleTagsBarViewModel
+                                     ?? throw new InvalidCastException("Expected different DataContext");
+
+        Close((SelectFileTextBox.Text, simpleTagsBarViewModel.Tags));
     }
 }

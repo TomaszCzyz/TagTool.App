@@ -2,10 +2,12 @@ namespace TagTool.App.Core.Models;
 
 public class Tag
 {
+    public string? Name { get; set; }
+
     public Tag(string? name)
     {
         Name = name;
     }
 
-    public string? Name { get; set; }
+    public override string ToString() => $"{{Name: {Name}}}";
 }
