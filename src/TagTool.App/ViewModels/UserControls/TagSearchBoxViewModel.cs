@@ -1,8 +1,6 @@
 ﻿using System.Collections.ObjectModel;
-using Avalonia.Controls;
 using Avalonia.Controls.Documents;
 using Avalonia.Media;
-using Avalonia.VisualTree;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Grpc.Core;
@@ -29,9 +27,21 @@ public partial class TagSearchBoxViewModel : ViewModelBase, IDisposable
 
     public ObservableCollection<HighlightedMatch> TagsSearchResults { get; set; } = new();
 
+    /// <summary>
+    ///     ctor for XAML previewer
+    /// </summary>
+    public TagSearchBoxViewModel()
+    {
+        _tagSearchService = null!;
+
+        TagsSearchResults.Add(new HighlightedMatch { MatchedText = "someMatch" });
+        TagsSearchResults.Add(new HighlightedMatch { MatchedText = "NewTag" });
+        TagsSearchResults.Add(new HighlightedMatch { MatchedText = "someOtherMatch" });
+    }
+
     public TagSearchBoxViewModel(ITagToolBackend tagToolBackend)
     {
-        _tagSearchService =  tagToolBackend.GetSearchService();
+        _tagSearchService = tagToolBackend.GetSearchService();
 
         TagsSearchResults.Add(new HighlightedMatch { MatchedText = "someMatch" });
         TagsSearchResults.Add(new HighlightedMatch { MatchedText = "NewTag" });
@@ -49,16 +59,9 @@ public partial class TagSearchBoxViewModel : ViewModelBase, IDisposable
     }
 
     [RelayCommand]
-    private void RemoveTag(object? value)
+    private void RemoveTag()
     {
-        var autoCompleteBox = value as AutoCompleteBox;
-        var textBox = autoCompleteBox!.FindDescendantOfType<TextBox>();
-        var textBoxCaretIndex = textBox!.CaretIndex;
-
-        if (textBoxCaretIndex == 0)
-        {
-            TagsContainer?.RemoveLast();
-        }
+        TagsContainer?.RemoveLast();
     }
 
     private CancellationTokenSource? _cts;

@@ -56,15 +56,8 @@
                         FilterMode="None"
                         Items="{Binding TagsSearchResults}"
                         SearchText="{Binding SearchText, Mode=OneWayToSource}"
-                        SelectedItem="{Binding SelectedItem, Mode=TwoWay}">
-                        <AutoCompleteBox.KeyBindings>
-                            <KeyBinding Gesture="Enter" Command="{Binding CommitTagCommand}" />
-                            <KeyBinding
-                                Gesture="Back"
-                                Command="{Binding RemoveTagCommand}"
-                                CommandParameter="{Binding #TagSearchAutoCompleteBox}" />
-
-                        </AutoCompleteBox.KeyBindings>
+                        SelectedItem="{Binding SelectedItem, Mode=TwoWay}"
+                        AttachedToVisualTree="TagSearchAutoCompleteBox_OnAttachedToVisualTree">
                         <AutoCompleteBox.ItemTemplate>
                             <DataTemplate DataType="models:HighlightedMatch">
                                 <templatedControls:TagChip Text="{Binding MatchedText}" />
