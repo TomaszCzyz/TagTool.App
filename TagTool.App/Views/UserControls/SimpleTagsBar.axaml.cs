@@ -1,7 +1,6 @@
-﻿using Avalonia;
-using Avalonia.Controls;
+﻿using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
-using TagTool.App.Extensions;
+using Microsoft.Extensions.DependencyInjection;
 using TagTool.App.ViewModels.UserControls;
 
 namespace TagTool.App.Views.UserControls;
@@ -10,7 +9,7 @@ public partial class SimpleTagsBar : UserControl
 {
     public SimpleTagsBar()
     {
-        DataContext = Application.Current?.CreateInstance<SimpleTagsBarViewModel>();
+        DataContext = App.Current.Services.GetRequiredService<SimpleTagsBarViewModel>();
         InitializeComponent();
     }
 

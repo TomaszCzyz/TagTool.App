@@ -1,10 +1,12 @@
 using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Serilog;
 using TagTool.App.Core.Services;
 using TagTool.App.Docks;
+using TagTool.App.Options;
 using TagTool.App.ViewModels;
 using TagTool.App.ViewModels.Dialogs;
 using TagTool.App.ViewModels.UserControls;
@@ -14,19 +16,20 @@ namespace TagTool.App;
 
 public class App : Application
 {
-    private IServiceProvider _serviceProvider = null!;
+    public static new App Current => (App)Application.Current!;
+
+    public IServiceProvider Services { get; private set; } = null!;
 
     public override void Initialize()
     {
         AvaloniaXamlLoader.Load(this);
 
-        _serviceProvider = ConfigureServices();
-        Resources[typeof(IServiceProvider)] = _serviceProvider;
+        Services = ConfigureServices();
     }
 
     public override void OnFrameworkInitializationCompleted()
     {
-        var mainWindowViewModel = _serviceProvider.GetRequiredService<MainWindowViewModel>();
+        var mainWindowViewModel = Services.GetRequiredService<MainWindowViewModel>();
 
         if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktopLifetime)
         {
@@ -47,21 +50,35 @@ public class App : Application
     {
         var services = new ServiceCollection();
 
+        var configuration = CreateConfiguration();
+
+        services.AddSingleton(configuration);
+        services.AddSingleton(Log.Logger);
         services.AddSingleton<IFileIconProvider, DefaultFileIconProvider>();
         services.AddSingleton<TagSearchServiceFactory>();
         services.AddSingleton<TagServiceFactory>();
         services.AddTransient<NotepadFactory>();
         services.AddTransient<FilesDocumentDock>();
 
-        services.AddSingleton(Log.Logger);
-        services.AddTransient<TabContentViewModel>();
-        services.AddTransient<TagSearchBoxViewModel>();
-        services.AddTransient<AddFileDialogViewModel>();
-        services.AddTransient<FileSystemViewModel>();
-        services.AddTransient<MainWindowViewModel>();
-        services.AddTransient<TabContentViewModel>();
-        services.AddTransient<SimpleTagsBarViewModel>();
+        services
+            .AddOptions<GeneralOptions>()
+            .Configure(options => configuration.GetSection(GeneralOptions.General).Bind(options));
+
+        services
+            .AddTransient<TabContentViewModel>()
+            .AddTransient<ToolbarViewModel>()
+            .AddTransient<TagSearchBoxViewModel>()
+            .AddTransient<AddFileDialogViewModel>()
+            .AddTransient<FileSystemViewModel>()
+            .AddTransient<MainWindowViewModel>()
+            .AddTransient<TabContentViewModel>()
+            .AddTransient<SimpleTagsBarViewModel>();
 
         return services.BuildServiceProvider();
     }
+
+    public static IConfiguration CreateConfiguration()
+        => new ConfigurationBuilder()
+            .AddJsonFile("generalAppSettings.json", optional: false, reloadOnChange: true)
+            .Build();
 }

@@ -1,9 +1,8 @@
-﻿using Avalonia;
-using Avalonia.Controls;
+﻿using Avalonia.Controls;
 using Avalonia.Interactivity;
 using Avalonia.Markup.Xaml;
 using Avalonia.Platform.Storage;
-using TagTool.App.Extensions;
+using Microsoft.Extensions.DependencyInjection;
 using TagTool.App.ViewModels.Dialogs;
 using TagTool.App.ViewModels.UserControls;
 
@@ -11,7 +10,7 @@ namespace TagTool.App.Views.Dialogs;
 
 public partial class AddFileDialog : Window
 {
-    private readonly AddFileDialogViewModel _vm = Application.Current?.CreateInstance<AddFileDialogViewModel>()!;
+    private readonly AddFileDialogViewModel _vm = App.Current.Services.GetRequiredService<AddFileDialogViewModel>();
 
     public AddFileDialog()
     {
@@ -23,7 +22,7 @@ public partial class AddFileDialog : Window
 
     private async void OpenFilePickerButton_OnClick(object? sender, RoutedEventArgs e)
     {
-        var options = new FilePickerOpenOptions { Title = "Open file", FileTypeFilter = new[] { FilePickerFileTypes.All }, AllowMultiple = false };
+        var options = new FilePickerOpenOptions { Title = "Select file", FileTypeFilter = new[] { FilePickerFileTypes.All }, AllowMultiple = false };
 
         var result = await GetStorageProvider().OpenFilePickerAsync(options);
 

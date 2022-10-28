@@ -1,7 +1,7 @@
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
-using TagTool.App.Extensions;
+using Microsoft.Extensions.DependencyInjection;
 using TagTool.App.ViewModels;
 
 namespace TagTool.App.Views;
@@ -10,12 +10,12 @@ public partial class MainWindow : Window
 {
     public MainWindow()
     {
+        DataContext = App.Current.Services.GetRequiredService<MainWindowViewModel>();
         InitializeComponent();
 #if DEBUG
         this.AttachDevTools();
         Renderer.DrawFps = true;
 #endif
-        DataContext = this.CreateInstance<MainWindowViewModel>();
     }
 
     private void InitializeComponent()

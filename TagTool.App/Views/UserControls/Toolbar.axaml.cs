@@ -1,9 +1,8 @@
-﻿using Avalonia;
-using Avalonia.Controls;
+﻿using Avalonia.Controls;
 using Avalonia.Interactivity;
 using Avalonia.Markup.Xaml;
+using Microsoft.Extensions.DependencyInjection;
 using TagTool.App.Core.Models;
-using TagTool.App.Extensions;
 using TagTool.App.ViewModels.UserControls;
 using TagTool.App.Views.Dialogs;
 
@@ -11,7 +10,7 @@ namespace TagTool.App.Views.UserControls;
 
 public partial class Toolbar : UserControl
 {
-    private readonly ToolbarViewModel _vm = Application.Current?.CreateInstance<ToolbarViewModel>()!;
+    private readonly ToolbarViewModel _vm = App.Current.Services.GetRequiredService<ToolbarViewModel>();
 
     public Toolbar()
     {

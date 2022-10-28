@@ -4,14 +4,14 @@ using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Markup.Xaml;
 using Avalonia.VisualTree;
-using TagTool.App.Extensions;
+using Microsoft.Extensions.DependencyInjection;
 using TagTool.App.ViewModels.UserControls;
 
 namespace TagTool.App.Views.UserControls;
 
 public partial class FileSystemView : UserControl
 {
-    private readonly FileSystemViewModel _vm = Application.Current?.CreateInstance<FileSystemViewModel>()!;
+    private readonly FileSystemViewModel _vm = App.Current.Services.GetRequiredService<FileSystemViewModel>();
 
     public FileSystemView()
     {
