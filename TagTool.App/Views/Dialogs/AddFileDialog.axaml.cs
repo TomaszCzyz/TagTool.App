@@ -2,33 +2,40 @@
 using Avalonia.Interactivity;
 using Avalonia.Markup.Xaml;
 using Avalonia.Platform.Storage;
+using Avalonia.Platform.Storage.FileIO;
 using Microsoft.Extensions.DependencyInjection;
 using TagTool.App.ViewModels.Dialogs;
 using TagTool.App.ViewModels.UserControls;
 
 namespace TagTool.App.Views.Dialogs;
 
-public partial class AddFileDialog : Window
+public partial class TagFileDialog : Window
 {
-    private readonly AddFileDialogViewModel _vm = App.Current.Services.GetRequiredService<AddFileDialogViewModel>();
-
-    public AddFileDialog()
+    public TagFileDialog()
     {
-        DataContext = _vm;
+        DataContext = App.Current.Services.GetRequiredService<TagFileDialogViewModel>();
         InitializeComponent();
-
-        // IStorageFolder? lastSelectedDirectory = null;
     }
 
     private async void OpenFilePickerButton_OnClick(object? sender, RoutedEventArgs e)
     {
-        var options = new FilePickerOpenOptions { Title = "Select file", FileTypeFilter = new[] { FilePickerFileTypes.All }, AllowMultiple = false };
+        if (sender is not Button { DataContext: TagFileDialogViewModel viewModel }) return;
+
+        var options = new FilePickerOpenOptions
+        {
+            Title = "Select file",
+            FileTypeFilter = new[] { FilePickerFileTypes.All },
+            AllowMultiple = false,
+            SuggestedStartLocation = viewModel.FilePickerSuggestedStartLocation
+        };
 
         var result = await GetStorageProvider().OpenFilePickerAsync(options);
 
-        if (result.Count == 0) return;
+        if (result.Count == 0 || !result[0].TryGetUri(out var filePath)) return;
 
-        SelectFileTextBox.Text = result[0].Name;
+        var folderPath = Directory.GetParent(filePath.LocalPath)?.FullName;
+        viewModel.FilePickerSuggestedStartLocation = folderPath is null ? null : new BclStorageFolder(folderPath);
+        SelectFileTextBox.Text = filePath.LocalPath;
     }
 
     private IStorageProvider GetStorageProvider()

@@ -68,7 +68,7 @@ public class App : Application
             .AddTransient<TabContentViewModel>()
             .AddTransient<ToolbarViewModel>()
             .AddTransient<TagSearchBoxViewModel>()
-            .AddTransient<AddFileDialogViewModel>()
+            .AddTransient<TagFileDialogViewModel>()
             .AddTransient<FileSystemViewModel>()
             .AddTransient<MainWindowViewModel>()
             .AddTransient<TabContentViewModel>()
@@ -79,6 +79,6 @@ public class App : Application
 
     public static IConfiguration CreateConfiguration()
         => new ConfigurationBuilder()
-            .AddJsonFile("generalAppSettings.json", optional: false, reloadOnChange: true)
+            .AddJsonFile("defaultAppSettings.json", optional: false, reloadOnChange: true)
             .Build();
 }

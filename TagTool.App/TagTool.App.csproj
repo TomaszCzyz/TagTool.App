@@ -52,8 +52,12 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Remove="generalAppSettings.json" />
-    <Content Include="generalAppSettings.json">
+    <None Remove="defaultAppSettings.json" />
+    <None Remove="workspaceSettings.json" />
+    <Content Include="defaultAppSettings.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="userSettings.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>

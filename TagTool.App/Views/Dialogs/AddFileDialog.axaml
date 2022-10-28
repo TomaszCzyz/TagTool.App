@@ -7,7 +7,7 @@
     xmlns:userControls="clr-namespace:TagTool.App.Views.UserControls"
     xmlns:converters="clr-namespace:TagTool.App.Converters"
     mc:Ignorable="d" d:DesignWidth="600" d:DesignHeight="350"
-    x:Class="TagTool.App.Views.Dialogs.AddFileDialog"
+    x:Class="TagTool.App.Views.Dialogs.TagFileDialog"
     Title="AddFileDialog"
     WindowStartupLocation="CenterOwner"
     ExtendClientAreaChromeHints="NoChrome"
@@ -23,7 +23,7 @@
     </Window.Resources>
 
     <Design.DataContext>
-        <dialogs:AddFileDialogViewModel />
+        <dialogs:TagFileDialogViewModel />
     </Design.DataContext>
 
     <Grid
