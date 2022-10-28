@@ -5,7 +5,7 @@ using TagTool.App.Core.Models;
 
 namespace TagTool.App.ViewModels.UserControls;
 
-public partial class TabContentViewModel : Document
+public class TabContentViewModel : Document
 {
     public ObservableCollection<SimpleFile> Files { get; set; } = new();
 

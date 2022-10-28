@@ -14,8 +14,9 @@ namespace TagTool.App.ViewModels.UserControls;
 
 public partial class TagSearchBoxViewModel : ViewModelBase, IDisposable
 {
-    private readonly ITagsContainer _tagsContainer;
     private readonly TagSearchService.TagSearchServiceClient _tagSearchServiceClient;
+
+    public ITagsContainer? TagsContainer { get; set; }
 
     [ObservableProperty]
     private string? _searchText;
@@ -28,10 +29,9 @@ public partial class TagSearchBoxViewModel : ViewModelBase, IDisposable
 
     public ObservableCollection<HighlightedMatch> TagsSearchResults { get; set; } = new();
 
-    public TagSearchBoxViewModel(ITagsContainer tagsContainer)
+    public TagSearchBoxViewModel(TagSearchServiceFactory tagSearchServiceFactory)
     {
-        _tagsContainer = tagsContainer;
-        _tagSearchServiceClient = new TagSearchServiceFactory().Create();
+        _tagSearchServiceClient = tagSearchServiceFactory.Create();
 
         TagsSearchResults.Add(new HighlightedMatch { MatchedText = "someMatch" });
         TagsSearchResults.Add(new HighlightedMatch { MatchedText = "NewTag" });
@@ -43,7 +43,7 @@ public partial class TagSearchBoxViewModel : ViewModelBase, IDisposable
     {
         if (SelectedItem is null) return;
 
-        _tagsContainer.AddTag(new Tag(SelectedItem.MatchedText));
+        TagsContainer?.AddTag(new Tag(SelectedItem.MatchedText));
         SearchText = "";
         Text = "";
     }
@@ -57,7 +57,7 @@ public partial class TagSearchBoxViewModel : ViewModelBase, IDisposable
 
         if (textBoxCaretIndex == 0)
         {
-            _tagsContainer.RemoveLast();
+            TagsContainer?.RemoveLast();
         }
     }
 

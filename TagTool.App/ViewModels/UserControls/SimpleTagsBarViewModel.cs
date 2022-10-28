@@ -1,6 +1,7 @@
 ﻿using System.Collections.ObjectModel;
 using CommunityToolkit.Mvvm.Input;
 using DynamicData;
+using Microsoft.Extensions.DependencyInjection;
 using TagTool.App.Core.Models;
 
 namespace TagTool.App.ViewModels.UserControls;
@@ -20,12 +21,14 @@ public partial class SimpleTagsBarViewModel : ViewModelBase, ITagsContainer
 
     public ObservableCollection<object> EnteredTags { get; set; } = new(); // Tag or TagSearchBox
 
-    public SimpleTagsBarViewModel()
+    public SimpleTagsBarViewModel(IServiceProvider serviceProvider)
     {
         var tags = new Tag[] { new("Tag1"), new("Audio"), new("Dog"), new("Picture"), new("Colleague"), new("Tag6"), new("LastTag") };
         EnteredTags.AddRange(tags);
 
-        var tagSearchBoxViewModel = new TagSearchBoxViewModel(this);
+        var tagSearchBoxViewModel = serviceProvider.GetRequiredService<TagSearchBoxViewModel>();
+        tagSearchBoxViewModel.TagsContainer = this;
+
         EnteredTags.Add(tagSearchBoxViewModel);
     }
 
