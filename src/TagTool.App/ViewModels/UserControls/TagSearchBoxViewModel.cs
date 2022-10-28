@@ -14,7 +14,7 @@ namespace TagTool.App.ViewModels.UserControls;
 
 public partial class TagSearchBoxViewModel : ViewModelBase, IDisposable
 {
-    private readonly TagSearchService.TagSearchServiceClient _tagSearchServiceClient;
+    private readonly TagSearchService.TagSearchServiceClient _tagSearchService;
 
     public ITagsContainer? TagsContainer { get; set; }
 
@@ -29,9 +29,9 @@ public partial class TagSearchBoxViewModel : ViewModelBase, IDisposable
 
     public ObservableCollection<HighlightedMatch> TagsSearchResults { get; set; } = new();
 
-    public TagSearchBoxViewModel(TagSearchServiceFactory tagSearchServiceFactory)
+    public TagSearchBoxViewModel(ITagToolBackend tagToolBackend)
     {
-        _tagSearchServiceClient = tagSearchServiceFactory.Create();
+        _tagSearchService =  tagToolBackend.GetSearchService();
 
         TagsSearchResults.Add(new HighlightedMatch { MatchedText = "someMatch" });
         TagsSearchResults.Add(new HighlightedMatch { MatchedText = "NewTag" });
@@ -80,7 +80,7 @@ public partial class TagSearchBoxViewModel : ViewModelBase, IDisposable
         var matchTagsRequest = new MatchTagsRequest { PartialTagName = value, MaxReturn = 50 };
         var callOptions = new CallOptions().WithCancellationToken(_cts.Token);
 
-        using var streamingCall = _tagSearchServiceClient.MatchTags(matchTagsRequest, callOptions);
+        using var streamingCall = _tagSearchService.MatchTags(matchTagsRequest, callOptions);
 
         try
         {

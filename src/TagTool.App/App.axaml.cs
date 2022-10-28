@@ -55,8 +55,8 @@ public class App : Application
         services.AddSingleton(configuration);
         services.AddSingleton(Log.Logger);
         services.AddSingleton<IFileIconProvider, DefaultFileIconProvider>();
-        services.AddSingleton<TagSearchServiceFactory>();
-        services.AddSingleton<TagServiceFactory>();
+        services.AddSingleton<ITagToolBackendConnectionFactory, GrpcChannelFactory>();
+        services.AddSingleton<ITagToolBackend, TagToolBackend>();
         services.AddTransient<NotepadFactory>();
         services.AddTransient<FilesDocumentDock>();
 
