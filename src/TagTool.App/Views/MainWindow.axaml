@@ -7,10 +7,15 @@
     xmlns:userControls="clr-namespace:TagTool.App.Views.UserControls"
     mc:Ignorable="d" d:DesignWidth="1600" d:DesignHeight="900"
     x:Class="TagTool.App.Views.MainWindow"
+    x:Name="RootWindow"
     Icon="/Assets/avalonia-logo.ico"
     Title="TagTool.App"
     TransparencyLevelHint="AcrylicBlur"
     Background="Transparent">
+    <Window.KeyBindings>
+        <KeyBinding Gesture="Escape" Command="{Binding ResetFocusCommand}" CommandParameter="{Binding #RootWindow}" />
+        <KeyBinding Gesture="Ctrl+Q" Command="{Binding FocusNextSearchTabCommand}" CommandParameter="{Binding #RootWindow}" />
+    </Window.KeyBindings>
 
     <Design.DataContext>
         <vm:MainWindowViewModel />

@@ -36,6 +36,7 @@ public partial class SimpleTagsBar : UserControl
         {
             case Key.Enter when autoCompleteBox.SelectedItem is not null:
                 viewModel.CommitTagCommand.Execute(e);
+                e.Handled = true;
                 break;
             case Key.Back when string.IsNullOrEmpty(autoCompleteBox.Text):
                 viewModel.RemoveTagCommand.Execute(e);

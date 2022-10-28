@@ -18,6 +18,7 @@ public static class Program
     {
         SetupSerilog();
 
+        // todo: check if it is needed in non-debug mode
         GC.KeepAlive(typeof(SvgImageExtension).Assembly);
         GC.KeepAlive(typeof(Avalonia.Svg.Skia.Svg).Assembly);
         var appBuilder = AppBuilder
