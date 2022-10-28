@@ -1,6 +1,6 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TagTool.App", "TagTool.App\TagTool.App.csproj", "{645CC627-2F78-4A8C-A686-BF813907110D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TagTool.App", "src\TagTool.App\TagTool.App.csproj", "{645CC627-2F78-4A8C-A686-BF813907110D}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SolutionItems", "SolutionItems", "{8C1FD390-AE9E-4C26-9B1A-DA179141E522}"
 	ProjectSection(SolutionItems) = preProject
@@ -11,7 +11,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SolutionItems", "SolutionIt
 		XamlFormattingNotes.md = XamlFormattingNotes.md
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TagTool.App.Core", "TagTool.App.Core\TagTool.App.Core.csproj", "{D2E532D1-862D-43BE-8486-897B227D67B9}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TagTool.App.Core", "src\TagTool.App.Core\TagTool.App.Core.csproj", "{D2E532D1-862D-43BE-8486-897B227D67B9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
