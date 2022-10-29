@@ -14,6 +14,7 @@
 
     <StackPanel Orientation="Horizontal">
         <Button Name="AddFileButton" Content="AddFile" Click="AddFileButton_OnClick"/>
+        <Button Name="AdvancedTaggingFileButton" Content="AdvancedTaggingFileButton" Click="AdvancedTaggingFileButton_OnClick"/>
         <Button Content="AddSearchTab" />
         <Button Content="AddNote" />
     </StackPanel>

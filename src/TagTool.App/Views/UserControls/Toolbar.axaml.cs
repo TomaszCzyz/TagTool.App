@@ -30,4 +30,10 @@ public partial class Toolbar : UserControl
         var dialog = new TagFileDialog();
         var showDialog2 = await dialog.ShowDialog<(string FileName, Tag[] Tags)>(GetWindow());
     }
+
+    private async void AdvancedTaggingFileButton_OnClick(object? sender, RoutedEventArgs e)
+    {
+        var dialog = new AdvancedTaggingDialog();
+        await dialog.ShowDialog(GetWindow());
+    }
 }
