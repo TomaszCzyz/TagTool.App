@@ -8,6 +8,7 @@ using TagTool.App.Core.Services;
 using TagTool.App.Docks;
 using TagTool.App.Options;
 using TagTool.App.ViewModels;
+using TagTool.App.ViewModels.UserControls;
 using TagTool.App.Views;
 
 namespace TagTool.App;
@@ -63,6 +64,7 @@ public class App : Application
             .Configure(options => configuration.GetSection(GeneralOptions.General).Bind(options));
 
         services.AddViewModels(typeof(ViewModelBase));
+        services.AddTransient<TabContentViewModel>();
 
         return services.BuildServiceProvider();
     }

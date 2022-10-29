@@ -17,7 +17,7 @@
         <!--     x:Name="DockControl" -->
         <!--     Layout="{Binding Layout}" -->
         <!--     Margin="4" /> -->
-        <Grid ColumnDefinitions="*, 2, *">
+        <Grid ColumnDefinitions="*,2,*,2,*">
             <Grid
                 Grid.Column="0"
                 RowDefinitions="*, 2, *">
@@ -36,6 +36,13 @@
                 ResizeDirection="Columns" />
 
             <userControls:FileSystemView Grid.Column="2" />
+
+            <GridSplitter
+                Grid.Column="3"
+                Background="Black"
+                ResizeDirection="Columns" />
+            
+            <userControls:FilePreviewer Grid.Column="4" />
         </Grid>
 
 
