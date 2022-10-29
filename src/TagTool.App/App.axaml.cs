@@ -8,8 +8,6 @@ using TagTool.App.Core.Services;
 using TagTool.App.Docks;
 using TagTool.App.Options;
 using TagTool.App.ViewModels;
-using TagTool.App.ViewModels.Dialogs;
-using TagTool.App.ViewModels.UserControls;
 using TagTool.App.Views;
 
 namespace TagTool.App;
@@ -64,21 +62,26 @@ public class App : Application
             .AddOptions<GeneralOptions>()
             .Configure(options => configuration.GetSection(GeneralOptions.General).Bind(options));
 
-        services
-            .AddTransient<TabContentViewModel>()
-            .AddTransient<ToolbarViewModel>()
-            .AddTransient<TagSearchBoxViewModel>()
-            .AddTransient<TagFileDialogViewModel>()
-            .AddTransient<FileSystemViewModel>()
-            .AddTransient<MainWindowViewModel>()
-            .AddTransient<TabContentViewModel>()
-            .AddTransient<SimpleTagsBarViewModel>();
+        services.AddViewModels(typeof(ViewModelBase));
 
         return services.BuildServiceProvider();
     }
 
-    public static IConfiguration CreateConfiguration()
+    private static IConfiguration CreateConfiguration()
         => new ConfigurationBuilder()
             .AddJsonFile("defaultAppSettings.json", optional: false, reloadOnChange: true)
             .Build();
+}
+
+public static class ServiceCollectionExtensions
+{
+    private static Func<Type, bool> Predicate => x => typeof(ViewModelBase).IsAssignableFrom(x) && !x.IsInterface && !x.IsAbstract;
+
+    public static void AddViewModels(this IServiceCollection services, Type scanMarker)
+    {
+        foreach (var type in scanMarker.Assembly.ExportedTypes.Where(Predicate))
+        {
+            services.AddTransient(type);
+        }
+    }
 }

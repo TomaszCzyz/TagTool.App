@@ -7,7 +7,7 @@ using TagTool.App.Options;
 
 namespace TagTool.App.ViewModels.Dialogs;
 
-public partial class TagFileDialogViewModel : ObservableObject
+public partial class TagFileDialogViewModel : ViewModelBase
 {
     private readonly GeneralOptions _options;
 
