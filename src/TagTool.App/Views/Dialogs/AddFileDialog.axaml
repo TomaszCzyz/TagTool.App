@@ -15,8 +15,8 @@
     ExtendClientAreaTitleBarHeightHint="-1"
     ShowInTaskbar="True"
     SizeToContent="WidthAndHeight"
-    Background="{x:Null}"
-    TransparencyLevelHint="AcrylicBlur">
+    TransparencyLevelHint="AcrylicBlur"
+    Background="{x:Null}">
 
     <Window.Resources>
         <converters:ArraySizeToBooleanConverter x:Key="ArraySizeToBooleanConverter" Threshold="1" />
