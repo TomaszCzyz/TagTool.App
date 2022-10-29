@@ -123,7 +123,11 @@ public partial class FileSystemViewModel : ViewModelBase
         TextBoxAddress = CurrentFolder.FullName;
 
         Items.Clear();
-        Items.AddRange(value.EnumerateFileSystemInfos().Select(info => new FileSystemEntry(info)));
+        Items.AddRange(
+            value
+                .EnumerateFileSystemInfos()
+                .Select(info => new FileSystemEntry(info))
+                .OrderByDescending(static entry => entry, FileSystemEntryComparer.StaticFileSystemEntryComparer));
 
         AddressSegments.Clear();
         AddressSegments.AddRange(CurrentFolder.GetAncestors().Select(folder => new AddressSegmentViewModel(folder, this)));

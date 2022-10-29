@@ -38,14 +38,35 @@ public class FileSystemEntryComparer : IComparer
     {
         if (x is not FileSystemEntry xEntry || y is not FileSystemEntry yEntry)
         {
-            return Comparer.Default.Compare(x, y);
+            return System.Collections.Comparer.Default.Compare(x, y);
         }
 
-        if (xEntry.IsDir && yEntry.IsFile) return 1;
-        if (xEntry.IsFile && yEntry.IsDir) return -1;
-
-        return string.CompareOrdinal(xEntry.Name, yEntry.Name);
+        return CompareInternal(xEntry, yEntry);
     }
+
+    private sealed class Comparer : IComparer<FileSystemEntry>
+    {
+        public int Compare(FileSystemEntry? x, FileSystemEntry? y)
+        {
+            return x switch
+            {
+                null when y is null => 0,
+                null => -1,
+                _ when y is null => 1,
+                _ => CompareInternal(x, y)
+            };
+        }
+    }
+
+    private static int CompareInternal(FileSystemEntry x, FileSystemEntry y)
+    {
+        if (x.IsDir && y.IsFile) return 1;
+        if (x.IsFile && y.IsDir) return -1;
+
+        return string.CompareOrdinal(x.Name, y.Name);
+    }
+
+    public static IComparer<FileSystemEntry> StaticFileSystemEntryComparer { get; } = new Comparer();
 }
 
 public static class DirectoryInfoExtensions
