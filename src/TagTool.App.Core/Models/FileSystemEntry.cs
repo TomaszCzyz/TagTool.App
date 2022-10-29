@@ -17,8 +17,6 @@ public class FileSystemEntry
 
     public bool IsFile { get; }
 
-    public Type Type => _info.GetType();
-
     public string Name => _info.Name;
 
     public string FullName => _info.FullName;
@@ -30,6 +28,8 @@ public class FileSystemEntry
     public DateTime DateCreated => _info.CreationTime;
 
     public DateTime DateModified => _info.LastWriteTime;
+
+    public static explicit operator FileSystemInfo?(FileSystemEntry? entry) => entry?._info;
 }
 
 public class FileSystemEntryComparer : IComparer

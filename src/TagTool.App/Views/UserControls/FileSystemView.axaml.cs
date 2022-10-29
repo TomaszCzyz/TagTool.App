@@ -23,7 +23,7 @@ public partial class FileSystemView : UserControl
     {
         if (sender is not TextBox { DataContext: FileSystemViewModel fileSystem }) return;
 
-        fileSystem.CancelNavigationCommand.Execute(e);
+        fileSystem.CancelAddressChangeCommand.Execute(e);
     }
 
     private void Border_OnPointerPressed(object? sender, PointerPressedEventArgs e)
@@ -46,7 +46,7 @@ public partial class FileSystemView : UserControl
     {
         var dataGridCell = e.Parent.FindAncestorOfType<DataGridCell>()!;
 
-        dataGridCell.DoubleTapped += (_, _) => _vm.OpenItemCommand.Execute(null);
+        dataGridCell.DoubleTapped += (_, _) => _vm.NavigateCommand.Execute(null);
     }
 
     private void InitializeComponent()

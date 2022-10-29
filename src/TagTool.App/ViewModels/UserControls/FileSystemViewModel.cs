@@ -25,10 +25,10 @@ public partial class FileSystemViewModel : ViewModelBase
 
     [EditorBrowsable(EditorBrowsableState.Never)]
     [ObservableProperty]
-    private string _textBoxAddress = string.Empty;
+    private string _addressTextBox = string.Empty;
 
     [ObservableProperty]
-    private object? _selectedItem;
+    private FileSystemEntry? _selectedItem;
 
     public bool CanNavigateBack => _navigationHistoryBack.Count > 0;
 
@@ -40,37 +40,25 @@ public partial class FileSystemViewModel : ViewModelBase
     }
 
     [RelayCommand]
-    private void CancelNavigation()
+    private void CancelAddressChange()
     {
-        TextBoxAddress = CurrentFolder.FullName;
+        AddressTextBox = CurrentFolder.FullName;
         IsEditing = false;
     }
 
     [RelayCommand]
-    private void CommitNavigation()
+    private void CommitAddress()
     {
-        if (File.Exists(TextBoxAddress))
+        if (File.Exists(AddressTextBox))
         {
-            using var process = new Process();
-
-            process.StartInfo.FileName = TextBoxAddress;
-            process.StartInfo.UseShellExecute = true;
-
-            process.Start();
-
-            NavigateTo(new DirectoryInfo(Path.GetDirectoryName(TextBoxAddress)!));
-            IsEditing = false;
-            return;
+            NavigateTo(new FileInfo(AddressTextBox));
         }
 
-        if (Directory.Exists(TextBoxAddress))
+        if (Directory.Exists(AddressTextBox))
         {
-            NavigateTo(new DirectoryInfo(TextBoxAddress));
-            IsEditing = false;
-            return;
+            NavigateTo(new DirectoryInfo(AddressTextBox));
         }
 
-        TextBoxAddress = CurrentFolder.FullName;
         IsEditing = false;
     }
 
@@ -110,30 +98,40 @@ public partial class FileSystemViewModel : ViewModelBase
     }
 
     [RelayCommand]
-    private void OpenItem()
+    private void Navigate(FileSystemInfo? info = null)
     {
-        if (SelectedItem is FileSystemEntry { IsDir: true } fileSystemEntry)
+        var destination = info ?? (FileSystemInfo?)SelectedItem;
+
+        switch (destination)
         {
-            NavigateTo(new DirectoryInfo(fileSystemEntry.FullName));
+            case null:
+                return;
+            case DirectoryInfo folder:
+                NavigateTo(folder, false);
+                return;
+            case FileInfo file:
+                NavigateTo(file);
+                break;
         }
     }
 
-    partial void OnCurrentFolderChanged(DirectoryInfo value)
+    private void NavigateTo(FileInfo file)
     {
-        TextBoxAddress = CurrentFolder.FullName;
+        if (!file.Exists) return;
 
-        Items.Clear();
-        Items.AddRange(
-            value
-                .EnumerateFileSystemInfos()
-                .Select(info => new FileSystemEntry(info))
-                .OrderByDescending(static entry => entry, FileSystemEntryComparer.StaticFileSystemEntryComparer));
+        using var process = new Process();
 
-        AddressSegments.Clear();
-        AddressSegments.AddRange(CurrentFolder.GetAncestors().Select(folder => new AddressSegmentViewModel(folder, this)));
+        process.StartInfo.FileName = file.FullName;
+        process.StartInfo.UseShellExecute = true;
+
+        process.Start();
+
+        if (file.Directory is not null)
+        {
+            NavigateTo(file.Directory, false);
+        }
     }
 
-    [RelayCommand]
     private void NavigateTo(DirectoryInfo folder)
     {
         NavigateTo(folder, false);
@@ -151,5 +149,20 @@ public partial class FileSystemViewModel : ViewModelBase
         }
 
         CurrentFolder = folder;
+    }
+
+    partial void OnCurrentFolderChanged(DirectoryInfo value)
+    {
+        AddressTextBox = CurrentFolder.FullName;
+
+        Items.Clear();
+        Items.AddRange(
+            value
+                .EnumerateFileSystemInfos("*", new EnumerationOptions { IgnoreInaccessible = true })
+                .Select(info => new FileSystemEntry(info))
+                .OrderByDescending(static entry => entry, FileSystemEntryComparer.StaticFileSystemEntryComparer));
+
+        AddressSegments.Clear();
+        AddressSegments.AddRange(CurrentFolder.GetAncestors().Select(folder => new AddressSegmentViewModel(folder, this)));
     }
 }

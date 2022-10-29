@@ -32,6 +32,6 @@ public partial class AddressSegmentViewModel : ViewModelBase
     [RelayCommand]
     private void NavigateHere()
     {
-        _owner.NavigateToCommand.Execute(_folder);
+        _owner.NavigateCommand.Execute(_folder);
     }
 }

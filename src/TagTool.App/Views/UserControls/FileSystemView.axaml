@@ -73,8 +73,8 @@
                 Text="{Binding TextBoxAddress}"
                 LostFocus="AddressTextBox_OnLostFocus">
                 <TextBox.KeyBindings>
-                    <KeyBinding Gesture="Escape" Command="{CompiledBinding CancelNavigationCommand}" />
-                    <KeyBinding Gesture="Enter" Command="{CompiledBinding CommitNavigationCommand}" />
+                    <KeyBinding Gesture="Escape" Command="{CompiledBinding CancelAddressChangeCommand}" />
+                    <KeyBinding Gesture="Enter" Command="{CompiledBinding CommitAddressCommand}" />
                 </TextBox.KeyBindings>
             </TextBox>
 
@@ -154,7 +154,7 @@
             Items="{Binding Items}"
             SelectionChanged="DataGrid_OnSelectionChanged">
             <DataGrid.KeyBindings>
-                <KeyBinding Gesture="Enter" Command="{CompiledBinding OpenItemCommand}" />
+                <KeyBinding Gesture="Enter" Command="{CompiledBinding NavigateCommand}" />
                 <KeyBinding Gesture="Back" Command="{CompiledBinding NavigateUpCommand}" />
             </DataGrid.KeyBindings>
             <DataGrid.Columns>
