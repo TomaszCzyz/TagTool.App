@@ -80,6 +80,7 @@
                     <Button>
                         <avalonia:MaterialIcon Kind="UnfoldMoreHorizontal" />
                     </Button>
+                    <TextBlock Text="{Binding TagsLoadingCounter}" />
                 </StackPanel>
 
                 <TreeView
@@ -97,7 +98,7 @@
                                 RowDefinitions="Auto">
                                 <Grid.Styles>
                                     <Style Selector="ListBoxItem">
-                                        <Setter Property="Padding" Value="1 2 0 0" />
+                                        <Setter Property="Padding" Value="1 1 0 0" />
                                         <Setter Property="Opacity" Value="0.6" />
                                     </Style>
                                 </Grid.Styles>
@@ -141,7 +142,7 @@
                 <ProgressBar
                     Grid.Row="2"
                     IsIndeterminate="True"
-                    IsVisible="{Binding IsTagsLoading}" />
+                    IsVisible="{Binding TagsLoadingCounter}" />
             </Grid>
         </Border>
 

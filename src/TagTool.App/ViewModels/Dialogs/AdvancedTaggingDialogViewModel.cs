@@ -15,13 +15,22 @@ public partial class AdvancedTaggingDialogViewModel : ViewModelBase, IDisposable
     public ObservableCollection<Node> SelectedItems { get; } = new();
 
     [ObservableProperty]
-    private bool _isTagsLoading;
+    private int _tagsLoadingCounter;
 
     public AdvancedTaggingDialogViewModel()
     {
         var child = new Node(new DirectoryInfo(@"C:\Users\tczyz\MyFiles\FromOec"));
         _root.AddItem(child);
         Items = _root.Children;
+
+        Task.Run(async () =>
+        {
+            var periodicTimer = new PeriodicTimer(TimeSpan.FromMilliseconds(750));
+            while (await periodicTimer.WaitForNextTickAsync())
+            {
+                TagsLoadingCounter = _tagsLoadingTaskCounter;
+            }
+        });
     }
 
     [RelayCommand]
@@ -59,6 +68,8 @@ public partial class AdvancedTaggingDialogViewModel : ViewModelBase, IDisposable
         CancelAllTagsLoading();
         GC.SuppressFinalize(this);
     }
+
+    private static int _tagsLoadingTaskCounter;
 
     public class Node
     {
@@ -139,7 +150,9 @@ public partial class AdvancedTaggingDialogViewModel : ViewModelBase, IDisposable
         {
             Dispatcher.UIThread.Post(async () =>
             {
-                foreach (var i in Enumerable.Range(1, Random.Shared.Next(1, 8)))
+                Interlocked.Increment(ref _tagsLoadingTaskCounter);
+
+                foreach (var i in Enumerable.Range(1, Random.Shared.Next(1, 6)))
                 {
                     if (_cts.IsCancellationRequested)
                     {
@@ -149,6 +162,8 @@ public partial class AdvancedTaggingDialogViewModel : ViewModelBase, IDisposable
                     await Task.Delay(Random.Shared.Next(500, 2000));
                     node.Tags.Add(new Tag($"Tag{i}"));
                 }
+
+                Interlocked.Decrement(ref _tagsLoadingTaskCounter);
             });
         }
 
