@@ -28,7 +28,7 @@ public partial class Toolbar : UserControl
     private async void AddFileButton_OnClick(object? sender, RoutedEventArgs e)
     {
         var dialog = new TagFileDialog();
-        var showDialog2 = await dialog.ShowDialog<(string FileName, Tag[] Tags)>(GetWindow());
+        var showDialog = await dialog.ShowDialog<(string FileName, Tag[] Tags)>(GetWindow());
     }
 
     private async void AdvancedTaggingFileButton_OnClick(object? sender, RoutedEventArgs e)

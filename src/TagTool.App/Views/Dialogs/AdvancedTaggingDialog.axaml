@@ -7,6 +7,8 @@
     xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
     xmlns:converters="clr-namespace:TagTool.App.Converters"
     xmlns:userControls="clr-namespace:TagTool.App.Views.UserControls"
+    xmlns:models="clr-namespace:TagTool.App.Core.Models;assembly=TagTool.App.Core"
+    xmlns:templatedControls="clr-namespace:TagTool.App.Views.TemplatedControls"
     mc:Ignorable="d" d:DesignWidth="1000" d:DesignHeight="450"
     x:Class="TagTool.App.Views.Dialogs.AdvancedTaggingDialog"
     Title="AdvancedTaggingDialog"
@@ -39,7 +41,7 @@
     <Grid
         Name="TopMostGrid"
         RowDefinitions="*,Auto"
-        ColumnDefinitions="300,4,*"
+        ColumnDefinitions="500,4,*"
         Margin="20">
 
         <!-- tree view column -->
@@ -49,7 +51,7 @@
             ClipToBounds="True"
             Classes="Outline">
 
-            <Grid RowDefinitions="Auto,*" ColumnDefinitions="*">
+            <Grid RowDefinitions="Auto,*,Auto" ColumnDefinitions="*">
                 <Grid.Styles>
                     <Style Selector="Button">
                         <Setter Property="Padding" Value="2" />
@@ -66,7 +68,7 @@
                     Orientation="Horizontal"
                     Spacing="-2">
 
-                    <Button Command="{Binding AddItemCommand}">
+                    <Button Click="Button_OnClick">
                         <avalonia:MaterialIcon Kind="Add" />
                     </Button>
                     <Button Command="{Binding RemoveItemCommand}" IsEnabled="{Binding SelectedItems.Count}">
@@ -91,7 +93,14 @@
                         <TreeDataTemplate ItemsSource="{Binding Children}">
                             <Grid
                                 Name="GridFileEntryName"
-                                ColumnDefinitions="25,*">
+                                ColumnDefinitions="25,Auto,*"
+                                RowDefinitions="Auto">
+                                <Grid.Styles>
+                                    <Style Selector="ListBoxItem">
+                                        <Setter Property="Padding" Value="1 2 0 0" />
+                                        <Setter Property="Opacity" Value="0.6" />
+                                    </Style>
+                                </Grid.Styles>
 
                                 <Image
                                     Grid.Column="0"
@@ -103,10 +112,36 @@
                                     VerticalAlignment="Center"
                                     Text="{Binding Header}" />
 
+                                <ListBox
+                                    Grid.Column="2"
+                                    Background="Transparent"
+                                    IsEnabled="False"
+                                    Items="{Binding Tags}">
+                                    <ListBox.ItemsPanel>
+                                        <ItemsPanelTemplate>
+                                            <StackPanel Orientation="Horizontal" />
+                                        </ItemsPanelTemplate>
+                                    </ListBox.ItemsPanel>
+                                    <ListBox.ItemTemplate>
+                                        <DataTemplate DataType="models:Tag">
+                                            <templatedControls:TagChip
+                                                Classes="Small"
+                                                VerticalAlignment="Center"
+                                                IsDeletable="False"
+                                                Text="{Binding Name}" />
+
+                                        </DataTemplate>
+                                    </ListBox.ItemTemplate>
+                                </ListBox>
+
                             </Grid>
                         </TreeDataTemplate>
                     </TreeView.ItemTemplate>
                 </TreeView>
+                <ProgressBar
+                    Grid.Row="2"
+                    IsIndeterminate="True"
+                    IsVisible="{Binding IsTagsLoading}" />
             </Grid>
         </Border>
 

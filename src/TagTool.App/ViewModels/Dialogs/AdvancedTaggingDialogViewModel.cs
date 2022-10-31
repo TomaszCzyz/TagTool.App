@@ -1,4 +1,6 @@
 ﻿using System.Collections.ObjectModel;
+using Avalonia.Threading;
+using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using TagTool.App.Core.Models;
 
@@ -12,18 +14,32 @@ public partial class AdvancedTaggingDialogViewModel : ViewModelBase
 
     public ObservableCollection<Node> SelectedItems { get; } = new();
 
+    [ObservableProperty]
+    private bool _isTagsLoading;
+
     public AdvancedTaggingDialogViewModel()
     {
-        _root.AddItem(new Node(new DirectoryInfo(@"C:\Users\tczyz\MyFiles")));
+        var child = new Node(new DirectoryInfo(@"C:\Users\tczyz\MyFiles\FromOec"));
+        _root.AddItem(child);
+
+        // Task.Run(async () =>
+        // {
+        //     foreach (var i in Enumerable.Range(1, 3))
+        //     {
+        //         child.Tags.Add(new Tag($"Tag{i}"));
+        //         await Task.Delay(Random.Shared.Next(500, 2500));
+        //     }
+        // });
         Items = _root.Children;
     }
 
-    // [RelayCommand]
-    // private void AddItem()
-    // {
-    //     var parentItem = SelectedItems.Count > 0 ? SelectedItems[0] : _root;
-    //     parentItem.AddItem();
-    // }
+    [RelayCommand]
+    private void AddItem(DirectoryInfo directoryInfo)
+    {
+        var child = new Node(directoryInfo);
+
+        _root.AddItem(child);
+    }
 
     [RelayCommand]
     private void RemoveItem()
@@ -50,6 +66,8 @@ public partial class AdvancedTaggingDialogViewModel : ViewModelBase
         private ObservableCollection<Node>? _children;
 
         public ObservableCollection<Node> Children => _children ??= InitializeChildren();
+
+        public ObservableCollection<Tag> Tags { get; set; } = new();
 
         public string Header { get; }
 
@@ -81,6 +99,22 @@ public partial class AdvancedTaggingDialogViewModel : ViewModelBase
                 .Select(info => new Node(this, info))
                 .OrderByDescending(node => node.Item, FileSystemInfoComparer.Comparer)
                 .ToArray();
+
+            // todo: safeguard for large directories as TreeView cannot handle too many entries;
+            // desired solution: shows first 50 files/folders and button to load next 50
+            // also disabling loading Tags would be nice 
+
+            foreach (var node in array)
+            {
+                Dispatcher.UIThread.Post(async () =>
+                {
+                    foreach (var i in Enumerable.Range(1, Random.Shared.Next(1, 5)))
+                    {
+                        await Task.Delay(Random.Shared.Next(500, 2000));
+                        node.Tags.Add(new Tag($"Tag{i}"));
+                    }
+                });
+            }
 
             return new ObservableCollection<Node>(array);
         }
