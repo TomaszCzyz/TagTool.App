@@ -74,7 +74,7 @@
                     <Button Command="{Binding RemoveItemCommand}" IsEnabled="{Binding SelectedItems.Count}">
                         <avalonia:MaterialIcon Kind="Minus" />
                     </Button>
-                    <Button>
+                    <Button Command="{Binding CancelAllTagsLoadingCommand}">
                         <avalonia:MaterialIcon Kind="UnfoldLessHorizontal" />
                     </Button>
                     <Button>

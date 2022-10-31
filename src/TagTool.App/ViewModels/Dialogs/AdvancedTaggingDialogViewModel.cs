@@ -6,7 +6,7 @@ using TagTool.App.Core.Models;
 
 namespace TagTool.App.ViewModels.Dialogs;
 
-public partial class AdvancedTaggingDialogViewModel : ViewModelBase
+public partial class AdvancedTaggingDialogViewModel : ViewModelBase, IDisposable
 {
     private readonly Node _root = new();
 
@@ -21,15 +21,6 @@ public partial class AdvancedTaggingDialogViewModel : ViewModelBase
     {
         var child = new Node(new DirectoryInfo(@"C:\Users\tczyz\MyFiles\FromOec"));
         _root.AddItem(child);
-
-        // Task.Run(async () =>
-        // {
-        //     foreach (var i in Enumerable.Range(1, 3))
-        //     {
-        //         child.Tags.Add(new Tag($"Tag{i}"));
-        //         await Task.Delay(Random.Shared.Next(500, 2500));
-        //     }
-        // });
         Items = _root.Children;
     }
 
@@ -55,6 +46,18 @@ public partial class AdvancedTaggingDialogViewModel : ViewModelBase
         {
             return items.Remove(selectedItem) || items.Any(item => item.AreChildrenInitialized && RecursiveRemove(item.Children, selectedItem));
         }
+    }
+
+    [RelayCommand]
+    private void CancelAllTagsLoading()
+    {
+        _root.CancelTagsLoading();
+    }
+
+    public void Dispose()
+    {
+        CancelAllTagsLoading();
+        GC.SuppressFinalize(this);
     }
 
     public class Node
@@ -90,6 +93,18 @@ public partial class AdvancedTaggingDialogViewModel : ViewModelBase
             Parent = parent;
         }
 
+        public void CancelTagsLoading()
+        {
+            foreach (var child in Children)
+            {
+                child.CancelTagsLoading();
+            }
+
+            _cts.Cancel();
+        }
+
+        private readonly CancellationTokenSource _cts = new();
+
         private ObservableCollection<Node> InitializeChildren()
         {
             if (Item is not DirectoryInfo directoryInfo) return new ObservableCollection<Node>();
@@ -106,22 +121,36 @@ public partial class AdvancedTaggingDialogViewModel : ViewModelBase
 
             foreach (var node in array)
             {
-                Dispatcher.UIThread.Post(async () =>
-                {
-                    foreach (var i in Enumerable.Range(1, Random.Shared.Next(1, 5)))
-                    {
-                        await Task.Delay(Random.Shared.Next(500, 2000));
-                        node.Tags.Add(new Tag($"Tag{i}"));
-                    }
-                });
+                LoadTags(node);
             }
 
             return new ObservableCollection<Node>(array);
         }
 
-        public void AddItem(Node child) => Children.Add(child);
+        public void AddItem(Node child)
+        {
+            Children.Add(child);
+            LoadTags(child);
+        }
 
         public void RemoveItem(Node child) => Children.Remove(child);
+
+        private void LoadTags(Node node)
+        {
+            Dispatcher.UIThread.Post(async () =>
+            {
+                foreach (var i in Enumerable.Range(1, Random.Shared.Next(1, 8)))
+                {
+                    if (_cts.IsCancellationRequested)
+                    {
+                        return;
+                    }
+
+                    await Task.Delay(Random.Shared.Next(500, 2000));
+                    node.Tags.Add(new Tag($"Tag{i}"));
+                }
+            });
+        }
 
         public override string ToString() => Header;
     }

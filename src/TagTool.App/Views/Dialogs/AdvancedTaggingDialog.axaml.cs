@@ -29,6 +29,7 @@ public partial class AdvancedTaggingDialog : Window
 
     private void CancelButton_OnClick(object? sender, RoutedEventArgs e)
     {
+        _viewModel.Dispose();
         Close();
     }
 
