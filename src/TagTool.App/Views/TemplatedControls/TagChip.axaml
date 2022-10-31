@@ -32,9 +32,9 @@
         <Setter Property="Margin" Value="1" />
         <Setter Property="HorizontalAlignment" Value="Left" />
         <Setter Property="FontSize" Value="18" />
-        <Setter Property="FontFamily" Value="avares://TagTool.App/Assets/Fonts#Roboto" />
+        <Setter Property="FontFamily" Value="avares://TagTool.App/Assets/Fonts#JetBrains" />
         <Setter Property="FontWeight" Value="Bold" />
-        <Setter Property="FontStretch" Value="Condensed" />
+        <!-- <Setter Property="FontStretch" Value="Condensed" /> -->
         <Setter Property="Foreground" Value="#00E5FF" />
         <Setter Property="Background" Value="#0097A7" />
         <Setter Property="BorderThickness" Value="0" />

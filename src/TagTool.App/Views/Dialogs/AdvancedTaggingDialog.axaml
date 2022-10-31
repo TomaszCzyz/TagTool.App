@@ -5,7 +5,9 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:dialogs="clr-namespace:TagTool.App.ViewModels.Dialogs"
     xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
-    mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+    xmlns:converters="clr-namespace:TagTool.App.Converters"
+    xmlns:userControls="clr-namespace:TagTool.App.Views.UserControls"
+    mc:Ignorable="d" d:DesignWidth="1000" d:DesignHeight="450"
     x:Class="TagTool.App.Views.Dialogs.AdvancedTaggingDialog"
     Title="AdvancedTaggingDialog"
     WindowStartupLocation="CenterOwner"
@@ -13,14 +15,19 @@
     ExtendClientAreaToDecorationsHint="True"
     ExtendClientAreaTitleBarHeightHint="-1"
     ShowInTaskbar="True"
-    SizeToContent="WidthAndHeight"
+    MinHeight="400"
+    SizeToContent="Width"
     TransparencyLevelHint="AcrylicBlur"
     Background="{x:Null}">
-
+    <Window.Resources>
+        <converters:IconToBitmapConverter x:Key="IconToBitmapConverter" />
+    </Window.Resources>
     <Window.Styles>
         <Style Selector="Border.Outline">
             <Setter Property="CornerRadius" Value="4" />
-            <Setter Property="BorderBrush" Value="Gray" />
+            <Setter Property="BorderBrush">
+                <SolidColorBrush Color="Gray" Opacity="0.6" />
+            </Setter>
             <Setter Property="BorderThickness" Value="1" />
         </Style>
     </Window.Styles>
@@ -29,53 +36,160 @@
         <dialogs:AdvancedTaggingDialogViewModel />
     </Design.DataContext>
 
-    <Grid ColumnDefinitions="Auto,*, Auto" Margin="20">
+    <Grid
+        Name="TopMostGrid"
+        RowDefinitions="*,Auto"
+        ColumnDefinitions="300,4,*"
+        Margin="20">
 
         <!-- tree view column -->
-        <Border Classes="Outline">
+        <Border
+            Grid.Row="0"
+            Grid.Column="0"
+            ClipToBounds="True"
+            Classes="Outline">
 
-            <Grid RowDefinitions="Auto,*">
-                <StackPanel Grid.Row="0" Orientation="Horizontal">
-                    <Button
-                        Padding="2"
-                        Margin="2 2 0 0"
-                        CornerRadius="4"
-                        Command="{Binding AddItemCommand}">
+            <Grid RowDefinitions="Auto,*" ColumnDefinitions="*">
+                <Grid.Styles>
+                    <Style Selector="Button">
+                        <Setter Property="Padding" Value="2" />
+                        <Setter Property="Margin" Value="2" />
+                        <Setter Property="CornerRadius" Value="4" />
+                    </Style>
+                    <Style Selector="avalonia|MaterialIcon">
+                        <Setter Property="HorizontalAlignment" Value="Center" />
+                        <Setter Property="VerticalAlignment" Value="Center" />
+                    </Style>
+                </Grid.Styles>
+                <StackPanel
+                    Grid.Row="0"
+                    Orientation="Horizontal"
+                    Spacing="-2">
 
-                        <avalonia:MaterialIcon
-                            Kind="Add"
-                            HorizontalAlignment="Center"
-                            VerticalAlignment="Center" />
-                        
+                    <Button Command="{Binding AddItemCommand}">
+                        <avalonia:MaterialIcon Kind="Add" />
                     </Button>
-                    <Button
-                        Padding="2"
-                        Margin="2 2 0 0"
-                        CornerRadius="4"
-                        Command="{Binding RemoveItemCommand}"
-                        IsEnabled="{Binding SelectedItems.Count}">
-
-                        <avalonia:MaterialIcon
-                            Kind="Minus"
-                            HorizontalAlignment="Center"
-                            VerticalAlignment="Center" />
-
+                    <Button Command="{Binding RemoveItemCommand}" IsEnabled="{Binding SelectedItems.Count}">
+                        <avalonia:MaterialIcon Kind="Minus" />
+                    </Button>
+                    <Button>
+                        <avalonia:MaterialIcon Kind="UnfoldLessHorizontal" />
+                    </Button>
+                    <Button>
+                        <avalonia:MaterialIcon Kind="UnfoldMoreHorizontal" />
                     </Button>
                 </StackPanel>
+
                 <TreeView
                     Grid.Row="1"
+                    Grid.Column="0"
+                    MinWidth="100"
                     Items="{Binding Items}"
                     SelectedItems="{Binding SelectedItems}"
                     SelectionMode="Multiple">
                     <TreeView.ItemTemplate>
                         <TreeDataTemplate ItemsSource="{Binding Children}">
-                            <TextBlock Text="{Binding Header}" />
+                            <Grid
+                                Name="GridFileEntryName"
+                                ColumnDefinitions="25,*">
+
+                                <Image
+                                    Grid.Column="0"
+                                    Margin="0 0 2 0"
+                                    Source="{Binding Item.FullName, Converter={StaticResource IconToBitmapConverter}, ConverterParameter=25}" />
+
+                                <TextBlock
+                                    Grid.Column="1"
+                                    VerticalAlignment="Center"
+                                    Text="{Binding Header}" />
+
+                            </Grid>
                         </TreeDataTemplate>
                     </TreeView.ItemTemplate>
                 </TreeView>
             </Grid>
         </Border>
 
-    </Grid>
+        <GridSplitter Grid.Row="0" Grid.Column="1" ResizeBehavior="BasedOnAlignment" />
 
+        <!-- New tags view -->
+        <Grid
+            Grid.Row="0"
+            Grid.Column="2"
+            RowDefinitions="Auto,5,1*,5,1*,5,Auto"
+            ColumnDefinitions="Auto,5,450,*"
+            Margin="10 0"
+            ShowGridLines="False">
+
+            <!-- first row -->
+            <TextBlock
+                Text="Selected file:"
+                VerticalAlignment="Center"
+                HorizontalAlignment="Right" />
+
+            <TextBox
+                Grid.Row="0"
+                Grid.Column="2"
+                Name="SelectFileTextBox"
+                UseFloatingWatermark="True"
+                Watermark="Select file" />
+
+            <!-- second row -->
+            <TextBlock
+                Grid.Row="2"
+                Grid.Column="0"
+                Text="Tags:"
+                VerticalAlignment="Center"
+                HorizontalAlignment="Right" />
+
+            <Border
+                Grid.Row="2"
+                Grid.Column="2"
+                Classes="Outline">
+
+                <userControls:SimpleTagsBar Name="TagsToApplySimpleTagsBar" MaxHeight="150" />
+            </Border>
+
+            <!-- third row -->
+            <TextBlock
+                Grid.Row="4"
+                Grid.Column="0"
+                Text="Implicit tags:"
+                VerticalAlignment="Center"
+                HorizontalAlignment="Right" />
+
+            <Border
+                Grid.Row="4"
+                Grid.Column="2"
+                Classes="Outline">
+
+                <userControls:SimpleTagsBar MaxHeight="150" />
+            </Border>
+        </Grid>
+
+        <!-- Bottom buttons -->
+        <StackPanel
+            Grid.Row="1"
+            Grid.Column="0"
+            Grid.ColumnSpan="3"
+            Orientation="Horizontal"
+            HorizontalAlignment="Left"
+            EffectiveViewportChanged="Layoutable_OnEffectiveViewportChanged">
+
+            <Separator Name="AligningSeparator" Background="Transparent" Margin="0" />
+
+            <StackPanel
+                Name="BottomButtonsStackPanel"
+                Orientation="Horizontal"
+                Spacing="10">
+
+                <Button Content="Ok" />
+
+                <Button
+                    Content="Cancel"
+                    Click="CancelButton_OnClick" />
+
+            </StackPanel>
+        </StackPanel>
+    </Grid>
 </Window>

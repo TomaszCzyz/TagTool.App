@@ -69,20 +69,19 @@ public class FileSystemEntryComparer : IComparer
     public static IComparer<FileSystemEntry> StaticFileSystemEntryComparer { get; } = new Comparer();
 }
 
-public static class DirectoryInfoExtensions
+public class FileSystemInfoComparer : IComparer<FileSystemInfo>
 {
-    public static IEnumerable<DirectoryInfo> GetAncestors(this DirectoryInfo info) => Ancestors(info);
-
-    private static IEnumerable<DirectoryInfo> Ancestors(DirectoryInfo folder)
+    public int Compare(FileSystemInfo? x, FileSystemInfo? y)
     {
-        if (folder.Parent is { } parent)
-        {
-            foreach (var segment in Ancestors(parent))
-            {
-                yield return segment;
-            }
-        }
+        if (ReferenceEquals(x, y)) return 0;
+        if (ReferenceEquals(null, y)) return 1;
+        if (ReferenceEquals(null, x)) return -1;
 
-        yield return folder;
+        if ((x.Attributes & FileAttributes.Directory) != 0 && (y.Attributes & FileAttributes.Directory) == 0) return 1;
+        if ((x.Attributes & FileAttributes.Directory) == 0 && (y.Attributes & FileAttributes.Directory) != 0) return -1;
+
+        return string.Compare(x.FullName, y.FullName, StringComparison.Ordinal);
     }
+    
+    public static IComparer<FileSystemInfo> Comparer { get; } = new FileSystemInfoComparer();
 }

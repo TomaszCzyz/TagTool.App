@@ -1,5 +1,6 @@
 ﻿using System.Collections.ObjectModel;
 using CommunityToolkit.Mvvm.Input;
+using TagTool.App.Core.Models;
 
 namespace TagTool.App.ViewModels.Dialogs;
 
@@ -13,15 +14,16 @@ public partial class AdvancedTaggingDialogViewModel : ViewModelBase
 
     public AdvancedTaggingDialogViewModel()
     {
+        _root.AddItem(new Node(new DirectoryInfo(@"C:\Users\tczyz\MyFiles")));
         Items = _root.Children;
     }
 
-    [RelayCommand]
-    private void AddItem()
-    {
-        var parentItem = SelectedItems.Count > 0 ? SelectedItems[0] : _root;
-        parentItem.AddItem();
-    }
+    // [RelayCommand]
+    // private void AddItem()
+    // {
+    //     var parentItem = SelectedItems.Count > 0 ? SelectedItems[0] : _root;
+    //     parentItem.AddItem();
+    // }
 
     [RelayCommand]
     private void RemoveItem()
@@ -33,47 +35,60 @@ public partial class AdvancedTaggingDialogViewModel : ViewModelBase
             SelectedItems.RemoveAt(0);
         }
 
-        bool RecursiveRemove(ObservableCollection<Node> items, Node selectedItem)
+        bool RecursiveRemove(ICollection<Node> items, Node selectedItem)
         {
-            return items.Remove(selectedItem)
-                   || items.Any(item => item.AreChildrenInitialized && RecursiveRemove(item.Children, selectedItem));
+            return items.Remove(selectedItem) || items.Any(item => item.AreChildrenInitialized && RecursiveRemove(item.Children, selectedItem));
         }
     }
 
     public class Node
     {
-        private int _childIndex = 10;
+        public FileSystemInfo Item { get; init; }
+
+        public Node? Parent { get; init; }
 
         private ObservableCollection<Node>? _children;
 
+        public ObservableCollection<Node> Children => _children ??= InitializeChildren();
+
         public string Header { get; }
-
-        public Node? Parent { get; }
-
-        public Node()
-        {
-            Header = "Item";
-        }
-
-        public Node(Node parent, int index)
-        {
-            Parent = parent;
-            Header = parent.Header + ' ' + index;
-        }
 
         public bool AreChildrenInitialized => _children != null;
 
-        public ObservableCollection<Node> Children => _children ??= CreateChildren();
+        public Node()
+        {
+            Item = null!;
+            Header = "NoItem";
+        }
 
-        public void AddItem() => Children.Add(new Node(this, _childIndex++));
+        public Node(FileSystemInfo item)
+        {
+            Item = item;
+            Header = item.Name;
+        }
+
+        private Node(Node parent, FileSystemInfo item) : this(item)
+        {
+            Parent = parent;
+        }
+
+        private ObservableCollection<Node> InitializeChildren()
+        {
+            if (Item is not DirectoryInfo directoryInfo) return new ObservableCollection<Node>();
+
+            var array = directoryInfo
+                .EnumerateFileSystemInfos("*", SearchOption.TopDirectoryOnly)
+                .Select(info => new Node(this, info))
+                .OrderByDescending(node => node.Item, FileSystemInfoComparer.Comparer)
+                .ToArray();
+
+            return new ObservableCollection<Node>(array);
+        }
+
+        public void AddItem(Node child) => Children.Add(child);
 
         public void RemoveItem(Node child) => Children.Remove(child);
 
         public override string ToString() => Header;
-
-        private ObservableCollection<Node> CreateChildren()
-        {
-            return new ObservableCollection<Node>(Enumerable.Range(0, 10).Select(i => new Node(this, i)));
-        }
     }
 }

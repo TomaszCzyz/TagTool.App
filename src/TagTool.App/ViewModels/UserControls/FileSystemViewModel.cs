@@ -4,6 +4,7 @@ using System.Diagnostics;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using DynamicData;
+using TagTool.App.Core.Extensions;
 using TagTool.App.Core.Models;
 
 namespace TagTool.App.ViewModels.UserControls;
