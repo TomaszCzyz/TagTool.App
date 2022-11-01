@@ -9,7 +9,7 @@
     xmlns:userControls="clr-namespace:TagTool.App.Views.UserControls"
     xmlns:models="clr-namespace:TagTool.App.Core.Models;assembly=TagTool.App.Core"
     xmlns:templatedControls="clr-namespace:TagTool.App.Views.TemplatedControls"
-    mc:Ignorable="d" d:DesignWidth="1000" d:DesignHeight="450"
+    mc:Ignorable="d" d:DesignWidth="1100" d:DesignHeight="450"
     x:Class="TagTool.App.Views.Dialogs.AdvancedTaggingDialog"
     Title="AdvancedTaggingDialog"
     WindowStartupLocation="CenterOwner"
@@ -143,6 +143,7 @@
                     Grid.Row="2"
                     IsIndeterminate="True"
                     IsVisible="{Binding TagsLoadingCounter}" />
+
             </Grid>
         </Border>
 
@@ -152,29 +153,42 @@
         <Grid
             Grid.Row="0"
             Grid.Column="2"
-            RowDefinitions="Auto,5,1*,5,1*,5,Auto"
+            RowDefinitions="150,4,1*,4,1*,4,1*,4,Auto"
             ColumnDefinitions="Auto,5,450,*"
             Margin="10 0"
             ShowGridLines="False">
 
             <!-- first row -->
             <TextBlock
-                Text="Selected file:"
+                Text="Selected file(s):"
                 VerticalAlignment="Center"
                 HorizontalAlignment="Right" />
 
-            <TextBox
+            <Border
                 Grid.Row="0"
                 Grid.Column="2"
-                Name="SelectFileTextBox"
-                UseFloatingWatermark="True"
-                Watermark="Select file" />
+                Classes="Outline">
+
+                <ListBox
+                    Background="Transparent"
+                    Name="SelectedFilesListBox"
+                    Items="{Binding SelectedItems}"
+                    SelectionMode="Multiple" />
+
+            </Border>
+
+            <GridSplitter
+                Grid.Row="1"
+                Grid.Column="0"
+                Grid.ColumnSpan="3"
+                ResizeDirection="Rows"
+                Background="Transparent" />
 
             <!-- second row -->
             <TextBlock
                 Grid.Row="2"
                 Grid.Column="0"
-                Text="Tags:"
+                Text="{Binding RowDescription}"
                 VerticalAlignment="Center"
                 HorizontalAlignment="Right" />
 
@@ -183,19 +197,68 @@
                 Grid.Column="2"
                 Classes="Outline">
 
-                <userControls:SimpleTagsBar Name="TagsToApplySimpleTagsBar" MaxHeight="150" />
+                <ListBox
+                    Background="Transparent"
+                    Items="{Binding ExistingTags}">
+                    <ListBox.Styles>
+                        <Style Selector="ListBoxItem">
+                            <Setter Property="Padding" Value="1 1 0 0" />
+                        </Style>
+                    </ListBox.Styles>
+                    <ListBox.ItemTemplate>
+                        <DataTemplate DataType="models:Tag">
+                            <templatedControls:TagChip Text="{Binding Name}" IsDeletable="False"/>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                    <ListBox.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <WrapPanel />
+                        </ItemsPanelTemplate>
+                    </ListBox.ItemsPanel>
+
+                </ListBox>
             </Border>
+
+            <GridSplitter
+                Grid.Row="3"
+                Grid.Column="0"
+                Grid.ColumnSpan="3"
+                ResizeDirection="Rows"
+                Background="Transparent" />
 
             <!-- third row -->
             <TextBlock
                 Grid.Row="4"
+                Grid.Column="0"
+                Text="New Tags:"
+                VerticalAlignment="Center"
+                HorizontalAlignment="Right" />
+
+            <Border
+                Grid.Row="4"
+                Grid.Column="2"
+                Classes="Outline">
+
+                <userControls:SimpleTagsBar Name="TagsToApplySimpleTagsBar" MaxHeight="150" />
+            </Border>
+
+            <GridSplitter
+                Grid.Row="5"
+                Grid.Column="0"
+                Grid.ColumnSpan="3"
+                ResizeDirection="Rows"
+                Background="Transparent" />
+
+            <!-- fourth row -->
+            <TextBlock
+                Grid.Row="6"
                 Grid.Column="0"
                 Text="Implicit tags:"
                 VerticalAlignment="Center"
                 HorizontalAlignment="Right" />
 
             <Border
-                Grid.Row="4"
+                Grid.Row="6"
                 Grid.Column="2"
                 Classes="Outline">
 

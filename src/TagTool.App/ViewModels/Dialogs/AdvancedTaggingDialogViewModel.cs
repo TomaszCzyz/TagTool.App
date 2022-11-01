@@ -2,6 +2,7 @@
 using Avalonia.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using DynamicData;
 using TagTool.App.Core.Models;
 
 namespace TagTool.App.ViewModels.Dialogs;
@@ -14,6 +15,11 @@ public partial class AdvancedTaggingDialogViewModel : ViewModelBase, IDisposable
 
     public ObservableCollection<Node> SelectedItems { get; } = new();
 
+    public ObservableCollection<Tag> ExistingTags { get; set; } = new();
+
+    [ObservableProperty]
+    private string _rowDescription = "Existing Tags: ";
+
     [ObservableProperty]
     private int _tagsLoadingCounter;
 
@@ -22,6 +28,38 @@ public partial class AdvancedTaggingDialogViewModel : ViewModelBase, IDisposable
         var child = new Node(new DirectoryInfo(@"C:\Users\tczyz\MyFiles\FromOec"));
         _root.AddItem(child);
         Items = _root.Children;
+
+        SelectedItems.CollectionChanged += (_, _) =>
+        {
+            ExistingTags.Clear();
+
+            switch (SelectedItems.Count)
+            {
+                case 0:
+                    return;
+                case 1:
+                    RowDescription = "Existing Tags: ";
+                    ExistingTags.AddRange(SelectedItems.SelectMany(node => node.Tags));
+                    break;
+                default:
+                    RowDescription = "Intersection: ";
+                    var observableCollections = SelectedItems.Select(node => node.Tags).ToArray();
+
+                    var intersection = observableCollections
+                        .Skip(1)
+                        .Aggregate(
+                            new HashSet<Tag>(observableCollections.First()),
+                            (set, tags) =>
+                            {
+                                set.IntersectWith(tags);
+                                return set;
+                            }
+                        );
+
+                    ExistingTags.AddRange(intersection);
+                    break;
+            }
+        };
 
         Task.Run(async () =>
         {
