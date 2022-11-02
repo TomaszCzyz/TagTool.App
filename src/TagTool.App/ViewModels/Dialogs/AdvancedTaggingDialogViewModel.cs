@@ -17,6 +17,8 @@ public partial class AdvancedTaggingDialogViewModel : ViewModelBase, IDisposable
 
     public ObservableCollection<Tag> ExistingTags { get; set; } = new();
 
+    public ObservableCollection<Tag> ImplicitTags { get; set; } = new(new Tag[]{new("Audio"), new("Text"), new("Date"), new("Zip")});
+
     [ObservableProperty]
     private string _rowDescription = "Existing Tags: ";
 
