@@ -17,6 +17,10 @@
                 <templatedControls:TagChip Text="Test" IsDeletable="True" />
                 <templatedControls:TagChip Text="Test" IsDeletable="False" />
             </StackPanel>
+            <StackPanel Orientation="Horizontal">
+                <templatedControls:TagChip Classes="Implicit" Text="Implicit" />
+                <templatedControls:TagChip Classes="Implicit" Text="ImplicitTest" IsDeletable="False" />
+            </StackPanel>
         </StackPanel>
     </Design.PreviewWith>
 
@@ -112,6 +116,13 @@
             <Setter Property="Width" Value="8" />
             <Setter Property="Margin" Value="-2 2 2 2" />
         </Style>
+    </Style>
+
+    <Style Selector="templatedControls|TagChip.Implicit">
+        <Setter Property="IsDeletable" Value="False" />
+        <Setter Property="Background" Value="#CCCCCC" />
+        <Setter Property="Foreground" Value="#464646" />
+        <Setter Property="Opacity" Value="0.8" />
     </Style>
 
     <!-- <Style Selector="templatedControls|TagChip.test"> -->

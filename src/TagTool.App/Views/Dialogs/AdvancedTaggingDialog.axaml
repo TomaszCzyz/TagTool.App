@@ -161,7 +161,7 @@
         <Grid
             Grid.Row="0"
             Grid.Column="2"
-            RowDefinitions="*,Auto,*,Auto,*,Auto,*,Auto"
+            RowDefinitions="2*,Auto,*,Auto,*,Auto,*,Auto"
             ColumnDefinitions="Auto,Auto,*">
             <Grid.Styles>
                 <Style Selector="TextBlock">
@@ -235,7 +235,7 @@
                         </ListBox.Styles>
                         <ListBox.ItemTemplate>
                             <DataTemplate DataType="models:Tag">
-                                <templatedControls:TagChip Text="{Binding Name}" IsDeletable="False" />
+                                <templatedControls:TagChip Classes="Implicit" Text="{Binding Name}" />
                             </DataTemplate>
                         </ListBox.ItemTemplate>
                         <ListBox.ItemsPanel>
