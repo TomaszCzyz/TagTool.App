@@ -11,36 +11,50 @@
         <userControls:FilePreviewerViewModel />
     </Design.DataContext>
 
-    <ScrollViewer
-        Name="ScrollViewer"
-        VerticalScrollBarVisibility="Auto"
-        HorizontalScrollBarVisibility="Auto">
+    <Panel>
+        <TextBlock
+            Name="NoPreviewMessageTextBlock"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Center"
+            TextWrapping="Wrap"
+            Text="{Binding NoPreviewMessage}"
+            IsVisible="{Binding Current, Converter={x:Static ObjectConverters.IsNull}}" />
 
-        <Border
-            Name="ScrollViewerBackground"
-            Background="Transparent"
-            ClipToBounds="True"
-            VerticalAlignment="Stretch"
-            HorizontalAlignment="Stretch" >
+        <ProgressBar IsIndeterminate="True" VerticalAlignment="Bottom" IsVisible="{Binding IsLoading}" />
 
-            <Border
-                Name="Border1"
-                VerticalAlignment="Center"
-                HorizontalAlignment="Center"
-                Width="{Binding ViewboxWidth}"
-                Height="{Binding ViewboxHeight}">
+        <Border IsVisible="{Binding Current, Converter={x:Static ObjectConverters.IsNotNull}}">
+            <ScrollViewer
+                Name="ScrollViewer"
+                VerticalScrollBarVisibility="Auto"
+                HorizontalScrollBarVisibility="Auto">
 
-                <Viewbox
-                    Stretch="Uniform"
-                    StretchDirection="Both">
+                <Border
+                    Name="ScrollViewerBackground"
+                    Background="Transparent"
+                    ClipToBounds="True"
+                    VerticalAlignment="Stretch"
+                    HorizontalAlignment="Stretch">
 
-                    <Image
-                        Name="PreviewImage"
-                        Focusable="True"
-                        Source="{Binding Current}"
-                        PointerWheelChanged="PreviewImage_OnPointerWheelChanged" />
-                </Viewbox>
-            </Border>
+                    <Border
+                        Name="Border1"
+                        VerticalAlignment="Center"
+                        HorizontalAlignment="Center"
+                        Width="{Binding ViewboxWidth}"
+                        Height="{Binding ViewboxHeight}">
+
+                        <Viewbox
+                            Stretch="Uniform"
+                            StretchDirection="Both">
+
+                            <Image
+                                Name="PreviewImage"
+                                Focusable="True"
+                                Source="{Binding Current}"
+                                PointerWheelChanged="PreviewImage_OnPointerWheelChanged" />
+                        </Viewbox>
+                    </Border>
+                </Border>
+            </ScrollViewer>
         </Border>
-    </ScrollViewer>
+    </Panel>
 </UserControl>

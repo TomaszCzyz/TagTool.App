@@ -17,7 +17,7 @@ public partial class AdvancedTaggingDialogViewModel : ViewModelBase, IDisposable
 
     public ObservableCollection<Tag> ExistingTags { get; set; } = new();
 
-    public ObservableCollection<Tag> ImplicitTags { get; set; } = new(new Tag[]{new("Audio"), new("Text"), new("Date"), new("Zip")});
+    public ObservableCollection<Tag> ImplicitTags { get; set; } = new(new Tag[] { new("Audio"), new("Text"), new("Date"), new("Zip") });
 
     [ObservableProperty]
     private string _rowDescription = "Existing Tags: ";
@@ -188,6 +188,7 @@ public partial class AdvancedTaggingDialogViewModel : ViewModelBase, IDisposable
 
         private void LoadTags(Node node)
         {
+            // todo: add upper limit for concurrent loadings (especially important for "expand all" functionality; NOTE: the order of expanding matters.. should be like BFS)
             Dispatcher.UIThread.Post(async () =>
             {
                 Interlocked.Increment(ref _tagsLoadingTaskCounter);

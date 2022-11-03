@@ -16,11 +16,11 @@
     MinHeight="400"
     Width="1600"
     Height="900"
-    WindowStartupLocation="CenterOwner"
-    ExtendClientAreaChromeHints="NoChrome"
-    ExtendClientAreaToDecorationsHint="True"
-    ExtendClientAreaTitleBarHeightHint="-1"
     ShowInTaskbar="True"
+    WindowStartupLocation="CenterOwner"
+    ExtendClientAreaToDecorationsHint="True"
+    ExtendClientAreaChromeHints="NoChrome"
+    ExtendClientAreaTitleBarHeightHint="20"
     TransparencyLevelHint="AcrylicBlur">
     <Window.Resources>
         <converters:IconToBitmapConverter x:Key="IconToBitmapConverter" />
@@ -47,7 +47,7 @@
         Name="TopMostGrid"
         RowDefinitions="*,Auto"
         ColumnDefinitions="500,Auto,*,Auto,Auto"
-        Margin="10"
+        Margin="10 20 10 0"
         ShowGridLines="False">
 
         <!-- left panel -->
@@ -94,10 +94,12 @@
                 <TreeView
                     Grid.Row="1"
                     Grid.Column="0"
+                    Name="TreeView"
                     MinWidth="100"
+                    SelectionMode="Multiple"
                     Items="{Binding Items}"
                     SelectedItems="{Binding SelectedItems}"
-                    SelectionMode="Multiple">
+                    SelectionChanged="TreeView_OnSelectionChanged">
                     <TreeView.ItemTemplate>
                         <TreeDataTemplate ItemsSource="{Binding Children}">
                             <Grid
@@ -161,7 +163,7 @@
         <Grid
             Grid.Row="0"
             Grid.Column="2"
-            RowDefinitions="2*,Auto,*,Auto,*,Auto,*,Auto"
+            RowDefinitions="4*,Auto,*,Auto,*,Auto,3*,Auto"
             ColumnDefinitions="Auto,Auto,*">
             <Grid.Styles>
                 <Style Selector="TextBlock">
@@ -263,8 +265,12 @@
 
         <!-- Previewer panel -->
         <Border Grid.Row="0" Grid.Column="4">
-            <Border Classes="Outline" IsVisible="{Binding #PreviewToggleButton.IsChecked}">
-                <userControls:FilePreviewer />
+            <Border
+                Classes="Outline"
+                Width="500"
+                IsVisible="{Binding #PreviewToggleButton.IsChecked}">
+
+                <userControls:FilePreviewer Name="FilePreviewer" />
             </Border>
         </Border>
 
@@ -282,12 +288,11 @@
             <StackPanel
                 Name="BottomButtonsStackPanel"
                 Orientation="Horizontal"
+                Margin="0 10"
                 Spacing="10">
 
-                <Button Content="Ok" />
-
                 <Button
-                    Content="Cancel"
+                    Content="Exit"
                     Click="CancelButton_OnClick" />
 
             </StackPanel>

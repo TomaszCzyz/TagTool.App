@@ -6,6 +6,7 @@ using Avalonia.Markup.Xaml;
 using Avalonia.Platform.Storage;
 using Microsoft.Extensions.DependencyInjection;
 using TagTool.App.ViewModels.Dialogs;
+using TagTool.App.ViewModels.UserControls;
 
 namespace TagTool.App.Views.Dialogs;
 
@@ -25,6 +26,23 @@ public partial class AdvancedTaggingDialog : Window
     private void InitializeComponent()
     {
         AvaloniaXamlLoader.Load(this);
+    }
+
+    private void TreeView_OnSelectionChanged(object? sender, SelectionChangedEventArgs e)
+    {
+        if(!PreviewToggleButton.IsChecked ?? false) return;
+        if (TreeView.SelectedItems is not { Count: 1 } selectedItems) return;
+
+        var selectedNode = selectedItems[0] as AdvancedTaggingDialogViewModel.Node
+                           ?? throw new InvalidCastException(
+                               $"Expected item to be {nameof(AdvancedTaggingDialogViewModel.Node)}, got {selectedItems[0]!.GetType()}");
+
+        var previewerViewModel = FilePreviewer?.DataContext as FilePreviewerViewModel
+                                 ?? throw new InvalidCastException(
+                                     $"Expected FilePreviewer DataContext to be {nameof(FilePreviewerViewModel)}," +
+                                     $" got {FilePreviewer?.DataContext?.GetType()}");
+
+        previewerViewModel.CurrentFilePath = selectedNode.Item.FullName;
     }
 
     private void CancelButton_OnClick(object? sender, RoutedEventArgs e)

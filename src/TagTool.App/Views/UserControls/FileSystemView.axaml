@@ -70,7 +70,7 @@
                 BorderThickness="0"
                 VerticalContentAlignment="Center"
                 IsVisible="{Binding IsEditing}"
-                Text="{Binding TextBoxAddress}"
+                Text="{Binding AddressTextBox}"
                 LostFocus="AddressTextBox_OnLostFocus">
                 <TextBox.KeyBindings>
                     <KeyBinding Gesture="Escape" Command="{CompiledBinding CancelAddressChangeCommand}" />
