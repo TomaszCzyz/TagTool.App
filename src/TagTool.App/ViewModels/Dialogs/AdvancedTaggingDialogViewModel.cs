@@ -74,7 +74,7 @@ public partial class AdvancedTaggingDialogViewModel : ViewModelBase, IDisposable
     }
 
     [RelayCommand]
-    private void AddItem(DirectoryInfo directoryInfo)
+    private void AddItem(FileSystemInfo directoryInfo)
     {
         var child = new Node(directoryInfo);
 
@@ -180,6 +180,8 @@ public partial class AdvancedTaggingDialogViewModel : ViewModelBase, IDisposable
 
         public void AddItem(Node child)
         {
+            if (Children.Contains(child)) return;
+
             Children.Add(child);
             LoadTags(child);
         }
@@ -207,6 +209,17 @@ public partial class AdvancedTaggingDialogViewModel : ViewModelBase, IDisposable
                 Interlocked.Decrement(ref _tagsLoadingTaskCounter);
             });
         }
+
+        private bool Equals(Node other) => Item.FullName.Equals(other.Item.FullName, StringComparison.Ordinal);
+
+        public override bool Equals(object? obj)
+        {
+            if (ReferenceEquals(null, obj)) return false;
+            if (ReferenceEquals(this, obj)) return true;
+            return obj.GetType() == GetType() && Equals((Node) obj);
+        }
+
+        public override int GetHashCode() => Item.GetHashCode();
 
         public override string ToString() => Header;
     }

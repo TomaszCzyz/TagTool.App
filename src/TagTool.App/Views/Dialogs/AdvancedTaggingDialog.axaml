@@ -54,6 +54,7 @@
         <Border
             Grid.Row="0"
             Grid.Column="0"
+            DragDrop.AllowDrop="True"
             Classes="Outline">
 
             <Grid RowDefinitions="Auto,*,Auto" ColumnDefinitions="*">
@@ -121,7 +122,7 @@
                                 <TextBlock
                                     Grid.Column="1"
                                     VerticalAlignment="Center"
-                                    Text="{Binding Header}" >
+                                    Text="{Binding Header}">
                                     <TextBlock.ContextFlyout>
                                         <MenuFlyout>
                                             <MenuItem Header="Show in Explorer" />
@@ -162,6 +163,26 @@
                     IsVisible="{Binding TagsLoadingCounter}" />
 
             </Grid>
+        </Border>
+
+        <Border
+            Grid.Row="0"
+            Grid.Column="0"
+            DragDrop.AllowDrop="True"
+            Name="DragDropInfoAreaBorder"
+            IsVisible="False"
+            Background="Gray"
+            Opacity="0.7"
+            BorderBrush="#444444"
+            BorderThickness="10"
+            BorderDashArray="5,5">
+
+            <TextBlock
+                Text="Drop file(s) or folder(s) here"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                FontSize="20" />
+
         </Border>
 
         <GridSplitter Grid.Row="0" Grid.Column="1" ResizeDirection="Columns" Width="4" />

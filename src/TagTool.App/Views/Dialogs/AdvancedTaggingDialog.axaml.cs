@@ -1,5 +1,6 @@
 ﻿using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Layout;
 using Avalonia.Markup.Xaml;
@@ -21,6 +22,12 @@ public partial class AdvancedTaggingDialog : Window
 #if DEBUG
         this.AttachDevTools();
 #endif
+
+        AddHandler(DragDrop.DropEvent, Drop);
+        AddHandler(DragDrop.DragOverEvent, DragOver);
+        AddHandler(DragDrop.DragEnterEvent, (_, _) => DragDropInfoAreaBorder.IsVisible = true);
+        AddHandler(DragDrop.DragLeaveEvent, (_, _) => DragDropInfoAreaBorder.IsVisible = false);
+        AddHandler(DragDrop.DropEvent, (_, _) => DragDropInfoAreaBorder.IsVisible = false);
     }
 
     private void InitializeComponent()
@@ -28,9 +35,33 @@ public partial class AdvancedTaggingDialog : Window
         AvaloniaXamlLoader.Load(this);
     }
 
+    private void DragOver(object? sender, DragEventArgs e)
+    {
+        // Only allow Copy or Link as Drop Operations.
+        e.DragEffects &= (DragDropEffects.Copy | DragDropEffects.Link);
+
+        // Only allow if the dragged data contains text or filenames.
+        if (!e.Data.Contains(DataFormats.Text) && !e.Data.Contains(DataFormats.FileNames))
+        {
+            e.DragEffects = DragDropEffects.None;
+        }
+    }
+
+    private void Drop(object? sender, DragEventArgs e)
+    {
+        if (!e.Data.Contains(DataFormats.FileNames)) return;
+        if (e.Data.GetFileNames() is not { } paths) return;
+
+        foreach (var path in paths)
+        {
+            FileSystemInfo fileSystemInfo = Directory.Exists(path) ? new DirectoryInfo(path) : new FileInfo(path);
+            _viewModel.AddItemCommand.Execute(fileSystemInfo);
+        }
+    }
+
     private void TreeView_OnSelectionChanged(object? sender, SelectionChangedEventArgs e)
     {
-        if(!PreviewToggleButton.IsChecked ?? false) return;
+        if (!PreviewToggleButton.IsChecked ?? false) return;
         if (TreeView.SelectedItems is not { Count: 1 } selectedItems) return;
 
         var selectedNode = selectedItems[0] as AdvancedTaggingDialogViewModel.Node
