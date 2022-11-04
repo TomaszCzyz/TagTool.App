@@ -17,32 +17,19 @@
         <!--     x:Name="DockControl" -->
         <!--     Layout="{Binding Layout}" -->
         <!--     Margin="4" /> -->
-        <Grid ColumnDefinitions="*,2,*,2,*">
-            <Grid
-                Grid.Column="0"
-                RowDefinitions="*, 2, *">
-
+        <Grid ColumnDefinitions="2*,Auto,2*,Auto,*">
+            <Grid.Styles>
+                <Style Selector="GridSplitter">
+                    <Setter Property="Background" Value="Transparent" />
+                </Style>
+            </Grid.Styles>
+            <Grid Grid.Column="0" RowDefinitions="*, Auto, *">
                 <userControls:TabContentView Grid.Row="0" />
-                <GridSplitter
-                    Grid.Row="1"
-                    Background="Black"
-                    ResizeDirection="Rows" />
-
+                <GridSplitter Grid.Row="1" ResizeDirection="Rows" Height="4"/>
                 <userControls:TabContentView Grid.Row="2" />
             </Grid>
-            <GridSplitter
-                Grid.Column="1"
-                Background="Black"
-                ResizeDirection="Columns" />
-
+            <GridSplitter Grid.Column="1" ResizeDirection="Columns" Width="4"/>
             <userControls:FileSystemView Grid.Column="2" />
-
-            <GridSplitter
-                Grid.Column="3"
-                Background="Black"
-                ResizeDirection="Columns" />
-            
-            <userControls:FilePreviewer Grid.Column="4" />
         </Grid>
 
 

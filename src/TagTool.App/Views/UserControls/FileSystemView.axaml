@@ -181,7 +181,20 @@
                                 Grid.Column="1"
                                 VerticalAlignment="Center"
                                 HorizontalAlignment="Stretch"
-                                Text="{Binding Name}" />
+                                Text="{Binding Name}">
+                                <TextBlock.ContextFlyout>
+                                    <MenuFlyout>
+                                        <MenuItem Header="Tag it" />
+                                        <Separator />
+                                        <MenuItem Header="Show in Explorer" />
+                                        <Separator />
+                                        <MenuItem Header="Rename" />
+                                        <MenuItem Header="Copy" />
+                                    </MenuFlyout>
+                                </TextBlock.ContextFlyout>
+                            </TextBlock>
+
+                            <Popup Grid.Column="0" Grid.ColumnSpan="2" />
 
                         </Grid>
                     </DataTemplate>
@@ -190,11 +203,6 @@
                     Header="Date Created"
                     IsReadOnly="True"
                     Binding="{Binding DateCreated, StringFormat=\{0:yyyy/MM/dd hh:mm:ss\}}" />
-
-                <DataGridTextColumn
-                    Header="Date Modified"
-                    IsReadOnly="True"
-                    Binding="{Binding ModifiedDate, StringFormat=\{0:yyyy/MM/dd hh:mm:ss\}}" />
 
                 <DataGridTemplateColumn
                     Header="Size"

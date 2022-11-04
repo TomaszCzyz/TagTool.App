@@ -121,7 +121,15 @@
                                 <TextBlock
                                     Grid.Column="1"
                                     VerticalAlignment="Center"
-                                    Text="{Binding Header}" />
+                                    Text="{Binding Header}" >
+                                    <TextBlock.ContextFlyout>
+                                        <MenuFlyout>
+                                            <MenuItem Header="Show in Explorer" />
+                                            <MenuItem Header="Rename" />
+                                            <MenuItem Header="Properties" />
+                                        </MenuFlyout>
+                                    </TextBlock.ContextFlyout>
+                                </TextBlock>
 
                                 <ListBox
                                     Grid.Column="2"
@@ -144,7 +152,6 @@
                                         </DataTemplate>
                                     </ListBox.ItemTemplate>
                                 </ListBox>
-
                             </Grid>
                         </TreeDataTemplate>
                     </TreeView.ItemTemplate>
