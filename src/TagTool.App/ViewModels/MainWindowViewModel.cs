@@ -50,32 +50,26 @@ public partial class MainWindowViewModel : ViewModelBase
     [RelayCommand]
     private void FocusNextSearchTab(object element)
     {
-        var rootWindow = element as Window ?? throw new InvalidCastException($"Expected Window, got {element}");
+        var rootWindow = element as Window
+                         ?? throw new InvalidCastException($"Expected parameter to be of type {typeof(Window)}, got {element.GetType()}");
+
         var focusTargets = FindAllVisibleSearchBars(rootWindow);
 
-        InputElement? elementToFocus;
-
-        switch (focusTargets.Length)
+        var elementToFocus = focusTargets.Length switch
         {
-            case 0:
-                return;
-            case 1:
-                elementToFocus = focusTargets[0];
-                break;
-            default:
-                if (_previouslyFocusedElement is null || !focusTargets.TryFind(box => Equals(box, _previouslyFocusedElement), out var index))
-                {
-                    elementToFocus = focusTargets[0];
-                    break;
-                }
-
-                elementToFocus = focusTargets[index + 1 < focusTargets.Length ? index + 1 : 0];
-                break;
-        }
+            0 => null,
+            1 => focusTargets[0],
+            _ => NextToFocus(focusTargets)
+        };
 
         _previouslyFocusedElement = elementToFocus;
         _focusManager.Focus(elementToFocus);
     }
+
+    private InputElement? NextToFocus(AutoCompleteBox?[] focusTargets) =>
+        _previouslyFocusedElement is null || !focusTargets.TryFind(box => Equals(box, _previouslyFocusedElement), out var index)
+            ? focusTargets[0]
+            : focusTargets[index + 1 < focusTargets.Length ? index + 1 : 0];
 
     private static AutoCompleteBox?[] FindAllVisibleSearchBars(Window rootWindow) =>
         rootWindow
