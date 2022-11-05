@@ -1,4 +1,3 @@
-using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
 using Microsoft.Extensions.DependencyInjection;
@@ -14,7 +13,7 @@ public partial class MainWindow : Window
         InitializeComponent();
 #if DEBUG
         this.AttachDevTools();
-        Renderer.DrawFps = true;
+        Renderer.DrawFps = false;
 #endif
     }
 

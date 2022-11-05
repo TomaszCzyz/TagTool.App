@@ -2,6 +2,7 @@
 using Avalonia.Platform.Storage;
 using Avalonia.Platform.Storage.FileIO;
 using CommunityToolkit.Mvvm.ComponentModel;
+using JetBrains.Annotations;
 using Microsoft.Extensions.Options;
 using TagTool.App.Options;
 
@@ -41,6 +42,7 @@ public partial class TagFileDialogViewModel : ViewModelBase
         _options = null!; // to suppress warning
     }
 
+    [UsedImplicitly]
     public TagFileDialogViewModel(IOptions<GeneralOptions> options)
     {
         _options = options.Value;

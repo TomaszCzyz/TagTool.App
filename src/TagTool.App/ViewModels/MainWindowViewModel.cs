@@ -6,6 +6,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Dock.Model.Controls;
 using Dock.Model.Core;
+using JetBrains.Annotations;
 using TagTool.App.Core.Extensions;
 using TagTool.App.Docks;
 using TagTool.App.Views.UserControls;
@@ -27,6 +28,7 @@ public partial class MainWindowViewModel : ViewModelBase
         _focusManager = null!;
     }
 
+    [UsedImplicitly]
     public MainWindowViewModel(NotepadFactory notepadFactory)
     {
         _focusManager = AvaloniaLocator.Current.GetRequiredService<IFocusManager>();

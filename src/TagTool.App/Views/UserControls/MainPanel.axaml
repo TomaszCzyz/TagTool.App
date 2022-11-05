@@ -17,7 +17,7 @@
         <!--     x:Name="DockControl" -->
         <!--     Layout="{Binding Layout}" -->
         <!--     Margin="4" /> -->
-        <Grid ColumnDefinitions="2*,Auto,2*,Auto,*">
+        <Grid ColumnDefinitions="2*,Auto,2*,Auto">
             <Grid.Styles>
                 <Style Selector="GridSplitter">
                     <Setter Property="Background" Value="Transparent" />

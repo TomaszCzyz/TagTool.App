@@ -4,6 +4,7 @@ using Avalonia.Media;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Grpc.Core;
+using JetBrains.Annotations;
 using TagTool.App.Core.Models;
 using TagTool.App.Core.Services;
 using TagTool.Backend;
@@ -30,6 +31,7 @@ public partial class TagSearchBoxViewModel : ViewModelBase, IDisposable
     /// <summary>
     ///     ctor for XAML previewer
     /// </summary>
+    [UsedImplicitly]
     public TagSearchBoxViewModel()
     {
         _tagSearchService = null!;

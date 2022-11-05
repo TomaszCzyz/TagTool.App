@@ -1,6 +1,7 @@
 ﻿using System.Collections.ObjectModel;
 using CommunityToolkit.Mvvm.Input;
 using DynamicData;
+using JetBrains.Annotations;
 using Microsoft.Extensions.DependencyInjection;
 using TagTool.App.Core.Models;
 
@@ -21,6 +22,14 @@ public partial class SimpleTagsBarViewModel : ViewModelBase, ITagsContainer
 
     public ObservableCollection<object> EnteredTags { get; set; } = new(); // Tag or TagSearchBox
 
+    /// <summary>
+    ///     ctor for XAML previewer
+    /// </summary>
+    public SimpleTagsBarViewModel()
+    {
+    }
+
+    [UsedImplicitly]
     public SimpleTagsBarViewModel(IServiceProvider serviceProvider)
     {
         var tags = new Tag[] { new("Tag1"), new("Audio"), new("Dog"), new("Picture"), new("Colleague"), new("Tag6"), new("LastTag") };
