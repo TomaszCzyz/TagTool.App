@@ -52,10 +52,7 @@ public partial class MainWindowViewModel : ViewModelBase
     [RelayCommand]
     private void FocusNextSearchTab(object element)
     {
-        var rootWindow = element as Window
-                         ?? throw new InvalidCastException($"Expected parameter to be of type {typeof(Window)}, got {element.GetType()}");
-
-        var focusTargets = FindAllVisibleSearchBars(rootWindow);
+        var focusTargets = FindAllVisibleSearchBars((Window)element);
 
         var elementToFocus = focusTargets.Length switch
         {
@@ -68,13 +65,13 @@ public partial class MainWindowViewModel : ViewModelBase
         _focusManager.Focus(elementToFocus);
     }
 
-    private InputElement? NextToFocus(AutoCompleteBox?[] focusTargets) =>
-        _previouslyFocusedElement is null || !focusTargets.TryFind(box => Equals(box, _previouslyFocusedElement), out var index)
+    private InputElement? NextToFocus(AutoCompleteBox?[] focusTargets)
+        => _previouslyFocusedElement is null || !focusTargets.TryFind(box => Equals(box, _previouslyFocusedElement), out var index)
             ? focusTargets[0]
             : focusTargets[index + 1 < focusTargets.Length ? index + 1 : 0];
 
-    private static AutoCompleteBox?[] FindAllVisibleSearchBars(Window rootWindow) =>
-        rootWindow
+    private static AutoCompleteBox?[] FindAllVisibleSearchBars(Window rootWindow)
+        => rootWindow
             .GetVisualDescendants()
             .Where(logical => logical.GetType() == typeof(SimpleTagsBar) && logical.IsVisible)
             .Select(visual => visual.FindDescendantOfType<AutoCompleteBox>())

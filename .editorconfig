@@ -154,6 +154,7 @@ csharp_style_expression_bodied_indexers = when_on_single_line:warning
 csharp_style_expression_bodied_accessors = when_on_single_line:warning
 csharp_style_expression_bodied_lambdas = when_on_single_line:silent
 csharp_style_expression_bodied_local_functions = false:warning
+csharp_wrap_before_arrow_with_expressions = true
 
 # Pattern matching preferences
 csharp_style_pattern_matching_over_is_with_cast_check = true:warning

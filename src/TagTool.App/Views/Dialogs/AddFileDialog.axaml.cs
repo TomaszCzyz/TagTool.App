@@ -38,12 +38,7 @@ public partial class TagFileDialog : Window
         SelectFileTextBox.Text = filePath.LocalPath;
     }
 
-    private IStorageProvider GetStorageProvider()
-    {
-        var visualRoot = VisualRoot as TopLevel ?? throw new ArgumentException("Invalid Owner");
-
-        return visualRoot.StorageProvider;
-    }
+    private IStorageProvider GetStorageProvider() => ((TopLevel)VisualRoot!).StorageProvider;
 
     private void InitializeComponent()
     {
@@ -57,8 +52,7 @@ public partial class TagFileDialog : Window
 
     private void TagButton_OnClick(object? sender, RoutedEventArgs e)
     {
-        var simpleTagsBarViewModel = TagsToApplySimpleTagsBar.DataContext as SimpleTagsBarViewModel
-                                     ?? throw new InvalidCastException("Expected different DataContext");
+        var simpleTagsBarViewModel = (SimpleTagsBarViewModel)TagsToApplySimpleTagsBar.DataContext!;
 
         Close((SelectFileTextBox.Text, simpleTagsBarViewModel.Tags));
     }

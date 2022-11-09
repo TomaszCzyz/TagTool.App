@@ -1,5 +1,4 @@
-﻿using Avalonia;
-using Avalonia.Controls;
+﻿using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Layout;
@@ -64,14 +63,8 @@ public partial class AdvancedTaggingDialog : Window
         if (!PreviewToggleButton.IsChecked ?? false) return;
         if (TreeView.SelectedItems is not { Count: 1 } selectedItems) return;
 
-        var selectedNode = selectedItems[0] as AdvancedTaggingDialogViewModel.Node
-                           ?? throw new InvalidCastException(
-                               $"Expected item to be {nameof(AdvancedTaggingDialogViewModel.Node)}, got {selectedItems[0]!.GetType()}");
-
-        var previewerViewModel = FilePreviewer?.DataContext as FilePreviewerViewModel
-                                 ?? throw new InvalidCastException(
-                                     $"Expected FilePreviewer DataContext to be {nameof(FilePreviewerViewModel)}," +
-                                     $" got {FilePreviewer?.DataContext?.GetType()}");
+        var selectedNode = (AdvancedTaggingDialogViewModel.Node)selectedItems[0]!;
+        var previewerViewModel = (FilePreviewerViewModel)FilePreviewer?.DataContext!;
 
         previewerViewModel.CurrentFilePath = selectedNode.Item.FullName;
     }
@@ -105,10 +98,5 @@ public partial class AdvancedTaggingDialog : Window
         }
     }
 
-    private IStorageProvider GetStorageProvider()
-    {
-        var visualRoot = VisualRoot as TopLevel ?? throw new ArgumentException("Invalid Owner");
-
-        return visualRoot.StorageProvider;
-    }
+    private IStorageProvider GetStorageProvider() => ((TopLevel)VisualRoot!).StorageProvider;
 }

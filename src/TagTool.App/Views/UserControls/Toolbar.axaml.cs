@@ -18,7 +18,7 @@ public partial class Toolbar : UserControl
         InitializeComponent();
     }
 
-    private Window GetWindow() => VisualRoot as Window ?? throw new AggregateException("Invalid Owner");
+    private Window GetWindow() => (Window)VisualRoot!;
 
     private void InitializeComponent()
     {

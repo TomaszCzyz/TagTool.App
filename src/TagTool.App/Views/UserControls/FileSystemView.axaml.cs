@@ -28,11 +28,11 @@ public partial class FileSystemView : UserControl
 
     private void Border_OnPointerPressed(object? sender, PointerPressedEventArgs e)
     {
-        if (sender is not Border { DataContext: FileSystemViewModel fileSystem } border) return;
+        var border = (Border)sender!;
 
         if (e.GetCurrentPoint(border).Properties.PointerUpdateKind != PointerUpdateKind.LeftButtonPressed) return;
 
-        fileSystem.IsEditing = true;
+        _vm.IsEditing = true;
         AddressTextBox?.Focus();
         AddressTextBox?.SelectAll();
     }

@@ -216,7 +216,7 @@ public partial class AdvancedTaggingDialogViewModel : ViewModelBase, IDisposable
         {
             if (ReferenceEquals(null, obj)) return false;
             if (ReferenceEquals(this, obj)) return true;
-            return obj.GetType() == GetType() && Equals((Node) obj);
+            return obj.GetType() == GetType() && Equals((Node)obj);
         }
 
         public override int GetHashCode() => Item.GetHashCode();
