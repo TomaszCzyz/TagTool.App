@@ -6,6 +6,7 @@
     xmlns:userControls="clr-namespace:TagTool.App.ViewModels.UserControls"
     xmlns:converters="clr-namespace:TagTool.App.Converters"
     xmlns:models="clr-namespace:TagTool.App.Core.Models;assembly=TagTool.App.Core"
+    xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
     mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
     x:Name="Root"
     x:Class="TagTool.App.Views.UserControls.FileSystemView"
@@ -14,6 +15,7 @@
     <UserControl.Resources>
         <converters:FileSizeToStringConverter x:Key="FileSizeToStringConverter" />
         <converters:IconToBitmapConverter x:Key="IconToBitmapConverter" />
+        <converters:ArraySizeToBrushConverter x:Key="ArraySizeToBrushConverter" />
         <models:FileSystemEntryComparer x:Key="FileSystemEntryComparer" />
     </UserControl.Resources>
 
@@ -152,10 +154,11 @@
             CanUserSortColumns="True"
             SelectedItem="{Binding SelectedItem}"
             Items="{Binding Items}"
+            LostFocus="DataGrid_OnLostFocus"
+            KeyDown="DataGrid_OnKeyDown"
             SelectionChanged="DataGrid_OnSelectionChanged">
             <DataGrid.KeyBindings>
                 <KeyBinding Gesture="Enter" Command="{CompiledBinding NavigateCommand}" />
-                <KeyBinding Gesture="Back" Command="{CompiledBinding NavigateUpCommand}" />
             </DataGrid.KeyBindings>
             <DataGrid.Columns>
                 <DataGridCheckBoxColumn Width="60" Header="✔" CanUserResize="False" />
@@ -165,7 +168,6 @@
                     CanUserSort="True"
                     Width="*"
                     CustomSortComparer="{StaticResource FileSystemEntryComparer}">
-
                     <DataTemplate DataType="models:FileSystemEntry">
                         <Grid
                             Name="GridFileEntryName"
@@ -177,12 +179,12 @@
                                 Margin="0 0 2 0"
                                 Source="{Binding FullName, Converter={StaticResource IconToBitmapConverter}, ConverterParameter=25}" />
 
-                            <TextBlock
+                            <RichTextBlock
                                 Grid.Column="1"
                                 VerticalAlignment="Center"
                                 HorizontalAlignment="Stretch"
-                                Text="{Binding Name}">
-                                <TextBlock.ContextFlyout>
+                                Inlines="{Binding Inlines}">
+                                <RichTextBlock.ContextFlyout>
                                     <MenuFlyout>
                                         <MenuItem Header="Tag it" />
                                         <Separator />
@@ -191,8 +193,8 @@
                                         <MenuItem Header="Rename" />
                                         <MenuItem Header="Copy" />
                                     </MenuFlyout>
-                                </TextBlock.ContextFlyout>
-                            </TextBlock>
+                                </RichTextBlock.ContextFlyout>
+                            </RichTextBlock>
 
                             <Popup Grid.Column="0" Grid.ColumnSpan="2" />
 
@@ -217,6 +219,34 @@
                 </DataGridTemplateColumn>
             </DataGrid.Columns>
         </DataGrid>
+
+        <!-- search text helper -->
+
+        <Border
+            Grid.Row="1"
+            Name="QuickSearchBorder"
+            Opacity="0.7"
+            Background="Orange"
+            HorizontalAlignment="Left"
+            VerticalAlignment="Top"
+            CornerRadius="4"
+            IsVisible="{Binding QuickSearchText, Converter={x:Static StringConverters.IsNotNullOrEmpty}}">
+
+            <DockPanel>
+                <avalonia:MaterialIcon
+                    DockPanel.Dock="Left"
+                    Kind="Search"
+                    Margin="4 0 0 0" />
+
+                <TextBlock
+                    Name="QuickSearchTextBlock"
+                    Padding="4"
+                    Text="{Binding QuickSearchText, Mode=TwoWay}" 
+                    Foreground="{Binding Brush}"/>
+
+            </DockPanel>
+        </Border>
+
 
         <StackPanel Grid.Row="2" Orientation="Horizontal">
             <TextBlock

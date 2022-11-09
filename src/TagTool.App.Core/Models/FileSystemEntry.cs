@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using Avalonia.Controls.Documents;
 
 namespace TagTool.App.Core.Models;
 
@@ -9,6 +10,7 @@ public class FileSystemEntry
     public FileSystemEntry(FileSystemInfo info)
     {
         _info = info;
+        Inlines = new InlineCollection { new Run { Text = _info.Name } };
         IsDir = info is DirectoryInfo;
         IsFile = info is FileInfo;
     }
@@ -18,6 +20,8 @@ public class FileSystemEntry
     public bool IsFile { get; }
 
     public string Name => _info.Name;
+
+    public InlineCollection Inlines { get; }
 
     public string FullName => _info.FullName;
 
@@ -82,6 +86,6 @@ public class FileSystemInfoComparer : IComparer<FileSystemInfo>
 
         return string.Compare(x.FullName, y.FullName, StringComparison.Ordinal);
     }
-    
+
     public static IComparer<FileSystemInfo> Comparer { get; } = new FileSystemInfoComparer();
 }

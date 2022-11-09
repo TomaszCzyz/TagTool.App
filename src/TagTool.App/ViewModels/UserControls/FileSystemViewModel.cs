@@ -1,6 +1,9 @@
 ﻿using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
+using Avalonia.Controls.Documents;
+using Avalonia.Media;
+using Avalonia.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using DynamicData;
@@ -31,6 +34,12 @@ public partial class FileSystemViewModel : ViewModelBase
     [ObservableProperty]
     private FileSystemEntry? _selectedItem;
 
+    [ObservableProperty]
+    private bool _isQuickSearching;
+
+    [ObservableProperty]
+    private string _quickSearchText = "";
+
     public bool CanNavigateBack => _navigationHistoryBack.Count > 0;
 
     public bool CanNavigateForward => _navigationHistoryForward.Count > 0;
@@ -38,6 +47,97 @@ public partial class FileSystemViewModel : ViewModelBase
     public FileSystemViewModel()
     {
         CurrentFolder = new DirectoryInfo(@"C:\Users\tczyz\MyFiles");
+
+        Task.Run(async () =>
+        {
+            await Task.Delay(1000);
+            return QuickSearchText = "tion";
+        });
+
+        Task.Run(async () =>
+        {
+            await Task.Delay(2000);
+            return QuickSearchText = "tions";
+        });
+
+        Task.Run(async () =>
+        {
+            await Task.Delay(3000);
+            return QuickSearchText = "tionss";
+        });
+    }
+
+    private readonly List<int> _highlightedItemsIndexes = new();
+
+    partial void OnQuickSearchTextChanged(string? value)
+    {
+        _selectedHighlightedMatchIndex = null;
+        // todo: add cancellation support in case of large folders
+        if (value is null) return;
+
+        Dispatcher.UIThread.Post(() =>
+        {
+            for (var i = 0; i < Items.Count; i++)
+            {
+                var fileSystemEntry = Items[i];
+                var name = fileSystemEntry.Name;
+                var index = name.IndexOf(value, StringComparison.OrdinalIgnoreCase);
+
+                if (index <= 0)
+                {
+                    if (_highlightedItemsIndexes.Contains(i))
+                    {
+                        fileSystemEntry.Inlines.Clear();
+                        fileSystemEntry.Inlines.Add(new Run { Text = fileSystemEntry.Name });
+
+                        _highlightedItemsIndexes.Remove(i);
+                    }
+
+                    continue;
+                }
+
+                _highlightedItemsIndexes.Add(i);
+
+                var runs = CreateHighlightedInline(index, index + value.Length, name);
+
+                fileSystemEntry.Inlines.Clear();
+                fileSystemEntry.Inlines.AddRange(runs);
+            }
+        });
+    }
+
+    private static IEnumerable<Run> CreateHighlightedInline(int begin, int end, string name)
+    {
+        var solidColorBrush = new SolidColorBrush(Color.FromRgb(177, 127, 55), 0.6);
+
+        yield return new Run { Text = name[..begin] };
+        yield return new Run { Text = name[begin..end], FontWeight = FontWeight.Bold, Background = solidColorBrush };
+        yield return new Run { Text = name[end..] };
+    }
+
+    private int? _selectedHighlightedMatchIndex;
+
+    [RelayCommand]
+    private void GoToNextMatchedItem()
+    {
+        GoToMatchedItem(1);
+    }
+
+    [RelayCommand]
+    private void GoToPreviousMatchedItem()
+    {
+        GoToMatchedItem(-1);
+    }
+
+    private void GoToMatchedItem(int step)
+    {
+        if (_highlightedItemsIndexes.Count == 0) return;
+
+        _selectedHighlightedMatchIndex = _selectedHighlightedMatchIndex is null
+            ? _highlightedItemsIndexes[0]
+            : (_selectedHighlightedMatchIndex + step) % _highlightedItemsIndexes.Count;
+
+        SelectedItem = Items[_selectedHighlightedMatchIndex.Value];
     }
 
     [RelayCommand]
@@ -154,6 +254,7 @@ public partial class FileSystemViewModel : ViewModelBase
 
     partial void OnCurrentFolderChanged(DirectoryInfo value)
     {
+        QuickSearchText = "";
         AddressTextBox = CurrentFolder.FullName;
 
         Items.Clear();
