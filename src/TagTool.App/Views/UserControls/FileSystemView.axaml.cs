@@ -27,9 +27,7 @@ public partial class FileSystemView : UserControl
 
     private void AddressTextBox_OnLostFocus(object? sender, RoutedEventArgs e)
     {
-        if (sender is not TextBox { DataContext: FileSystemViewModel fileSystem }) return;
-
-        fileSystem.CancelAddressChangeCommand.Execute(e);
+        _vm.CancelAddressChangeCommand.Execute(e);
     }
 
     private void Border_OnPointerPressed(object? sender, PointerPressedEventArgs e)
