@@ -40,6 +40,9 @@ public partial class FileSystemViewModel : ViewModelBase
     [ObservableProperty]
     private string _quickSearchText = "";
 
+    [ObservableProperty]
+    private bool _hasQuickSearchResults;
+
     public bool CanNavigateBack => _navigationHistoryBack.Count > 0;
 
     public bool CanNavigateForward => _navigationHistoryForward.Count > 0;
@@ -63,50 +66,61 @@ public partial class FileSystemViewModel : ViewModelBase
         Task.Run(async () =>
         {
             await Task.Delay(3000);
-            return QuickSearchText = "tionss";
+            return QuickSearchText = "tionsd";
         });
     }
 
-    private readonly List<int> _highlightedItemsIndexes = new();
+    private readonly SortedSet<int> _highlightedItemsIndexes = new();
 
-    partial void OnQuickSearchTextChanged(string? value)
+    partial void OnQuickSearchTextChanged(string value)
     {
-        _selectedHighlightedMatchIndex = null;
         // todo: add cancellation support in case of large folders
-        if (value is null) return;
-
         Dispatcher.UIThread.Post(() =>
         {
-            for (var i = 0; i < Items.Count; i++)
-            {
-                var fileSystemEntry = Items[i];
-                var name = fileSystemEntry.Name;
-                var index = name.IndexOf(value, StringComparison.OrdinalIgnoreCase);
-
-                if (index <= 0)
-                {
-                    if (_highlightedItemsIndexes.Contains(i))
-                    {
-                        fileSystemEntry.Inlines.Clear();
-                        fileSystemEntry.Inlines.Add(new Run { Text = fileSystemEntry.Name });
-
-                        _highlightedItemsIndexes.Remove(i);
-                    }
-
-                    continue;
-                }
-
-                _highlightedItemsIndexes.Add(i);
-
-                var runs = CreateHighlightedInline(index, index + value.Length, name);
-
-                fileSystemEntry.Inlines.Clear();
-                fileSystemEntry.Inlines.AddRange(runs);
-            }
+            OnQuickSearchTextChangedInner(value);
         });
     }
 
-    private static IEnumerable<Run> CreateHighlightedInline(int begin, int end, string name)
+    private void OnQuickSearchTextChangedInner(string value)
+    {
+        for (var i = 0; i < Items.Count; i++)
+        {
+            var entry = Items[i];
+            var index = entry.Name.IndexOf(value, StringComparison.CurrentCultureIgnoreCase);
+
+            if (index < 0)
+            {
+                if (_highlightedItemsIndexes.Contains(i))
+                {
+                    // reset previous highlighting 
+                    entry.Inlines.Clear();
+                    entry.Inlines.Add(new Run { Text = entry.Name });
+                    _highlightedItemsIndexes.Remove(i);
+                }
+
+                continue;
+            }
+
+            entry.Inlines.Clear();
+            entry.Inlines.AddRange(CreateHighlightedText(index, index + value.Length, entry.Name));
+            _highlightedItemsIndexes.Add(i);
+        }
+
+        UpdateResults();
+    }
+
+    private void UpdateResults()
+    {
+        HasQuickSearchResults = _highlightedItemsIndexes.Count != 0;
+
+        if (SelectedItem is null) return;
+
+        var currentIndex = Items.IndexOf(SelectedItem);
+        var newIndex = _highlightedItemsIndexes.FirstOrDefault(i => i >= currentIndex, 0);
+        SelectedItem = Items[newIndex];
+    }
+
+    private static IEnumerable<Run> CreateHighlightedText(int begin, int end, string name)
     {
         var solidColorBrush = new SolidColorBrush(Color.FromRgb(177, 127, 55), 0.6);
 
@@ -115,29 +129,28 @@ public partial class FileSystemViewModel : ViewModelBase
         yield return new Run { Text = name[end..] };
     }
 
-    private int? _selectedHighlightedMatchIndex;
-
     [RelayCommand]
     private void GoToNextMatchedItem()
     {
-        GoToMatchedItem(1);
+        GoToMatchedItem();
     }
 
     [RelayCommand]
     private void GoToPreviousMatchedItem()
     {
-        GoToMatchedItem(-1);
+        GoToMatchedItem(true);
     }
 
-    private void GoToMatchedItem(int step)
+    private void GoToMatchedItem(bool backwards = false)
     {
-        if (_highlightedItemsIndexes.Count == 0) return;
-
-        _selectedHighlightedMatchIndex = _selectedHighlightedMatchIndex is null
-            ? _highlightedItemsIndexes[0]
-            : (_selectedHighlightedMatchIndex + step) % _highlightedItemsIndexes.Count;
-
-        SelectedItem = Items[_selectedHighlightedMatchIndex.Value];
+        // if (_highlightedItemsIndexes.Count == 0) return;
+        //
+        // var currentlySelectedIndex = SelectedItem is not null ? Items.IndexOf(SelectedItem) : 0;
+        //
+        // var sortedIndexes = _highlightedItemsIndexes.ToList();
+        // var newIndex = sortedIndexes.BinarySearch(currentlySelectedIndex);
+        //
+        // SelectedItem = Items[sortedIndexes[newIndex < 0 ? -newIndex : newIndex]];
     }
 
     [RelayCommand]

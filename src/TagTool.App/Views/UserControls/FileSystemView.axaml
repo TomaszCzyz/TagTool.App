@@ -15,7 +15,7 @@
     <UserControl.Resources>
         <converters:FileSizeToStringConverter x:Key="FileSizeToStringConverter" />
         <converters:IconToBitmapConverter x:Key="IconToBitmapConverter" />
-        <converters:ArraySizeToBrushConverter x:Key="ArraySizeToBrushConverter" />
+        <converters:BoolToBrushConverter x:Key="BoolToBrushConverter" />
         <models:FileSystemEntryComparer x:Key="FileSystemEntryComparer" />
     </UserControl.Resources>
 
@@ -155,7 +155,6 @@
             SelectedItem="{Binding SelectedItem}"
             Items="{Binding Items}"
             LostFocus="DataGrid_OnLostFocus"
-            KeyDown="DataGrid_OnKeyDown"
             SelectionChanged="DataGrid_OnSelectionChanged">
             <DataGrid.KeyBindings>
                 <KeyBinding Gesture="Enter" Command="{CompiledBinding NavigateCommand}" />
@@ -241,8 +240,8 @@
                 <TextBlock
                     Name="QuickSearchTextBlock"
                     Padding="4"
-                    Text="{Binding QuickSearchText, Mode=TwoWay}" 
-                    Foreground="{Binding Brush}"/>
+                    Text="{Binding QuickSearchText, Mode=TwoWay}"
+                    Foreground="{Binding HasQuickSearchResults, Mode=OneWay,  Converter={StaticResource BoolToBrushConverter}}" />
 
             </DockPanel>
         </Border>

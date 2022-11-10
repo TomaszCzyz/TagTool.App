@@ -52,7 +52,6 @@ public class App : Application
         var configuration = CreateConfiguration();
 
         services.AddSingleton(configuration);
-        services.AddSingleton(Log.Logger);
         services.AddSingleton<IFileIconProvider, DefaultFileIconProvider>();
         services.AddSingleton<ITagToolBackendConnectionFactory, GrpcChannelFactory>();
         services.AddSingleton<ITagToolBackend, TagToolBackend>();

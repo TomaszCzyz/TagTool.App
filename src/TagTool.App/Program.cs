@@ -1,4 +1,5 @@
-﻿using Avalonia;
+﻿using System.Globalization;
+using Avalonia;
 using Avalonia.Svg.Skia;
 using Serilog;
 using Serilog.Core.Enrichers;

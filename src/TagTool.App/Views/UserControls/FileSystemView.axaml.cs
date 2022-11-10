@@ -18,6 +18,11 @@ public partial class FileSystemView : UserControl
     {
         DataContext = _vm;
         InitializeComponent();
+
+        DataGrid.AddHandler(
+            KeyDownEvent,
+            DataGrid_OnKeyDown, //todo: split this logic to two handlers (one for quick search scenario, one for navigation scenario)
+            handledEventsToo: true);
     }
 
     private void AddressTextBox_OnLostFocus(object? sender, RoutedEventArgs e)
@@ -57,15 +62,20 @@ public partial class FileSystemView : UserControl
 
     private void DataGrid_OnKeyDown(object? sender, KeyEventArgs e)
     {
-        if (string.IsNullOrEmpty(_vm.QuickSearchText) && e.Key == Key.Back)
-        {
-            _vm.NavigateUpCommand.Execute(null);
-            return;
-        }
-
         if (KeyHelpers.IsDigitOrLetter(e.Key))
         {
             _vm.QuickSearchText += e.Key.ToString().ToLower(CultureInfo.CurrentCulture);
+            return;
+        }
+
+        if (string.IsNullOrEmpty(_vm.QuickSearchText))
+        {
+            if (e.Key == Key.Back)
+            {
+                _vm.NavigateUpCommand.Execute(null);
+            }
+
+            return;
         }
 
         switch (e.Key)
