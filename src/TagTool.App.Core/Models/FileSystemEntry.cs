@@ -1,8 +1,10 @@
 ﻿using System.Collections;
+using System.Diagnostics;
 using Avalonia.Controls.Documents;
 
 namespace TagTool.App.Core.Models;
 
+[DebuggerDisplay("{Name}")]
 public class FileSystemEntry
 {
     private readonly FileSystemInfo _info;

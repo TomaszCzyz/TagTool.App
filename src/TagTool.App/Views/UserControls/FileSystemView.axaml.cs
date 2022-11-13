@@ -68,10 +68,10 @@ public partial class FileSystemView : UserControl
 
         if (string.IsNullOrEmpty(_vm.QuickSearchText))
         {
-            if (e.Key == Key.Back)
-            {
-                _vm.NavigateUpCommand.Execute(null);
-            }
+            if (e.Key != Key.Back) return;
+
+            _vm.NavigateUpCommand.Execute(null);
+            e.Handled = true;
 
             return;
         }
@@ -82,10 +82,18 @@ public partial class FileSystemView : UserControl
                 _vm.QuickSearchText = _vm.QuickSearchText[..^1];
                 break;
             case Key.Down:
-                _vm.GoToNextMatchedItemCommand.Execute(null);
+                if (_vm.GoToNextMatchedItemCommand.CanExecute(null))
+                {
+                    _vm.GoToNextMatchedItemCommand.Execute(null);
+                }
+
                 break;
             case Key.Up:
-                _vm.GoToPreviousMatchedItemCommand.Execute(null);
+                if (_vm.GoToPreviousMatchedItemCommand.CanExecute(null))
+                {
+                    _vm.GoToPreviousMatchedItemCommand.Execute(null);
+                }
+
                 break;
         }
     }

@@ -47,33 +47,27 @@ public partial class FileSystemViewModel : ViewModelBase
 
     public bool CanNavigateForward => _navigationHistoryForward.Count > 0;
 
+    private readonly List<FileSystemEntry> _highlightedItems = new();
+
+    /// <summary>
+    ///     Because DataGrid handles KeyDownEvent first, it is inconvenient to use SelectedItem property,
+    ///     as it points to the next item, when quick search navigation is performed.
+    ///     Also, the SelectedItem is not updated if event occurs on the last item.
+    /// </summary>
+    private FileSystemEntry? _quickSearchSelectedItem;
+
     public FileSystemViewModel()
     {
         CurrentFolder = new DirectoryInfo(@"C:\Users\tczyz\MyFiles");
-
-        Task.Run(async () =>
-        {
-            await Task.Delay(1000);
-            return QuickSearchText = "tion";
-        });
-
-        Task.Run(async () =>
-        {
-            await Task.Delay(2000);
-            return QuickSearchText = "tions";
-        });
-
-        Task.Run(async () =>
-        {
-            await Task.Delay(3000);
-            return QuickSearchText = "tionsd";
-        });
     }
-
-    private readonly SortedSet<int> _highlightedItemsIndexes = new();
 
     partial void OnQuickSearchTextChanged(string value)
     {
+        if (value == "")
+        {
+            _highlightedItems.Clear();
+        }
+
         // todo: add cancellation support in case of large folders
         Dispatcher.UIThread.Post(() =>
         {
@@ -83,19 +77,19 @@ public partial class FileSystemViewModel : ViewModelBase
 
     private void OnQuickSearchTextChangedInner(string value)
     {
-        for (var i = 0; i < Items.Count; i++)
+        foreach (var entry in Items)
         {
-            var entry = Items[i];
             var index = entry.Name.IndexOf(value, StringComparison.CurrentCultureIgnoreCase);
 
             if (index < 0)
             {
-                if (_highlightedItemsIndexes.Contains(i))
+                if (_highlightedItems.Contains(entry))
                 {
                     // reset previous highlighting 
                     entry.Inlines.Clear();
                     entry.Inlines.Add(new Run { Text = entry.Name });
-                    _highlightedItemsIndexes.Remove(i);
+
+                    _highlightedItems.Remove(entry);
                 }
 
                 continue;
@@ -103,21 +97,12 @@ public partial class FileSystemViewModel : ViewModelBase
 
             entry.Inlines.Clear();
             entry.Inlines.AddRange(CreateHighlightedText(index, index + value.Length, entry.Name));
-            _highlightedItemsIndexes.Add(i);
+
+            if (_highlightedItems.Contains(entry)) continue;
+            _highlightedItems.Add(entry);
         }
 
         UpdateResults();
-    }
-
-    private void UpdateResults()
-    {
-        HasQuickSearchResults = _highlightedItemsIndexes.Count != 0;
-
-        if (SelectedItem is null) return;
-
-        var currentIndex = Items.IndexOf(SelectedItem);
-        var newIndex = _highlightedItemsIndexes.FirstOrDefault(i => i >= currentIndex, 0);
-        SelectedItem = Items[newIndex];
     }
 
     private static IEnumerable<Run> CreateHighlightedText(int begin, int end, string name)
@@ -129,28 +114,66 @@ public partial class FileSystemViewModel : ViewModelBase
         yield return new Run { Text = name[end..] };
     }
 
-    [RelayCommand]
+    private void UpdateResults()
+    {
+        HasQuickSearchResults = _highlightedItems.Count != 0;
+
+        if (!HasQuickSearchResults) return;
+
+        FocusNextHighlightItem();
+
+        void FocusNextHighlightItem()
+        {
+            foreach (var highlightedItem in _highlightedItems)
+            {
+                var index = Items.IndexOf(highlightedItem);
+                var selectedItemIndex = SelectedItem is not null ? Items.IndexOf(SelectedItem) : 0;
+
+                if (index >= selectedItemIndex)
+                {
+                    _quickSearchSelectedItem = SelectedItem = highlightedItem;
+                    return;
+                }
+            }
+
+            _quickSearchSelectedItem = SelectedItem = _highlightedItems[0];
+        }
+    }
+
+    [RelayCommand(CanExecute = nameof(HasQuickSearchResults))]
     private void GoToNextMatchedItem()
     {
-        GoToMatchedItem();
+        var currentIndex = Items.IndexOf(_quickSearchSelectedItem!);
+
+        foreach (var highlightedItem in _highlightedItems)
+        {
+            if (Items.IndexOf(highlightedItem) <= currentIndex) continue;
+
+            SelectedItem = highlightedItem;
+            _quickSearchSelectedItem = SelectedItem;
+            return;
+        }
+
+        SelectedItem = _highlightedItems[0];
+        _quickSearchSelectedItem = SelectedItem;
     }
 
-    [RelayCommand]
+    [RelayCommand(CanExecute = nameof(HasQuickSearchResults))]
     private void GoToPreviousMatchedItem()
     {
-        GoToMatchedItem(true);
-    }
+        var currentIndex = Items.IndexOf(_quickSearchSelectedItem!);
 
-    private void GoToMatchedItem(bool backwards = false)
-    {
-        // if (_highlightedItemsIndexes.Count == 0) return;
-        //
-        // var currentlySelectedIndex = SelectedItem is not null ? Items.IndexOf(SelectedItem) : 0;
-        //
-        // var sortedIndexes = _highlightedItemsIndexes.ToList();
-        // var newIndex = sortedIndexes.BinarySearch(currentlySelectedIndex);
-        //
-        // SelectedItem = Items[sortedIndexes[newIndex < 0 ? -newIndex : newIndex]];
+        for (var index = _highlightedItems.Count - 1; index >= 0; index--)
+        {
+            var highlightedItem = _highlightedItems[index];
+
+            if (Items.IndexOf(highlightedItem) >= currentIndex) continue;
+
+            _quickSearchSelectedItem = SelectedItem = highlightedItem;
+            return;
+        }
+
+        _quickSearchSelectedItem = SelectedItem = _highlightedItems[^1];
     }
 
     [RelayCommand]
