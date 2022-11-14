@@ -16,13 +16,13 @@
 6. Events
 
 ```xaml
- <RichTextBlock
+ <SelectableTextBlock
     Grid.Column="0"
-    Name="RichTextBlock"
+    Name="SelectableTextBlock"
     Margin="4 1"
     IsTabStop="False"
     VerticalAlignment="Center"
     Inlines="{TemplateBinding Inlines}"
     Text="{TemplateBinding Text}"
-    PionterPressed="RichTextBlock_PointerPressed"/>
+    PionterPressed="SelectableTextBlock_PointerPressed"/>
 ```

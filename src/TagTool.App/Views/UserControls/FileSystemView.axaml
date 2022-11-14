@@ -178,12 +178,12 @@
                                 Margin="0 0 2 0"
                                 Source="{Binding FullName, Converter={StaticResource IconToBitmapConverter}, ConverterParameter=25}" />
 
-                            <RichTextBlock
+                            <SelectableTextBlock
                                 Grid.Column="1"
                                 VerticalAlignment="Center"
                                 HorizontalAlignment="Stretch"
                                 Inlines="{Binding Inlines}">
-                                <RichTextBlock.ContextFlyout>
+                                <SelectableTextBlock.ContextFlyout>
                                     <MenuFlyout>
                                         <MenuItem Header="Tag it" />
                                         <Separator />
@@ -192,8 +192,8 @@
                                         <MenuItem Header="Rename" />
                                         <MenuItem Header="Copy" />
                                     </MenuFlyout>
-                                </RichTextBlock.ContextFlyout>
-                            </RichTextBlock>
+                                </SelectableTextBlock.ContextFlyout>
+                            </SelectableTextBlock>
 
                             <Popup Grid.Column="0" Grid.ColumnSpan="2" />
 

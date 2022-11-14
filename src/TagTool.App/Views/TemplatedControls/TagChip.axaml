@@ -54,9 +54,9 @@
                         BorderBrush="{TemplateBinding BorderBrush}"
                         BorderThickness="{TemplateBinding BorderThickness}" />
 
-                    <RichTextBlock
+                    <SelectableTextBlock
                         Grid.Column="0"
-                        Name="PART_RichTextBlock"
+                        Name="PART_SelectableTextBlock"
                         VerticalAlignment="Center"
                         IsTabStop="False"
                         Margin="4 1"
@@ -92,7 +92,7 @@
         <Setter Property="FontSize" Value="14" />
         <Setter Property="CornerRadius" Value="3" />
 
-        <Style Selector="^ /template/ RichTextBlock#PART_RichTextBlock">
+        <Style Selector="^ /template/ SelectableTextBlock#PART_SelectableTextBlock">
             <Setter Property="Margin" Value="3 0" />
         </Style>
 
@@ -107,7 +107,7 @@
         <Setter Property="FontSize" Value="9" />
         <Setter Property="CornerRadius" Value="2" />
 
-        <Style Selector="^ /template/ RichTextBlock#PART_RichTextBlock">
+        <Style Selector="^ /template/ SelectableTextBlock#PART_SelectableTextBlock">
             <Setter Property="Margin" Value="2 1" />
         </Style>
 
@@ -124,24 +124,5 @@
         <Setter Property="Foreground" Value="#464646" />
         <Setter Property="Opacity" Value="0.8" />
     </Style>
-
-    <!-- <Style Selector="templatedControls|TagChip.test"> -->
-    <!--     <Setter Property="FontSize" Value="13" /> -->
-    <!--     <Setter Property="Background" Value="#5317d8" /> -->
-    <!--     <Setter Property="Margin" Value="4" /> -->
-    <!--     <Setter Property="Template"> -->
-    <!--         <ControlTemplate> -->
-    <!--             <RichTextBlock -->
-    <!--                 Inlines="{TemplateBinding Inlines}" -->
-    <!--                 Text="{TemplateBinding Text}" -->
-    <!--                 VerticalAlignment="Center" -->
-    <!--                 Margin="8 0 8 0"> -->
-    <!-- -->
-    <!--                 ~1~ <Span Inlines="{TemplateBinding Inlines}" /> @1@ -->
-    <!--                 <Run FontStyle="Italic" FontSize="20" Text="asdxcxcxcxcasd" /> -->
-    <!--             </RichTextBlock> -->
-    <!--         </ControlTemplate> -->
-    <!--     </Setter> -->
-    <!-- </Style> -->
 
 </Styles>
