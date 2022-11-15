@@ -20,7 +20,7 @@
 
   <ItemGroup>
     <Protobuf Include="Protos\TagSearchService.proto" GrpcServices="Client" />
-    <Protobuf Include="Protos\TagToolService.proto" GrpcServices="Client" />
+    <Protobuf Include="Protos\TagService.proto" GrpcServices="Client" />
   </ItemGroup>
 
 </Project>

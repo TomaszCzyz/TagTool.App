@@ -1,6 +1,7 @@
 ﻿using System.Collections.ObjectModel;
 using Avalonia.Controls.Documents;
 using Avalonia.Media;
+using Avalonia.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Grpc.Core;
@@ -16,9 +17,6 @@ public partial class TagSearchBoxViewModel : ViewModelBase, IDisposable
     private readonly TagSearchService.TagSearchServiceClient _tagSearchService;
 
     public ITagsContainer? TagsContainer { get; set; }
-
-    [ObservableProperty]
-    private string? _searchText;
 
     [ObservableProperty]
     private string? _text;
@@ -44,10 +42,9 @@ public partial class TagSearchBoxViewModel : ViewModelBase, IDisposable
     public TagSearchBoxViewModel(ITagToolBackend tagToolBackend)
     {
         _tagSearchService = tagToolBackend.GetSearchService();
-
-        TagsSearchResults.Add(new HighlightedMatch { MatchedText = "someMatch" });
         TagsSearchResults.Add(new HighlightedMatch { MatchedText = "NewTag" });
         TagsSearchResults.Add(new HighlightedMatch { MatchedText = "someOtherMatch" });
+        TagsSearchResults.Add(new HighlightedMatch { MatchedText = "someMatch" });
     }
 
     [RelayCommand]
@@ -56,7 +53,6 @@ public partial class TagSearchBoxViewModel : ViewModelBase, IDisposable
         if (SelectedItem is null) return;
 
         TagsContainer?.AddTag(new Tag(SelectedItem.MatchedText));
-        SearchText = "";
         Text = "";
     }
 
@@ -68,28 +64,31 @@ public partial class TagSearchBoxViewModel : ViewModelBase, IDisposable
 
     private CancellationTokenSource? _cts;
 
-    private async Task DoSearchRelay()
+    partial void OnTextChanged(string? value)
     {
-        await DoSearch(SearchText);
-    }
-
-    private async Task DoSearch(string? value)
-    {
-        _cts?.Cancel();
+        _cts?.Cancel(false);
         _cts?.Dispose();
         _cts = new CancellationTokenSource();
 
-        // TagsSearchResults.Clear(); // todo: it breaks without throttle
+        async void Action() => await DoSearch(value, _cts.Token);
+
+        Dispatcher.UIThread.InvokeAsync(Action, DispatcherPriority.MaxValue);
+    }
+
+    private async Task DoSearch(string? value, CancellationToken ct)
+    {
         if (string.IsNullOrEmpty(value)) return;
 
+        TagsSearchResults.Clear(); // todo: it breaks without throttle
+
         var matchTagsRequest = new MatchTagsRequest { PartialTagName = value, MaxReturn = 50 };
-        var callOptions = new CallOptions().WithCancellationToken(_cts.Token);
+        var callOptions = new CallOptions().WithCancellationToken(ct);
 
         using var streamingCall = _tagSearchService.MatchTags(matchTagsRequest, callOptions);
 
         try
         {
-            while (await streamingCall.ResponseStream.MoveNext(_cts.Token))
+            while (await streamingCall.ResponseStream.MoveNext(ct))
             {
                 var reply = streamingCall.ResponseStream.Current;
 
@@ -97,10 +96,7 @@ public partial class TagSearchBoxViewModel : ViewModelBase, IDisposable
                     .Select(match => new HighlightInfo(match.StartIndex, match.Length))
                     .ToArray();
 
-                var viewListItem = new HighlightedMatch
-                {
-                    MatchedText = reply.MatchedTagName, Score = reply.Score //Inlines = FindSpans(reply.MatchedTagName, highlightInfos)
-                };
+                var viewListItem = new HighlightedMatch { Score = reply.Score, Inlines = FindSpans(reply.MatchedTagName, highlightInfos) };
 
                 TagsSearchResults.Add(viewListItem);
             }
@@ -138,7 +134,9 @@ public partial class TagSearchBoxViewModel : ViewModelBase, IDisposable
                 FlushNotHighlighted();
 
                 var endIndex = index + highlightedPart.Length;
-                inlines.Add(new Run { Text = tagName[index..endIndex], Background = Brushes.DarkSeaGreen });
+
+                var solidColorBrush = new SolidColorBrush(Color.FromRgb(35, 85, 177), 0.6);
+                inlines.Add(new Run { Text = tagName[index..endIndex], FontWeight = FontWeight.Bold, Background = solidColorBrush });
 
                 index = endIndex;
                 lastIndex = index;

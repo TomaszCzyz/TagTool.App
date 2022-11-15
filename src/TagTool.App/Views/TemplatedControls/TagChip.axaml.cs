@@ -19,8 +19,8 @@ public sealed class TagChip : TemplatedControl
     public static readonly StyledProperty<InlineCollection?> InlinesProperty
         = AvaloniaProperty.Register<TagChip, InlineCollection?>(nameof(Inlines));
 
-    public static readonly StyledProperty<string> TextProperty
-        = AvaloniaProperty.Register<TagChip, string>(nameof(Text), "DefaultTagText");
+    public static readonly StyledProperty<string?> TextProperty
+        = AvaloniaProperty.Register<TagChip, string?>(nameof(Text), "DefaultTagText");
 
     /// <summary>
     /// Indicates if the delete button should be visible.
@@ -40,7 +40,7 @@ public sealed class TagChip : TemplatedControl
         set => SetValue(InlinesProperty, value);
     }
 
-    public string Text
+    public string? Text
     {
         get => GetValue(TextProperty);
         set => SetValue(TextProperty, value);

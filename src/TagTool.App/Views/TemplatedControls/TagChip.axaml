@@ -8,9 +8,15 @@
     <Design.PreviewWith>
         <StackPanel Margin="20">
             <StackPanel Orientation="Horizontal">
-                <templatedControls:TagChip />
-                <templatedControls:TagChip Classes="Medium" />
-                <templatedControls:TagChip Classes="Small" />
+                <templatedControls:TagChip>
+                    <templatedControls:TagChip.Inlines>
+                        <InlineCollection>
+                            <Run Text="qwe" Background="green" />
+                        </InlineCollection>
+                    </templatedControls:TagChip.Inlines>
+                </templatedControls:TagChip>
+                <!-- <templatedControls:TagChip Classes="Medium" /> -->
+                <!-- <templatedControls:TagChip Classes="Small" /> -->
             </StackPanel>
 
             <StackPanel Orientation="Horizontal">

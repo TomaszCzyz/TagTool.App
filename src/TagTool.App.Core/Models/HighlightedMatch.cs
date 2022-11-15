@@ -1,12 +1,14 @@
-﻿namespace TagTool.App.Core.Models;
+﻿using Avalonia.Controls.Documents;
+
+namespace TagTool.App.Core.Models;
 
 public record HighlightInfo(int StartIndex, int Length);
 
 public class HighlightedMatch
 {
-    public string? MatchedText { get; set; } = "default";
+    public string? MatchedText { get; init; } = "default";
 
-    // public InlineCollection? Inlines { get; set; }
+    public InlineCollection? Inlines { get; set; }
 
     public int Score { get; init; }
 
