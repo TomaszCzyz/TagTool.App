@@ -21,9 +21,8 @@
         <vm:MainWindowViewModel />
     </Design.DataContext>
 
-    <Grid RowDefinitions="Auto,Auto,*">
+    <Grid RowDefinitions="Auto,*">
         <userControls:MenuView />
-        <userControls:Toolbar Grid.Row="1" />
-        <userControls:MainPanel Grid.Row="2" />
+        <userControls:MainPanel Grid.Row="1" />
     </Grid>
 </Window>

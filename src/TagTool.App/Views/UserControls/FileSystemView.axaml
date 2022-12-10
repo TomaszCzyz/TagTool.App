@@ -7,7 +7,7 @@
     xmlns:converters="clr-namespace:TagTool.App.Converters"
     xmlns:models="clr-namespace:TagTool.App.Core.Models;assembly=TagTool.App.Core"
     xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
-    mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+    mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="900"
     x:Name="Root"
     x:Class="TagTool.App.Views.UserControls.FileSystemView"
     x:DataType="userControls:FileSystemViewModel">
@@ -147,7 +147,7 @@
         <DataGrid
             Grid.Row="1"
             Name="DataGrid"
-            FontFamily="avares://TagTool.App/Assets/Fonts#JetBrains"
+            FontFamily="avares://TagTool.App/Assets/Fonts#Lato"
             SelectionMode="Extended"
             CanUserResizeColumns="True"
             CanUserReorderColumns="True"
@@ -160,7 +160,7 @@
                 <KeyBinding Gesture="Enter" Command="{CompiledBinding NavigateCommand}" />
             </DataGrid.KeyBindings>
             <DataGrid.Columns>
-                <DataGridCheckBoxColumn Width="60" Header="✔" CanUserResize="False" />
+                <!-- <DataGridCheckBoxColumn Width="60" Header="✔" CanUserResize="False" /> -->
                 <DataGridTemplateColumn
                     Header="Name"
                     IsReadOnly="True"
@@ -178,22 +178,22 @@
                                 Margin="0 0 2 0"
                                 Source="{Binding FullName, Converter={StaticResource IconToBitmapConverter}, ConverterParameter=25}" />
 
-                            <SelectableTextBlock
+                            <TextBlock
                                 Grid.Column="1"
                                 VerticalAlignment="Center"
                                 HorizontalAlignment="Stretch"
                                 Inlines="{Binding Inlines}">
-                                <SelectableTextBlock.ContextFlyout>
+                                <TextBlock.ContextFlyout>
                                     <MenuFlyout>
-                                        <MenuItem Header="Tag it" />
+                                        <MenuItem Header="Tag it"/>
                                         <Separator />
                                         <MenuItem Header="Show in Explorer" />
                                         <Separator />
                                         <MenuItem Header="Rename" />
                                         <MenuItem Header="Copy" />
                                     </MenuFlyout>
-                                </SelectableTextBlock.ContextFlyout>
-                            </SelectableTextBlock>
+                                </TextBlock.ContextFlyout>
+                            </TextBlock>
 
                             <Popup Grid.Column="0" Grid.ColumnSpan="2" />
 

@@ -6,6 +6,8 @@
     xmlns:dialogs="clr-namespace:TagTool.App.ViewModels.Dialogs"
     xmlns:userControls="clr-namespace:TagTool.App.Views.UserControls"
     xmlns:converters="clr-namespace:TagTool.App.Converters"
+    xmlns:templatedControls="clr-namespace:TagTool.App.Views.TemplatedControls"
+    xmlns:models="clr-namespace:TagTool.App.Core.Models;assembly=TagTool.App.Core"
     mc:Ignorable="d" d:DesignWidth="600" d:DesignHeight="350"
     x:Class="TagTool.App.Views.Dialogs.TagFileDialog"
     Title="AddFileDialog"
@@ -94,7 +96,25 @@
             Grid.Column="2"
             Classes="Outline">
 
-            <userControls:SimpleTagsBar MaxHeight="150" />
+            <ListBox
+                Background="Transparent"
+                Items="{Binding ImplicitTags}">
+                <ListBox.Styles>
+                    <Style Selector="ListBoxItem">
+                        <Setter Property="Padding" Value="1 1 0 0" />
+                    </Style>
+                </ListBox.Styles>
+                <ListBox.ItemTemplate>
+                    <DataTemplate DataType="models:Tag">
+                        <templatedControls:TagChip Classes="Implicit" Text="{Binding Name}" />
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+                <ListBox.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <WrapPanel />
+                    </ItemsPanelTemplate>
+                </ListBox.ItemsPanel>
+            </ListBox>
         </Border>
 
         <!-- fourth row -->

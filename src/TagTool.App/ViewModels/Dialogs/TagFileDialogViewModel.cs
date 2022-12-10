@@ -1,9 +1,11 @@
-﻿using Avalonia.Data;
+﻿using System.Collections.ObjectModel;
+using Avalonia.Data;
 using Avalonia.Platform.Storage;
 using Avalonia.Platform.Storage.FileIO;
 using CommunityToolkit.Mvvm.ComponentModel;
 using JetBrains.Annotations;
 using Microsoft.Extensions.Options;
+using TagTool.App.Core.Models;
 using TagTool.App.Options;
 
 namespace TagTool.App.ViewModels.Dialogs;
@@ -14,6 +16,8 @@ public partial class TagFileDialogViewModel : ViewModelBase
 
     [ObservableProperty]
     private string _text = "";
+
+    public ObservableCollection<Tag> ImplicitTags { get; set; } = new(new Tag[] { new("Audio"), new("Text"), new("Date"), new("Zip") });
 
     public IStorageFolder? FilePickerSuggestedStartLocation
     {
