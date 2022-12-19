@@ -11,7 +11,9 @@
     Icon="/Assets/avalonia-logo.ico"
     Title="TagTool.App"
     TransparencyLevelHint="AcrylicBlur"
-    Background="Transparent">
+    ExtendClientAreaChromeHints="Default"
+    ExtendClientAreaToDecorationsHint="True"
+    ExtendClientAreaTitleBarHeightHint="-1">
     <Window.KeyBindings>
         <KeyBinding Gesture="Escape" Command="{Binding ResetFocusCommand}" CommandParameter="{Binding #RootWindow}" />
         <KeyBinding Gesture="Ctrl+Q" Command="{Binding FocusNextSearchTabCommand}" CommandParameter="{Binding #RootWindow}" />
@@ -22,7 +24,11 @@
     </Design.DataContext>
 
     <Grid RowDefinitions="Auto,*">
-        <userControls:MenuView />
+        <userControls:MenuView
+            PointerPressed="InputElement_OnPointerPressed"
+            PointerReleased="InputElement_OnPointerReleased"
+            PointerMoved="InputElement_OnPointerMoved" />
+
         <userControls:MainPanel Grid.Row="1" />
     </Grid>
 </Window>
