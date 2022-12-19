@@ -45,10 +45,8 @@
                 Grid.ColumnSpan="2"
                 Name="PART_BorderBackground"
                 CornerRadius="8"
-                Background="#6692B1"
                 BorderBrush="#6692B1"
-                BorderThickness="2"
-                Opacity="0.5" />
+                BorderThickness="2" />
 
             <avalonia:MaterialIcon
                 Grid.Column="0"
@@ -65,7 +63,7 @@
         <!-- SearchResults -->
         <DataGrid
             Grid.Row="2"
-            FontFamily="avares://TagTool.App/Assets/Fonts#JetBrains"
+            FontFamily="avares://TagTool.App/Assets/Fonts#Lato"
             CanUserResizeColumns="True"
             CanUserReorderColumns="True"
             RowBackground="Transparent"
@@ -87,7 +85,8 @@
                             </Style>
                         </StackPanel.Styles>
 
-                        <Rectangle Width="60" Height="0" Margin="0" Fill="Transparent" />
+                        <!-- rectangle below is used to align tags when checkbox column in enabled  -->
+                        <!-- <Rectangle Width="60" Height="0" Margin="0" Fill="Transparent" /> -->
                         <templatedControls:TagChip Classes="Medium" Text="Tag" />
                         <templatedControls:TagChip Classes="Medium" Text="Picture" />
                         <templatedControls:TagChip Classes="Medium" Text="Audio" />
@@ -99,7 +98,7 @@
                 </DataTemplate>
             </DataGrid.RowDetailsTemplate>
             <DataGrid.Columns>
-                <DataGridCheckBoxColumn Width="60" Header="✔" CanUserResize="False" />
+                <!-- <DataGridCheckBoxColumn Width="60" Header="✔" CanUserResize="False" /> -->
                 <DataGridTextColumn IsReadOnly="True" Header="Name" Width="*" Binding="{Binding Name}" />
                 <DataGridTextColumn IsReadOnly="True" Header="Date Modified" Binding="{Binding DateModified, StringFormat=\{0:yyyy/MM/dd hh:mm:ss\}}" />
                 <DataGridTemplateColumn IsReadOnly="True" Header="Size">
