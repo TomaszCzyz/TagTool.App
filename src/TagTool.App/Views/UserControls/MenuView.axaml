@@ -3,7 +3,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+    mc:Ignorable="d" d:DesignWidth="100" d:DesignHeight="75"
     x:Class="TagTool.App.Views.UserControls.MenuView">
 
     <UserControl.Styles>
@@ -20,37 +20,41 @@
         </Style>
     </UserControl.Styles>
 
-    <Menu>
-        <MenuItem Header="_File">
-            <MenuItem Header="_New" Command="{Binding FileNew}" />
-            <MenuItem Header="_Open..." Command="{Binding FileOpen}" />
-            <MenuItem Header="Save" Command="{Binding FileSave}" />
-            <MenuItem Header="Save _As..." Command="{Binding FileSaveAs}" />
-            <Separator />
-            <MenuItem Header="E_xit" Command="{Binding FileExit}" />
-        </MenuItem>
+    <Button Padding="3">
+        <Svg Path="/Assets/Svgs/menu_4_bars_dark.svg" Width="24" Height="24" />
 
-        <MenuItem Header="_Edit">
-            <MenuItem Header="_Undo" />
-            <Separator />
-            <MenuItem Header="Cu_t" />
-            <MenuItem Header="_Copy" />
-            <MenuItem Header="_Paste" />
-            <MenuItem Header="_Delete" />
-            <Separator />
-            <MenuItem Header="Select _All" />
-            <MenuItem Header="_Time/date" />
-        </MenuItem>
-        <MenuItem Header="_Format">
-            <MenuItem Header="_Wrap lines" />
-            <MenuItem Header="_Font..." />
-        </MenuItem>
-        <MenuItem Header="_View">
-            <MenuItem Header="_Status bar" />
-        </MenuItem>
-        <MenuItem Header="_Help">
-            <MenuItem Header="Get _Help" />
-            <MenuItem Header="Notepad - _About" />
-        </MenuItem>
-    </Menu>
+        <Button.Flyout>
+            <MenuFlyout Placement="BottomEdgeAlignedLeft">
+                <MenuItem Header="_File">
+                    <MenuItem Header="_New" Command="{Binding FileNew}" />
+                    <MenuItem Header="_Open..." Command="{Binding FileOpen}" />
+                    <MenuItem Header="Save" Command="{Binding FileSave}" />
+                    <MenuItem Header="Save _As..." Command="{Binding FileSaveAs}" />
+                    <MenuItem Header="Nested">
+                        <MenuItem Header="Nested" />
+                    </MenuItem>
+                </MenuItem>
+
+                <MenuItem Header="_Edit">
+                    <MenuItem Header="_Undo" />
+                    <Separator />
+                    <MenuItem Header="Cu_t" />
+                    <MenuItem Header="_Copy" />
+                    <MenuItem Header="_Paste" />
+                    <MenuItem Header="_Delete" />
+                </MenuItem>
+                <MenuItem Header="_Format">
+                    <MenuItem Header="_Wrap lines" />
+                    <MenuItem Header="_Font..." />
+                </MenuItem>
+                <MenuItem Header="_View">
+                    <MenuItem Header="_Status bar" />
+                </MenuItem>
+                <MenuItem Header="_Help">
+                    <MenuItem Header="Get _Help" />
+                    <MenuItem Header="_About" />
+                </MenuItem>
+            </MenuFlyout>
+        </Button.Flyout>
+    </Button>
 </UserControl>
