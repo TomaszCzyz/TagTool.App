@@ -15,7 +15,7 @@ public partial class MainWindow : Window
         InitializeComponent();
 #if DEBUG
         this.AttachDevTools();
-        Renderer.DrawFps = true;
+        Renderer.DrawFps = false;
 #endif
     }
 

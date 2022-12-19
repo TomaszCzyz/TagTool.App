@@ -20,16 +20,16 @@
         </Style>
     </UserControl.Styles>
 
-    <Button Padding="3">
-        <Svg Path="/Assets/Svgs/menu_4_bars_dark.svg" Width="24" Height="24" />
+    <Button Padding="5" Background="Transparent">
+        <Svg Path="/Assets/Svgs/menu_4_bars_dark.svg" Width="28" Height="28" />
 
         <Button.Flyout>
             <MenuFlyout Placement="BottomEdgeAlignedLeft">
                 <MenuItem Header="_File">
-                    <MenuItem Header="_New" Command="{Binding FileNew}" />
-                    <MenuItem Header="_Open..." Command="{Binding FileOpen}" />
-                    <MenuItem Header="Save" Command="{Binding FileSave}" />
-                    <MenuItem Header="Save _As..." Command="{Binding FileSaveAs}" />
+                    <MenuItem Header="_New" />
+                    <MenuItem Header="_Open..." />
+                    <MenuItem Header="Save" />
+                    <MenuItem Header="Save _As..." />
                     <MenuItem Header="Nested">
                         <MenuItem Header="Nested" />
                     </MenuItem>

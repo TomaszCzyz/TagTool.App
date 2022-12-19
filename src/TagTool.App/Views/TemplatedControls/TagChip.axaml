@@ -38,16 +38,15 @@
 
     <Style Selector="templatedControls|TagChip">
         <!-- <Setter Property="RenderTransform" Value="skewX(-14deg)" /> -->
-        <!-- <Setter Property="BorderBrush" Value="#4CAF50" /> -->
+        <Setter Property="BorderBrush" Value="#0097A7" />
         <Setter Property="Margin" Value="1" />
         <Setter Property="HorizontalAlignment" Value="Left" />
         <Setter Property="FontSize" Value="18" />
-        <Setter Property="FontFamily" Value="avares://TagTool.App/Assets/Fonts#JetBrains" />
+        <Setter Property="FontFamily" Value="avares://TagTool.App/Assets/Fonts#Lato" />
         <Setter Property="FontWeight" Value="Bold" />
-        <!-- <Setter Property="FontStretch" Value="Condensed" /> -->
-        <Setter Property="Foreground" Value="#00E5FF" />
-        <Setter Property="Background" Value="#0097A7" />
-        <Setter Property="BorderThickness" Value="0" />
+        <Setter Property="Foreground" Value="#007181" />
+        <!-- <Setter Property="Background" Value="#0097A7" /> -->
+        <Setter Property="BorderThickness" Value="1" />
         <Setter Property="CornerRadius" Value="4" />
         <Setter Property="Template">
             <ControlTemplate>
