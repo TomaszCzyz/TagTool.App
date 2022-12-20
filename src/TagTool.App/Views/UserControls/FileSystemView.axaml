@@ -189,7 +189,7 @@
                                 Inlines="{Binding Inlines}">
                                 <TextBlock.ContextFlyout>
                                     <MenuFlyout>
-                                        <MenuItem Header="Tag it"/>
+                                        <MenuItem Header="Tag it" />
                                         <Separator />
                                         <MenuItem Header="Show in Explorer" />
                                         <Separator />
