@@ -1,0 +1,180 @@
+﻿<UserControl
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:templatedControls="clr-namespace:TagTool.App.Views.TemplatedControls"
+    xmlns:userControls="clr-namespace:TagTool.App.ViewModels.UserControls"
+    xmlns:models="clr-namespace:TagTool.App.Core.Models;assembly=TagTool.App.Core"
+    xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+    mc:Ignorable="d" d:DesignWidth="550" d:DesignHeight="300"
+    x:Name="UserControlRoot"
+    x:Class="TagTool.App.Views.UserControls.MainSearchBar"
+    x:DataType="userControls:SimpleTagsBarViewModel">
+    <UserControl.Resources>
+        <SolidColorBrush Color="LightGray" Opacity="1" x:Key="PopupBackgroundBrush" />
+    </UserControl.Resources>
+    <UserControl.Styles>
+        <Style Selector="ListBox">
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="ItemsPanel">
+                <ItemsPanelTemplate>
+                    <WrapPanel />
+                </ItemsPanelTemplate>
+            </Setter>
+        </Style>
+        <Style Selector="ListBoxItem">
+            <Setter Property="Padding" Value="0" />
+            <Setter Property="MaxHeight" Value="30" />
+        </Style>
+    </UserControl.Styles>
+
+    <!-- <Design.DataContext> -->
+    <!--     <userControls:SimpleTagsBarViewModel /> -->
+    <!-- </Design.DataContext> -->
+
+    <Grid
+        Name="TopMostGrid"
+        ColumnDefinitions="Auto,*,Auto"
+        VerticalAlignment="Top"
+        RowDefinitions="Auto">
+
+        <Border
+            Name="SearchBarBorder"
+            Grid.ColumnSpan="3"
+            ClipToBounds="True"
+            CornerRadius="16"
+            BorderBrush="#6692B1"
+            BorderThickness="2" />
+
+        <avalonia:MaterialIcon
+            Grid.Column="0"
+            Kind="Magnify"
+            Margin="10 0 5 0"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Center"
+            Width="20"
+            Height="20" />
+
+        <ScrollViewer
+            Grid.Column="1"
+            VerticalScrollBarVisibility="Visible"
+            HorizontalAlignment="Stretch"
+            VerticalAlignment="Top">
+
+            <Panel>
+                <!-- entered tags box -->
+                <ListBox
+                    ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                    Name="TagsListBox"
+                    Margin="2"
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Center"
+                    Items="{Binding EnteredTags}">
+                    <ListBox.DataTemplates>
+                        <DataTemplate DataType="models:Tag">
+                            <templatedControls:TagChip
+                                Margin="4 2"
+                                Text="{Binding Name}"
+                                DeleteCommand="{Binding #UserControlRoot.DataContext.RemoveTagCommand, FallbackValue=null}"
+                                DeleteCommandParameter="{Binding .}" />
+
+                        </DataTemplate>
+                    </ListBox.DataTemplates>
+                </ListBox>
+            </Panel>
+        </ScrollViewer>
+
+        <Button
+            Grid.Column="2"
+            Background="Transparent"
+            Padding="0 5"
+            HorizontalAlignment="Right"
+            VerticalAlignment="Center"
+            Click="Button_OnClick"
+            >
+
+            <avalonia:MaterialIcon Kind="MoreVert" />
+        </Button>
+
+        <!-- Popup -->
+        <Popup
+            Name="SearchHelperPopup"
+            Grid.Column="0"
+            IsOpen="True"
+            IsLightDismissEnabled="True"
+            WindowManagerAddShadowHint="True"
+            PlacementTarget="{Binding #TopMostGrid}"
+            PlacementGravity="Bottom"
+            Width="{Binding #TopMostGrid.Bounds.Width}">
+
+            <Border
+                CornerRadius="16"
+                Padding="10"
+                ClipToBounds="True"
+                Background="{StaticResource PopupBackgroundBrush}">
+
+                <Grid RowDefinitions="Auto, Auto,*,*" ColumnDefinitions="*">
+                    <ListBox
+                        SelectionMode="Single"
+                        HorizontalAlignment="Left">
+                        <ListBox.DataTemplates>
+                            <DataTemplate DataType="x:String">
+                                <templatedControls:TagChip Text="{Binding .}" IsDeletable="False" />
+                            </DataTemplate>
+                        </ListBox.DataTemplates>
+                        <ListBoxItem>SomeTag</ListBoxItem>
+                        <ListBoxItem>Tag</ListBoxItem>
+                        <ListBoxItem>SomeTag</ListBoxItem>
+                        <ListBoxItem>Picture</ListBoxItem>
+                        <ListBoxItem>Tag</ListBoxItem>
+                        <ListBoxItem>Audio</ListBoxItem>
+                        <ListBoxItem>Tag</ListBoxItem>
+                        <ListBoxItem>Picture</ListBoxItem>
+                        <ListBoxItem>SearchTag</ListBoxItem>
+                        <ListBoxItem>Picture</ListBoxItem>
+                    </ListBox>
+
+                    <TextBlock
+                        Grid.Row="1"
+                        FontSize="12"
+                        Text="Most popular tags:"
+                        Margin="0 5 0 0" />
+
+                    <ListBox Grid.Row="2" SelectionMode="Single">
+                        <ListBox.DataTemplates>
+                            <DataTemplate DataType="x:String">
+                                <templatedControls:TagChip Text="{Binding .}" Classes="Medium" IsDeletable="False" />
+                            </DataTemplate>
+                        </ListBox.DataTemplates>
+                        <ListBoxItem>SomeTag</ListBoxItem>
+                        <ListBoxItem>Tag</ListBoxItem>
+                        <ListBoxItem>SomeTag</ListBoxItem>
+                        <ListBoxItem>Picture</ListBoxItem>
+                        <ListBoxItem>Tag</ListBoxItem>
+                        <ListBoxItem>Audio</ListBoxItem>
+                        <ListBoxItem>Tag</ListBoxItem>
+                        <ListBoxItem>Picture</ListBoxItem>
+                        <ListBoxItem>SearchTag</ListBoxItem>
+                        <ListBoxItem>Picture</ListBoxItem>
+                    </ListBox>
+
+                    <StackPanel
+                        Grid.Row="3"
+                        ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                        Orientation="Horizontal"
+                        Spacing="5"
+                        Margin="0 10 0 0">
+
+                        <RadioButton>
+                            <Label Content="Exclude" FontSize="12" Padding="0" />
+                        </RadioButton>
+                        <Button>
+                            <TextBlock Text="AddSpecialTag" />
+                        </Button>
+                    </StackPanel>
+                </Grid>
+            </Border>
+        </Popup>
+    </Grid>
+</UserControl>

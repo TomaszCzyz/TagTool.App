@@ -10,7 +10,6 @@
     x:Name="RootWindow"
     Icon="/Assets/avalonia-logo.ico"
     Title="TagTool.App"
-    TransparencyLevelHint="AcrylicBlur"
     ExtendClientAreaChromeHints="Default"
     ExtendClientAreaToDecorationsHint="True"
     ExtendClientAreaTitleBarHeightHint="-1">
@@ -49,13 +48,13 @@
                             </Setter>
                         </Style>
                     </StackPanel.Styles>
-                    <RadioButton Name="RadioButton1">
+                    <RadioButton Name="RadioButton1" ToolTip.Tip="Quick access to common tags" ToolTip.Placement="Right">
                         <Svg Path="/Assets/Svgs/Light/tags.svg" />
                     </RadioButton>
-                    <RadioButton Name="RadioButton2">
+                    <RadioButton Name="RadioButton2"  ToolTip.Tip="Ble ble" ToolTip.Placement="Right">
                         <Svg Path="/Assets/Svgs/Light/tags.svg" />
                     </RadioButton>
-                    <RadioButton Name="RadioButton3">
+                    <RadioButton Name="RadioButton3"  ToolTip.Tip="Another tool view" ToolTip.Placement="Right">
                         <Svg Path="/Assets/Svgs/Light/tags.svg" />
                     </RadioButton>
                 </StackPanel>
