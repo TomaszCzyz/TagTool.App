@@ -21,7 +21,7 @@
     </UserControl.Styles>
 
     <Button Padding="5" Background="Transparent">
-        <Svg Path="/Assets/Svgs/menu_4_bars_dark.svg" Width="28" Height="28" />
+        <Svg Path="/Assets/Svgs/Light/menu_4_bars.svg" Width="28" Height="28" />
 
         <Button.Flyout>
             <MenuFlyout Placement="BottomEdgeAlignedLeft">

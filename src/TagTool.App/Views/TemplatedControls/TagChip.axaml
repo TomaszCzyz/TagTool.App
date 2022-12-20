@@ -43,8 +43,9 @@
         <Setter Property="HorizontalAlignment" Value="Left" />
         <Setter Property="FontSize" Value="18" />
         <Setter Property="FontFamily" Value="avares://TagTool.App/Assets/Fonts#Lato" />
-        <Setter Property="FontWeight" Value="Bold" />
-        <Setter Property="Foreground" Value="#007181" />
+        <Setter Property="FontWeight" Value="Regular" />
+        <Setter Property="Foreground" Value="#464646" />
+        <!-- <Setter Property="Foreground" Value="#007181" /> -->
         <!-- <Setter Property="Background" Value="#0097A7" /> -->
         <Setter Property="BorderThickness" Value="1" />
         <Setter Property="CornerRadius" Value="4" />
