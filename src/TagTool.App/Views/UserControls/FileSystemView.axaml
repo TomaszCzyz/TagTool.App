@@ -35,10 +35,14 @@
         <Grid Grid.Row="0" ColumnDefinitions="Auto,Auto,Auto,*">
             <Grid.Styles>
                 <Style Selector="Button.NavigationButton">
-                    <Setter Property="Background" Value="#464646" />
+                    <Setter Property="Background" Value="Transparent" />
                     <Setter Property="Margin" Value="1 4" />
                     <Setter Property="Padding" Value="1" />
                     <Setter Property="CornerRadius" Value="6" />
+                    
+                    <Style Selector="^:disabled /template/ ContentPresenter#PART_ContentPresenter">
+                        <Setter Property="Background" Value="Transparent" />
+                    </Style>
                 </Style>
             </Grid.Styles>
             <Button
@@ -46,7 +50,7 @@
                 Classes="NavigationButton"
                 Command="{Binding NavigateBackCommand}">
 
-                <Svg Path="/Assets/Svgs/arrow_back_black_24dp.svg" />
+                <Svg Path="/Assets/Svgs/Light/arrow_back.svg" />
             </Button>
 
             <Button
@@ -54,7 +58,7 @@
                 Classes="NavigationButton"
                 Command="{Binding NavigateForwardCommand}">
 
-                <Svg Path="/Assets/Svgs/arrow_forward_black_24dp.svg" />
+                <Svg Path="/Assets/Svgs/Light/arrow_forward.svg" />
             </Button>
 
             <Button
@@ -62,7 +66,7 @@
                 Classes="NavigationButton"
                 Command="{Binding NavigateUpCommand}">
 
-                <Svg Path="/Assets/Svgs/arrow_upward_black_24dp.svg" />
+                <Svg Path="/Assets/Svgs/Light/arrow_upward.svg" />
             </Button>
 
             <TextBox

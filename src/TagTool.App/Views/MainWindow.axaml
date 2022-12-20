@@ -29,6 +29,68 @@
             PointerReleased="InputElement_OnPointerReleased"
             PointerMoved="InputElement_OnPointerMoved" />
 
-        <userControls:MainPanel Grid.Row="1" />
+        <Grid Grid.Row="1" ColumnDefinitions="Auto,*">
+            <!-- side panel -->
+            <Grid Grid.Column="0" Width="36">
+                <!-- from top -->
+                <StackPanel Orientation="Vertical">
+                    <StackPanel.Styles>
+                        <Style Selector="RadioButton">
+                            <Setter Property="Template">
+                                <ControlTemplate>
+                                    <ToggleButton
+                                        DataContext="{Binding $parent}"
+                                        Background="Transparent"
+                                        Padding="3"
+                                        Content="{Binding Content, RelativeSource={RelativeSource TemplatedParent}, Mode=TwoWay}"
+                                        IsChecked="{Binding IsChecked, RelativeSource={RelativeSource TemplatedParent}, Mode=TwoWay}" />
+
+                                </ControlTemplate>
+                            </Setter>
+                        </Style>
+                    </StackPanel.Styles>
+                    <RadioButton Name="RadioButton1">
+                        <Svg Path="/Assets/Svgs/Light/tags.svg" />
+                    </RadioButton>
+                    <RadioButton Name="RadioButton2">
+                        <Svg Path="/Assets/Svgs/Light/tags.svg" />
+                    </RadioButton>
+                    <RadioButton Name="RadioButton3">
+                        <Svg Path="/Assets/Svgs/Light/tags.svg" />
+                    </RadioButton>
+                </StackPanel>
+
+                <!-- from bottom -->
+                <StackPanel VerticalAlignment="Bottom">
+                    <Svg Path="/Assets/Svgs/Light/sun.svg" />
+                    <Svg Path="/Assets/Svgs/Light/moon.svg" />
+                </StackPanel>
+
+            </Grid>
+
+            <SplitView
+                Grid.Column="1"
+                DisplayMode="Inline"
+                OpenPaneLength="296">
+                <SplitView.IsPaneOpen>
+                    <MultiBinding Converter="{x:Static BoolConverters.Or}">
+                        <Binding Source="{ResolveByName RadioButton1}" Path="IsChecked"/>
+                        <Binding Source="{ResolveByName RadioButton2}" Path="IsChecked"/>
+                        <Binding Source="{ResolveByName RadioButton3}" Path="IsChecked"/>
+                    </MultiBinding>
+                </SplitView.IsPaneOpen>
+                <SplitView.Pane>
+                    <TextBlock
+                        Text="Pane"
+                        FontSize="24"
+                        VerticalAlignment="Center"
+                        HorizontalAlignment="Center" />
+
+                </SplitView.Pane>
+                <userControls:MainPanel />
+            </SplitView>
+        </Grid>
+
+
     </Grid>
 </Window>

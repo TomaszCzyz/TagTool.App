@@ -25,16 +25,6 @@
         RowDefinitions="Auto,Auto,*"
         Margin="4">
 
-        <!-- Toolbar -->
-        <StackPanel
-            Grid.Row="0"
-            Orientation="Horizontal"
-            Height="35">
-
-            <Button Classes="addTag" />
-            <Button Classes="deleteTag" />
-        </StackPanel>
-
         <!-- SearchBar -->
         <Grid
             Grid.Row="1"
@@ -44,7 +34,7 @@
             <Border
                 Grid.ColumnSpan="2"
                 Name="PART_BorderBackground"
-                CornerRadius="8"
+                CornerRadius="16"
                 BorderBrush="#6692B1"
                 BorderThickness="2" />
 
