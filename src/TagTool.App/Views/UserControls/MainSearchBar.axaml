@@ -11,9 +11,6 @@
     x:Name="UserControlRoot"
     x:Class="TagTool.App.Views.UserControls.MainSearchBar"
     x:DataType="userControls:SimpleTagsBarViewModel">
-    <UserControl.Resources>
-        <SolidColorBrush Color="LightGray" Opacity="1" x:Key="PopupBackgroundBrush" />
-    </UserControl.Resources>
     <UserControl.Styles>
         <Style Selector="ListBox">
             <Setter Property="Background" Value="Transparent" />
@@ -44,7 +41,8 @@
             Grid.ColumnSpan="3"
             ClipToBounds="True"
             CornerRadius="16"
-            BorderBrush="#6692B1"
+            Background="{StaticResource MyLightPrimary300}"
+            BorderBrush="{StaticResource MyLightPrimary600}"
             BorderThickness="2" />
 
         <avalonia:MaterialIcon
@@ -91,8 +89,7 @@
             Padding="0 5"
             HorizontalAlignment="Right"
             VerticalAlignment="Center"
-            Click="Button_OnClick"
-            >
+            Click="Button_OnClick">
 
             <avalonia:MaterialIcon Kind="MoreVert" />
         </Button>
@@ -101,9 +98,9 @@
         <Popup
             Name="SearchHelperPopup"
             Grid.Column="0"
-            IsOpen="True"
+            IsOpen="False"
             IsLightDismissEnabled="True"
-            WindowManagerAddShadowHint="True"
+            WindowManagerAddShadowHint="False"
             PlacementTarget="{Binding #TopMostGrid}"
             PlacementGravity="Bottom"
             Width="{Binding #TopMostGrid.Bounds.Width}">
@@ -111,8 +108,11 @@
             <Border
                 CornerRadius="16"
                 Padding="10"
+                BorderThickness="1"
+                Margin="0 -1 0 0"
+                BorderBrush="{StaticResource MyLightPrimary600}"
                 ClipToBounds="True"
-                Background="{StaticResource PopupBackgroundBrush}">
+                Background="{StaticResource MyLightPrimary300}">
 
                 <Grid RowDefinitions="Auto, Auto,*,*" ColumnDefinitions="*">
                     <ListBox
