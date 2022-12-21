@@ -22,7 +22,7 @@
         <Style Selector="Border.MenuPanel">
             <Setter Property="BorderThickness" Value="1" />
             <Setter Property="BorderBrush" Value="{StaticResource MyLightPrimary800}" />
-            <Setter Property="Background" Value="{StaticResource MyLightPrimary500}" />
+            <Setter Property="Background" Value="{StaticResource MyLightPrimary400}" />
         </Style>
     </Window.Styles>
 
@@ -31,12 +31,15 @@
     </Design.DataContext>
 
     <Grid RowDefinitions="Auto,*">
-        <Border Grid.Column="0" Classes="MenuPanel">
+        <Border
+            Grid.Column="0"
+            Classes="MenuPanel"
+            Margin="-1 -1 -1 0"
+            PointerPressed="InputElement_OnPointerPressed"
+            PointerReleased="InputElement_OnPointerReleased"
+            PointerMoved="InputElement_OnPointerMoved">
 
-            <userControls:MenuView
-                PointerPressed="InputElement_OnPointerPressed"
-                PointerReleased="InputElement_OnPointerReleased"
-                PointerMoved="InputElement_OnPointerMoved" />
+            <userControls:MenuView />
         </Border>
 
         <Grid Grid.Row="1" ColumnDefinitions="Auto,*">

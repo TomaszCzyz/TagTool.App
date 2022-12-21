@@ -76,7 +76,7 @@ public class App : Application
 
 public static class ServiceCollectionExtensions
 {
-    private static Func<Type, bool> Predicate => x => typeof(ViewModelBase).IsAssignableFrom(x) && !x.IsInterface && !x.IsAbstract;
+    private static Func<Type, bool> Predicate => x => typeof(ViewModelBase).IsAssignableFrom(x) && x is { IsInterface: false, IsAbstract: false };
 
     public static void AddViewModels(this IServiceCollection services, Type scanMarker)
     {

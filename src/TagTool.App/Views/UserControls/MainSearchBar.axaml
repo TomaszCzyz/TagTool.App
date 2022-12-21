@@ -7,10 +7,11 @@
     xmlns:userControls="clr-namespace:TagTool.App.ViewModels.UserControls"
     xmlns:models="clr-namespace:TagTool.App.Core.Models;assembly=TagTool.App.Core"
     xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+    xmlns:system="clr-namespace:System;assembly=System.Runtime"
     mc:Ignorable="d" d:DesignWidth="550" d:DesignHeight="300"
     x:Name="UserControlRoot"
     x:Class="TagTool.App.Views.UserControls.MainSearchBar"
-    x:DataType="userControls:SimpleTagsBarViewModel">
+    x:DataType="userControls:MainSearchBarViewModel">
     <UserControl.Styles>
         <Style Selector="ListBox">
             <Setter Property="Background" Value="Transparent" />
@@ -24,11 +25,23 @@
             <Setter Property="Padding" Value="0" />
             <Setter Property="MaxHeight" Value="30" />
         </Style>
+        <Style Selector="TextBox.Transparent">
+            <Setter Property="BorderThickness" Value="0" />
+            <Setter Property="Background" Value="Transparent" />
+
+            <!-- pointerover -->
+            <Style Selector="^:pointerover, ^:focus-within, ^:focus">
+                <Style Selector="^ /template/ Border#PART_BorderElement">
+                    <Setter Property="Background" Value="Transparent" />
+                    <Setter Property="BorderThickness" Value="0" />
+                </Style>
+            </Style>
+        </Style>
     </UserControl.Styles>
 
-    <!-- <Design.DataContext> -->
-    <!--     <userControls:SimpleTagsBarViewModel /> -->
-    <!-- </Design.DataContext> -->
+    <Design.DataContext>
+        <userControls:MainSearchBarViewModel />
+    </Design.DataContext>
 
     <Grid
         Name="TopMostGrid"
@@ -61,6 +74,7 @@
             VerticalAlignment="Top">
 
             <Panel>
+
                 <!-- entered tags box -->
                 <ListBox
                     ScrollViewer.HorizontalScrollBarVisibility="Disabled"
@@ -76,6 +90,15 @@
                                 Text="{Binding Name}"
                                 DeleteCommand="{Binding #UserControlRoot.DataContext.RemoveTagCommand, FallbackValue=null}"
                                 DeleteCommandParameter="{Binding .}" />
+
+                        </DataTemplate>
+                        <DataTemplate DataType="system:String">
+                            <TextBox
+                                Classes="Transparent"
+                                Watermark="Next tag..."
+                                Text="{Binding #UserControlRoot.DataContext.SearchText, FallbackValue=null}"
+                                GotFocus="InputElement_OnGotFocus"
+                                AttachedToLogicalTree="StyledElement_OnAttachedToLogicalTree" />
 
                         </DataTemplate>
                     </ListBox.DataTemplates>
@@ -114,53 +137,46 @@
                 ClipToBounds="True"
                 Background="{StaticResource MyLightPrimary300}">
 
-                <Grid RowDefinitions="Auto, Auto,*,*" ColumnDefinitions="*">
+                <Grid RowDefinitions="Auto,*,Auto,*,*" ColumnDefinitions="*">
+                    <TextBlock
+                        Grid.Row="0"
+                        FontSize="12"
+                        Text="Search results:"/>
+
                     <ListBox
+                        Name="SearchResultsListBox"
+                        Grid.Row="1"
                         SelectionMode="Single"
-                        HorizontalAlignment="Left">
+                        HorizontalAlignment="Left"
+                        SelectedItem="{Binding SelectedItemFromSearched}"
+                        Items="{Binding SearchResults}">
                         <ListBox.DataTemplates>
-                            <DataTemplate DataType="x:String">
-                                <templatedControls:TagChip Text="{Binding .}" IsDeletable="False" />
+                            <DataTemplate DataType="models:Tag">
+                                <templatedControls:TagChip Text="{Binding Name}" IsDeletable="False" />
                             </DataTemplate>
                         </ListBox.DataTemplates>
-                        <ListBoxItem>SomeTag</ListBoxItem>
-                        <ListBoxItem>Tag</ListBoxItem>
-                        <ListBoxItem>SomeTag</ListBoxItem>
-                        <ListBoxItem>Picture</ListBoxItem>
-                        <ListBoxItem>Tag</ListBoxItem>
-                        <ListBoxItem>Audio</ListBoxItem>
-                        <ListBoxItem>Tag</ListBoxItem>
-                        <ListBoxItem>Picture</ListBoxItem>
-                        <ListBoxItem>SearchTag</ListBoxItem>
-                        <ListBoxItem>Picture</ListBoxItem>
                     </ListBox>
 
                     <TextBlock
-                        Grid.Row="1"
+                        Grid.Row="2"
                         FontSize="12"
                         Text="Most popular tags:"
                         Margin="0 5 0 0" />
 
-                    <ListBox Grid.Row="2" SelectionMode="Single">
+                    <ListBox
+                        Grid.Row="3"
+                        SelectionMode="Single"
+                        SelectedItem="{Binding SelectedItemFromPopular}"
+                        Items="{Binding PopularTags}">
                         <ListBox.DataTemplates>
-                            <DataTemplate DataType="x:String">
-                                <templatedControls:TagChip Text="{Binding .}" Classes="Medium" IsDeletable="False" />
+                            <DataTemplate DataType="models:Tag">
+                                <templatedControls:TagChip Text="{Binding Name}" Classes="Medium" IsDeletable="False" />
                             </DataTemplate>
                         </ListBox.DataTemplates>
-                        <ListBoxItem>SomeTag</ListBoxItem>
-                        <ListBoxItem>Tag</ListBoxItem>
-                        <ListBoxItem>SomeTag</ListBoxItem>
-                        <ListBoxItem>Picture</ListBoxItem>
-                        <ListBoxItem>Tag</ListBoxItem>
-                        <ListBoxItem>Audio</ListBoxItem>
-                        <ListBoxItem>Tag</ListBoxItem>
-                        <ListBoxItem>Picture</ListBoxItem>
-                        <ListBoxItem>SearchTag</ListBoxItem>
-                        <ListBoxItem>Picture</ListBoxItem>
                     </ListBox>
 
                     <StackPanel
-                        Grid.Row="3"
+                        Grid.Row="4"
                         ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                         Orientation="Horizontal"
                         Spacing="5"
@@ -169,7 +185,7 @@
                         <RadioButton>
                             <Label Content="Exclude" FontSize="12" Padding="0" />
                         </RadioButton>
-                        <Button>
+                        <Button Padding="0">
                             <TextBlock Text="AddSpecialTag" />
                         </Button>
                     </StackPanel>
