@@ -12,60 +12,75 @@
     Title="TagTool.App"
     ExtendClientAreaChromeHints="Default"
     ExtendClientAreaToDecorationsHint="True"
-    ExtendClientAreaTitleBarHeightHint="-1">
+    ExtendClientAreaTitleBarHeightHint="-1"
+    Background="#F1F3F3">
     <Window.KeyBindings>
         <KeyBinding Gesture="Escape" Command="{Binding ResetFocusCommand}" CommandParameter="{Binding #RootWindow}" />
         <KeyBinding Gesture="Ctrl+Q" Command="{Binding FocusNextSearchTabCommand}" CommandParameter="{Binding #RootWindow}" />
     </Window.KeyBindings>
+    <Window.Styles>
+        <Style Selector="Border.MenuPanel">
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="BorderBrush" Value="{StaticResource MyLightPrimary800}" />
+            <Setter Property="Background" Value="{StaticResource MyLightPrimary500}" />
+        </Style>
+    </Window.Styles>
 
     <Design.DataContext>
         <vm:MainWindowViewModel />
     </Design.DataContext>
 
     <Grid RowDefinitions="Auto,*">
-        <userControls:MenuView
-            PointerPressed="InputElement_OnPointerPressed"
-            PointerReleased="InputElement_OnPointerReleased"
-            PointerMoved="InputElement_OnPointerMoved" />
+        <Border Grid.Column="0" Classes="MenuPanel">
+
+            <userControls:MenuView
+                PointerPressed="InputElement_OnPointerPressed"
+                PointerReleased="InputElement_OnPointerReleased"
+                PointerMoved="InputElement_OnPointerMoved" />
+        </Border>
 
         <Grid Grid.Row="1" ColumnDefinitions="Auto,*">
-            <!-- side panel -->
-            <Grid Grid.Column="0" Width="36">
-                <!-- from top -->
-                <StackPanel Orientation="Vertical">
-                    <StackPanel.Styles>
-                        <Style Selector="RadioButton">
-                            <Setter Property="Template">
-                                <ControlTemplate>
-                                    <ToggleButton
-                                        DataContext="{Binding $parent}"
-                                        Background="Transparent"
-                                        Padding="3"
-                                        Content="{Binding Content, RelativeSource={RelativeSource TemplatedParent}, Mode=TwoWay}"
-                                        IsChecked="{Binding IsChecked, RelativeSource={RelativeSource TemplatedParent}, Mode=TwoWay}" />
 
-                                </ControlTemplate>
-                            </Setter>
-                        </Style>
-                    </StackPanel.Styles>
-                    <RadioButton Name="RadioButton1" ToolTip.Tip="Quick access to common tags" ToolTip.Placement="Right">
-                        <Svg Path="/Assets/Svgs/Light/tags.svg" />
-                    </RadioButton>
-                    <RadioButton Name="RadioButton2"  ToolTip.Tip="Ble ble" ToolTip.Placement="Right">
-                        <Svg Path="/Assets/Svgs/Light/tags.svg" />
-                    </RadioButton>
-                    <RadioButton Name="RadioButton3"  ToolTip.Tip="Another tool view" ToolTip.Placement="Right">
-                        <Svg Path="/Assets/Svgs/Light/tags.svg" />
-                    </RadioButton>
-                </StackPanel>
+            <!-- left side panel -->
+            <Border Grid.Column="0" Classes="MenuPanel" Margin="-1">
 
-                <!-- from bottom -->
-                <StackPanel VerticalAlignment="Bottom">
-                    <Svg Path="/Assets/Svgs/Light/sun.svg" />
-                    <Svg Path="/Assets/Svgs/Light/moon.svg" />
-                </StackPanel>
+                <Grid Width="36">
 
-            </Grid>
+                    <!-- top items -->
+                    <StackPanel Orientation="Vertical">
+                        <StackPanel.Styles>
+                            <Style Selector="RadioButton">
+                                <Setter Property="Template">
+                                    <ControlTemplate>
+                                        <ToggleButton
+                                            DataContext="{Binding $parent}"
+                                            Background="Transparent"
+                                            Padding="3"
+                                            Content="{Binding Content, RelativeSource={RelativeSource TemplatedParent}, Mode=TwoWay}"
+                                            IsChecked="{Binding IsChecked, RelativeSource={RelativeSource TemplatedParent}, Mode=TwoWay}" />
+
+                                    </ControlTemplate>
+                                </Setter>
+                            </Style>
+                        </StackPanel.Styles>
+                        <RadioButton Name="RadioButton1" ToolTip.Tip="Quick access to common tags" ToolTip.Placement="Right">
+                            <Svg Path="/Assets/Svgs/Light/tags.svg" />
+                        </RadioButton>
+                        <RadioButton Name="RadioButton2" ToolTip.Tip="Ble ble" ToolTip.Placement="Right">
+                            <Svg Path="/Assets/Svgs/Light/tags.svg" />
+                        </RadioButton>
+                        <RadioButton Name="RadioButton3" ToolTip.Tip="Another tool view" ToolTip.Placement="Right">
+                            <Svg Path="/Assets/Svgs/Light/tags.svg" />
+                        </RadioButton>
+                    </StackPanel>
+
+                    <!-- bottom items -->
+                    <StackPanel VerticalAlignment="Bottom">
+                        <Svg Path="/Assets/Svgs/Light/sun.svg" />
+                        <Svg Path="/Assets/Svgs/Light/moon.svg" />
+                    </StackPanel>
+                </Grid>
+            </Border>
 
             <SplitView
                 Grid.Column="1"
@@ -73,9 +88,9 @@
                 OpenPaneLength="296">
                 <SplitView.IsPaneOpen>
                     <MultiBinding Converter="{x:Static BoolConverters.Or}">
-                        <Binding Source="{ResolveByName RadioButton1}" Path="IsChecked"/>
-                        <Binding Source="{ResolveByName RadioButton2}" Path="IsChecked"/>
-                        <Binding Source="{ResolveByName RadioButton3}" Path="IsChecked"/>
+                        <Binding Source="{ResolveByName RadioButton1}" Path="IsChecked" />
+                        <Binding Source="{ResolveByName RadioButton2}" Path="IsChecked" />
+                        <Binding Source="{ResolveByName RadioButton3}" Path="IsChecked" />
                     </MultiBinding>
                 </SplitView.IsPaneOpen>
                 <SplitView.Pane>
@@ -89,7 +104,5 @@
                 <userControls:MainPanel />
             </SplitView>
         </Grid>
-
-
     </Grid>
 </Window>
