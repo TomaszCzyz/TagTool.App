@@ -1,14 +1,11 @@
-﻿using Avalonia;
-using Avalonia.Controls;
+﻿using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.VisualTree;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Dock.Model.Controls;
 using Dock.Model.Core;
-using JetBrains.Annotations;
 using TagTool.App.Core.Extensions;
-using TagTool.App.Docks;
 using TagTool.App.Views.UserControls;
 
 namespace TagTool.App.ViewModels;
@@ -26,18 +23,6 @@ public partial class MainWindowViewModel : ViewModelBase
     public MainWindowViewModel()
     {
         _focusManager = null!;
-    }
-
-    [UsedImplicitly]
-    public MainWindowViewModel(NotepadFactory notepadFactory)
-    {
-        _focusManager = AvaloniaLocator.Current.GetRequiredService<IFocusManager>();
-
-        Layout = notepadFactory.CreateLayout();
-        if (Layout is { })
-        {
-            notepadFactory.InitLayout(Layout);
-        }
     }
 
     private InputElement? _previouslyFocusedElement;

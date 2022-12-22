@@ -8,11 +8,13 @@ using TagTool.App.ViewModels.UserControls;
 
 namespace TagTool.App.Views.UserControls;
 
-public partial class MainSearchBar : UserControl
+public partial class TaggedItemsSearchView : UserControl
 {
-    public MainSearchBar()
+    private readonly TaggedItemsSearchViewModel _vm = App.Current.Services.GetRequiredService<TaggedItemsSearchViewModel>();
+
+    public TaggedItemsSearchView()
     {
-        DataContext = App.Current.Services.GetRequiredService<MainSearchBarViewModel>();
+        DataContext = _vm;
         InitializeComponent();
     }
 
@@ -48,15 +50,14 @@ public partial class MainSearchBar : UserControl
     private void OnKeyDown(object? sender, KeyEventArgs e)
     {
         var textBox = (TextBox)sender!;
-        var viewModel = (MainSearchBarViewModel)DataContext!;
 
         switch (e.Key)
         {
             case Key.Back when string.IsNullOrEmpty(textBox.Text):
-                viewModel.RemoveLastCommand.Execute(e);
+                _vm.RemoveLastCommand.Execute(e);
                 break;
             case Key.Enter: // when autoCompleteBox.SelectedItem is not null:
-                viewModel.AddTagCommand.Execute(e);
+                _vm.AddTagCommand.Execute(e);
                 e.Handled = true;
                 break;
             case Key.Right:
@@ -68,15 +69,13 @@ public partial class MainSearchBar : UserControl
                 e.Handled = true;
                 break;
             default:
-                viewModel.UpdateSearchCommand.Execute(e);
+                _vm.UpdateSearchCommand.Execute(e);
                 break;
         }
     }
 
     private void InputElement_OnDoubleTapped(object? sender, TappedEventArgs e)
     {
-        var viewModel = (MainSearchBarViewModel)DataContext!;
-
-        viewModel.AddTagCommand.Execute(e);
+        _vm.AddTagCommand.Execute(e);
     }
 }

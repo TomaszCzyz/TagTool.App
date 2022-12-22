@@ -24,9 +24,11 @@
                 </Style>
             </Grid.Styles>
             <Grid Grid.Column="0" RowDefinitions="*, Auto, *">
-                <userControls:TabContentView Grid.Row="0" />
+                <!-- <userControls:TabContentView Grid.Row="0" /> -->
+                <userControls:TaggedItemsSearchView Grid.Row="0" />
                 <GridSplitter Grid.Row="1" ResizeDirection="Rows" Height="4"/>
-                <userControls:TabContentView Grid.Row="2" />
+                <!-- <userControls:TabContentView Grid.Row="2" /> -->
+                <userControls:TaggedItemsSearchView Grid.Row="2" />
             </Grid>
             <GridSplitter Grid.Column="1" ResizeDirection="Columns" Width="4"/>
             <userControls:FileSystemView Grid.Column="2" />
