@@ -1,10 +1,7 @@
 ﻿using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.VisualTree;
-using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using Dock.Model.Controls;
-using Dock.Model.Core;
 using TagTool.App.Core.Extensions;
 using TagTool.App.Views.UserControls;
 
@@ -12,9 +9,6 @@ namespace TagTool.App.ViewModels;
 
 public partial class MainWindowViewModel : ViewModelBase
 {
-    [ObservableProperty]
-    private IRootDock? _layout;
-
     private readonly IFocusManager _focusManager;
 
     /// <summary>
@@ -61,12 +55,4 @@ public partial class MainWindowViewModel : ViewModelBase
             .Where(logical => logical.GetType() == typeof(SimpleTagsBar) && logical.IsVisible)
             .Select(visual => visual.FindDescendantOfType<AutoCompleteBox>())
             .ToArray();
-
-    public void CloseLayout()
-    {
-        if (Layout is IDock dock && dock.Close.CanExecute(null))
-        {
-            dock.Close.Execute(null);
-        }
-    }
 }

@@ -26,17 +26,12 @@ public class App : Application
 
     public override void OnFrameworkInitializationCompleted()
     {
-        var mainWindowViewModel = Services.GetRequiredService<MainWindowViewModel>();
-
         if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktopLifetime)
         {
             var mainWindow = new MainWindow();
 
-            mainWindow.Closing += (_, _) => mainWindowViewModel.CloseLayout();
-
             desktopLifetime.MainWindow = mainWindow;
 
-            desktopLifetime.Exit += (_, _) => mainWindowViewModel.CloseLayout();
             desktopLifetime.Exit += (_, _) => Log.CloseAndFlush();
         }
 

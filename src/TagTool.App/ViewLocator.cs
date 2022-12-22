@@ -1,6 +1,5 @@
 using Avalonia.Controls;
 using Avalonia.Controls.Templates;
-using Dock.Model.Core;
 using TagTool.App.ViewModels;
 
 namespace TagTool.App;
@@ -27,6 +26,6 @@ public class ViewLocator : IDataTemplate
 
     public bool Match(object? data)
     {
-        return data is ViewModelBase or IDockable;
+        return data is ViewModelBase;
     }
 }
