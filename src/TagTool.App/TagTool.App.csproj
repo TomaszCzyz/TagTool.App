@@ -23,8 +23,6 @@
     <PackageReference Include="Avalonia.Svg.Skia" Version="11.0.0-preview3" />
     <PackageReference Include="Avalonia.Themes.Fluent" Version="11.0.0-preview4" />
     <PackageReference Include="CommunityToolkit.Mvvm" Version="8.0.0" />
-    <PackageReference Include="Dock.Avalonia" Version="11.0.0-preview3" />
-    <PackageReference Include="Dock.Model.Mvvm" Version="11.0.0-preview3" />
     <PackageReference Include="DynamicData" Version="7.12.1" />
     <PackageReference Include="Material.Icons.Avalonia" Version="1.2.0" />
     <PackageReference Include="Microsoft.Extensions.Configuration" Version="6.0.1" />

@@ -110,22 +110,4 @@
             </ControlTemplate>
         </Setter>
     </Style>
-
-    <Style Selector="DocumentTabStrip /template/ Button#PART_ButtonCreate">
-        <Setter Property="Background" Value="Red" />
-        <Setter Property="Template">
-            <ControlTemplate>
-                <Panel>
-                    <avalonia:MaterialIcon
-                        Foreground="Green"
-                        Kind="Add"
-                        Width="25"
-                        Height="25"
-                        HorizontalAlignment="Center"
-                        VerticalAlignment="Center" />
-
-                </Panel>
-            </ControlTemplate>
-        </Setter>
-    </Style>
 </Styles>
