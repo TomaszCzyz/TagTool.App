@@ -136,6 +136,7 @@
                         <Binding
                             ElementName="TagsToApplySimpleTagsBar"
                             Path="TagsListBox.Items.Count"
+                            FallbackValue="null"
                             Converter="{StaticResource ArraySizeToBooleanConverter}" />
 
                     </MultiBinding>

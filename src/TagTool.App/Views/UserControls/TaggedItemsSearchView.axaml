@@ -1,0 +1,304 @@
+﻿<UserControl
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:converters="clr-namespace:TagTool.App.Converters"
+    xmlns:userControls="clr-namespace:TagTool.App.ViewModels.UserControls"
+    xmlns:templatedControls="clr-namespace:TagTool.App.Views.TemplatedControls"
+    xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+    xmlns:models="clr-namespace:TagTool.App.Core.Models;assembly=TagTool.App.Core"
+    xmlns:system="clr-namespace:System;assembly=System.Runtime"
+    mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+    x:Class="TagTool.App.Views.UserControls.TaggedItemsSearchView"
+    x:Name="UserControlRoot">
+    <UserControl.Resources>
+        <converters:FileSizeToStringConverter x:Key="FileSizeToStringConverter" />
+    </UserControl.Resources>
+
+    <Design.DataContext>
+        <userControls:TaggedItemsSearchViewModel />
+    </Design.DataContext>
+
+    <Grid
+        ColumnDefinitions="*"
+        RowDefinitions="Auto,Auto,*"
+        Margin="4">
+
+        <!-- Search Bar -->
+        <Grid
+            Name="TopMostGrid"
+            ColumnDefinitions="Auto,*,Auto"
+            VerticalAlignment="Top"
+            RowDefinitions="Auto">
+            <Grid.KeyBindings>
+                <KeyBinding Gesture="Ctrl+Enter" Command="{Binding CommitSearchCommand}" />
+            </Grid.KeyBindings>
+            <Grid.Styles>
+                <Style Selector="ListBox">
+                    <Setter Property="Background" Value="Transparent" />
+                    <Setter Property="ItemsPanel">
+                        <ItemsPanelTemplate>
+                            <WrapPanel />
+                        </ItemsPanelTemplate>
+                    </Setter>
+                </Style>
+                <Style Selector="ListBoxItem">
+                    <Setter Property="Padding" Value="0" />
+                    <Setter Property="MaxHeight" Value="30" />
+                </Style>
+                <Style Selector="TextBox.Transparent">
+                    <Setter Property="BorderThickness" Value="0" />
+                    <Setter Property="Background" Value="Transparent" />
+
+                    <!-- pointerover -->
+                    <Style Selector="^:pointerover, ^:focus-within, ^:focus">
+                        <Style Selector="^ /template/ Border#PART_BorderElement">
+                            <Setter Property="Background" Value="Transparent" />
+                            <Setter Property="BorderThickness" Value="0" />
+                        </Style>
+                    </Style>
+                </Style>
+            </Grid.Styles>
+
+            <Border
+                Name="SearchBarBorder"
+                Grid.ColumnSpan="3"
+                ClipToBounds="True"
+                CornerRadius="16"
+                Background="{StaticResource MyLightPrimary300}"
+                BorderBrush="{StaticResource MyLightPrimary600}"
+                BorderThickness="2" />
+
+            <Button
+                Grid.Column="0"
+                Padding="0"
+                Background="Transparent"
+                Margin="10 0 5 0"
+                Command="{Binding CommitSearchCommand}">
+
+                <avalonia:MaterialIcon
+                    Kind="Magnify"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    Width="20"
+                    Height="20" />
+
+            </Button>
+
+            <ScrollViewer
+                Grid.Column="1"
+                VerticalScrollBarVisibility="Visible"
+                HorizontalAlignment="Stretch"
+                VerticalAlignment="Top">
+
+                <Panel>
+
+                    <!-- entered tags box -->
+                    <ListBox
+                        ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                        Name="TagsListBox"
+                        Margin="2"
+                        HorizontalAlignment="Left"
+                        VerticalAlignment="Center"
+                        Items="{Binding EnteredTags}">
+                        <ListBox.DataTemplates>
+                            <DataTemplate DataType="models:Tag">
+                                <templatedControls:TagChip
+                                    Margin="4 2"
+                                    Text="{Binding Name}"
+                                    DeleteCommand="{Binding #UserControlRoot.DataContext.RemoveTagCommand, FallbackValue=null}"
+                                    DeleteCommandParameter="{Binding .}" />
+
+                            </DataTemplate>
+                            <DataTemplate DataType="system:String">
+                                <TextBox
+                                    Classes="Transparent"
+                                    Watermark="Next tag..."
+                                    Text="{Binding #UserControlRoot.DataContext.SearchText, FallbackValue=null}"
+                                    GotFocus="InputElement_OnGotFocus"
+                                    AttachedToLogicalTree="StyledElement_OnAttachedToLogicalTree" />
+
+                            </DataTemplate>
+                        </ListBox.DataTemplates>
+                    </ListBox>
+                </Panel>
+            </ScrollViewer>
+
+            <Button
+                Grid.Column="2"
+                Background="Transparent"
+                Padding="0 5"
+                HorizontalAlignment="Right"
+                VerticalAlignment="Center"
+                Click="Button_OnClick">
+
+                <avalonia:MaterialIcon Kind="MoreVert" />
+            </Button>
+
+            <!-- Popup -->
+            <Popup
+                Name="SearchHelperPopup"
+                Grid.Column="0"
+                IsOpen="False"
+                IsLightDismissEnabled="False"
+                WindowManagerAddShadowHint="False"
+                PlacementGravity="Bottom"
+                PlacementTarget="{Binding #TopMostGrid}"
+                Width="{Binding #TopMostGrid.Bounds.Width}">
+
+                <Border
+                    CornerRadius="16"
+                    Padding="10"
+                    BorderThickness="1"
+                    Margin="0 -1 0 0"
+                    ClipToBounds="True"
+                    Background="{StaticResource MyLightPrimary300}"
+                    BorderBrush="{StaticResource MyLightPrimary600}">
+
+                    <Grid RowDefinitions="Auto,*,Auto,*,*" ColumnDefinitions="*">
+                        <TextBlock
+                            Grid.Row="0"
+                            FontSize="12"
+                            Text="Search results:" />
+
+                        <ListBox
+                            Name="SearchResultsListBox"
+                            Grid.Row="1"
+                            SelectionMode="Single"
+                            HorizontalAlignment="Left"
+                            SelectedItem="{Binding SelectedItemFromSearched}"
+                            Items="{Binding SearchResults}">
+                            <ListBox.DataTemplates>
+                                <DataTemplate DataType="models:Tag">
+                                    <Border
+                                        HorizontalAlignment="Left"
+                                        VerticalAlignment="Center"
+                                        CornerRadius="4"
+                                        BorderBrush="#0097A7"
+                                        BorderThickness="1"
+                                        Margin="1"
+                                        ClipToBounds="True"
+                                        DoubleTapped="InputElement_OnDoubleTapped">
+
+                                        <TextBlock
+                                            Margin="2 0"
+                                            FontSize="18"
+                                            FontFamily="avares://TagTool.App/Assets/Fonts#Lato"
+                                            Foreground=""
+                                            VerticalAlignment="Center"
+                                            IsTabStop="False"
+                                            Text="{Binding Name}"
+                                            Inlines="{Binding Inlines}" />
+
+                                    </Border>
+                                </DataTemplate>
+                            </ListBox.DataTemplates>
+                        </ListBox>
+
+                        <TextBlock
+                            Grid.Row="2"
+                            FontSize="12"
+                            Text="Most popular tags:"
+                            Margin="0 5 0 0" />
+
+                        <ListBox
+                            Grid.Row="3"
+                            SelectionMode="Single"
+                            SelectedItem="{Binding SelectedItemFromPopular}"
+                            Items="{Binding PopularTags}">
+                            <ListBox.DataTemplates>
+                                <DataTemplate DataType="models:Tag">
+                                    <Border
+                                        HorizontalAlignment="Left"
+                                        VerticalAlignment="Center"
+                                        CornerRadius="4"
+                                        BorderBrush="#0097A7"
+                                        BorderThickness="1"
+                                        Margin="1"
+                                        ClipToBounds="True"
+                                        DoubleTapped="InputElement_OnDoubleTapped">
+
+                                        <TextBlock
+                                            Margin="2 0"
+                                            FontSize="12"
+                                            FontFamily="avares://TagTool.App/Assets/Fonts#Lato"
+                                            Foreground=""
+                                            VerticalAlignment="Center"
+                                            IsTabStop="False"
+                                            Text="{Binding Name}"
+                                            Inlines="{Binding Inlines}" />
+                                    </Border>
+                                </DataTemplate>
+                            </ListBox.DataTemplates>
+                        </ListBox>
+
+                        <StackPanel
+                            Grid.Row="4"
+                            ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                            Orientation="Horizontal"
+                            Spacing="5"
+                            Margin="0 10 0 0">
+
+                            <RadioButton>
+                                <Label Content="Exclude" FontSize="12" Padding="0" />
+                            </RadioButton>
+                            <Button Padding="0">
+                                <TextBlock Text="AddSpecialTag" />
+                            </Button>
+                        </StackPanel>
+                    </Grid>
+                </Border>
+            </Popup>
+        </Grid>
+
+        <!-- SearchResults -->
+        <DataGrid
+            Grid.Row="2"
+            FontFamily="avares://TagTool.App/Assets/Fonts#Lato"
+            CanUserResizeColumns="True"
+            CanUserReorderColumns="True"
+            RowBackground="Transparent"
+            Background="Transparent"
+            CanUserSortColumns="True"
+            RowDetailsVisibilityMode="Visible"
+            Items="{Binding Files}">
+            <DataGrid.RowDetailsTemplate>
+                <DataTemplate>
+                    <StackPanel Orientation="Horizontal">
+                        <StackPanel.Styles>
+                            <Style Selector="templatedControls|TagChip">
+                                <Setter Property="FontFamily" Value="avares://TagTool.App/Assets/Fonts#Lato" />
+                                <Setter Property="FontWeight" Value="Regular" />
+                                <Setter Property="IsDeletable" Value="False" />
+                                <Setter Property="Opacity" Value="0.6" />
+                                <Setter Property="BorderThickness" Value="1" />
+                                <Setter Property="BorderBrush" Value="#8800E5FF" />
+                            </Style>
+                        </StackPanel.Styles>
+
+                        <!-- rectangle below is used to align tags when checkbox column in enabled  -->
+                        <!-- <Rectangle Width="60" Height="0" Margin="0" Fill="Transparent" /> -->
+                        <templatedControls:TagChip Classes="Medium" Text="Tag" />
+                        <templatedControls:TagChip Classes="Medium" Text="Picture" />
+                        <templatedControls:TagChip Classes="Medium" Text="Audio" />
+                        <templatedControls:TagChip Classes="Medium" Text="Something" />
+                        <templatedControls:TagChip Classes="Medium" Text="LongLongLongTag" />
+                        <templatedControls:TagChip Classes="Medium" Text="Tag2" />
+                        <templatedControls:TagChip Classes="Medium" Text="Tag3" />
+                    </StackPanel>
+                </DataTemplate>
+            </DataGrid.RowDetailsTemplate>
+            <DataGrid.Columns>
+                <!-- <DataGridCheckBoxColumn Width="60" Header="✔" CanUserResize="False" /> -->
+                <DataGridTextColumn IsReadOnly="True" Header="Name" Width="*" Binding="{Binding Name}" />
+                <DataGridTextColumn IsReadOnly="True" Header="Date Modified" Binding="{Binding DateModified, StringFormat=\{0:yyyy/MM/dd hh:mm:ss\}}" />
+                <DataGridTemplateColumn IsReadOnly="True" Header="Size">
+                    <DataTemplate DataType="models:SimpleFile">
+                        <TextBlock TextAlignment="Right" Text="{Binding Length, Converter={StaticResource FileSizeToStringConverter}}" />
+                    </DataTemplate>
+                </DataGridTemplateColumn>
+            </DataGrid.Columns>
+        </DataGrid>
+    </Grid>
+</UserControl>
