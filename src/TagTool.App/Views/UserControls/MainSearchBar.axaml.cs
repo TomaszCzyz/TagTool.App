@@ -36,10 +36,11 @@ public partial class MainSearchBar : UserControl
         var textBox = (TextBox)sender!;
 
         textBox.AddHandler(KeyDownEvent, OnKeyDown, RoutingStrategies.Tunnel);
-        textBox.AddHandler(PointerPressedEvent, PointerPressed, RoutingStrategies.Tunnel);
+        textBox.AddHandler(KeyDownEvent, EnsurePopupOpen, RoutingStrategies.Tunnel);
+        textBox.AddHandler(PointerPressedEvent, EnsurePopupOpen, RoutingStrategies.Tunnel);
     }
 
-    private new void PointerPressed(object? sender, PointerPressedEventArgs e)
+    private void EnsurePopupOpen(object? sender, RoutedEventArgs e)
     {
         SearchHelperPopup.IsOpen = true;
     }
@@ -51,12 +52,12 @@ public partial class MainSearchBar : UserControl
 
         switch (e.Key)
         {
+            case Key.Back when string.IsNullOrEmpty(textBox.Text):
+                viewModel.RemoveLastCommand.Execute(e);
+                break;
             case Key.Enter: // when autoCompleteBox.SelectedItem is not null:
                 viewModel.AddTagCommand.Execute(e);
                 e.Handled = true;
-                break;
-            case Key.Back when string.IsNullOrEmpty(textBox.Text):
-                viewModel.RemoveTagCommand.Execute(e);
                 break;
             case Key.Right:
                 SearchResultsListBox.SelectedIndex++;
@@ -70,5 +71,12 @@ public partial class MainSearchBar : UserControl
                 viewModel.UpdateSearchCommand.Execute(e);
                 break;
         }
+    }
+
+    private void InputElement_OnDoubleTapped(object? sender, TappedEventArgs e)
+    {
+        var viewModel = (MainSearchBarViewModel)DataContext!;
+
+        viewModel.AddTagCommand.Execute(e);
     }
 }

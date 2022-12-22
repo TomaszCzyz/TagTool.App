@@ -8,7 +8,7 @@
     xmlns:templatedControls="clr-namespace:TagTool.App.Views.TemplatedControls"
     xmlns:converters="clr-namespace:TagTool.App.Converters"
     xmlns:models="clr-namespace:TagTool.App.Core.Models;assembly=TagTool.App.Core"
-    mc:Ignorable="d" d:DesignWidth="600" d:DesignHeight="350"
+    mc:Ignorable="d" d:DesignWidth="600" d:DesignHeight="550"
     x:Class="TagTool.App.Views.UserControls.TabContentView">
 
     <UserControl.Resources>
@@ -25,7 +25,7 @@
         Margin="4">
 
         <!-- SearchBar -->
-        <userControls:MainSearchBar MaxHeight="250" Grid.Row="1" />
+        <userControls:MainSearchBar Grid.Row="1" MaxHeight="250" />
 
         <!-- SearchResults -->
         <DataGrid
@@ -76,5 +76,4 @@
             </DataGrid.Columns>
         </DataGrid>
     </Grid>
-
 </UserControl>
