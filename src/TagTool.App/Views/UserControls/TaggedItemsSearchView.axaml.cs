@@ -10,11 +10,11 @@ namespace TagTool.App.Views.UserControls;
 
 public partial class TaggedItemsSearchView : UserControl
 {
-    private readonly TaggedItemsSearchViewModel _vm = App.Current.Services.GetRequiredService<TaggedItemsSearchViewModel>();
+    private readonly TaggedItemsSearchViewModel _viewModel = App.Current.Services.GetRequiredService<TaggedItemsSearchViewModel>();
 
     public TaggedItemsSearchView()
     {
-        DataContext = _vm;
+        DataContext = _viewModel;
         InitializeComponent();
     }
 
@@ -54,10 +54,10 @@ public partial class TaggedItemsSearchView : UserControl
         switch (e.Key)
         {
             case Key.Back when string.IsNullOrEmpty(textBox.Text):
-                _vm.RemoveLastCommand.Execute(e);
+                _viewModel.RemoveLastCommand.Execute(e);
                 break;
             case Key.Enter: // when autoCompleteBox.SelectedItem is not null:
-                _vm.AddTagCommand.Execute(e);
+                _viewModel.AddTagCommand.Execute(e);
                 e.Handled = true;
                 break;
             case Key.Right:
@@ -69,13 +69,13 @@ public partial class TaggedItemsSearchView : UserControl
                 e.Handled = true;
                 break;
             default:
-                _vm.UpdateSearchCommand.Execute(e);
+                _viewModel.UpdateSearchCommand.Execute(e);
                 break;
         }
     }
 
     private void InputElement_OnDoubleTapped(object? sender, TappedEventArgs e)
     {
-        _vm.AddTagCommand.Execute(e);
+        _viewModel.AddTagCommand.Execute(e);
     }
 }

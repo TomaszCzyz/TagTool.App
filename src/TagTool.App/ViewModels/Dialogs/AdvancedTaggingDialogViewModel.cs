@@ -111,7 +111,7 @@ public partial class AdvancedTaggingDialogViewModel : ViewModelBase, IDisposable
 
     private static int _tagsLoadingTaskCounter;
 
-    public class Node
+    public class Node : IDisposable
     {
         public FileSystemInfo Item { get; init; }
 
@@ -222,5 +222,11 @@ public partial class AdvancedTaggingDialogViewModel : ViewModelBase, IDisposable
         public override int GetHashCode() => Item.GetHashCode();
 
         public override string ToString() => Header;
+
+        public void Dispose()
+        {
+            _cts.Dispose();
+            GC.SuppressFinalize(this);
+        }
     }
 }

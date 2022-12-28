@@ -30,6 +30,6 @@ public partial class MyTagsView : UserControl
         var dragData = new DataObject();
         dragData.Set("draggedTag", _vm.SelectedTag!);
 
-        var result = await DragDrop.DoDragDrop(e, dragData, DragDropEffects.Link);
+        var _ = await DragDrop.DoDragDrop(e, dragData, DragDropEffects.Link);
     }
 }

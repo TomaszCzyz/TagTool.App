@@ -133,8 +133,8 @@ public partial class FileSystemView : UserControl
     {
         if (_vm.SelectedItem is null) return;
 
-        var dialog = new TagFileDialog(_vm.SelectedItem.Entry.FullName);
-        var showDialog = await dialog.ShowDialog<(string FileName, Tag[] Tags)>(GetWindow());
+        var dialog = new TagFileDialog(_vm.SelectedItem.FullName);
+        var _ = await dialog.ShowDialog<(string FileName, Tag[] Tags)>(GetWindow());
     }
 
     private Window GetWindow() => (Window)VisualRoot!;
