@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
 using Avalonia.Controls.Documents;
 
@@ -24,6 +25,9 @@ public class FileSystemEntry
     public string Name => _info.Name;
 
     public InlineCollection Inlines { get; }
+
+    // todo: it should be lazy loaded... and not be here xd
+    public ObservableCollection<string> AssociatedTags { get; init; } = new();
 
     public string FullName => _info.FullName;
 

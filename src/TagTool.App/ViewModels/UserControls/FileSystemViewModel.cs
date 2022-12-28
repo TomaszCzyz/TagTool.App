@@ -8,6 +8,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using DynamicData;
 using JetBrains.Annotations;
+using Microsoft.Extensions.DependencyInjection;
 using TagTool.App.Core.Extensions;
 using TagTool.App.Core.Models;
 using TagTool.App.Core.Services;
@@ -47,9 +48,6 @@ public partial class FileSystemViewModel : ViewModelBase
     [ObservableProperty]
     private bool _hasQuickSearchResults;
 
-    [ObservableProperty]
-    private bool _areTagsVisible;
-
     public bool CanNavigateBack => _navigationHistoryBack.Count > 0;
 
     public bool CanNavigateForward => _navigationHistoryForward.Count > 0;
@@ -68,7 +66,7 @@ public partial class FileSystemViewModel : ViewModelBase
     /// </summary>
     public FileSystemViewModel()
     {
-        _tagService = null!;
+        _tagService = App.Current.Services.GetRequiredService<ITagToolBackend>().GetTagService();
         CurrentFolder = new DirectoryInfo(@"C:\Users\tczyz\MyFiles");
     }
 
@@ -329,7 +327,23 @@ public partial class FileSystemViewModel : ViewModelBase
                 .Select(info => new FileSystemEntry(info))
                 .OrderByDescending(static entry => entry, FileSystemEntryComparer.StaticFileSystemEntryComparer));
 
+        Dispatcher.UIThread.Post(UpdateTags, DispatcherPriority.Background);
+
         AddressSegments.Clear();
         AddressSegments.AddRange(CurrentFolder.GetAncestors().Select(folder => new AddressSegmentViewModel(folder, this)));
+    }
+
+    public void UpdateTags()
+    {
+        foreach (var entry in Items)
+        {
+            var getItemInfoRequest = new GetItemInfoRequest { Type = entry.IsDir ? "folder" : "file", ItemIdentifier = entry.FullName };
+
+            var getItemInfoReply = _tagService.GetItemInfo(getItemInfoRequest);
+
+            // todo: change to AddIfNotExists
+            entry.AssociatedTags.Clear();
+            entry.AssociatedTags.AddRange(getItemInfoReply.Tags.ToList());
+        }
     }
 }

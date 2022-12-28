@@ -8,7 +8,7 @@
     xmlns:models="clr-namespace:TagTool.App.Core.Models;assembly=TagTool.App.Core"
     xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
     mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="400"
-    x:Name="Root"
+    x:Name="UserControlRoot"
     x:Class="TagTool.App.Views.UserControls.FileSystemView"
     x:DataType="userControls:FileSystemViewModel">
 
@@ -147,28 +147,60 @@
 
             </DockPanel>
 
-            <ToggleButton
+            <Border
                 Grid.Column="4"
-                IsChecked="{Binding AreTagsVisible}">
-                <ToggleButton.Template>
-                    <ControlTemplate>
+                BorderBrush="Green"
+                BorderThickness="0">
+                <Border.Styles>
+                    <Style
+                        Selector="
+                            ToggleButton:checked /template/ ContentPresenter#PART_ContentPresenter,
+                            ToggleButton:unchecked /template/ ContentPresenter#PART_ContentPresenter">
+                        <Setter Property="Background" Value="Transparent" />
+                        <Setter Property="Foreground" Value="Black" />
+                    </Style>
+                    <Style Selector="ToggleButton avalonia|MaterialIcon.tb-checked">
+                        <Setter Property="IsVisible" Value="False" />
+                    </Style>
+                    <Style Selector="ToggleButton:checked avalonia|MaterialIcon.tb-checked">
+                        <Setter Property="IsVisible" Value="True" />
+                    </Style>
+                    <Style Selector="ToggleButton avalonia|MaterialIcon.tb-unchecked">
+                        <Setter Property="IsVisible" Value="True" />
+                    </Style>
+                    <Style Selector="ToggleButton:checked avalonia|MaterialIcon.tb-unchecked">
+                        <Setter Property="IsVisible" Value="False" />
+                    </Style>
+                </Border.Styles>
+
+                <ToggleButton
+                    Name="TagsVisibilityToggleButton"
+                    Padding="0"
+                    IsChecked="False">
+
+                    <Border
+                        BorderBrush="Red"
+                        BorderThickness="0">
+
                         <Panel>
                             <avalonia:MaterialIcon
-                                Width="20"
-                                Height="20"
-                                IsVisible="{Binding !IsChecked, RelativeSource={RelativeSource TemplatedParent}}"
-                                Kind="Visibility" />
+                                Classes="tb-checked"
+                                Kind="VisibilityOutline"
+                                Width="25"
+                                Height="25"
+                                IsVisible="{Binding !IsChecked, RelativeSource={RelativeSource TemplatedParent}}" />
 
                             <avalonia:MaterialIcon
-                                Width="20"
-                                Height="20"
-                                IsVisible="{Binding IsChecked, RelativeSource={RelativeSource TemplatedParent}}"
-                                Kind="VisibilityOff" />
+                                Classes="tb-unchecked"
+                                Kind="VisibilityOffOutline"
+                                Width="25"
+                                Height="25"
+                                IsVisible="{Binding IsChecked, RelativeSource={RelativeSource TemplatedParent}}" />
                         </Panel>
-                    </ControlTemplate>
-                </ToggleButton.Template>
-                <avalonia:MaterialIcon Kind="Visibility" />
-            </ToggleButton>
+                    </Border>
+                </ToggleButton>
+            </Border>
+
         </Grid>
 
         <!-- File system data grid -->
@@ -199,7 +231,7 @@
                         <Grid
                             DragDrop.AllowDrop="True"
                             Name="GridFileEntryName"
-                            ColumnDefinitions="25,*"
+                            ColumnDefinitions="25,Auto,*"
                             AttachedToVisualTree="Visual_OnAttachedToVisualTree">
 
                             <Image
@@ -224,7 +256,48 @@
                                 </TextBlock.ContextFlyout>
                             </TextBlock>
 
-                            <Popup Grid.Column="0" Grid.ColumnSpan="2" />
+                            <!-- Associated tags -->
+                            <Border
+                                Grid.Column="2"
+                                BorderThickness="0"
+                                BorderBrush="Green"
+                                IsVisible="{Binding !#TagsVisibilityToggleButton.IsChecked}">
+
+                                <ItemsControl
+                                    Padding="5 0"
+                                    Margin="0"
+                                    HorizontalAlignment="Left"
+                                    VerticalAlignment="Center"
+                                    Items="{Binding AssociatedTags}">
+                                    <ItemsControl.ItemsPanel>
+                                        <ItemsPanelTemplate>
+                                            <StackPanel Orientation="Horizontal" Spacing="2" />
+                                        </ItemsPanelTemplate>
+                                    </ItemsControl.ItemsPanel>
+                                    <ItemsControl.ItemTemplate>
+                                        <DataTemplate>
+                                            <Border
+                                                HorizontalAlignment="Left"
+                                                VerticalAlignment="Center"
+                                                CornerRadius="4"
+                                                BorderBrush="#0097A7"
+                                                BorderThickness="1"
+                                                Margin="1"
+                                                ClipToBounds="True">
+
+                                                <TextBlock
+                                                    Margin="2 0"
+                                                    FontSize="12"
+                                                    FontFamily="avares://TagTool.App/Assets/Fonts#Lato"
+                                                    VerticalAlignment="Center"
+                                                    IsTabStop="False"
+                                                    Text="{Binding .}" />
+
+                                            </Border>
+                                        </DataTemplate>
+                                    </ItemsControl.ItemTemplate>
+                                </ItemsControl>
+                            </Border>
                         </Grid>
                     </DataTemplate>
                 </DataGridTemplateColumn>

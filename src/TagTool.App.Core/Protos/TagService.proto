@@ -12,6 +12,16 @@ service TagService {
   rpc Untag(stream UntagRequest) returns (stream UntagReply);
 
   rpc GetItems(GetItemsRequest) returns (stream GetItemsResponse);
+  rpc GetItemInfo(GetItemInfoRequest) returns (GetItemInfoReply);
+}
+
+message GetItemInfoRequest {
+  string type = 1;
+  string itemIdentifier = 2;
+}
+
+message GetItemInfoReply {
+  repeated string tags = 1;
 }
 
 message GetItemsRequest {

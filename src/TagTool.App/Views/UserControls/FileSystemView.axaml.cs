@@ -82,6 +82,7 @@ public partial class FileSystemView : UserControl
         var tagName = (string)e.Data.Get("draggedTag")!;
 
         _vm.TagItCommand.Execute((tagName, entry));
+        _vm.UpdateTags();
     }
 
     private void DataGrid_OnKeyDown(object? sender, KeyEventArgs e)
