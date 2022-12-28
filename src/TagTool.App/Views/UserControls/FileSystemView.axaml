@@ -150,7 +150,8 @@
             <Border
                 Grid.Column="4"
                 BorderBrush="Green"
-                BorderThickness="0">
+                BorderThickness="0"
+                Width="{Binding $self.Bounds.Height}">
                 <Border.Styles>
                     <Style
                         Selector="
@@ -175,32 +176,28 @@
 
                 <ToggleButton
                     Name="TagsVisibilityToggleButton"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
                     Padding="0"
                     IsChecked="False">
 
-                    <Border
-                        BorderBrush="Red"
-                        BorderThickness="0">
+                    <Panel>
+                        <avalonia:MaterialIcon
+                            Classes="tb-checked"
+                            Kind="VisibilityOutline"
+                            Width="20"
+                            Height="20"
+                            IsVisible="{Binding !$parent[ToggleButton].IsChecked}" />
 
-                        <Panel>
-                            <avalonia:MaterialIcon
-                                Classes="tb-checked"
-                                Kind="VisibilityOutline"
-                                Width="25"
-                                Height="25"
-                                IsVisible="{Binding !IsChecked, RelativeSource={RelativeSource TemplatedParent}}" />
-
-                            <avalonia:MaterialIcon
-                                Classes="tb-unchecked"
-                                Kind="VisibilityOffOutline"
-                                Width="25"
-                                Height="25"
-                                IsVisible="{Binding IsChecked, RelativeSource={RelativeSource TemplatedParent}}" />
-                        </Panel>
-                    </Border>
+                        <avalonia:MaterialIcon
+                            Classes="tb-unchecked"
+                            Kind="VisibilityOffOutline"
+                            Width="20"
+                            Height="20"
+                            IsVisible="{Binding $parent[ToggleButton].IsChecked}" />
+                    </Panel>
                 </ToggleButton>
             </Border>
-
         </Grid>
 
         <!-- File system data grid -->
