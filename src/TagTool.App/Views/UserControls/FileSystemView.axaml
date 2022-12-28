@@ -153,6 +153,10 @@
                 BorderThickness="0"
                 Width="{Binding $self.Bounds.Height}">
                 <Border.Styles>
+                    <Style Selector="avalonia|MaterialIcon">
+                        <Setter Property="Width" Value="20" />
+                        <Setter Property="Height" Value="20" />
+                    </Style>
                     <Style
                         Selector="
                             ToggleButton:checked /template/ ContentPresenter#PART_ContentPresenter,
@@ -185,16 +189,13 @@
                         <avalonia:MaterialIcon
                             Classes="tb-checked"
                             Kind="VisibilityOutline"
-                            Width="20"
-                            Height="20"
                             IsVisible="{Binding !$parent[ToggleButton].IsChecked}" />
 
                         <avalonia:MaterialIcon
                             Classes="tb-unchecked"
                             Kind="VisibilityOffOutline"
-                            Width="20"
-                            Height="20"
                             IsVisible="{Binding $parent[ToggleButton].IsChecked}" />
+
                     </Panel>
                 </ToggleButton>
             </Border>
@@ -288,7 +289,17 @@
                                                     FontFamily="avares://TagTool.App/Assets/Fonts#Lato"
                                                     VerticalAlignment="Center"
                                                     IsTabStop="False"
-                                                    Text="{Binding .}" />
+                                                    Text="{Binding .}">
+                                                    <TextBlock.ContextFlyout>
+                                                        <MenuFlyout>
+                                                            <MenuItem Header="Remove" Click="TagMenuItem_OnClick">
+                                                                <MenuItem.Icon>
+                                                                    <avalonia:MaterialIcon Kind="DeleteOutline" />
+                                                                </MenuItem.Icon>
+                                                            </MenuItem>
+                                                        </MenuFlyout>
+                                                    </TextBlock.ContextFlyout>
+                                                </TextBlock>
 
                                             </Border>
                                         </DataTemplate>

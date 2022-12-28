@@ -3,6 +3,7 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Interactivity;
+using Avalonia.LogicalTree;
 using Avalonia.Markup.Xaml;
 using Avalonia.VisualTree;
 using Microsoft.Extensions.DependencyInjection;
@@ -139,6 +140,19 @@ public partial class FileSystemView : UserControl
     }
 
     private Window GetWindow() => (Window)VisualRoot!;
+
+    private void TagMenuItem_OnClick(object? sender, RoutedEventArgs e)
+    {
+        var menuItem = (MenuItem)sender!;
+        var textBlock = menuItem.FindLogicalAncestorOfType<TextBlock>()!;
+        var dataGridCell = menuItem.FindLogicalAncestorOfType<DataGridCell>()!;
+
+        var tagName = textBlock.Text!;
+        var entry = (FileSystemEntry)dataGridCell.DataContext!;
+
+        _vm.UntagItemCommand.Execute((tagName, entry));
+        _vm.UpdateTags();
+    }
 }
 
 public static class KeyHelpers

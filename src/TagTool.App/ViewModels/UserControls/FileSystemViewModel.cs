@@ -169,6 +169,20 @@ public partial class FileSystemViewModel : ViewModelBase
         await streamingCall.RequestStream.CompleteAsync();
     }
 
+    [RelayCommand]
+    private async Task UntagItem((string TagName, FileSystemEntry FileSystemEntry) data)
+    {
+        var (tagName, fileSystemEntry) = data;
+        var untagRequest = fileSystemEntry.IsDir
+            ? new UntagRequest { TagNames = { tagName }, FolderInfo = new FolderDescription { Path = fileSystemEntry.FullName } }
+            : new UntagRequest { TagNames = { tagName }, FileInfo = new FileDescription { Path = fileSystemEntry.FullName } };
+
+        var streamingCall = _tagService.Untag();
+
+        await streamingCall.RequestStream.WriteAsync(untagRequest);
+        await streamingCall.RequestStream.CompleteAsync();
+    }
+
     [RelayCommand(CanExecute = nameof(HasQuickSearchResults))]
     private void GoToNextMatchedItem()
     {
