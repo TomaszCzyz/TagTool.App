@@ -9,15 +9,26 @@ using CommunityToolkit.Mvvm.Input;
 using DynamicData;
 using TagTool.App.Core.Extensions;
 using TagTool.App.Core.Models;
+using TagTool.App.Core.Services;
+using TagTool.Backend;
 
 namespace TagTool.App.ViewModels.UserControls;
 
+public class DisplayInfo
+{
+    public FileSystemEntry Entry { get; set; }
+    public List<Tag> AsociatedTags { get; set; }
+}
+
 public partial class FileSystemViewModel : ViewModelBase
 {
+    private readonly TagService.TagServiceClient _tagService;
     private readonly Stack<DirectoryInfo> _navigationHistoryBack = new();
     private readonly Stack<DirectoryInfo> _navigationHistoryForward = new();
 
-    public ObservableCollection<FileSystemEntry> Items { get; set; } = new();
+    public ObservableCollection<DisplayInfo> Items { get; set; } = new();
+
+    public ObservableCollection<string> DetailsItems { get; set; } = new();
 
     public ObservableCollection<AddressSegmentViewModel> AddressSegments { get; set; } = new();
 
@@ -32,7 +43,7 @@ public partial class FileSystemViewModel : ViewModelBase
     private string _addressTextBox = string.Empty;
 
     [ObservableProperty]
-    private FileSystemEntry? _selectedItem;
+    private DisplayInfo? _selectedItem;
 
     [ObservableProperty]
     private bool _isQuickSearching;
@@ -47,18 +58,21 @@ public partial class FileSystemViewModel : ViewModelBase
 
     public bool CanNavigateForward => _navigationHistoryForward.Count > 0;
 
-    private readonly List<FileSystemEntry> _highlightedItems = new();
+    private readonly List<DisplayInfo> _highlightedItems = new();
 
     /// <summary>
     ///     Because DataGrid handles KeyDownEvent first, it is inconvenient to use SelectedItem property,
     ///     as it points to the next item, when quick search navigation is performed.
     ///     Also, the SelectedItem is not updated if event occurs on the last item.
     /// </summary>
-    private FileSystemEntry? _quickSearchSelectedItem;
+    private DisplayInfo? _quickSearchSelectedItem;
 
-    public FileSystemViewModel()
+    public FileSystemViewModel(ITagToolBackend tagToolBackend)
     {
+        _tagService = tagToolBackend.GetTagService();
         CurrentFolder = new DirectoryInfo(@"C:\Users\tczyz\MyFiles");
+
+        DetailsItems.AddRange(new[] { "qwe", "wer", "ert" });
     }
 
     partial void OnQuickSearchTextChanged(string value)
@@ -68,7 +82,7 @@ public partial class FileSystemViewModel : ViewModelBase
             _highlightedItems.Clear();
         }
 
-        // todo: add cancellation support in case of large folders
+        // todo: add cancellation support in a case of large folders
         Dispatcher.UIThread.Post(() =>
         {
             OnQuickSearchTextChangedInner(value);
@@ -77,19 +91,19 @@ public partial class FileSystemViewModel : ViewModelBase
 
     private void OnQuickSearchTextChangedInner(string value)
     {
-        foreach (var entry in Items)
+        foreach (var (info, entry) in Items.Select(info => (info, info.Entry)))
         {
             var index = entry.Name.IndexOf(value, StringComparison.CurrentCultureIgnoreCase);
 
             if (index < 0)
             {
-                if (_highlightedItems.Contains(entry))
+                if (_highlightedItems.Contains(info))
                 {
                     // reset previous highlighting 
                     entry.Inlines.Clear();
                     entry.Inlines.Add(new Run { Text = entry.Name });
 
-                    _highlightedItems.Remove(entry);
+                    _highlightedItems.Remove(info);
                 }
 
                 continue;
@@ -98,8 +112,8 @@ public partial class FileSystemViewModel : ViewModelBase
             entry.Inlines.Clear();
             entry.Inlines.AddRange(CreateHighlightedText(index, index + value.Length, entry.Name));
 
-            if (_highlightedItems.Contains(entry)) continue;
-            _highlightedItems.Add(entry);
+            if (_highlightedItems.Contains(info)) continue;
+            _highlightedItems.Add(info);
         }
 
         UpdateResults();
@@ -129,15 +143,28 @@ public partial class FileSystemViewModel : ViewModelBase
                 var index = Items.IndexOf(highlightedItem);
                 var selectedItemIndex = SelectedItem is not null ? Items.IndexOf(SelectedItem) : 0;
 
-                if (index >= selectedItemIndex)
-                {
-                    _quickSearchSelectedItem = SelectedItem = highlightedItem;
-                    return;
-                }
+                if (index < selectedItemIndex) continue;
+
+                _quickSearchSelectedItem = SelectedItem = highlightedItem;
+                return;
             }
 
             _quickSearchSelectedItem = SelectedItem = _highlightedItems[0];
         }
+    }
+
+    [RelayCommand]
+    private async Task TagIt((string TagName, FileSystemEntry FileSystemEntry) data)
+    {
+        var (tagName, fileSystemEntry) = data;
+        var tagRequest = fileSystemEntry.IsDir
+            ? new TagRequest { TagNames = { tagName }, FolderInfo = new FolderDescription { Path = fileSystemEntry.FullName } }
+            : new TagRequest { TagNames = { tagName }, FileInfo = new FileDescription { Path = fileSystemEntry.FullName } };
+
+        var streamingCall = _tagService.Tag();
+
+        await streamingCall.RequestStream.WriteAsync(tagRequest);
+        await streamingCall.RequestStream.CompleteAsync();
     }
 
     [RelayCommand(CanExecute = nameof(HasQuickSearchResults))]
@@ -145,10 +172,8 @@ public partial class FileSystemViewModel : ViewModelBase
     {
         var currentIndex = Items.IndexOf(_quickSearchSelectedItem!);
 
-        foreach (var highlightedItem in _highlightedItems)
+        foreach (var highlightedItem in _highlightedItems.Where(highlightedItem => Items.IndexOf(highlightedItem) > currentIndex))
         {
-            if (Items.IndexOf(highlightedItem) <= currentIndex) continue;
-
             SelectedItem = highlightedItem;
             _quickSearchSelectedItem = SelectedItem;
             return;
@@ -237,7 +262,7 @@ public partial class FileSystemViewModel : ViewModelBase
     [RelayCommand]
     private void Navigate(FileSystemInfo? info = null)
     {
-        var destination = info ?? (FileSystemInfo?)SelectedItem;
+        var destination = info ?? (FileSystemInfo?)SelectedItem.Entry;
 
         switch (destination)
         {
@@ -297,8 +322,8 @@ public partial class FileSystemViewModel : ViewModelBase
         Items.AddRange(
             value
                 .EnumerateFileSystemInfos("*", new EnumerationOptions { IgnoreInaccessible = true })
-                .Select(info => new FileSystemEntry(info))
-                .OrderByDescending(static entry => entry, FileSystemEntryComparer.StaticFileSystemEntryComparer));
+                .Select(info => new DisplayInfo { Entry = new FileSystemEntry(info), AsociatedTags = new List<Tag>() })
+                .OrderByDescending(static info => info.Entry, FileSystemEntryComparer.StaticFileSystemEntryComparer));
 
         AddressSegments.Clear();
         AddressSegments.AddRange(CurrentFolder.GetAncestors().Select(folder => new AddressSegmentViewModel(folder, this)));

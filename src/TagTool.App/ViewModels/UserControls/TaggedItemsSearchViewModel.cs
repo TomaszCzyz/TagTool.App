@@ -16,6 +16,7 @@ namespace TagTool.App.ViewModels.UserControls;
 public partial class TaggedItemsSearchViewModel : ViewModelBase, IDisposable
 {
     private readonly TagSearchService.TagSearchServiceClient _tagSearchService;
+    private readonly TagService.TagServiceClient _tagService;
 
     [ObservableProperty]
     private string? _searchText;
@@ -32,9 +33,9 @@ public partial class TaggedItemsSearchViewModel : ViewModelBase, IDisposable
 
     public ObservableCollection<object> EnteredTags { get; set; } = new();
 
-    public ObservableCollection<SimpleFile> Files { get; set; } = new();
+    public ObservableCollection<TaggedItem> Files { get; set; } = new();
 
-    public Tag[] Tags => EnteredTags.Where(o => o.GetType() == typeof(Tag)).Cast<Tag>().ToArray();
+    private IEnumerable<Tag> Tags => EnteredTags.Where(o => o.GetType() == typeof(Tag)).Cast<Tag>().ToArray();
 
     /// <summary>
     ///     ctor for XAML previewer
@@ -42,12 +43,14 @@ public partial class TaggedItemsSearchViewModel : ViewModelBase, IDisposable
     public TaggedItemsSearchViewModel()
     {
         _tagSearchService = null!;
+        _tagService = null!;
     }
 
     [UsedImplicitly]
     public TaggedItemsSearchViewModel(ITagToolBackend tagToolBackend)
     {
         _tagSearchService = tagToolBackend.GetSearchService();
+        _tagService = tagToolBackend.GetTagService();
 
         var tags = new Tag[] { new("Audio"), new("Dog"), new("Picture"), new("Colleague"), new("Tag6"), new("LastTag") };
         EnteredTags.AddRange(tags);
@@ -63,9 +66,26 @@ public partial class TaggedItemsSearchViewModel : ViewModelBase, IDisposable
     }
 
     [RelayCommand]
-    private void CommitSearch()
+    private async Task CommitSearch()
     {
-        int t = 0;
+        Files.Clear();
+
+        var getItemsRequest = new GetItemsRequest { TagNames = { Tags.Select(tag => tag.Name).ToArray() } };
+        var streamingCall = _tagService.GetItems(getItemsRequest);
+        while (await streamingCall.ResponseStream.MoveNext())
+        {
+            var reply = streamingCall.ResponseStream.Current;
+            if (reply.FileInfo is not null)
+            {
+                var info = new FileInfo(reply.FileInfo.Path);
+                Files.Add(new TaggedItem(info.Name, info.Length, info.CreationTime, info.LastWriteTime, new[] { new Tag("asd"), new Tag("ert") }));
+            }
+            else
+            {
+                var info = new DirectoryInfo(reply.FolderInfo.Path);
+                Files.Add(new TaggedItem(info.Name, 0, info.CreationTime, info.LastWriteTime, new[] { new Tag("asd"), new Tag("ert") }));
+            }
+        }
     }
 
     [RelayCommand]
@@ -202,23 +222,23 @@ public partial class TaggedItemsSearchViewModel : ViewModelBase, IDisposable
         GC.SuppressFinalize(this);
     }
 
-    private readonly SimpleFile[] _exampleFiles =
+    private readonly TaggedItem[] _exampleFiles =
     {
-        new(1, "File1.txt", 1234, new DateTime(2022, 12, 12), new DateTime(2022, 12, 12), @"C:\Program Files"),
-        new(1, "File2.txt", 12311111114, new DateTime(2022, 12, 12), new DateTime(2022, 12, 12), @"C:\Program Files"),
-        new(1, "File3.txt", 1234, new DateTime(2022, 12, 12), new DateTime(2022, 12, 12), @"C:\Program Files"),
-        new(1, "File4.txt", 1212312334, new DateTime(2022, 12, 12), new DateTime(2022, 12, 12), @"C:\Program Files"),
-        new(1, "File5.txt", 1234, new DateTime(2022, 12, 12), new DateTime(2022, 12, 12), @"C:\Program Files"),
-        new(1, "File6.txt", 1222234, new DateTime(2022, 12, 12), new DateTime(2022, 12, 12), @"C:\Program Files"),
-        new(1, "File1.txt", 1234, new DateTime(2022, 12, 12), new DateTime(2022, 12, 12), @"C:\Program Files"),
-        new(1, "File1.txt", 1234, new DateTime(2022, 12, 12), new DateTime(2022, 12, 12), @"C:\Program Files"),
-        new(1, "File1.txt", 1234, new DateTime(2022, 12, 12), new DateTime(2022, 12, 12), @"C:\Program Files"),
-        new(1, "File1.txt", 1212334, new DateTime(2022, 12, 12), new DateTime(2022, 12, 12), @"C:\Program Files"),
-        new(1, "File1.txt", 1234, new DateTime(2022, 12, 12), new DateTime(2022, 12, 12), @"C:\Program Files"),
-        new(1, "File1.txt", 1234, new DateTime(2022, 12, 12), new DateTime(2022, 12, 12), @"C:\Program Files"),
-        new(2, "File2.txt", 1234, new DateTime(1999, 1, 1), new DateTime(1999, 1, 1), @"C:\Users\tczyz\Source\repos\LayersTraversing"),
-        new(3, "File3.txt", 144234, new DateTime(2022, 2, 12), null, @"C:\Program Files"),
-        new(4, "FileFile4", 13234, new DateTime(202, 12, 30), null, @"C:\Users\tczyz\Source"),
-        new(5, "File5", 122334, new DateTime(1990, 12, 30), null, @"C:\Users\tczyz\Source\repos\LayersTraversing\file.txt")
+        new("File1.txt", 1234, new DateTime(2022, 12, 12), new DateTime(2022, 12, 12), new[] { new Tag("empty") }),
+        new("File2.txt", 12311111114, new DateTime(2022, 12, 12), new DateTime(2022, 12, 12), new[] { new Tag("empty") }),
+        new("File3.txt", 1234, new DateTime(2022, 12, 12), new DateTime(2022, 12, 12), new[] { new Tag("empty") }),
+        new("File4.txt", 1212312334, new DateTime(2022, 12, 12), new DateTime(2022, 12, 12), new[] { new Tag("empty") }),
+        new("File5.txt", 1234, new DateTime(2022, 12, 12), new DateTime(2022, 12, 12), new[] { new Tag("empty") }),
+        new("File6.txt", 1222234, new DateTime(2022, 12, 12), new DateTime(2022, 12, 12), new[] { new Tag("empty") }),
+        new("File1.txt", 1234, new DateTime(2022, 12, 12), new DateTime(2022, 12, 12), new[] { new Tag("empty") }),
+        new("File1.txt", 1234, new DateTime(2022, 12, 12), new DateTime(2022, 12, 12), new[] { new Tag("empty") }),
+        new("File1.txt", 1234, new DateTime(2022, 12, 12), new DateTime(2022, 12, 12), new[] { new Tag("empty") }),
+        new("File1.txt", 1212334, new DateTime(2022, 12, 12), new DateTime(2022, 12, 12), new[] { new Tag("empty") }),
+        new("File1.txt", 1234, new DateTime(2022, 12, 12), new DateTime(2022, 12, 12), new[] { new Tag("empty") }),
+        new("File1.txt", 1234, new DateTime(2022, 12, 12), new DateTime(2022, 12, 12), new[] { new Tag("empty") }),
+        new("File2.txt", 1234, new DateTime(1999, 1, 1), new DateTime(1999, 1, 1), new[] { new Tag("empty") }),
+        new("File3.txt", 144234, new DateTime(2022, 2, 12), null, new[] { new Tag("empty") }),
+        new("FileFile4", 13234, new DateTime(202, 12, 30), null, new[] { new Tag("empty") }),
+        new("File5", 122334, new DateTime(1990, 12, 30), null, new[] { new Tag("empty") })
     };
 }

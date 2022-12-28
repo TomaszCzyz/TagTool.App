@@ -16,6 +16,7 @@
         <Color x:Key="MyLightPrimary500">#42B1F0</Color>
         <Color x:Key="MyLightPrimary400">#A1D8F7</Color>
         <Color x:Key="MyLightPrimary300">#E7F5FD</Color>
+        <Color x:Key="MyLightPrimary200">#F1F3F3</Color>
 
         <Color x:Key="MyLightSecondary900">#311902</Color>
         <Color x:Key="MyLightSecondary800">#623104</Color>
@@ -28,7 +29,6 @@
 
     <Application.Styles>
         <FluentTheme Mode="Light" />
-        <StyleInclude Source="avares://Dock.Avalonia/Themes/DockFluentTheme.axaml" />
         <StyleInclude Source="avares://Avalonia.Controls.DataGrid/Themes/Fluent.xaml" />
         <StyleInclude Source="avares://Material.Icons.Avalonia/App.xaml" />
         <StyleInclude Source="/Views/TemplatedControls/TagChip.axaml" />

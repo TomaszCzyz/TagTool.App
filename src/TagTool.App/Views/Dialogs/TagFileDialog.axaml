@@ -10,15 +10,13 @@
     xmlns:models="clr-namespace:TagTool.App.Core.Models;assembly=TagTool.App.Core"
     mc:Ignorable="d" d:DesignWidth="600" d:DesignHeight="350"
     x:Class="TagTool.App.Views.Dialogs.TagFileDialog"
-    Title="AddFileDialog"
+    Title="TagFileDialog"
     WindowStartupLocation="CenterOwner"
     ExtendClientAreaChromeHints="NoChrome"
     ExtendClientAreaToDecorationsHint="True"
     ExtendClientAreaTitleBarHeightHint="-1"
     ShowInTaskbar="True"
-    SizeToContent="WidthAndHeight"
-    TransparencyLevelHint="AcrylicBlur"
-    Background="{x:Null}">
+    SizeToContent="WidthAndHeight">
 
     <Window.Resources>
         <converters:ArraySizeToBooleanConverter x:Key="ArraySizeToBooleanConverter" Threshold="1" />

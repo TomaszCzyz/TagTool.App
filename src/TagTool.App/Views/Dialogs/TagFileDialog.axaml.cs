@@ -11,22 +11,27 @@ namespace TagTool.App.Views.Dialogs;
 
 public partial class TagFileDialog : Window
 {
+    private readonly TagFileDialogViewModel _viewModel = App.Current.Services.GetRequiredService<TagFileDialogViewModel>();
+
+    public TagFileDialog(string startLocation) : this()
+    {
+        _viewModel.Text = startLocation;
+    }
+
     public TagFileDialog()
     {
-        DataContext = App.Current.Services.GetRequiredService<TagFileDialogViewModel>();
+        DataContext = _viewModel;
         InitializeComponent();
     }
 
     private async void OpenFilePickerButton_OnClick(object? sender, RoutedEventArgs e)
     {
-        if (sender is not Button { DataContext: TagFileDialogViewModel viewModel }) return;
-
         var options = new FilePickerOpenOptions
         {
             Title = "Select file",
             FileTypeFilter = new[] { FilePickerFileTypes.All },
             AllowMultiple = false,
-            SuggestedStartLocation = viewModel.FilePickerSuggestedStartLocation
+            SuggestedStartLocation = _viewModel.FilePickerSuggestedStartLocation
         };
 
         var result = await GetStorageProvider().OpenFilePickerAsync(options);
@@ -34,7 +39,7 @@ public partial class TagFileDialog : Window
         if (result.Count == 0 || !result[0].TryGetUri(out var filePath)) return;
 
         var folderPath = Directory.GetParent(filePath.LocalPath)?.FullName;
-        viewModel.FilePickerSuggestedStartLocation = folderPath is null ? null : new BclStorageFolder(folderPath);
+        _viewModel.FilePickerSuggestedStartLocation = folderPath is null ? null : new BclStorageFolder(folderPath);
         SelectFileTextBox.Text = filePath.LocalPath;
     }
 

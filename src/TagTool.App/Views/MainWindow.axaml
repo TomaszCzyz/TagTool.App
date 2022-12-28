@@ -13,7 +13,7 @@
     ExtendClientAreaChromeHints="Default"
     ExtendClientAreaToDecorationsHint="True"
     ExtendClientAreaTitleBarHeightHint="-1"
-    Background="#F1F3F3">
+    Background="{StaticResource MyLightPrimary200}">
     <Window.KeyBindings>
         <KeyBinding Gesture="Escape" Command="{Binding ResetFocusCommand}" CommandParameter="{Binding #RootWindow}" />
         <KeyBinding Gesture="Ctrl+Q" Command="{Binding FocusNextSearchTabCommand}" CommandParameter="{Binding #RootWindow}" />
@@ -22,7 +22,7 @@
         <Style Selector="Border.MenuPanel">
             <Setter Property="BorderThickness" Value="1" />
             <Setter Property="BorderBrush" Value="{StaticResource MyLightPrimary800}" />
-            <Setter Property="Background" Value="{StaticResource MyLightPrimary400}" />
+            <Setter Property="Background" Value="{StaticResource MyLightPrimary300}" />
         </Style>
     </Window.Styles>
 
@@ -97,11 +97,7 @@
                     </MultiBinding>
                 </SplitView.IsPaneOpen>
                 <SplitView.Pane>
-                    <TextBlock
-                        Text="Pane"
-                        FontSize="24"
-                        VerticalAlignment="Center"
-                        HorizontalAlignment="Center" />
+                    <userControls:MyTagsView />
 
                 </SplitView.Pane>
                 <userControls:MainPanel />
