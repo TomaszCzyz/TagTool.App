@@ -6,7 +6,9 @@ using Avalonia.Interactivity;
 using Avalonia.Markup.Xaml;
 using Avalonia.VisualTree;
 using Microsoft.Extensions.DependencyInjection;
+using TagTool.App.Core.Models;
 using TagTool.App.ViewModels.UserControls;
+using TagTool.App.Views.Dialogs;
 
 namespace TagTool.App.Views.UserControls;
 
@@ -23,6 +25,11 @@ public partial class FileSystemView : UserControl
             KeyDownEvent,
             DataGrid_OnKeyDown, //todo: split this logic to two handlers (one for quick search scenario, one for navigation scenario)
             handledEventsToo: true);
+    }
+
+    private void InitializeComponent()
+    {
+        AvaloniaXamlLoader.Load(this);
     }
 
     private void AddressTextBox_OnLostFocus(object? sender, RoutedEventArgs e)
@@ -50,12 +57,31 @@ public partial class FileSystemView : UserControl
     {
         var dataGridCell = e.Parent.FindAncestorOfType<DataGridCell>()!;
 
-        dataGridCell.DoubleTapped += (_, _) => _vm.NavigateCommand.Execute(null);
+        dataGridCell.AddHandler(DoubleTappedEvent, (_, _) => _vm.NavigateCommand.Execute(null));
+        dataGridCell.AddHandler(DragDrop.DragOverEvent, DragOver);
+        dataGridCell.AddHandler(DragDrop.DropEvent, Drop);
     }
 
-    private void InitializeComponent()
+    private void DragOver(object? sender, DragEventArgs e)
     {
-        AvaloniaXamlLoader.Load(this);
+        // Only allow Copy or Link as Drop Operations.
+        e.DragEffects &= DragDropEffects.Link;
+
+        // Only allow if the dragged data contains tag
+        if (!e.Data.Contains("draggedTag"))
+        {
+            e.DragEffects = DragDropEffects.None;
+        }
+    }
+
+    private void Drop(object? sender, DragEventArgs e)
+    {
+        var dataGridCell = (DataGridCell)sender!;
+
+        var entry = (FileSystemEntry)dataGridCell.DataContext!;
+        var tagName = (string)e.Data.Get("draggedTag")!;
+
+        _vm.TagItCommand.Execute((tagName, entry));
     }
 
     private void DataGrid_OnKeyDown(object? sender, KeyEventArgs e)
@@ -102,6 +128,16 @@ public partial class FileSystemView : UserControl
     {
         _vm.QuickSearchText = "";
     }
+
+    private async void TagItMenuItem_OnClick(object? sender, RoutedEventArgs e)
+    {
+        if (_vm.SelectedItem is null) return;
+
+        var dialog = new TagFileDialog(_vm.SelectedItem.Entry.FullName);
+        var showDialog = await dialog.ShowDialog<(string FileName, Tag[] Tags)>(GetWindow());
+    }
+
+    private Window GetWindow() => (Window)VisualRoot!;
 }
 
 public static class KeyHelpers

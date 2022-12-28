@@ -7,7 +7,7 @@
     xmlns:converters="clr-namespace:TagTool.App.Converters"
     xmlns:models="clr-namespace:TagTool.App.Core.Models;assembly=TagTool.App.Core"
     xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
-    mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="900"
+    mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="400"
     x:Name="Root"
     x:Class="TagTool.App.Views.UserControls.FileSystemView"
     x:DataType="userControls:FileSystemViewModel">
@@ -39,7 +39,7 @@
                     <Setter Property="Margin" Value="1 4" />
                     <Setter Property="Padding" Value="1" />
                     <Setter Property="CornerRadius" Value="6" />
-                    
+
                     <Style Selector="^:disabled /template/ ContentPresenter#PART_ContentPresenter">
                         <Setter Property="Background" Value="Transparent" />
                     </Style>
@@ -173,6 +173,7 @@
                     CustomSortComparer="{StaticResource FileSystemEntryComparer}">
                     <DataTemplate DataType="models:FileSystemEntry">
                         <Grid
+                            DragDrop.AllowDrop="True"
                             Name="GridFileEntryName"
                             ColumnDefinitions="25,*"
                             AttachedToVisualTree="Visual_OnAttachedToVisualTree">
@@ -189,7 +190,7 @@
                                 Inlines="{Binding Inlines}">
                                 <TextBlock.ContextFlyout>
                                     <MenuFlyout>
-                                        <MenuItem Header="Tag it" />
+                                        <MenuItem Header="Tag it" Click="TagItMenuItem_OnClick" />
                                         <Separator />
                                         <MenuItem Header="Show in Explorer" />
                                         <Separator />
@@ -200,7 +201,6 @@
                             </TextBlock>
 
                             <Popup Grid.Column="0" Grid.ColumnSpan="2" />
-
                         </Grid>
                     </DataTemplate>
                 </DataGridTemplateColumn>
