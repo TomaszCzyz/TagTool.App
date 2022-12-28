@@ -10,8 +10,8 @@ service TagService {
 
   rpc Tag(stream TagRequest) returns (stream TagReply);
   rpc Untag(stream UntagRequest) returns (stream UntagReply);
-  
-  rpc GetItems(GetItemsRequest) returns (stream GetItemsResponse); 
+
+  rpc GetItems(GetItemsRequest) returns (stream GetItemsResponse);
 }
 
 message GetItemsRequest {
@@ -22,7 +22,8 @@ message GetItemsResponse {
   oneof subject {
     FileDescription fileInfo = 1;
     FolderDescription folderInfo = 2;
-  } 
+  }
+  repeated string tagNames = 3;
 }
 
 message CreateTagsRequest {

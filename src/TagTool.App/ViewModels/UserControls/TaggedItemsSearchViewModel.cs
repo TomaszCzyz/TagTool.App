@@ -75,15 +75,17 @@ public partial class TaggedItemsSearchViewModel : ViewModelBase, IDisposable
         while (await streamingCall.ResponseStream.MoveNext())
         {
             var reply = streamingCall.ResponseStream.Current;
+            var tags = reply.TagNames.Select(s => new Tag(s)).ToArray();
+
             if (reply.FileInfo is not null)
             {
                 var info = new FileInfo(reply.FileInfo.Path);
-                Files.Add(new TaggedItem(info.Name, info.Length, info.CreationTime, info.LastWriteTime, new[] { new Tag("asd"), new Tag("ert") }));
+                Files.Add(new TaggedItem(info.Name, info.Length, info.CreationTime, info.LastWriteTime, tags));
             }
             else
             {
                 var info = new DirectoryInfo(reply.FolderInfo.Path);
-                Files.Add(new TaggedItem(info.Name, 0, info.CreationTime, info.LastWriteTime, new[] { new Tag("asd"), new Tag("ert") }));
+                Files.Add(new TaggedItem(info.Name, 0, info.CreationTime, info.LastWriteTime, tags));
             }
         }
     }

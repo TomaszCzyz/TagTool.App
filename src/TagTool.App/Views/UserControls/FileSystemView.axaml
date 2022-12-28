@@ -32,7 +32,7 @@
     <Grid RowDefinitions="30,*,Auto">
 
         <!-- Address bar -->
-        <Grid Grid.Row="0" ColumnDefinitions="Auto,Auto,Auto,*">
+        <Grid Grid.Row="0" ColumnDefinitions="Auto,Auto,Auto,*,Auto">
             <Grid.Styles>
                 <Style Selector="Button.NavigationButton">
                     <Setter Property="Background" Value="Transparent" />
@@ -84,6 +84,7 @@
                 </TextBox.KeyBindings>
             </TextBox>
 
+            <!-- Interactive address -->
             <DockPanel
                 Grid.Column="3"
                 Margin="5 0 0 0"
@@ -145,6 +146,29 @@
                     PointerPressed="Border_OnPointerPressed" />
 
             </DockPanel>
+
+            <ToggleButton
+                Grid.Column="4"
+                IsChecked="{Binding AreTagsVisible}">
+                <ToggleButton.Template>
+                    <ControlTemplate>
+                        <Panel>
+                            <avalonia:MaterialIcon
+                                Width="20"
+                                Height="20"
+                                IsVisible="{Binding !IsChecked, RelativeSource={RelativeSource TemplatedParent}}"
+                                Kind="Visibility" />
+
+                            <avalonia:MaterialIcon
+                                Width="20"
+                                Height="20"
+                                IsVisible="{Binding IsChecked, RelativeSource={RelativeSource TemplatedParent}}"
+                                Kind="VisibilityOff" />
+                        </Panel>
+                    </ControlTemplate>
+                </ToggleButton.Template>
+                <avalonia:MaterialIcon Kind="Visibility" />
+            </ToggleButton>
         </Grid>
 
         <!-- File system data grid -->
