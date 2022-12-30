@@ -2,6 +2,7 @@
 
 namespace TagTool.App.ViewModels;
 
-public abstract class ViewModelBase : ObservableObject
+[ObservableObject]
+public abstract partial class ViewModelBase
 {
 }

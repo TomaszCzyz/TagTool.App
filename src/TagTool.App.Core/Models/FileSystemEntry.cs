@@ -13,7 +13,7 @@ public class FileSystemEntry
     public FileSystemEntry(FileSystemInfo info)
     {
         _info = info;
-        Inlines = new InlineCollection { new Run { Text = _info.Name } };
+        Inlines?.Add(new Run { Text = _info.Name });
         IsDir = info is DirectoryInfo;
         IsFile = info is FileInfo;
     }
@@ -24,7 +24,7 @@ public class FileSystemEntry
 
     public string Name => _info.Name;
 
-    public InlineCollection Inlines { get; }
+    public InlineCollection? Inlines { get; } = new();
 
     // todo: it should be lazy loaded... and not be here xd
     public ObservableCollection<string> AssociatedTags { get; init; } = new();

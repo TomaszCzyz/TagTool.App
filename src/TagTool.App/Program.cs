@@ -3,7 +3,6 @@ using Avalonia;
 using Avalonia.Svg.Skia;
 using Serilog;
 using Serilog.Core.Enrichers;
-using Serilog.Events;
 
 namespace TagTool.App;
 
@@ -40,7 +39,7 @@ public static class Program
 
         Log.Logger = new LoggerConfiguration()
             .MinimumLevel.Verbose()
-            .MinimumLevel.Override("Microsoft", LogEventLevel.Warning)
+            .MinimumLevel.Override("Microsoft", Serilog.Events.LogEventLevel.Warning)
             .Enrich.FromLogContext()
             .Enrich.With(new PropertyEnricher("ApplicationName", "TagToolApp"))
             .WriteTo.SQLite(logsDbPath, storeTimestampInUtc: true, batchSize: 10)

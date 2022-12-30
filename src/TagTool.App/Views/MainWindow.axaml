@@ -98,8 +98,8 @@
                 </SplitView.IsPaneOpen>
                 <SplitView.Pane>
                     <userControls:MyTagsView />
-
                 </SplitView.Pane>
+
                 <userControls:MainPanel />
             </SplitView>
         </Grid>

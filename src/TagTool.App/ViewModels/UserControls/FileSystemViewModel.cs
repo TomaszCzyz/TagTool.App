@@ -16,13 +16,21 @@ using TagTool.Backend;
 
 namespace TagTool.App.ViewModels.UserControls;
 
+[ObservableObject]
+public partial class RowData
+{
+    public TaggableItemViewModel Model { get; set; }
+}
+
 public partial class FileSystemViewModel : ViewModelBase
 {
     private readonly TagService.TagServiceClient _tagService;
     private readonly Stack<DirectoryInfo> _navigationHistoryBack = new();
     private readonly Stack<DirectoryInfo> _navigationHistoryForward = new();
 
-    public ObservableCollection<FileSystemEntry> Items { get; set; } = new();
+    // public ObservableCollection<FileSystemEntry> Items { get; set; } = new();
+
+    public ObservableCollection<TaggableItemViewModel> Items { get; set; } = new();
 
     public ObservableCollection<AddressSegmentViewModel> AddressSegments { get; set; } = new();
 
@@ -37,7 +45,7 @@ public partial class FileSystemViewModel : ViewModelBase
     private string _addressTextBox = string.Empty;
 
     [ObservableProperty]
-    private FileSystemEntry? _selectedItem;
+    private TaggableItemViewModel? _selectedItem;
 
     [ObservableProperty]
     private bool _isQuickSearching;
@@ -52,14 +60,14 @@ public partial class FileSystemViewModel : ViewModelBase
 
     public bool CanNavigateForward => _navigationHistoryForward.Count > 0;
 
-    private readonly List<FileSystemEntry> _highlightedItems = new();
+    private readonly List<TaggableItemViewModel> _highlightedItems = new();
 
     /// <summary>
     ///     Because DataGrid handles KeyDownEvent first, it is inconvenient to use SelectedItem property,
     ///     as it points to the next item, when quick search navigation is performed.
     ///     Also, the SelectedItem is not updated if event occurs on the last item.
     /// </summary>
-    private FileSystemEntry? _quickSearchSelectedItem;
+    private TaggableItemViewModel? _quickSearchSelectedItem;
 
     /// <summary>
     ///     ctor for XAML previewer
@@ -95,15 +103,18 @@ public partial class FileSystemViewModel : ViewModelBase
     {
         foreach (var entry in Items)
         {
-            var index = entry.Name.IndexOf(value, StringComparison.CurrentCultureIgnoreCase);
+            var index = entry.DisplayName.IndexOf(value, StringComparison.CurrentCultureIgnoreCase);
 
             if (index < 0)
             {
                 if (_highlightedItems.Contains(entry))
                 {
                     // reset previous highlighting 
-                    entry.Inlines.Clear();
-                    entry.Inlines.Add(new Run { Text = entry.Name });
+                    Dispatcher.UIThread.Post(() =>
+                    {
+                        entry.Inlines.Clear();
+                        entry.Inlines.Add(new Run { Text = entry.DisplayName });
+                    });
 
                     _highlightedItems.Remove(entry);
                 }
@@ -112,7 +123,7 @@ public partial class FileSystemViewModel : ViewModelBase
             }
 
             entry.Inlines.Clear();
-            entry.Inlines.AddRange(CreateHighlightedText(index, index + value.Length, entry.Name));
+            entry.Inlines.AddRange(CreateHighlightedText(index, index + value.Length, entry.DisplayName));
 
             if (_highlightedItems.Contains(entry)) continue;
             _highlightedItems.Add(entry);
@@ -199,7 +210,9 @@ public partial class FileSystemViewModel : ViewModelBase
     {
         var currentIndex = Items.IndexOf(_quickSearchSelectedItem!);
 
-        foreach (var highlightedItem in Enumerable.Reverse(_highlightedItems).Where(item => Items.IndexOf(item) < currentIndex))
+        foreach (var highlightedItem in Enumerable.Reverse(_highlightedItems)
+                     .Where(item => Items
+                         .IndexOf(item) < currentIndex))
         {
             _quickSearchSelectedItem = SelectedItem = highlightedItem;
             return;
@@ -269,7 +282,9 @@ public partial class FileSystemViewModel : ViewModelBase
     [RelayCommand]
     private void Navigate(FileSystemInfo? info = null)
     {
-        var destination = info ?? (FileSystemInfo?)SelectedItem;
+        var destination = info ?? (FileSystemInfo?)(Directory.Exists(SelectedItem?.Location)
+            ? new DirectoryInfo(SelectedItem?.Location)
+            : new FileInfo(SelectedItem?.Location));
 
         switch (destination)
         {
@@ -325,12 +340,22 @@ public partial class FileSystemViewModel : ViewModelBase
         QuickSearchText = "";
         AddressTextBox = CurrentFolder.FullName;
 
-        Items.Clear();
-        Items.AddRange(
-            value
-                .EnumerateFileSystemInfos("*", new EnumerationOptions { IgnoreInaccessible = true })
-                .Select(info => new FileSystemEntry(info))
-                .OrderByDescending(static entry => entry, FileSystemEntryComparer.StaticFileSystemEntryComparer));
+        Dispatcher.UIThread.Post(() =>
+        {
+            Items.Clear();
+            Items.AddRange(
+                value
+                    .EnumerateFileSystemInfos("*", new EnumerationOptions { IgnoreInaccessible = true })
+                    .Select(info => new TaggableItemViewModel {
+                        DisplayName = info.Name,
+                        Location = info.FullName,
+                        DateCreated = info.CreationTime,
+                        AreTagsVisible = true,
+                        Size = 12312312})
+                // .Select(info => new FileSystemEntry(info))
+                // .OrderByDescending(static entry => entry, FileSystemEntryComparer.StaticFileSystemEntryComparer)
+            );
+        });
 
         Dispatcher.UIThread.Post(UpdateTags, DispatcherPriority.Background);
 
@@ -342,13 +367,19 @@ public partial class FileSystemViewModel : ViewModelBase
     {
         foreach (var entry in Items)
         {
-            var getItemInfoRequest = new GetItemInfoRequest { Type = entry.IsDir ? "folder" : "file", ItemIdentifier = entry.FullName };
+            var getItemInfoRequest = new GetItemInfoRequest
+            {
+                Type = Directory.Exists(entry.Location)
+                    ? "folder"
+                    : "file",
+                ItemIdentifier = entry.Location
+            };
 
             var getItemInfoReply = _tagService.GetItemInfo(getItemInfoRequest);
 
             // todo: change to AddIfNotExists
             entry.AssociatedTags.Clear();
-            entry.AssociatedTags.AddRange(getItemInfoReply.Tags.ToList());
+            entry.AssociatedTags.AddRange(getItemInfoReply.Tags.Select(s => new Tag(s)).ToList());
         }
     }
 }

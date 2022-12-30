@@ -135,7 +135,7 @@ public partial class FileSystemView : UserControl
     {
         if (_vm.SelectedItem is null) return;
 
-        var dialog = new TagFileDialog(_vm.SelectedItem.FullName);
+        var dialog = new TagFileDialog(_vm.SelectedItem.DisplayName);
         var _ = await dialog.ShowDialog<(string FileName, Tag[] Tags)>(GetWindow());
     }
 
@@ -152,6 +152,11 @@ public partial class FileSystemView : UserControl
 
         _vm.UntagItemCommand.Execute((tagName, entry));
         _vm.UpdateTags();
+    }
+
+    private void TagsVisibilityToggleButton_OnClick(object? sender, RoutedEventArgs e)
+    {
+        QuickSearchTextBlock.Text = QuickSearchTextBlock.Text?.Length == 0 ? "t" : "";
     }
 }
 
