@@ -118,7 +118,7 @@ public partial class FileSystemViewModel : ViewModelBase
             _highlightedItems.Add(entry);
         }
 
-        UpdateResults();
+        UpdateSelection();
     }
 
     private static IEnumerable<Run> CreateHighlightedText(int begin, int end, string name)
@@ -130,23 +130,20 @@ public partial class FileSystemViewModel : ViewModelBase
         yield return new Run { Text = name[end..] };
     }
 
-    private void UpdateResults()
+    private void UpdateSelection()
     {
         HasQuickSearchResults = _highlightedItems.Count != 0;
 
         if (!HasQuickSearchResults) return;
 
-        FocusNextHighlightItem();
+        FocusNextOrCurrentHighlightItem();
 
-        void FocusNextHighlightItem()
+        void FocusNextOrCurrentHighlightItem()
         {
-            foreach (var highlightedItem in _highlightedItems)
+            var selectedItemIndex = SelectedItem is not null ? Items.IndexOf(SelectedItem) : 0;
+
+            foreach (var highlightedItem in _highlightedItems.Where(item => Items.IndexOf(item) >= selectedItemIndex))
             {
-                var index = Items.IndexOf(highlightedItem);
-                var selectedItemIndex = SelectedItem is not null ? Items.IndexOf(SelectedItem) : 0;
-
-                if (index < selectedItemIndex) continue;
-
                 _quickSearchSelectedItem = SelectedItem = highlightedItem;
                 return;
             }
@@ -188,15 +185,13 @@ public partial class FileSystemViewModel : ViewModelBase
     {
         var currentIndex = Items.IndexOf(_quickSearchSelectedItem!);
 
-        foreach (var highlightedItem in _highlightedItems.Where(highlightedItem => Items.IndexOf(highlightedItem) > currentIndex))
+        foreach (var highlightedItem in _highlightedItems.Where(item => Items.IndexOf(item) > currentIndex))
         {
-            SelectedItem = highlightedItem;
-            _quickSearchSelectedItem = SelectedItem;
+            _quickSearchSelectedItem = SelectedItem = highlightedItem;
             return;
         }
 
-        SelectedItem = _highlightedItems[0];
-        _quickSearchSelectedItem = SelectedItem;
+        _quickSearchSelectedItem = SelectedItem = _highlightedItems[0];
     }
 
     [RelayCommand(CanExecute = nameof(HasQuickSearchResults))]
@@ -204,12 +199,8 @@ public partial class FileSystemViewModel : ViewModelBase
     {
         var currentIndex = Items.IndexOf(_quickSearchSelectedItem!);
 
-        for (var index = _highlightedItems.Count - 1; index >= 0; index--)
+        foreach (var highlightedItem in Enumerable.Reverse(_highlightedItems).Where(item => Items.IndexOf(item) < currentIndex))
         {
-            var highlightedItem = _highlightedItems[index];
-
-            if (Items.IndexOf(highlightedItem) >= currentIndex) continue;
-
             _quickSearchSelectedItem = SelectedItem = highlightedItem;
             return;
         }
