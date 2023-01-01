@@ -1,4 +1,5 @@
 ﻿using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Globalization;
 using Avalonia.Controls.Documents;
 using Avalonia.Threading;
@@ -16,6 +17,7 @@ public enum TaggedItemType
     Folder = 1
 }
 
+[DebuggerDisplay("{DisplayName}")]
 public partial class TaggableItemViewModel : ViewModelBase, IFileSystemEntry
 {
     private readonly TagService.TagServiceClient _tagService;
@@ -26,6 +28,9 @@ public partial class TaggableItemViewModel : ViewModelBase, IFileSystemEntry
     private string _displayName = "";
 
     [ObservableProperty]
+    private InlineCollection _inlines = new();
+
+    [ObservableProperty]
     private string _location = "";
 
     [ObservableProperty]
@@ -33,9 +38,6 @@ public partial class TaggableItemViewModel : ViewModelBase, IFileSystemEntry
 
     [ObservableProperty]
     private long? _size;
-
-    [ObservableProperty]
-    private InlineCollection _inlines = new();
 
     [ObservableProperty]
     private bool _areTagsVisible = true;

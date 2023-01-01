@@ -156,6 +156,15 @@ public partial class FileSystemViewModel : ViewModelBase
         }
     }
 
+    [RelayCommand]
+    private void ChangeTagsVisibility()
+    {
+        foreach (var taggableItemViewModel in Items)
+        {
+            taggableItemViewModel.AreTagsVisible ^= true;
+        }
+    }
+
     [RelayCommand(CanExecute = nameof(HasQuickSearchResults))]
     private void GoToNextMatchedItem()
     {
@@ -175,9 +184,7 @@ public partial class FileSystemViewModel : ViewModelBase
     {
         var currentIndex = Items.IndexOf(_quickSearchSelectedItem!);
 
-        foreach (var highlightedItem in Enumerable.Reverse(_highlightedItems)
-                     .Where(item => Items
-                         .IndexOf(item) < currentIndex))
+        foreach (var highlightedItem in Enumerable.Reverse(_highlightedItems).Where(item => Items.IndexOf(item) < currentIndex))
         {
             _quickSearchSelectedItem = SelectedItem = highlightedItem;
             return;
@@ -298,11 +305,6 @@ public partial class FileSystemViewModel : ViewModelBase
         }
 
         CurrentFolder = folder;
-    }
-
-    partial void OnSelectedItemChanged(TaggableItemViewModel? value)
-    {
-        Console.WriteLine($"{value}");
     }
 
     partial void OnCurrentFolderChanged(DirectoryInfo value)

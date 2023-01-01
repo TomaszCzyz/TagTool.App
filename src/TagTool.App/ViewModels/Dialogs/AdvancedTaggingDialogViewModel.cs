@@ -3,6 +3,7 @@ using Avalonia.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using DynamicData;
+using TagTool.App.Comparers;
 using TagTool.App.Core.Models;
 
 namespace TagTool.App.ViewModels.Dialogs;

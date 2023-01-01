@@ -7,6 +7,7 @@
     xmlns:converters="clr-namespace:TagTool.App.Converters"
     xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
     xmlns:userControls1="clr-namespace:TagTool.App.Views.UserControls"
+    xmlns:comparers="clr-namespace:TagTool.App.Comparers"
     mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="700"
     x:Name="UserControlRoot"
     x:Class="TagTool.App.Views.UserControls.FileSystemView"
@@ -15,6 +16,7 @@
     <UserControl.Resources>
         <converters:FileSizeToStringConverter x:Key="FileSizeToStringConverter" />
         <converters:BoolToBrushConverter x:Key="BoolToBrushConverter" />
+        <comparers:TaggableItemViewModelComparer x:Key="TaggableItemViewModelComparer" />
     </UserControl.Resources>
 
     <UserControl.Styles>
@@ -177,11 +179,11 @@
                 </Border.Styles>
 
                 <ToggleButton
-                    Name="TagsVisibilityToggleButton"
                     HorizontalAlignment="Center"
                     VerticalAlignment="Center"
                     Padding="0"
-                    IsChecked="False">
+                    IsChecked="False"
+                    Command="{Binding ChangeTagsVisibilityCommand}">
 
                     <Panel>
                         <avalonia:MaterialIcon
@@ -220,7 +222,8 @@
                     Header="Name"
                     IsReadOnly="True"
                     CanUserSort="True"
-                    Width="*">
+                    Width="*"
+                    CustomSortComparer="{StaticResource TaggableItemViewModelComparer}">
                     <DataTemplate DataType="userControls:TaggableItemViewModel">
                         <userControls1:TaggableItemView AttachedToVisualTree="Visual_OnAttachedToVisualTree"/>
                     </DataTemplate>
@@ -251,99 +254,10 @@
 
                     </DataTemplate>
                 </DataGridTemplateColumn>
-                <!-- <DataGridTemplateColumn -->
-                <!--     Header="Name" -->
-                <!--     IsReadOnly="True" -->
-                <!--     CanUserSort="True" -->
-                <!--     Width="*" -->
-                <!--     CustomSortComparer="{StaticResource FileSystemEntryComparer}"> -->
-                <!--     <DataTemplate DataType="models:FileSystemEntry"> -->
-                <!--         <Grid -->
-                <!--             DragDrop.AllowDrop="True" -->
-                <!--             ColumnDefinitions="25,Auto,*" -->
-                <!--             AttachedToVisualTree="Visual_OnAttachedToVisualTree"> -->
-                <!-- -->
-                <!--             <Image -->
-                <!--                 Grid.Column="0" -->
-                <!--                 Margin="0 0 2 0" -->
-                <!--                 Source="{Binding FullName, Converter={StaticResource IconToBitmapConverter}, ConverterParameter=25}" /> -->
-                <!-- -->
-                <!--             <TextBlock -->
-                <!--                 Grid.Column="1" -->
-                <!--                 VerticalAlignment="Center" -->
-                <!--                 HorizontalAlignment="Stretch" -->
-                <!--                 Inlines="{Binding Inlines}"> -->
-                <!--                 <TextBlock.ContextFlyout> -->
-                <!--                     <MenuFlyout> -->
-                <!--                         <MenuItem Header="Tag it" Click="TagItMenuItem_OnClick" /> -->
-                <!--                         <Separator /> -->
-                <!--                         <MenuItem Header="Show in Explorer" /> -->
-                <!--                         <Separator /> -->
-                <!--                         <MenuItem Header="Rename" /> -->
-                <!--                         <MenuItem Header="Copy" /> -->
-                <!--                     </MenuFlyout> -->
-                <!--                 </TextBlock.ContextFlyout> -->
-                <!--             </TextBlock> -->
-                <!-- -->
-                <!--             ~1~ Associated tags @1@ -->
-                <!--             <Border -->
-                <!--                 Grid.Column="2" -->
-                <!--                 BorderThickness="0" -->
-                <!--                 BorderBrush="Green" -->
-                <!--                 IsVisible="{Binding !#TagsVisibilityToggleButton.IsChecked}"> -->
-                <!-- -->
-                <!--                 <ItemsControl -->
-                <!--                     Padding="5 0" -->
-                <!--                     Margin="0" -->
-                <!--                     HorizontalAlignment="Left" -->
-                <!--                     VerticalAlignment="Center" -->
-                <!--                     Items="{Binding AssociatedTags}"> -->
-                <!--                     <ItemsControl.ItemsPanel> -->
-                <!--                         <ItemsPanelTemplate> -->
-                <!--                             <StackPanel Orientation="Horizontal" Spacing="2" /> -->
-                <!--                         </ItemsPanelTemplate> -->
-                <!--                     </ItemsControl.ItemsPanel> -->
-                <!--                     <ItemsControl.ItemTemplate> -->
-                <!--                         <DataTemplate> -->
-                <!--                             <Border -->
-                <!--                                 HorizontalAlignment="Left" -->
-                <!--                                 VerticalAlignment="Center" -->
-                <!--                                 CornerRadius="4" -->
-                <!--                                 BorderBrush="#0097A7" -->
-                <!--                                 BorderThickness="1" -->
-                <!--                                 Margin="1" -->
-                <!--                                 ClipToBounds="True"> -->
-                <!-- -->
-                <!--                                 <TextBlock -->
-                <!--                                     Margin="2 0" -->
-                <!--                                     FontSize="12" -->
-                <!--                                     FontFamily="avares://TagTool.App/Assets/Fonts#Lato" -->
-                <!--                                     VerticalAlignment="Center" -->
-                <!--                                     IsTabStop="False" -->
-                <!--                                     Text="{Binding .}"> -->
-                <!--                                     <TextBlock.ContextFlyout> -->
-                <!--                                         <MenuFlyout> -->
-                <!--                                             <MenuItem Header="Remove" Click="TagMenuItem_OnClick"> -->
-                <!--                                                 <MenuItem.Icon> -->
-                <!--                                                     <avalonia:MaterialIcon Kind="DeleteOutline" /> -->
-                <!--                                                 </MenuItem.Icon> -->
-                <!--                                             </MenuItem> -->
-                <!--                                         </MenuFlyout> -->
-                <!--                                     </TextBlock.ContextFlyout> -->
-                <!--                                 </TextBlock> -->
-                <!-- -->
-                <!--                             </Border> -->
-                <!--                         </DataTemplate> -->
-                <!--                     </ItemsControl.ItemTemplate> -->
-                <!--                 </ItemsControl> -->
-                <!--             </Border> -->
-                <!--         </Grid> -->
-                <!--     </DataTemplate> -->
-                <!-- </DataGridTemplateColumn> -->
             </DataGrid.Columns>
         </DataGrid>
 
-        <!-- search text helper -->
+        <!-- QuickSearch text field -->
         <Border
             Grid.Row="1"
             Name="QuickSearchBorder"
@@ -368,7 +282,6 @@
 
             </DockPanel>
         </Border>
-
 
         <StackPanel Grid.Row="2" Orientation="Horizontal">
             <TextBlock
