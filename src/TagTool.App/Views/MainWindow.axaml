@@ -45,9 +45,12 @@
         <Grid Grid.Row="1" ColumnDefinitions="Auto,*">
 
             <!-- left side panel -->
-            <Border Grid.Column="0" Classes="MenuPanel" Margin="-1">
+            <Border 
+                Grid.Column="0"
+                Classes="MenuPanel"
+                Margin="-1">
 
-                <Grid Width="36">
+                <Panel Width="36">
 
                     <!-- top items -->
                     <StackPanel Orientation="Vertical">
@@ -82,7 +85,7 @@
                         <Svg Path="/Assets/Svgs/Light/sun.svg" />
                         <Svg Path="/Assets/Svgs/Light/moon.svg" />
                     </StackPanel>
-                </Grid>
+                </Panel>
             </Border>
 
             <SplitView

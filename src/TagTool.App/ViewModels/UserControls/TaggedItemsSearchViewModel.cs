@@ -7,6 +7,7 @@ using CommunityToolkit.Mvvm.Input;
 using DynamicData;
 using Grpc.Core;
 using JetBrains.Annotations;
+using Microsoft.Extensions.DependencyInjection;
 using TagTool.App.Core.Models;
 using TagTool.App.Core.Services;
 using TagTool.Backend;
@@ -33,7 +34,7 @@ public partial class TaggedItemsSearchViewModel : ViewModelBase, IDisposable
 
     public ObservableCollection<object> EnteredTags { get; set; } = new();
 
-    public ObservableCollection<TaggedItem> Files { get; set; } = new();
+    public ObservableCollection<TaggableItemViewModel> Files { get; set; } = new();
 
     private IEnumerable<Tag> Tags => EnteredTags.Where(o => o.GetType() == typeof(Tag)).Cast<Tag>().ToArray();
 
@@ -42,8 +43,8 @@ public partial class TaggedItemsSearchViewModel : ViewModelBase, IDisposable
     /// </summary>
     public TaggedItemsSearchViewModel()
     {
-        _tagSearchService = null!;
-        _tagService = null!;
+        _tagSearchService = App.Current.Services.GetRequiredService<ITagToolBackend>().GetSearchService();
+        _tagService = App.Current.Services.GetRequiredService<ITagToolBackend>().GetTagService();
     }
 
     [UsedImplicitly]
@@ -52,7 +53,9 @@ public partial class TaggedItemsSearchViewModel : ViewModelBase, IDisposable
         _tagSearchService = tagToolBackend.GetSearchService();
         _tagService = tagToolBackend.GetTagService();
 
-        var tags = new Tag[] { new("Audio"), new("Dog"), new("Picture"), new("Colleague"), new("Tag6"), new("LastTag") };
+        EnteredTags.CollectionChanged += async (_, _) => await Dispatcher.UIThread.InvokeAsync(CommitSearch);
+
+        var tags = new Tag[] { new("Hello") };
         EnteredTags.AddRange(tags);
 
         var popularTags = new Tag[] { new("SomeTag"), new("Tag"), new("SomeTag"), new("Picture"), new("Tag"), new("Picture"), new("Picture") };
@@ -62,32 +65,51 @@ public partial class TaggedItemsSearchViewModel : ViewModelBase, IDisposable
         SearchResults.AddRange(searchResults);
 
         EnteredTags.Add("");
-        Files.AddRange(_exampleFiles);
     }
 
     [RelayCommand]
     private async Task CommitSearch()
     {
-        Files.Clear();
-
         var getItemsRequest = new GetItemsRequest { TagNames = { Tags.Select(tag => tag.Name).ToArray() } };
         var streamingCall = _tagService.GetItems(getItemsRequest);
+
+        var results = new List<TaggableItemViewModel>();
         while (await streamingCall.ResponseStream.MoveNext())
         {
             var reply = streamingCall.ResponseStream.Current;
             var tags = reply.TagNames.Select(s => new Tag(s)).ToArray();
 
+            TaggedItemType type;
+            long? size;
+            FileSystemInfo info;
             if (reply.FileInfo is not null)
             {
-                var info = new FileInfo(reply.FileInfo.Path);
-                Files.Add(new TaggedItem(info.Name, info.Length, info.CreationTime, info.LastWriteTime, tags));
+                type = TaggedItemType.File;
+                info = new FileInfo(reply.FileInfo.Path);
+                size = ((FileInfo)info).Length;
             }
             else
             {
-                var info = new DirectoryInfo(reply.FolderInfo.Path);
-                Files.Add(new TaggedItem(info.Name, 0, info.CreationTime, info.LastWriteTime, tags));
+                type = TaggedItemType.Folder;
+                info = new DirectoryInfo(reply.FolderInfo.Path);
+                size = null;
             }
+
+            results.Add(
+                new TaggableItemViewModel(_tagService)
+                {
+                    TaggedItemType = type,
+                    DisplayName = info.Name,
+                    Location = info.FullName,
+                    DateCreated = info.CreationTime,
+                    AreTagsVisible = true,
+                    Size = size,
+                    AssociatedTags = { tags }
+                });
         }
+
+        Files.Clear();
+        Files.AddRange(results);
     }
 
     [RelayCommand]
@@ -223,24 +245,4 @@ public partial class TaggedItemsSearchViewModel : ViewModelBase, IDisposable
         _cts?.Dispose();
         GC.SuppressFinalize(this);
     }
-
-    private readonly TaggedItem[] _exampleFiles =
-    {
-        new("File1.txt", 1234, new DateTime(2022, 12, 12), new DateTime(2022, 12, 12), new[] { new Tag("empty") }),
-        new("File2.txt", 12311111114, new DateTime(2022, 12, 12), new DateTime(2022, 12, 12), new[] { new Tag("empty") }),
-        new("File3.txt", 1234, new DateTime(2022, 12, 12), new DateTime(2022, 12, 12), new[] { new Tag("empty") }),
-        new("File4.txt", 1212312334, new DateTime(2022, 12, 12), new DateTime(2022, 12, 12), new[] { new Tag("empty") }),
-        new("File5.txt", 1234, new DateTime(2022, 12, 12), new DateTime(2022, 12, 12), new[] { new Tag("empty") }),
-        new("File6.txt", 1222234, new DateTime(2022, 12, 12), new DateTime(2022, 12, 12), new[] { new Tag("empty") }),
-        new("File1.txt", 1234, new DateTime(2022, 12, 12), new DateTime(2022, 12, 12), new[] { new Tag("empty") }),
-        new("File1.txt", 1234, new DateTime(2022, 12, 12), new DateTime(2022, 12, 12), new[] { new Tag("empty") }),
-        new("File1.txt", 1234, new DateTime(2022, 12, 12), new DateTime(2022, 12, 12), new[] { new Tag("empty") }),
-        new("File1.txt", 1212334, new DateTime(2022, 12, 12), new DateTime(2022, 12, 12), new[] { new Tag("empty") }),
-        new("File1.txt", 1234, new DateTime(2022, 12, 12), new DateTime(2022, 12, 12), new[] { new Tag("empty") }),
-        new("File1.txt", 1234, new DateTime(2022, 12, 12), new DateTime(2022, 12, 12), new[] { new Tag("empty") }),
-        new("File2.txt", 1234, new DateTime(1999, 1, 1), new DateTime(1999, 1, 1), new[] { new Tag("empty") }),
-        new("File3.txt", 144234, new DateTime(2022, 2, 12), null, new[] { new Tag("empty") }),
-        new("FileFile4", 13234, new DateTime(202, 12, 30), null, new[] { new Tag("empty") }),
-        new("File5", 122334, new DateTime(1990, 12, 30), null, new[] { new Tag("empty") })
-    };
 }

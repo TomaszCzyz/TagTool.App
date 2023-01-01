@@ -5,27 +5,32 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:viewModels="clr-namespace:TagTool.App.ViewModels"
     xmlns:userControls="clr-namespace:TagTool.App.Views.UserControls"
-    mc:Ignorable="d" d:DesignWidth="1600" d:DesignHeight="800"
+    mc:Ignorable="d" d:DesignWidth="1400" d:DesignHeight="800"
     x:Class="TagTool.App.Views.UserControls.MainPanel">
 
     <Design.DataContext>
         <viewModels:MainWindowViewModel />
     </Design.DataContext>
 
-    <Panel>
-        <Grid ColumnDefinitions="2*,Auto,2*,Auto">
-            <Grid.Styles>
-                <Style Selector="GridSplitter">
-                    <Setter Property="Background" Value="Transparent" />
-                </Style>
-            </Grid.Styles>
-            <Grid Grid.Column="0" RowDefinitions="*, Auto, *">
-                <userControls:TaggedItemsSearchView Grid.Row="0" />
-                <GridSplitter Grid.Row="1" ResizeDirection="Rows" Height="4" />
-                <userControls:TaggedItemsSearchView Grid.Row="2" />
-            </Grid>
-            <GridSplitter Grid.Column="1" ResizeDirection="Columns" Width="4" />
-            <userControls:FileSystemView Grid.Column="2" />
+    <Grid
+        RowDefinitions="*"
+        ColumnDefinitions="*,Auto,*">
+        <Grid.Styles>
+            <Style Selector="GridSplitter">
+                <Setter Property="Background" Value="Transparent" />
+            </Style>
+        </Grid.Styles>
+
+        <Grid Grid.Column="0" RowDefinitions="*,Auto,*" ColumnDefinitions="*">
+            <userControls:TaggedItemsSearchView Grid.Row="0" />
+
+            <GridSplitter Grid.Row="1" ResizeDirection="Rows" Height="4" />
+
+            <userControls:TaggedItemsSearchView Grid.Row="2" />
         </Grid>
-    </Panel>
+
+        <GridSplitter Grid.Column="1" ResizeDirection="Columns" Width="4" />
+
+        <userControls:FileSystemView Grid.Column="2" />
+    </Grid>
 </UserControl>

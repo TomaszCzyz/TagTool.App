@@ -233,7 +233,7 @@
                     Header="Date Created"
                     IsReadOnly="True"
                     CanUserSort="True"
-                    Width="*">
+                    Width="Auto">
                     <DataTemplate DataType="userControls:TaggableItemViewModel">
                         <TextBlock
                             TextAlignment="Left"
