@@ -10,17 +10,10 @@ using DynamicData;
 using JetBrains.Annotations;
 using Microsoft.Extensions.DependencyInjection;
 using TagTool.App.Core.Extensions;
-using TagTool.App.Core.Models;
 using TagTool.App.Core.Services;
 using TagTool.Backend;
 
 namespace TagTool.App.ViewModels.UserControls;
-
-[ObservableObject]
-public partial class RowData
-{
-    public TaggableItemViewModel Model { get; set; }
-}
 
 public partial class FileSystemViewModel : ViewModelBase
 {
@@ -28,11 +21,11 @@ public partial class FileSystemViewModel : ViewModelBase
     private readonly Stack<DirectoryInfo> _navigationHistoryBack = new();
     private readonly Stack<DirectoryInfo> _navigationHistoryForward = new();
 
-    // public ObservableCollection<FileSystemEntry> Items { get; set; } = new();
+    [ObservableProperty]
+    private ObservableCollection<TaggableItemViewModel> _items = new();
 
-    public ObservableCollection<TaggableItemViewModel> Items { get; set; } = new();
-
-    public ObservableCollection<AddressSegmentViewModel> AddressSegments { get; set; } = new();
+    [ObservableProperty]
+    private ObservableCollection<AddressSegmentViewModel> _addressSegments = new();
 
     [ObservableProperty]
     private DirectoryInfo _currentFolder = new(@"C:\");
@@ -163,34 +156,6 @@ public partial class FileSystemViewModel : ViewModelBase
         }
     }
 
-    [RelayCommand]
-    private async Task TagIt((string TagName, FileSystemEntry FileSystemEntry) data)
-    {
-        var (tagName, fileSystemEntry) = data;
-        var tagRequest = fileSystemEntry.IsDir
-            ? new TagRequest { TagNames = { tagName }, FolderInfo = new FolderDescription { Path = fileSystemEntry.FullName } }
-            : new TagRequest { TagNames = { tagName }, FileInfo = new FileDescription { Path = fileSystemEntry.FullName } };
-
-        var streamingCall = _tagService.Tag();
-
-        await streamingCall.RequestStream.WriteAsync(tagRequest);
-        await streamingCall.RequestStream.CompleteAsync();
-    }
-
-    [RelayCommand]
-    private async Task UntagItem((string TagName, FileSystemEntry FileSystemEntry) data)
-    {
-        var (tagName, fileSystemEntry) = data;
-        var untagRequest = fileSystemEntry.IsDir
-            ? new UntagRequest { TagNames = { tagName }, FolderInfo = new FolderDescription { Path = fileSystemEntry.FullName } }
-            : new UntagRequest { TagNames = { tagName }, FileInfo = new FileDescription { Path = fileSystemEntry.FullName } };
-
-        var streamingCall = _tagService.Untag();
-
-        await streamingCall.RequestStream.WriteAsync(untagRequest);
-        await streamingCall.RequestStream.CompleteAsync();
-    }
-
     [RelayCommand(CanExecute = nameof(HasQuickSearchResults))]
     private void GoToNextMatchedItem()
     {
@@ -282,9 +247,9 @@ public partial class FileSystemViewModel : ViewModelBase
     [RelayCommand]
     private void Navigate(FileSystemInfo? info = null)
     {
-        var destination = info ?? (FileSystemInfo?)(Directory.Exists(SelectedItem?.Location)
-            ? new DirectoryInfo(SelectedItem?.Location)
-            : new FileInfo(SelectedItem?.Location));
+        var destination = info ?? (FileSystemInfo?)(Directory.Exists(SelectedItem!.Location)
+            ? new DirectoryInfo(SelectedItem.Location)
+            : new FileInfo(SelectedItem.Location));
 
         switch (destination)
         {
@@ -335,51 +300,46 @@ public partial class FileSystemViewModel : ViewModelBase
         CurrentFolder = folder;
     }
 
+    partial void OnSelectedItemChanged(TaggableItemViewModel? value)
+    {
+        Console.WriteLine($"{value}");
+    }
+
     partial void OnCurrentFolderChanged(DirectoryInfo value)
     {
         QuickSearchText = "";
         AddressTextBox = CurrentFolder.FullName;
 
-        Dispatcher.UIThread.Post(() =>
-        {
-            Items.Clear();
-            Items.AddRange(
-                value
-                    .EnumerateFileSystemInfos("*", new EnumerationOptions { IgnoreInaccessible = true })
-                    .Select(info => new TaggableItemViewModel {
-                        DisplayName = info.Name,
-                        Location = info.FullName,
-                        DateCreated = info.CreationTime,
-                        AreTagsVisible = true,
-                        Size = 12312312})
-                // .Select(info => new FileSystemEntry(info))
-                // .OrderByDescending(static entry => entry, FileSystemEntryComparer.StaticFileSystemEntryComparer)
-            );
-        });
+        var folders = value.EnumerateFiles("*", new EnumerationOptions { IgnoreInaccessible = true })
+            .Select(info
+                => new TaggableItemViewModel(_tagService)
+                {
+                    TaggedItemType = TaggedItemType.File,
+                    DisplayName = info.Name,
+                    Location = info.FullName,
+                    DateCreated = info.CreationTime,
+                    AreTagsVisible = true,
+                    Size = info.Length
+                });
 
-        Dispatcher.UIThread.Post(UpdateTags, DispatcherPriority.Background);
+        var files = value.EnumerateDirectories("*", new EnumerationOptions { IgnoreInaccessible = true })
+            .Select(info
+                => new TaggableItemViewModel(_tagService)
+                {
+                    TaggedItemType = TaggedItemType.Folder,
+                    DisplayName = info.Name,
+                    Location = info.FullName,
+                    DateCreated = info.CreationTime,
+                    AreTagsVisible = true,
+                    Size = null
+                });
+
+        var folderContent = folders.Concat(files).OrderByDescending(static entry => entry.TaggedItemType).ThenBy(static entry => entry.DisplayName);
+
+        Items.Clear();
+        Items.AddRange(folderContent);
 
         AddressSegments.Clear();
         AddressSegments.AddRange(CurrentFolder.GetAncestors().Select(folder => new AddressSegmentViewModel(folder, this)));
-    }
-
-    public void UpdateTags()
-    {
-        foreach (var entry in Items)
-        {
-            var getItemInfoRequest = new GetItemInfoRequest
-            {
-                Type = Directory.Exists(entry.Location)
-                    ? "folder"
-                    : "file",
-                ItemIdentifier = entry.Location
-            };
-
-            var getItemInfoReply = _tagService.GetItemInfo(getItemInfoRequest);
-
-            // todo: change to AddIfNotExists
-            entry.AssociatedTags.Clear();
-            entry.AssociatedTags.AddRange(getItemInfoReply.Tags.Select(s => new Tag(s)).ToList());
-        }
     }
 }

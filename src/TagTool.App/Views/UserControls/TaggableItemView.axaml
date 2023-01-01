@@ -5,8 +5,14 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:userControls="clr-namespace:TagTool.App.ViewModels.UserControls"
     xmlns:converters="clr-namespace:TagTool.App.Converters"
+    xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+    xmlns:models="clr-namespace:TagTool.App.Core.Models;assembly=TagTool.App.Core"
     mc:Ignorable="d" d:DesignWidth="450" d:DesignHeight="50"
-    x:Class="TagTool.App.Views.UserControls.TaggableItemView">
+    x:Class="TagTool.App.Views.UserControls.TaggableItemView"
+    DragDrop.AllowDrop="True">
+    <UserControl.Background>
+        <SolidColorBrush Color="White" Opacity="0" />
+    </UserControl.Background>
     <UserControl.Resources>
         <converters:IconToBitmapConverter x:Key="IconToBitmapConverter" />
     </UserControl.Resources>
@@ -15,86 +21,89 @@
         <userControls:TaggableItemViewModel />
     </Design.DataContext>
 
-    <Grid
-        DragDrop.AllowDrop="True"
-        ColumnDefinitions="25,Auto,*">
+    <Border
+        BorderBrush="Green"
+        BorderThickness="0">
 
-        <Image
-            Grid.Column="0"
-            Margin="0 0 2 0"
-            Source="{Binding Location, Converter={StaticResource IconToBitmapConverter}, ConverterParameter=25}" />
+        <Grid
+            ColumnDefinitions="25,Auto,*">
 
-        <TextBlock
-            Grid.Column="1"
-            VerticalAlignment="Center"
-            HorizontalAlignment="Stretch"
-            Foreground="Black"
-            Text="{Binding DisplayName}"
-            Inlines="{Binding Inlines}">
-            <!-- <TextBlock.ContextFlyout> -->
-            <!--     <MenuFlyout> -->
-            <!--         <MenuItem Header="Tag it" /> -->
-            <!--         <Separator /> -->
-            <!--         <MenuItem Header="Show in Explorer" /> -->
-            <!--         <Separator /> -->
-            <!--         <MenuItem Header="Rename" /> -->
-            <!--         <MenuItem Header="Copy" /> -->
-            <!--     </MenuFlyout> -->
-            <!-- </TextBlock.ContextFlyout> -->
-        </TextBlock>
+            <Image
+                Grid.Column="0"
+                Margin="0 0 2 0"
+                Source="{Binding Location, Converter={StaticResource IconToBitmapConverter}, ConverterParameter=25}" />
 
-        <!-- Associated tags -->
-        <!-- <Border -->
-        <!--     Grid.Column="2" -->
-        <!--     BorderThickness="0" -->
-        <!--     BorderBrush="Green" -->
-        <!--     IsVisible="{Binding AreTagsVisible}"> -->
-        <!--     <ItemsControl -->
-        <!--         Padding="5 0" -->
-        <!--         Margin="0" -->
-        <!--         HorizontalAlignment="Left" -->
-        <!--         VerticalAlignment="Center" -->
-        <!--         Items="{Binding AssociatedTags}"> -->
-        <!--         <ItemsControl.ItemsPanel> -->
-        <!--             <ItemsPanelTemplate> -->
-        <!--                 <StackPanel Orientation="Horizontal" Spacing="2" /> -->
-        <!--             </ItemsPanelTemplate> -->
-        <!--         </ItemsControl.ItemsPanel> -->
-        <!--         <ItemsControl.ItemTemplate> -->
-        <!--             <DataTemplate> -->
-        <!--                 <Border -->
-        <!--                     HorizontalAlignment="Left" -->
-        <!--                     VerticalAlignment="Center" -->
-        <!--                     CornerRadius="4" -->
-        <!--                     BorderBrush="#0097A7" -->
-        <!--                     BorderThickness="1" -->
-        <!--                     Margin="1" -->
-        <!--                     ClipToBounds="True"> -->
-        <!-- -->
-        <!--                     <TextBlock -->
-        <!--                         Margin="2 0" -->
-        <!--                         FontSize="12" -->
-        <!--                         Foreground="Red" -->
-        <!--                         FontFamily="avares://TagTool.App/Assets/Fonts#Lato" -->
-        <!--                         VerticalAlignment="Center" -->
-        <!--                         IsTabStop="False" -->
-        <!--                         Text="{Binding Name}" -->
-        <!--                         Inlines="{Binding Inlines}"> -->
-        <!--                         <TextBlock.ContextFlyout> -->
-        <!--                             <MenuFlyout> -->
-        <!--                                 <MenuItem Header="Remove"> -->
-        <!--                                     <MenuItem.Icon> -->
-        <!--                                         <avalonia:MaterialIcon Kind="DeleteOutline" /> -->
-        <!--                                     </MenuItem.Icon> -->
-        <!--                                 </MenuItem> -->
-        <!--                             </MenuFlyout> -->
-        <!--                         </TextBlock.ContextFlyout> -->
-        <!--                     </TextBlock> -->
-        <!-- -->
-        <!--                 </Border> -->
-        <!--             </DataTemplate> -->
-        <!--         </ItemsControl.ItemTemplate> -->
-        <!--     </ItemsControl> -->
-        <!-- </Border> -->
-    </Grid>
+            <TextBlock
+                Grid.Column="1"
+                VerticalAlignment="Center"
+                HorizontalAlignment="Stretch"
+                Foreground="Black"
+                Text="{Binding DisplayName}"
+                Inlines="{Binding Inlines}">
+                <TextBlock.ContextFlyout>
+                    <MenuFlyout>
+                        <MenuItem Header="Tag it" Click="TagItMenuItem_OnClick" />
+                        <Separator />
+                        <MenuItem Header="Show in Explorer" />
+                        <Separator />
+                        <MenuItem Header="Rename" />
+                        <MenuItem Header="Copy" />
+                    </MenuFlyout>
+                </TextBlock.ContextFlyout>
+            </TextBlock>
+
+            <!-- Associated tags -->
+            <Border
+                Grid.Column="2"
+                BorderThickness="0"
+                BorderBrush="Green"
+                IsVisible="{Binding AreTagsVisible}">
+                <ItemsControl
+                    Padding="5 0"
+                    Margin="0"
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Center"
+                    Items="{Binding AssociatedTags}">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <StackPanel Orientation="Horizontal" Spacing="2" />
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate DataType="models:Tag">
+                            <Border
+                                HorizontalAlignment="Left"
+                                VerticalAlignment="Center"
+                                CornerRadius="4"
+                                BorderBrush="#0097A7"
+                                BorderThickness="1"
+                                Margin="1"
+                                ClipToBounds="True">
+
+                                <TextBlock
+                                    Margin="2 0"
+                                    FontSize="12"
+                                    FontFamily="avares://TagTool.App/Assets/Fonts#Lato"
+                                    VerticalAlignment="Center"
+                                    IsTabStop="False"
+                                    Text="{Binding Name}"
+                                    Inlines="{Binding Inlines}">
+                                    <TextBlock.ContextFlyout>
+                                        <MenuFlyout>
+                                            <MenuItem Header="Remove" Click="UntagMenuItem_OnClick">
+                                                <MenuItem.Icon>
+                                                    <avalonia:MaterialIcon Kind="DeleteOutline" />
+                                                </MenuItem.Icon>
+                                            </MenuItem>
+                                        </MenuFlyout>
+                                    </TextBlock.ContextFlyout>
+                                </TextBlock>
+
+                            </Border>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </Border>
+        </Grid>
+    </Border>
 </UserControl>

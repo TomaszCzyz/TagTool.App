@@ -5,19 +5,16 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:userControls="clr-namespace:TagTool.App.ViewModels.UserControls"
     xmlns:converters="clr-namespace:TagTool.App.Converters"
-    xmlns:models="clr-namespace:TagTool.App.Core.Models;assembly=TagTool.App.Core"
     xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
     xmlns:userControls1="clr-namespace:TagTool.App.Views.UserControls"
-    mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="400"
+    mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="700"
     x:Name="UserControlRoot"
     x:Class="TagTool.App.Views.UserControls.FileSystemView"
     x:DataType="userControls:FileSystemViewModel">
 
     <UserControl.Resources>
         <converters:FileSizeToStringConverter x:Key="FileSizeToStringConverter" />
-        <converters:IconToBitmapConverter x:Key="IconToBitmapConverter" />
         <converters:BoolToBrushConverter x:Key="BoolToBrushConverter" />
-        <models:FileSystemEntryComparer x:Key="FileSystemEntryComparer" />
     </UserControl.Resources>
 
     <UserControl.Styles>
@@ -184,8 +181,7 @@
                     HorizontalAlignment="Center"
                     VerticalAlignment="Center"
                     Padding="0"
-                    IsChecked="False"
-                    Click="TagsVisibilityToggleButton_OnClick">
+                    IsChecked="False">
 
                     <Panel>
                         <avalonia:MaterialIcon
@@ -226,7 +222,7 @@
                     CanUserSort="True"
                     Width="*">
                     <DataTemplate DataType="userControls:TaggableItemViewModel">
-                        <userControls1:TaggableItemView />
+                        <userControls1:TaggableItemView AttachedToVisualTree="Visual_OnAttachedToVisualTree"/>
                     </DataTemplate>
                 </DataGridTemplateColumn>
 
@@ -266,7 +262,7 @@
                 <!--             DragDrop.AllowDrop="True" -->
                 <!--             ColumnDefinitions="25,Auto,*" -->
                 <!--             AttachedToVisualTree="Visual_OnAttachedToVisualTree"> -->
-                <!--   -->
+                <!-- -->
                 <!--             <Image -->
                 <!--                 Grid.Column="0" -->
                 <!--                 Margin="0 0 2 0" -->
@@ -348,7 +344,6 @@
         </DataGrid>
 
         <!-- search text helper -->
-
         <Border
             Grid.Row="1"
             Name="QuickSearchBorder"
