@@ -1,6 +1,4 @@
 ﻿using System.Collections.ObjectModel;
-using Avalonia.Controls.Documents;
-using Avalonia.Media;
 using Avalonia.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
@@ -18,6 +16,7 @@ public partial class TaggedItemsSearchViewModel : ViewModelBase, IDisposable
 {
     private readonly TagSearchService.TagSearchServiceClient _tagSearchService;
     private readonly TagService.TagServiceClient _tagService;
+    private readonly IWordHighlighter _wordHighlighter;
 
     [ObservableProperty]
     private string? _searchText;
@@ -45,13 +44,15 @@ public partial class TaggedItemsSearchViewModel : ViewModelBase, IDisposable
     {
         _tagSearchService = App.Current.Services.GetRequiredService<ITagToolBackend>().GetSearchService();
         _tagService = App.Current.Services.GetRequiredService<ITagToolBackend>().GetTagService();
+        _wordHighlighter = App.Current.Services.GetRequiredService<IWordHighlighter>();
     }
 
     [UsedImplicitly]
-    public TaggedItemsSearchViewModel(ITagToolBackend tagToolBackend)
+    public TaggedItemsSearchViewModel(ITagToolBackend tagToolBackend, IWordHighlighter wordHighlighter)
     {
         _tagSearchService = tagToolBackend.GetSearchService();
         _tagService = tagToolBackend.GetTagService();
+        _wordHighlighter = wordHighlighter;
 
         EnteredTags.CollectionChanged += async (_, _) => await Dispatcher.UIThread.InvokeAsync(CommitSearch);
 
@@ -181,7 +182,7 @@ public partial class TaggedItemsSearchViewModel : ViewModelBase, IDisposable
                     .Select(match => new HighlightInfo(match.StartIndex, match.Length))
                     .ToArray();
 
-                var inlines = FindSpans(reply.MatchedTagName, highlightInfos);
+                var inlines = _wordHighlighter.CreateInlines(reply.MatchedTagName, highlightInfos);
 
                 SearchResults.Add(new Tag(reply.MatchedTagName, inlines));
             }
@@ -190,54 +191,6 @@ public partial class TaggedItemsSearchViewModel : ViewModelBase, IDisposable
         {
             // this.Log().Debug("Streaming of tag names hints for SearchBar was cancelled");
         }
-    }
-
-    private static InlineCollection FindSpans(string tagName, IReadOnlyCollection<HighlightInfo> highlightInfos)
-    {
-        var inlines = new InlineCollection();
-
-        var lastIndex = 0;
-        var index = 0;
-
-        void FlushNotHighlighted()
-        {
-            if (lastIndex == index) return;
-
-            inlines.Add(new Run { Text = tagName[lastIndex..index] });
-        }
-
-        while (index < tagName.Length)
-        {
-            var highlightedPart = highlightInfos.FirstOrDefault(info => info.StartIndex == index);
-
-            if (highlightedPart is null)
-            {
-                index++;
-            }
-            else
-            {
-                FlushNotHighlighted();
-
-                var endIndex = index + highlightedPart.Length;
-
-                var solidColorBrush = new SolidColorBrush(Color.Parse("#0F7EBD"));
-                var run = new Run
-                {
-                    Text = tagName[index..endIndex],
-                    TextDecorations = new TextDecorationCollection { new() { Location = TextDecorationLocation.Underline, Stroke = solidColorBrush } }
-                    // FontWeight = FontWeight.Bold,
-                    // Foreground = new SolidColorBrush(Color.Parse("#EEEEEE"));
-                    // Background = solidColorBrush;
-                };
-                inlines.Add(run);
-
-                index = endIndex;
-                lastIndex = index;
-            }
-        }
-
-        FlushNotHighlighted();
-        return inlines;
     }
 
     public void Dispose()

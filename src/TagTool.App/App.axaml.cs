@@ -46,6 +46,7 @@ public class App : Application
 
         services.AddSingleton(configuration);
         services.AddSingleton<IFileIconProvider, DefaultFileIconProvider>();
+        services.AddSingleton<IWordHighlighter, WordHighlighter>();
         services.AddSingleton<ITagToolBackendConnectionFactory, GrpcChannelFactory>();
         services.AddSingleton<ITagToolBackend, TagToolBackend>();
 
