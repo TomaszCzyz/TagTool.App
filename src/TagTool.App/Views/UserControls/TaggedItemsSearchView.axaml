@@ -140,7 +140,7 @@
                 Name="SearchHelperPopup"
                 Grid.Column="0"
                 IsOpen="False"
-                IsLightDismissEnabled="False"
+                IsLightDismissEnabled="True"
                 WindowManagerAddShadowHint="False"
                 PlacementGravity="Bottom"
                 PlacementTarget="{Binding #TopMostGrid}"
@@ -254,6 +254,7 @@
         <!-- SearchResults -->
         <DataGrid
             Grid.Row="2"
+            Name="SearchResultsDataGrid"
             HorizontalScrollBarVisibility="Auto"
             FontFamily="avares://TagTool.App/Assets/Fonts#Lato"
             CanUserResizeColumns="True"

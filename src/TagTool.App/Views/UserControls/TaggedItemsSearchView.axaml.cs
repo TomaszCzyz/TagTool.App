@@ -38,7 +38,7 @@ public partial class TaggedItemsSearchView : UserControl
         var textBox = (TextBox)sender!;
 
         textBox.AddHandler(KeyDownEvent, OnKeyDown, RoutingStrategies.Tunnel);
-        textBox.AddHandler(KeyDownEvent, EnsurePopupOpen, RoutingStrategies.Tunnel);
+        // textBox.AddHandler(KeyDownEvent, EnsurePopupOpen, RoutingStrategies.Tunnel);
         textBox.AddHandler(PointerPressedEvent, EnsurePopupOpen, RoutingStrategies.Tunnel);
     }
 
@@ -56,8 +56,12 @@ public partial class TaggedItemsSearchView : UserControl
             case Key.Back when string.IsNullOrEmpty(textBox.Text):
                 _viewModel.RemoveLastCommand.Execute(e);
                 break;
-            case Key.Enter: // when autoCompleteBox.SelectedItem is not null:
+            case Key.Enter when _viewModel.SelectedItemFromPopup is not null:
                 _viewModel.AddTagCommand.Execute(e);
+                e.Handled = true;
+                break;
+            case Key.Enter when _viewModel.SelectedItemFromPopup is null:
+                SearchHelperPopup.IsOpen = false;
                 e.Handled = true;
                 break;
             case Key.Right:
@@ -66,6 +70,10 @@ public partial class TaggedItemsSearchView : UserControl
                 break;
             case Key.Left:
                 SearchResultsListBox.SelectedIndex--;
+                e.Handled = true;
+                break;
+            case Key.Down when !SearchHelperPopup.IsOpen: // focus search results in dataGrid
+                SearchResultsDataGrid.Focus();
                 e.Handled = true;
                 break;
             default:

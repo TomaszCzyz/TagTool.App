@@ -27,6 +27,8 @@ public partial class TaggedItemsSearchViewModel : ViewModelBase, IDisposable
     [ObservableProperty]
     private Tag? _selectedItemFromPopular;
 
+    public Tag? SelectedItemFromPopup => SelectedItemFromSearched ?? SelectedItemFromPopular;
+
     public ObservableCollection<Tag> SearchResults { get; set; } = new();
 
     public ObservableCollection<Tag> PopularTags { get; set; } = new();
@@ -138,7 +140,7 @@ public partial class TaggedItemsSearchViewModel : ViewModelBase, IDisposable
     [RelayCommand]
     private void AddTag()
     {
-        var itemToAdd = SelectedItemFromSearched ?? SelectedItemFromPopular;
+        var itemToAdd = SelectedItemFromPopup;
 
         if (itemToAdd is null || EnteredTags.Contains(itemToAdd)) return;
 

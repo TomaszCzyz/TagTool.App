@@ -18,13 +18,6 @@ public class WordHighlighter : IWordHighlighter
         var lastIndex = 0;
         var index = 0;
 
-        void FlushNotHighlighted()
-        {
-            if (lastIndex == index) return;
-
-            inlines.Add(new Run { Text = tagName[lastIndex..index] });
-        }
-
         while (index < tagName.Length)
         {
             var highlightedPart = highlightInfos.FirstOrDefault(info => info.StartIndex == index);
@@ -56,6 +49,14 @@ public class WordHighlighter : IWordHighlighter
         }
 
         FlushNotHighlighted();
+
+        void FlushNotHighlighted()
+        {
+            if (lastIndex == index) return;
+
+            inlines.Add(new Run { Text = tagName[lastIndex..index] });
+        }
+
         return inlines;
     }
 }
