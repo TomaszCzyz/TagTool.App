@@ -3,8 +3,15 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    mc:Ignorable="d" d:DesignWidth="100" d:DesignHeight="75"
-    x:Class="TagTool.App.Views.UserControls.MenuView">
+    xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+    xmlns:userControls="clr-namespace:TagTool.App.ViewModels.UserControls"
+    mc:Ignorable="d" d:DesignWidth="200" d:DesignHeight="75"
+    x:Class="TagTool.App.Views.UserControls.MenuView"
+    x:DataType="userControls:MenuViewModel">
+
+    <Design.DataContext>
+        <userControls:MenuViewModel />
+    </Design.DataContext>
 
     <UserControl.Styles>
         <Style Selector="Menu">
@@ -20,41 +27,70 @@
         </Style>
     </UserControl.Styles>
 
-    <Button Padding="5" Background="Transparent">
-        <Svg Path="/Assets/Svgs/Light/menu_4_bars.svg" Width="28" Height="28" />
+    <StackPanel Orientation="Horizontal">
+        <Button Padding="5" Background="Transparent">
+            <Svg Path="/Assets/Svgs/Light/menu_4_bars.svg" Width="28" Height="28" />
 
-        <Button.Flyout>
-            <MenuFlyout Placement="BottomEdgeAlignedLeft">
-                <MenuItem Header="_File">
-                    <MenuItem Header="_New" />
-                    <MenuItem Header="_Open..." />
-                    <MenuItem Header="Save" />
-                    <MenuItem Header="Save _As..." />
-                    <MenuItem Header="Nested">
-                        <MenuItem Header="Nested" />
+            <Button.Flyout>
+                <MenuFlyout Placement="BottomEdgeAlignedLeft">
+                    <MenuItem Header="_File">
+                        <MenuItem Header="_New" />
+                        <MenuItem Header="_Open..." />
+                        <MenuItem Header="Save" />
+                        <MenuItem Header="Save _As..." />
+                        <MenuItem Header="Nested">
+                            <MenuItem Header="Nested" />
+                        </MenuItem>
                     </MenuItem>
-                </MenuItem>
 
-                <MenuItem Header="_Edit">
-                    <MenuItem Header="_Undo" />
-                    <Separator />
-                    <MenuItem Header="Cu_t" />
-                    <MenuItem Header="_Copy" />
-                    <MenuItem Header="_Paste" />
-                    <MenuItem Header="_Delete" />
-                </MenuItem>
-                <MenuItem Header="_Format">
-                    <MenuItem Header="_Wrap lines" />
-                    <MenuItem Header="_Font..." />
-                </MenuItem>
-                <MenuItem Header="_View">
-                    <MenuItem Header="_Status bar" />
-                </MenuItem>
-                <MenuItem Header="_Help">
-                    <MenuItem Header="Get _Help" />
-                    <MenuItem Header="_About" />
-                </MenuItem>
-            </MenuFlyout>
-        </Button.Flyout>
-    </Button>
+                    <MenuItem Header="_Edit">
+                        <MenuItem Header="_Undo" />
+                        <Separator />
+                        <MenuItem Header="Cu_t" />
+                        <MenuItem Header="_Copy" />
+                        <MenuItem Header="_Paste" />
+                        <MenuItem Header="_Delete" />
+                    </MenuItem>
+                    <MenuItem Header="_Format">
+                        <MenuItem Header="_Wrap lines" />
+                        <MenuItem Header="_Font..." />
+                    </MenuItem>
+                    <MenuItem Header="_View">
+                        <MenuItem Header="_Status bar" />
+                    </MenuItem>
+                    <MenuItem Header="_Help">
+                        <MenuItem Header="Get _Help" />
+                        <MenuItem Header="_About" />
+                    </MenuItem>
+                </MenuFlyout>
+            </Button.Flyout>
+        </Button>
+
+        <ToggleButton
+            Name="ShowLeftToolMenuButton"
+            Background="Transparent"
+            IsChecked="{Binding IsLeftToolMenuToggleButtonChecked}">
+            <ToggleButton.Styles>
+                <Style Selector="avalonia|MaterialIcon">
+                    <Setter Property="RenderTransform">
+                        <RotateTransform Angle="180" />
+                    </Setter>
+                </Style>
+            </ToggleButton.Styles>
+
+            <avalonia:MaterialIcon
+                Kind="MenuOpen"
+                Width="28"
+                Height="28" />
+
+        </ToggleButton>
+
+        <ToggleButton Background="Transparent" IsChecked="{Binding IsRightToolMenuToggleButtonChecked}">
+            <avalonia:MaterialIcon
+                Kind="MenuOpen"
+                Width="28"
+                Height="28" />
+
+        </ToggleButton>
+    </StackPanel>
 </UserControl>

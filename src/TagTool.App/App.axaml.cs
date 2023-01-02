@@ -73,7 +73,7 @@ public static class ServiceCollectionExtensions
     {
         foreach (var type in scanMarker.Assembly.ExportedTypes.Where(Predicate))
         {
-            services.AddTransient(type);
+            services.AddScoped(type);
         }
     }
 }

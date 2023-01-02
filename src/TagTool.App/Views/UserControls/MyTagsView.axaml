@@ -13,9 +13,7 @@
     </Design.DataContext>
 
     <StackPanel Orientation="Vertical" HorizontalAlignment="Stretch">
-        <StackPanel
-            Orientation="Vertical"
-            Margin="0 8 0 0">
+        <StackPanel Orientation="Vertical" Margin="0 8 0 0">
 
             <Expander
                 Header="All tags"

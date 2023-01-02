@@ -1,15 +1,43 @@
-﻿using Avalonia.Controls;
+﻿using System.Collections.ObjectModel;
+using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.VisualTree;
+using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using TagTool.App.Core.Extensions;
 using TagTool.App.Views.UserControls;
 
 namespace TagTool.App.ViewModels;
 
+public interface ISideTool
+{
+    public string Placement { get; set; }
+
+    public double Width { get; set; }
+}
+
 public partial class MainWindowViewModel : ViewModelBase
 {
     private readonly IFocusManager _focusManager;
+
+    [ObservableProperty]
+    private ObservableCollection<ISideTool> _sideTools = new();
+
+    [ObservableProperty]
+    private ISideTool? _activeLeftTool;
+
+    [ObservableProperty]
+    private ISideTool? _activeRightTool;
+
+    [ObservableProperty]
+    private GridLength _activeLeftToolWidth = new(250);
+
+    [ObservableProperty]
+    private GridLength _activeRightToolWidth = new(200);
+
+    private bool IsLeftToolPaneOpen => ActiveLeftTool is not null;
+
+    private bool IsRightToolPaneOpen => ActiveRightTool is not null;
 
     /// <summary>
     ///     ctor for XAML previewer
@@ -20,6 +48,40 @@ public partial class MainWindowViewModel : ViewModelBase
     }
 
     private InputElement? _previouslyFocusedElement;
+
+    [RelayCommand]
+    private void ChangeLeftToolMenuPanelVisibility(bool? isVisible = null)
+    {
+        switch (isVisible)
+        {
+            case null: // swap visibility
+                ActiveLeftToolWidth = ActiveLeftToolWidth == new GridLength(0) ? new GridLength(200) : new GridLength(0);
+                return;
+            case true:
+                ActiveLeftToolWidth = new GridLength(200);
+                break;
+            default:
+                ActiveLeftToolWidth = new GridLength(0);
+                break;
+        }
+    }
+
+    [RelayCommand]
+    private void ChangeRightToolMenuPanelVisibility(bool? isVisible = null)
+    {
+        switch (isVisible)
+        {
+            case null: // swap visibility
+                ActiveLeftToolWidth = ActiveLeftToolWidth == new GridLength(0) ? new GridLength(200) : new GridLength(0);
+                return;
+            case true:
+                ActiveLeftToolWidth = new GridLength(200);
+                break;
+            default:
+                ActiveLeftToolWidth = new GridLength(0);
+                break;
+        }
+    }
 
     [RelayCommand]
     private void ResetFocus(object element)

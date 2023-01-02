@@ -8,10 +8,14 @@ using TagTool.Backend;
 
 namespace TagTool.App.ViewModels.UserControls;
 
-public partial class MyTagsViewModel : ViewModelBase
+public partial class MyTagsViewModel : ViewModelBase, ISideTool
 {
     private readonly TagService.TagServiceClient _tagService;
     private readonly TagSearchService.TagSearchServiceClient _searchService;
+
+    public string Placement { get; set; }
+
+    public double Width { get; set; } = 200;
 
     [ObservableProperty]
     private string? _createTagText;
