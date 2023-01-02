@@ -94,37 +94,34 @@
                 HorizontalAlignment="Stretch"
                 VerticalAlignment="Top">
 
-                <Panel>
+                <!-- entered tags box -->
+                <ListBox
+                    ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                    Name="TagsListBox"
+                    Margin="2"
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Center"
+                    Items="{Binding EnteredTags}">
+                    <ListBox.DataTemplates>
+                        <DataTemplate DataType="models:Tag">
+                            <templatedControls:TagChip
+                                Margin="4 2"
+                                Text="{Binding Name}"
+                                DeleteCommand="{Binding #UserControlRoot.DataContext.RemoveTagCommand, FallbackValue=null}"
+                                DeleteCommandParameter="{Binding .}" />
 
-                    <!-- entered tags box -->
-                    <ListBox
-                        ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-                        Name="TagsListBox"
-                        Margin="2"
-                        HorizontalAlignment="Left"
-                        VerticalAlignment="Center"
-                        Items="{Binding EnteredTags}">
-                        <ListBox.DataTemplates>
-                            <DataTemplate DataType="models:Tag">
-                                <templatedControls:TagChip
-                                    Margin="4 2"
-                                    Text="{Binding Name}"
-                                    DeleteCommand="{Binding #UserControlRoot.DataContext.RemoveTagCommand, FallbackValue=null}"
-                                    DeleteCommandParameter="{Binding .}" />
+                        </DataTemplate>
+                        <DataTemplate DataType="system:String">
+                            <TextBox
+                                Classes="Transparent"
+                                Watermark="Next tag..."
+                                Text="{Binding #UserControlRoot.DataContext.SearchText, FallbackValue=null}"
+                                GotFocus="InputElement_OnGotFocus"
+                                AttachedToLogicalTree="StyledElement_OnAttachedToLogicalTree" />
 
-                            </DataTemplate>
-                            <DataTemplate DataType="system:String">
-                                <TextBox
-                                    Classes="Transparent"
-                                    Watermark="Next tag..."
-                                    Text="{Binding #UserControlRoot.DataContext.SearchText, FallbackValue=null}"
-                                    GotFocus="InputElement_OnGotFocus"
-                                    AttachedToLogicalTree="StyledElement_OnAttachedToLogicalTree" />
-
-                            </DataTemplate>
-                        </ListBox.DataTemplates>
-                    </ListBox>
-                </Panel>
+                        </DataTemplate>
+                    </ListBox.DataTemplates>
+                </ListBox>
             </ScrollViewer>
 
             <Button
@@ -277,7 +274,7 @@
                     CanUserSort="True"
                     Width="*">
                     <DataTemplate DataType="userControls:TaggableItemViewModel">
-                        <userControls1:TaggableItemView Margin="-2 0 0 0"/>
+                        <userControls1:TaggableItemView Margin="-2 0 0 0" />
                     </DataTemplate>
                 </DataGridTemplateColumn>
 

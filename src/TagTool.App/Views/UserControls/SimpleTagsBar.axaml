@@ -21,7 +21,6 @@
         </Style>
     </UserControl.Styles>
 
-
     <Grid
         ColumnDefinitions="Auto,*"
         RowDefinitions="Auto">
