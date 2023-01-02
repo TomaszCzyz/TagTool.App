@@ -47,13 +47,11 @@
 
     <Grid RowDefinitions="Auto,*">
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="36" />
             <ColumnDefinition Width="{Binding ActiveLeftToolWidth, Mode=TwoWay}" />
             <ColumnDefinition Width="Auto" />
             <ColumnDefinition Width="*" />
             <ColumnDefinition Width="Auto" />
             <ColumnDefinition Width="{Binding ActiveRightToolWidth, Mode=TwoWay}" />
-            <ColumnDefinition Width="36" />
         </Grid.ColumnDefinitions>
 
         <!-- Top menu -->
@@ -75,142 +73,32 @@
             Grid.Column="0"
             Classes="MenuPanel"
             Margin="-1 -1  0 -1">
-
-            <StackPanel Orientation="Vertical">
-                <RadioButton
-                    ToolTip.Tip="Quick access to common tags"
-                    ToolTip.Placement="Right"
-                    Classes="SideMenu">
-
-                    <Svg Path="/Assets/Svgs/Light/tags.svg" />
-                </RadioButton>
-
-                <RadioButton
-                    ToolTip.Tip="Ble ble"
-                    ToolTip.Placement="Right"
-                    Classes="SideMenu">
-
-                    <Svg Path="/Assets/Svgs/Light/tags.svg" />
-                </RadioButton>
-            </StackPanel>
+            
+            <TabControl>
+                <TabItem Header="tool1">tab1</TabItem>
+                <TabItem Header="tool2">tab2</TabItem>
+            </TabControl>
         </Border>
 
-        <!-- Left tool pane -->
-        <Panel
-            Grid.Row="1"
-            Grid.Column="1"
-            Name="LeftToolPane"
-            Background="Green">
-
-            <userControls:MyTagsView />
-        </Panel>
-
-        <GridSplitter Grid.Row="1" Grid.Column="2" ResizeDirection="Columns" Width="4" />
+        <GridSplitter Grid.Row="1" Grid.Column="1" ResizeDirection="Columns" Width="4" />
 
         <!-- Main panel -->
-        <userControls:MainPanel Grid.Row="1" Grid.Column="3" />
+        <userControls:MainPanel Grid.Row="1" Grid.Column="2" />
 
-        <GridSplitter Grid.Row="1" Grid.Column="4" ResizeDirection="Columns" Width="4" />
-
-        <!-- Right tool pane -->
-        <Panel
-            Grid.Row="1"
-            Grid.Column="5"
-            Name="RightToolPane"
-            Background="Green">
-            
-            <userControls:MyTagsView />
-        </Panel>
+        <GridSplitter Grid.Row="1" Grid.Column="3" ResizeDirection="Columns" Width="4" />
 
         <!-- Right tool menu -->
         <Border
             Grid.Row="1"
-            Grid.Column="6"
+            Grid.Column="4"
             Classes="MenuPanel"
             Margin="0 -1 -1 -1">
 
-            <StackPanel Orientation="Vertical">
-                <RadioButton
-                    ToolTip.Tip="Quick access to common tags"
-                    ToolTip.Placement="Right"
-                    Classes="SideMenu">
+            <TabControl>
+                <TabItem Header="tool1">tab1</TabItem>
+                <TabItem Header="tool2">tab2</TabItem>
+            </TabControl>
 
-                    <Svg Path="/Assets/Svgs/Light/tags.svg" />
-                </RadioButton>
-
-                <RadioButton
-                    ToolTip.Tip="Ble ble"
-                    ToolTip.Placement="Right"
-                    Classes="SideMenu">
-
-                    <Svg Path="/Assets/Svgs/Light/tags.svg" />
-                </RadioButton>
-            </StackPanel>
         </Border>
-
-        <!-- <Grid Grid.Row="1" ColumnDefinitions="Auto,*"> -->
-        <!-- -->
-        <!--     ~1~ left side panel @1@ -->
-        <!--     <Border  -->
-        <!--         Grid.Column="0" -->
-        <!--         Classes="MenuPanel" -->
-        <!--         Margin="-1"> -->
-        <!-- -->
-        <!--         <Panel Width="36"> -->
-        <!-- -->
-        <!--             ~1~ top items @1@ -->
-        <!--             <StackPanel Orientation="Vertical"> -->
-        <!--                 <StackPanel.Styles> -->
-        <!--                     <Style Selector="RadioButton"> -->
-        <!--                         <Setter Property="Template"> -->
-        <!--                             <ControlTemplate> -->
-        <!--                                 <ToggleButton -->
-        <!--                                     DataContext="{Binding $parent}" -->
-        <!--                                     Background="Transparent" -->
-        <!--                                     Padding="3" -->
-        <!--                                     Content="{Binding Content, RelativeSource={RelativeSource TemplatedParent}, Mode=TwoWay}" -->
-        <!--                                     IsChecked="{Binding IsChecked, RelativeSource={RelativeSource TemplatedParent}, Mode=TwoWay}" /> -->
-        <!-- -->
-        <!--                             </ControlTemplate> -->
-        <!--                         </Setter> -->
-        <!--                     </Style> -->
-        <!--                 </StackPanel.Styles> -->
-        <!--                 <RadioButton Name="RadioButton1" ToolTip.Tip="Quick access to common tags" ToolTip.Placement="Right"> -->
-        <!--                     <Svg Path="/Assets/Svgs/Light/tags.svg" /> -->
-        <!--                 </RadioButton> -->
-        <!--                 <RadioButton Name="RadioButton2" ToolTip.Tip="Ble ble" ToolTip.Placement="Right"> -->
-        <!--                     <Svg Path="/Assets/Svgs/Light/tags.svg" /> -->
-        <!--                 </RadioButton> -->
-        <!--                 <RadioButton Name="RadioButton3" ToolTip.Tip="Another tool view" ToolTip.Placement="Right"> -->
-        <!--                     <Svg Path="/Assets/Svgs/Light/tags.svg" /> -->
-        <!--                 </RadioButton> -->
-        <!--             </StackPanel> -->
-        <!-- -->
-        <!--             ~1~ bottom items @1@ -->
-        <!--             <StackPanel VerticalAlignment="Bottom"> -->
-        <!--                 <Svg Path="/Assets/Svgs/Light/sun.svg" /> -->
-        <!--                 <Svg Path="/Assets/Svgs/Light/moon.svg" /> -->
-        <!--             </StackPanel> -->
-        <!--         </Panel> -->
-        <!--     </Border> -->
-        <!-- -->
-        <!--     <SplitView -->
-        <!--         Grid.Column="1" -->
-        <!--         DisplayMode="Inline" -->
-        <!--         OpenPaneLength="296"> -->
-        <!--         <SplitView.IsPaneOpen> -->
-        <!--             <MultiBinding Converter="{x:Static BoolConverters.Or}"> -->
-        <!--                 <Binding Source="{ResolveByName RadioButton1}" Path="IsChecked" /> -->
-        <!--                 <Binding Source="{ResolveByName RadioButton2}" Path="IsChecked" /> -->
-        <!--                 <Binding Source="{ResolveByName RadioButton3}" Path="IsChecked" /> -->
-        <!--             </MultiBinding> -->
-        <!--         </SplitView.IsPaneOpen> -->
-        <!--         <SplitView.Pane> -->
-        <!--             <userControls:MyTagsView /> -->
-        <!--         </SplitView.Pane> -->
-        <!-- -->
-        <!--         <userControls:MainPanel /> -->
-        <!--     </SplitView> -->
-        <!-- </Grid> -->
     </Grid>
 </Window>

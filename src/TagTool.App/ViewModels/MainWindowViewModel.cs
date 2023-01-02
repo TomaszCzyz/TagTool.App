@@ -52,35 +52,23 @@ public partial class MainWindowViewModel : ViewModelBase
     [RelayCommand]
     private void ChangeLeftToolMenuPanelVisibility(bool? isVisible = null)
     {
-        switch (isVisible)
+        ActiveRightToolWidth = isVisible switch
         {
-            case null: // swap visibility
-                ActiveLeftToolWidth = ActiveLeftToolWidth == new GridLength(0) ? new GridLength(200) : new GridLength(0);
-                return;
-            case true:
-                ActiveLeftToolWidth = new GridLength(200);
-                break;
-            default:
-                ActiveLeftToolWidth = new GridLength(0);
-                break;
-        }
+            null => ActiveRightToolWidth == new GridLength(0) ? new GridLength(200) : new GridLength(0),
+            true => new GridLength(200),
+            false => new GridLength(0)
+        };
     }
 
     [RelayCommand]
     private void ChangeRightToolMenuPanelVisibility(bool? isVisible = null)
     {
-        switch (isVisible)
+        ActiveLeftToolWidth = isVisible switch
         {
-            case null: // swap visibility
-                ActiveLeftToolWidth = ActiveLeftToolWidth == new GridLength(0) ? new GridLength(200) : new GridLength(0);
-                return;
-            case true:
-                ActiveLeftToolWidth = new GridLength(200);
-                break;
-            default:
-                ActiveLeftToolWidth = new GridLength(0);
-                break;
-        }
+            null => ActiveLeftToolWidth == new GridLength(0) ? new GridLength(200) : new GridLength(0),
+            true => new GridLength(200),
+            false => new GridLength(0),
+        };
     }
 
     [RelayCommand]
