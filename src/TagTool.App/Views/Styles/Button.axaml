@@ -15,17 +15,30 @@
             <StackPanel Orientation="Horizontal">
                 <Button Classes="addTag" />
                 <Button Classes="addTag" Foreground="Green" />
-                <Line StartPoint="0,0" EndPoint="0,35" Stroke="Black" StrokeThickness="0.5" Margin="5,0,10,0" />
+                <Line
+                    Margin="5 0 10 0"
+                    Stroke="Black"
+                    StrokeThickness="0.5"
+                    StartPoint="0,0"
+                    EndPoint="0,35" />
                 <Button Classes="deleteTag" />
-                <Line StartPoint="0,0" EndPoint="0,35" Stroke="Black" StrokeThickness="0.5" Margin="5,0,10,0" />
+                <Line
+                    Margin="5 0 10 0"
+                    Stroke="Black"
+                    StrokeThickness="0.5"
+                    StartPoint="0,0"
+                    EndPoint="0,35" />
                 <Button Content="SomeContent" />
 
-                <Button Classes="InCircle" Height="33" Width="33">
+                <Button
+                    Classes="InCircle"
+                    Width="33"
+                    Height="33">
                     <avalonia:MaterialIcon
-                        Kind="Close"
-                        Height="{Binding $parent.Height}"
                         Width="{Binding $parent.Width}"
-                        Foreground="#999999" />
+                        Height="{Binding $parent.Height}"
+                        Foreground="#999999"
+                        Kind="Close" />
 
                 </Button>
             </StackPanel>
@@ -43,29 +56,29 @@
                         Name="PART_HoverIndicator"
                         Width="{TemplateBinding Width}"
                         Height="{TemplateBinding Height}"
-                        VerticalAlignment="Center"
                         HorizontalAlignment="Center"
-                        Opacity="0.7"
+                        VerticalAlignment="Center"
                         Fill="{TemplateBinding Foreground}"
-                        IsHitTestVisible="False" />
+                        IsHitTestVisible="False"
+                        Opacity="0.7" />
 
                     <Border
                         Width="{TemplateBinding Width}"
                         Height="{TemplateBinding Height}"
-                        VerticalAlignment="Center"
                         HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
                         ClipToBounds="True"
                         CornerRadius="1000000">
 
                         <ContentPresenter
                             Name="PART_ContentPresenter"
-                            CornerRadius="{TemplateBinding CornerRadius}"
+                            HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
+                            VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"
                             BorderBrush="{TemplateBinding BorderBrush}"
                             BorderThickness="{TemplateBinding BorderThickness}"
-                            ContentTemplate="{TemplateBinding ContentTemplate}"
                             Content="{TemplateBinding Content}"
-                            HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
-                            VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}" />
+                            ContentTemplate="{TemplateBinding ContentTemplate}"
+                            CornerRadius="{TemplateBinding CornerRadius}" />
 
                     </Border>
                 </Grid>
@@ -83,11 +96,11 @@
             <ControlTemplate>
                 <Panel>
                     <avalonia:MaterialIcon
-                        Kind="NotePlus"
                         Width="25"
                         Height="25"
                         HorizontalAlignment="Center"
-                        VerticalAlignment="Center" />
+                        VerticalAlignment="Center"
+                        Kind="NotePlus" />
 
                 </Panel>
             </ControlTemplate>
@@ -100,11 +113,11 @@
             <ControlTemplate>
                 <Panel>
                     <avalonia:MaterialIcon
-                        Kind="NoteMinus"
                         Width="25"
                         Height="25"
                         HorizontalAlignment="Center"
-                        VerticalAlignment="Center" />
+                        VerticalAlignment="Center"
+                        Kind="NoteMinus" />
 
                 </Panel>
             </ControlTemplate>

@@ -1,26 +1,28 @@
 ﻿<UserControl
+    x:Class="TagTool.App.Views.UserControls.MyTagsView"
     xmlns="https://github.com/avaloniaui"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:userControls="clr-namespace:TagTool.App.ViewModels.UserControls"
-    mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-    x:Class="TagTool.App.Views.UserControls.MyTagsView"
-    x:DataType="userControls:MyTagsViewModel">
+    d:DesignHeight="450"
+    d:DesignWidth="800"
+    x:DataType="userControls:MyTagsViewModel"
+    mc:Ignorable="d">
 
     <Design.DataContext>
         <userControls:MyTagsViewModel />
     </Design.DataContext>
 
-    <StackPanel Orientation="Vertical" HorizontalAlignment="Stretch">
-        <StackPanel Orientation="Vertical" Margin="0 8 0 0">
+    <StackPanel HorizontalAlignment="Stretch" Orientation="Vertical">
+        <StackPanel Margin="0 8 0 0" Orientation="Vertical">
 
             <Expander
-                Header="All tags"
-                IsExpanded="True"
                 HorizontalAlignment="Stretch"
+                CornerRadius="8"
                 ExpandDirection="Down"
-                CornerRadius="8">
+                Header="All tags"
+                IsExpanded="True">
                 <Expander.ContentTransition>
                     <CrossFade Duration="00:00:00.25" />
                 </Expander.ContentTransition>
@@ -31,8 +33,8 @@
                 </Expander.Styles>
                 <ListBox
                     Name="TagsListBox"
-                    SelectedItem="{Binding SelectedTag}"
-                    Items="{Binding Items}">
+                    Items="{Binding Items}"
+                    SelectedItem="{Binding SelectedTag}">
                     <ListBox.ItemsPanel>
                         <ItemsPanelTemplate>
                             <WrapPanel />
@@ -41,19 +43,19 @@
                     <ListBox.ItemTemplate>
                         <DataTemplate>
                             <Border
+                                Margin="1"
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Center"
-                                CornerRadius="4"
                                 BorderBrush="#0097A7"
                                 BorderThickness="1"
-                                Margin="1"
-                                ClipToBounds="True">
+                                ClipToBounds="True"
+                                CornerRadius="4">
 
                                 <TextBlock
                                     Margin="2 0"
-                                    FontSize="18"
-                                    FontFamily="avares://TagTool.App/Assets/Fonts#Lato"
                                     VerticalAlignment="Center"
+                                    FontFamily="avares://TagTool.App/Assets/Fonts#Lato"
+                                    FontSize="18"
                                     IsTabStop="False"
                                     Text="{Binding .}" />
 
@@ -62,7 +64,7 @@
                     </ListBox.ItemTemplate>
                 </ListBox>
             </Expander>
-            <Grid RowDefinitions="Auto" ColumnDefinitions="*,Auto">
+            <Grid ColumnDefinitions="*,Auto" RowDefinitions="Auto">
                 <TextBox
                     Grid.Column="0"
                     Text="{Binding CreateTagText}"
@@ -72,7 +74,10 @@
                     </TextBox.KeyBindings>
                 </TextBox>
 
-                <Button Grid.Column="1" Content="CreateTag" Command="{Binding CreateTagCommand}" />
+                <Button
+                    Grid.Column="1"
+                    Command="{Binding CreateTagCommand}"
+                    Content="CreateTag" />
             </Grid>
         </StackPanel>
     </StackPanel>

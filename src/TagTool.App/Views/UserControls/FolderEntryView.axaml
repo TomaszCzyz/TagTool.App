@@ -1,29 +1,27 @@
 ﻿<UserControl
+    x:Class="TagTool.App.Views.UserControls.FolderEntryView"
     xmlns="https://github.com/avaloniaui"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:userControls="clr-namespace:TagTool.App.ViewModels.UserControls"
-    xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
-    mc:Ignorable="d" d:DesignWidth="450" d:DesignHeight="50"
-    x:Class="TagTool.App.Views.UserControls.FolderEntryView">
+    d:DesignHeight="50"
+    d:DesignWidth="450"
+    mc:Ignorable="d">
 
     <Design.DataContext>
         <userControls:FolderEntryViewModel />
     </Design.DataContext>
 
-    <Grid
-        DragDrop.AllowDrop="True"
-        ColumnDefinitions="25,Auto,*">
+    <Grid DragDrop.AllowDrop="True" ColumnDefinitions="25,Auto,*">
 
-        <Image
-            Grid.Column="0"
-            Margin="0 0 2 0" />
+        <Image Grid.Column="0" Margin="0 0 2 0" />
 
         <TextBlock
             Grid.Column="1"
-            VerticalAlignment="Center"
             HorizontalAlignment="Stretch"
+            VerticalAlignment="Center"
             Inlines="{Binding Inlines}">
             <TextBlock.ContextFlyout>
                 <MenuFlyout>
@@ -40,12 +38,12 @@
         <!-- Associated tags -->
         <Border
             Grid.Column="2"
-            BorderThickness="0"
             BorderBrush="Green"
+            BorderThickness="0"
             IsVisible="{Binding AreTagsVisible}">
             <ItemsControl
-                Padding="5 0"
                 Margin="0"
+                Padding="5 0"
                 HorizontalAlignment="Left"
                 VerticalAlignment="Center"
                 Items="{Binding AssociatedTags}">
@@ -57,22 +55,22 @@
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
                         <Border
+                            Margin="1"
                             HorizontalAlignment="Left"
                             VerticalAlignment="Center"
-                            CornerRadius="4"
                             BorderBrush="#0097A7"
                             BorderThickness="1"
-                            Margin="1"
-                            ClipToBounds="True">
+                            ClipToBounds="True"
+                            CornerRadius="4">
 
                             <TextBlock
                                 Margin="2 0"
-                                FontSize="12"
-                                FontFamily="avares://TagTool.App/Assets/Fonts#Lato"
                                 VerticalAlignment="Center"
+                                FontFamily="avares://TagTool.App/Assets/Fonts#Lato"
+                                FontSize="12"
+                                Inlines="{Binding Inlines}"
                                 IsTabStop="False"
-                                Text="{Binding Name}"
-                                Inlines="{Binding Inlines}">
+                                Text="{Binding Name}">
                                 <TextBlock.ContextFlyout>
                                     <MenuFlyout>
                                         <MenuItem Header="Remove">
@@ -83,7 +81,6 @@
                                     </MenuFlyout>
                                 </TextBlock.ContextFlyout>
                             </TextBlock>
-
                         </Border>
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>

@@ -2,8 +2,8 @@
     xmlns="https://github.com/avaloniaui"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
-    xmlns:templatedControls="clr-namespace:TagTool.App.Views.TemplatedControls"
-    xmlns:system="clr-namespace:System;assembly=System.Runtime">
+    xmlns:system="clr-namespace:System;assembly=System.Runtime"
+    xmlns:templatedControls="clr-namespace:TagTool.App.Views.TemplatedControls">
 
     <Design.PreviewWith>
         <StackPanel Margin="20">
@@ -11,7 +11,7 @@
                 <templatedControls:TagChip>
                     <templatedControls:TagChip.Inlines>
                         <InlineCollection>
-                            <Run Text="qwe" Background="green" />
+                            <Run Background="green" Text="qwe" />
                         </InlineCollection>
                     </templatedControls:TagChip.Inlines>
                 </templatedControls:TagChip>
@@ -20,12 +20,15 @@
             </StackPanel>
 
             <StackPanel Orientation="Horizontal">
-                <templatedControls:TagChip Text="Test" IsDeletable="True" />
-                <templatedControls:TagChip Text="Test" IsDeletable="False" />
+                <templatedControls:TagChip IsDeletable="True" Text="Test" />
+                <templatedControls:TagChip IsDeletable="False" Text="Test" />
             </StackPanel>
             <StackPanel Orientation="Horizontal">
                 <templatedControls:TagChip Classes="Implicit" Text="Implicit" />
-                <templatedControls:TagChip Classes="Implicit" Text="ImplicitTest" IsDeletable="False" />
+                <templatedControls:TagChip
+                    Classes="Implicit"
+                    IsDeletable="False"
+                    Text="ImplicitTest" />
             </StackPanel>
         </StackPanel>
     </Design.PreviewWith>
@@ -53,36 +56,36 @@
             <ControlTemplate>
                 <Grid ColumnDefinitions="Auto,*" RowDefinitions="Auto">
                     <Border
-                        Grid.ColumnSpan="2"
                         Name="PART_Border"
-                        CornerRadius="{TemplateBinding CornerRadius}"
+                        Grid.ColumnSpan="2"
                         Background="{TemplateBinding Background}"
                         BorderBrush="{TemplateBinding BorderBrush}"
-                        BorderThickness="{TemplateBinding BorderThickness}" />
+                        BorderThickness="{TemplateBinding BorderThickness}"
+                        CornerRadius="{TemplateBinding CornerRadius}" />
 
                     <SelectableTextBlock
-                        Grid.Column="0"
                         Name="PART_SelectableTextBlock"
-                        VerticalAlignment="Center"
-                        IsTabStop="False"
+                        Grid.Column="0"
                         Margin="4 1"
+                        VerticalAlignment="Center"
                         Inlines="{TemplateBinding Inlines}"
+                        IsTabStop="False"
                         Text="{TemplateBinding Text}" />
 
                     <Button
-                        Grid.Column="1"
                         Name="PART_DeleteButton"
+                        Grid.Column="1"
                         Classes="InCircle"
-                        Margin="-4 2 4 2"
-                        Height="14"
                         Width="14"
+                        Height="14"
+                        Margin="-4 2 4 2"
                         IsVisible="{TemplateBinding IsDeletable}">
 
                         <avalonia:MaterialIcon
-                            Kind="Close"
-                            Foreground="#999999"
+                            Width="{Binding $parent.Width}"
                             Height="{Binding $parent.Height}"
-                            Width="{Binding $parent.Width}" />
+                            Foreground="#999999"
+                            Kind="Close" />
 
                     </Button>
                 </Grid>

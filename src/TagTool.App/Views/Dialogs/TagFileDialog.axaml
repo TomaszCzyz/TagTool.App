@@ -1,22 +1,24 @@
 ﻿<Window
+    x:Class="TagTool.App.Views.Dialogs.TagFileDialog"
     xmlns="https://github.com/avaloniaui"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:dialogs="clr-namespace:TagTool.App.ViewModels.Dialogs"
-    xmlns:userControls="clr-namespace:TagTool.App.Views.UserControls"
     xmlns:converters="clr-namespace:TagTool.App.Converters"
-    xmlns:templatedControls="clr-namespace:TagTool.App.Views.TemplatedControls"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:dialogs="clr-namespace:TagTool.App.ViewModels.Dialogs"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:models="clr-namespace:TagTool.App.Core.Models;assembly=TagTool.App.Core"
-    mc:Ignorable="d" d:DesignWidth="600" d:DesignHeight="350"
-    x:Class="TagTool.App.Views.Dialogs.TagFileDialog"
+    xmlns:templatedControls="clr-namespace:TagTool.App.Views.TemplatedControls"
+    xmlns:userControls="clr-namespace:TagTool.App.Views.UserControls"
     Title="TagFileDialog"
-    WindowStartupLocation="CenterOwner"
+    d:DesignHeight="350"
+    d:DesignWidth="600"
     ExtendClientAreaChromeHints="NoChrome"
-    ExtendClientAreaToDecorationsHint="True"
     ExtendClientAreaTitleBarHeightHint="-1"
+    ExtendClientAreaToDecorationsHint="True"
     ShowInTaskbar="True"
-    SizeToContent="WidthAndHeight">
+    SizeToContent="WidthAndHeight"
+    WindowStartupLocation="CenterOwner"
+    mc:Ignorable="d">
 
     <Window.Resources>
         <converters:ArraySizeToBooleanConverter x:Key="ArraySizeToBooleanConverter" Threshold="1" />
@@ -27,10 +29,10 @@
     </Design.DataContext>
 
     <Grid
-        RowDefinitions="Auto,5,1*,5,1*,5,Auto"
-        ColumnDefinitions="Auto,5,450,*"
-        HorizontalAlignment="Center"
         Margin="20"
+        HorizontalAlignment="Center"
+        ColumnDefinitions="Auto,5,450,*"
+        RowDefinitions="Auto,5,1*,5,1*,5,Auto"
         ShowGridLines="False">
         <Grid.Styles>
             <Style Selector="Border.Outline">
@@ -42,25 +44,29 @@
 
         <!-- first row -->
         <TextBlock
-            Text="File to tag:"
+            HorizontalAlignment="Right"
             VerticalAlignment="Center"
-            HorizontalAlignment="Right" />
+            Text="File to tag:" />
 
         <TextBox
+            Name="SelectFileTextBox"
             Grid.Row="0"
             Grid.Column="2"
-            Name="SelectFileTextBox"
+            Text="{Binding Text}"
             UseFloatingWatermark="True"
-            Watermark="Select file"
-            Text="{Binding Text}">
+            Watermark="Select file">
             <TextBox.InnerRightContent>
                 <Button
                     Name="OpenFilePickerButton"
-                    Background="Transparent"
                     Padding="4"
+                    Background="Transparent"
                     Click="OpenFilePickerButton_OnClick">
 
-                    <Svg Path="/Assets/Svgs/opened-folder-filled.svg" Width="24" Height="24" />
+                    <Svg
+                        Width="24"
+                        Height="24"
+                        Path="/Assets/Svgs/opened-folder-filled.svg" />
+
                 </Button>
             </TextBox.InnerRightContent>
         </TextBox>
@@ -69,9 +75,9 @@
         <TextBlock
             Grid.Row="2"
             Grid.Column="0"
-            Text="Tags:"
+            HorizontalAlignment="Right"
             VerticalAlignment="Center"
-            HorizontalAlignment="Right" />
+            Text="Tags:" />
 
         <Border
             Grid.Row="2"
@@ -85,18 +91,16 @@
         <TextBlock
             Grid.Row="4"
             Grid.Column="0"
-            Text="Implicit tags:"
+            HorizontalAlignment="Right"
             VerticalAlignment="Center"
-            HorizontalAlignment="Right" />
+            Text="Implicit tags:" />
 
         <Border
             Grid.Row="4"
             Grid.Column="2"
             Classes="Outline">
 
-            <ListBox
-                Background="Transparent"
-                Items="{Binding ImplicitTags}">
+            <ListBox Background="Transparent" Items="{Binding ImplicitTags}">
                 <ListBox.Styles>
                     <Style Selector="ListBoxItem">
                         <Setter Property="Padding" Value="1 1 0 0" />
@@ -129,13 +133,16 @@
                 Click="TagButton_OnClick">
                 <Button.IsEnabled>
                     <MultiBinding Converter="{x:Static BoolConverters.And}">
-                        <Binding ElementName="SelectFileTextBox" Path="Text" Converter="{x:Static StringConverters.IsNotNullOrEmpty}" />
+                        <Binding
+                            Converter="{x:Static StringConverters.IsNotNullOrEmpty}"
+                            ElementName="SelectFileTextBox"
+                            Path="Text" />
                         <Binding ElementName="SelectFileTextBox" Path="!(DataValidationErrors.HasErrors)" />
                         <Binding
+                            Converter="{StaticResource ArraySizeToBooleanConverter}"
                             ElementName="TagsToApplySimpleTagsBar"
-                            Path="TagsListBox.Items.Count"
                             FallbackValue="null"
-                            Converter="{StaticResource ArraySizeToBooleanConverter}" />
+                            Path="TagsListBox.Items.Count" />
 
                     </MultiBinding>
                 </Button.IsEnabled>
