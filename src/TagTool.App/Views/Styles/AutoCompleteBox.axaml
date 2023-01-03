@@ -1,6 +1,4 @@
-﻿<Styles
-    xmlns="https://github.com/avaloniaui"
-    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+﻿<Styles xmlns="https://github.com/avaloniaui" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
 
     <Design.PreviewWith>
         <Border Padding="20" Background="#a7a7a7">
@@ -23,23 +21,21 @@
                 <Panel>
                     <TextBox
                         Name="PART_TextBox"
+                        Padding="{TemplateBinding Padding}"
                         Background="{TemplateBinding Background}"
                         BorderBrush="{TemplateBinding BorderBrush}"
                         BorderThickness="{TemplateBinding BorderThickness}"
-                        Padding="{TemplateBinding Padding}"
-                        Watermark="{TemplateBinding Watermark}"
-                        DataValidationErrors.Errors="{TemplateBinding (DataValidationErrors.Errors)}" />
+                        DataValidationErrors.Errors="{TemplateBinding (DataValidationErrors.Errors)}"
+                        Watermark="{TemplateBinding Watermark}" />
 
                     <Popup
                         Name="PART_Popup"
                         MinWidth="{Binding Bounds.Width, RelativeSource={RelativeSource TemplatedParent}}"
                         MaxHeight="{TemplateBinding MaxDropDownHeight}"
-                        PlacementTarget="{TemplateBinding}"
-                        IsLightDismissEnabled="True">
+                        IsLightDismissEnabled="True"
+                        PlacementTarget="{TemplateBinding}">
 
-                        <Border
-                            BorderBrush="{DynamicResource MaterialDesignTextAreaBorder}"
-                            BorderThickness="1">
+                        <Border BorderBrush="{DynamicResource MaterialDesignTextAreaBorder}" BorderThickness="1">
 
                             <ListBox
                                 Name="PART_SelectingItemsControl"

@@ -1,17 +1,19 @@
 ﻿<UserControl
+    x:Class="TagTool.App.Views.UserControls.TaggableItemView"
     xmlns="https://github.com/avaloniaui"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+    xmlns:converters="clr-namespace:TagTool.App.Converters"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:userControls="clr-namespace:TagTool.App.ViewModels.UserControls"
-    xmlns:converters="clr-namespace:TagTool.App.Converters"
-    xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
     xmlns:models="clr-namespace:TagTool.App.Core.Models;assembly=TagTool.App.Core"
-    mc:Ignorable="d" d:DesignWidth="450" d:DesignHeight="50"
-    x:Class="TagTool.App.Views.UserControls.TaggableItemView"
-    DragDrop.AllowDrop="True">
+    xmlns:userControls="clr-namespace:TagTool.App.ViewModels.UserControls"
+    DragDrop.AllowDrop="True"
+    d:DesignHeight="50"
+    d:DesignWidth="450"
+    mc:Ignorable="d">
     <UserControl.Background>
-        <SolidColorBrush Color="White" Opacity="0" />
+        <SolidColorBrush Opacity="0" Color="White" />
     </UserControl.Background>
     <UserControl.Resources>
         <converters:IconToBitmapConverter x:Key="IconToBitmapConverter" />
@@ -21,12 +23,9 @@
         <userControls:TaggableItemViewModel />
     </Design.DataContext>
 
-    <Border
-        BorderBrush="Green"
-        BorderThickness="0">
+    <Border BorderBrush="Green" BorderThickness="0">
 
-        <Grid
-            ColumnDefinitions="25,Auto,*">
+        <Grid ColumnDefinitions="25,Auto,*">
 
             <Image
                 Grid.Column="0"
@@ -35,11 +34,11 @@
 
             <TextBlock
                 Grid.Column="1"
-                VerticalAlignment="Center"
                 HorizontalAlignment="Stretch"
+                VerticalAlignment="Center"
                 Foreground="Black"
-                Text="{Binding DisplayName}"
-                Inlines="{Binding Inlines}">
+                Inlines="{Binding Inlines}"
+                Text="{Binding DisplayName}">
                 <TextBlock.ContextFlyout>
                     <MenuFlyout>
                         <MenuItem Header="Tag it" Click="TagItMenuItem_OnClick" />
@@ -55,12 +54,12 @@
             <!-- Associated tags -->
             <Border
                 Grid.Column="2"
-                BorderThickness="0"
                 BorderBrush="Green"
+                BorderThickness="0"
                 IsVisible="{Binding AreTagsVisible}">
                 <ItemsControl
-                    Padding="5 0"
                     Margin="0"
+                    Padding="5 0"
                     HorizontalAlignment="Left"
                     VerticalAlignment="Center"
                     Items="{Binding AssociatedTags}">
@@ -72,22 +71,22 @@
                     <ItemsControl.ItemTemplate>
                         <DataTemplate DataType="models:Tag">
                             <Border
+                                Margin="1"
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Center"
-                                CornerRadius="4"
                                 BorderBrush="#0097A7"
                                 BorderThickness="1"
-                                Margin="1"
-                                ClipToBounds="True">
+                                ClipToBounds="True"
+                                CornerRadius="4">
 
                                 <TextBlock
                                     Margin="2 0"
-                                    FontSize="12"
-                                    FontFamily="avares://TagTool.App/Assets/Fonts#Lato"
                                     VerticalAlignment="Center"
+                                    FontFamily="avares://TagTool.App/Assets/Fonts#Lato"
+                                    FontSize="12"
+                                    Inlines="{Binding Inlines}"
                                     IsTabStop="False"
-                                    Text="{Binding Name}"
-                                    Inlines="{Binding Inlines}">
+                                    Text="{Binding Name}">
                                     <TextBlock.ContextFlyout>
                                         <MenuFlyout>
                                             <MenuItem Header="Remove" Click="UntagMenuItem_OnClick">

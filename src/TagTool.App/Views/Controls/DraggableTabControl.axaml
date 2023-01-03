@@ -1,47 +1,47 @@
-﻿<Styles xmlns="https://github.com/avaloniaui"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:controls="clr-namespace:TagTool.App.Controls">
+﻿<Styles
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:controls="clr-namespace:TagTool.App.Controls">
     <Design.PreviewWith>
         <Border>
             <Grid>
                 <Border
-                    VerticalAlignment="Top"
                     Height="30"
-                    HorizontalAlignment="Right" />
+                    HorizontalAlignment="Right"
+                    VerticalAlignment="Top" />
 
                 <controls:DraggableTabControl
-                    TabStripPlacement="Top"
-                    SelectedIndex="0"
                     Width="900"
                     Height="600"
-                    SecondaryBackground="#444">
+                    SecondaryBackground="#444"
+                    SelectedIndex="0"
+                    TabStripPlacement="Top">
 
-                    <controls:DraggableTabItem
-                        Header="Settings"
-                        IsClosable="False">
+                    <controls:DraggableTabItem Header="Settings" IsClosable="False">
 
                         <Border
-                            Background="Yellow"
                             Width="30"
-                            HorizontalAlignment="Right" />
+                            HorizontalAlignment="Right"
+                            Background="Yellow" />
 
                     </controls:DraggableTabItem>
 
-                    <controls:DraggableTabItem Header="Another Tab" Height="40" Background="" />
-                    <controls:DraggableTabItem Header="Another Tab" Content="test" />
+                    <controls:DraggableTabItem
+                        Height="40"
+                        Background=""
+                        Header="Another Tab" />
+                    <controls:DraggableTabItem Content="test" Header="Another Tab" />
                 </controls:DraggableTabControl>
             </Grid>
         </Border>
     </Design.PreviewWith>
     <Styles.Resources>
-        <SolidColorBrush Color="#fff" x:Key="DraggableTabControlForeground" />
-        <SolidColorBrush Color="#bbb" x:Key="DraggableTabControlBackground" />
+        <SolidColorBrush x:Key="DraggableTabControlForeground" Color="#fff" />
+        <SolidColorBrush x:Key="DraggableTabControlBackground" Color="#bbb" />
 
         <DrawingImage x:Key="FluentIconsFilled.AddFilled">
             <DrawingGroup>
-                <GeometryDrawing
-                    Brush="{DynamicResource DraggableTabControlForeground}"
-                    Geometry="M14.5,13 L14.5,3.75378577 C14.5,3.33978577 14.164,3.00378577 13.75,3.00378577 C13.336,3.00378577 13,3.33978577 13,3.75378577 L13,13 L3.75387573,13 C3.33987573,13 3.00387573,13.336 3.00387573,13.75 C3.00387573,14.164 3.33987573,14.5 3.75387573,14.5 L13,14.5 L13,23.7523651 C13,24.1663651 13.336,24.5023651 13.75,24.5023651 C14.164,24.5023651 14.5,24.1663651 14.5,23.7523651 L14.5,14.5 L23.7498262,14.5030754 C24.1638262,14.5030754 24.4998262,14.1670754 24.4998262,13.7530754 C24.4998262,13.3390754 24.1638262,13.0030754 23.7498262,13.0030754 L14.5,13 Z" />
+                <GeometryDrawing Brush="{DynamicResource DraggableTabControlForeground}" Geometry="M14.5,13 L14.5,3.75378577 C14.5,3.33978577 14.164,3.00378577 13.75,3.00378577 C13.336,3.00378577 13,3.33978577 13,3.75378577 L13,13 L3.75387573,13 C3.33987573,13 3.00387573,13.336 3.00387573,13.75 C3.00387573,14.164 3.33987573,14.5 3.75387573,14.5 L13,14.5 L13,23.7523651 C13,24.1663651 13.336,24.5023651 13.75,24.5023651 C14.164,24.5023651 14.5,24.1663651 14.5,23.7523651 L14.5,14.5 L23.7498262,14.5030754 C24.1638262,14.5030754 24.4998262,14.1670754 24.4998262,13.7530754 C24.4998262,13.3390754 24.1638262,13.0030754 23.7498262,13.0030754 L14.5,13 Z" />
             </DrawingGroup>
         </DrawingImage>
     </Styles.Resources>
@@ -71,126 +71,131 @@
             <ControlTemplate TargetType="controls:DraggableTabControl">
                 <Border
                     Margin="{TemplateBinding Margin}"
-                    BorderBrush="{TemplateBinding BorderBrush}"
-                    BorderThickness="{TemplateBinding BorderThickness}"
-                    Background="{TemplateBinding Background}"
                     HorizontalAlignment="{TemplateBinding HorizontalAlignment}"
-                    VerticalAlignment="{TemplateBinding VerticalAlignment}">
+                    VerticalAlignment="{TemplateBinding VerticalAlignment}"
+                    Background="{TemplateBinding Background}"
+                    BorderBrush="{TemplateBinding BorderBrush}"
+                    BorderThickness="{TemplateBinding BorderThickness}">
 
                     <Grid ColumnDefinitions="*" RowDefinitions="auto,*">
 
-                        <!--Item Presenter-->
+                        <!-- Item Presenter -->
                         <Grid>
                             <Grid
-                                Grid.Row="0"
-                                ColumnDefinitions="auto,auto,*,auto"
                                 Name="PART_DockContainer"
+                                Grid.Row="0"
+                                Width="{TemplateBinding Width}"
                                 Background="{TemplateBinding SecondaryBackground}"
-                                Width="{TemplateBinding Width}">
+                                ColumnDefinitions="auto,auto,*,auto">
 
-                                <!--Header-->
+                                <!-- Header -->
                                 <ContentPresenter
                                     Grid.Column="0"
                                     DockPanel.Dock="Left"
+                                    Margin="5 0"
                                     VerticalContentAlignment="Center"
-                                    Margin="5, 0"
                                     Content="{TemplateBinding Header}"
                                     ContentTemplate="{TemplateBinding HeaderTemplate}"
                                     FontSize="{TemplateBinding FontSize}"
                                     Foreground="{TemplateBinding Foreground}" />
 
-                                <!--Items and Adder Button-->
+                                <!-- Items and Adder Button -->
                                 <Grid
                                     Grid.Column="1"
-                                    ColumnDefinitions="*,auto"
-                                    Margin="{TemplateBinding ItemsMargin}">
+                                    Margin="{TemplateBinding ItemsMargin}"
+                                    ColumnDefinitions="*,auto">
 
                                     <ItemsPresenter
-                                        Grid.Column="0"
                                         Name="PART_ItemsPresenter"
+                                        Grid.Column="0"
+                                        MaxWidth="{TemplateBinding MaxWidthOfItemsPresenter}"
                                         HorizontalAlignment="Left"
-                                        Items="{TemplateBinding Items}"
-                                        ItemsPanel="{TemplateBinding ItemsPanel}"
                                         ItemTemplate="{TemplateBinding ItemTemplate}"
-                                        MaxWidth="{TemplateBinding MaxWidthOfItemsPresenter}">
+                                        Items="{TemplateBinding Items}"
+                                        ItemsPanel="{TemplateBinding ItemsPanel}">
                                         <ItemsPresenter.Transitions>
                                             <Transitions>
-                                                <DoubleTransition Property="Width" Duration="0:0:0.3" Easing="CubicEaseIn" />
+                                                <DoubleTransition
+                                                    Easing="CubicEaseIn"
+                                                    Property="Width"
+                                                    Duration="0:0:0.3" />
                                             </Transitions>
                                         </ItemsPresenter.Transitions>
                                     </ItemsPresenter>
                                     <Button
-                                        Grid.Column="1"
                                         Name="PART_AdderButton"
-                                        Padding="9"
-                                        ZIndex="-1"
-                                        Background="Transparent"
+                                        Grid.Column="1"
                                         Width="35"
-                                        IsVisible="{TemplateBinding AdderButtonIsVisible}">
+                                        Padding="9"
+                                        Background="Transparent"
+                                        IsVisible="{TemplateBinding AdderButtonIsVisible}"
+                                        ZIndex="-1">
 
                                         <Image Source="{DynamicResource FluentIconsFilled.AddFilled}" />
                                     </Button>
                                 </Grid>
-                                <!--secondary background-->
+                                <!-- secondary background -->
                                 <Grid
-                                    Grid.Column="2"
                                     Name="PART_InternalGrid"
+                                    Grid.Column="2"
                                     DockPanel.Dock="Right">
                                     <Grid.Transitions>
                                         <Transitions>
-                                            <DoubleTransition Property="Width" Duration="0:0:0.3" Easing="CubicEaseIn" />
+                                            <DoubleTransition
+                                                Easing="CubicEaseIn"
+                                                Property="Width"
+                                                Duration="0:0:0.3" />
                                         </Transitions>
                                     </Grid.Transitions>
                                     <Border Name="PART_InternalBorder">
                                         <Border.Transitions>
                                             <Transitions>
-                                                <DoubleTransition Property="Width" Duration="0:0:0.3" Easing="CubicEaseIn" />
+                                                <DoubleTransition
+                                                    Easing="CubicEaseIn"
+                                                    Property="Width"
+                                                    Duration="0:0:0.3" />
                                             </Transitions>
                                         </Border.Transitions>
                                     </Border>
                                 </Grid>
-                                <!--Footer-->
+                                <!-- Footer -->
                                 <ContentPresenter
                                     Grid.Column="3"
                                     DockPanel.Dock="Right"
-                                    Margin="5,0"
-                                    FontSize="{TemplateBinding FontSize}"
-                                    Foreground="{TemplateBinding Foreground}"
+                                    Margin="5 0"
+                                    HorizontalAlignment="Right"
                                     VerticalContentAlignment="Center"
-                                    HorizontalAlignment="Right" />
+                                    FontSize="{TemplateBinding FontSize}"
+                                    Foreground="{TemplateBinding Foreground}" />
                             </Grid>
                             <Border
                                 Name="PART_BoxShadow"
-                                Background="Transparent"
                                 Height="5"
-                                BoxShadow="inset 0 -5 3 -5 Black"
-                                VerticalAlignment="Bottom" />
+                                VerticalAlignment="Bottom"
+                                Background="Transparent"
+                                BoxShadow="inset 0 -5 3 -5 Black" />
 
                         </Grid>
 
-                        <!--Content Host-->
+                        <!-- Content Host -->
                         <Border
                             Grid.Row="1"
-                            BorderBrush="Transparent"
-                            Margin="0">
+                            Margin="0"
+                            BorderBrush="Transparent">
 
-                            <Grid
-                                Name="PART_GridHost"
-                                Width="{TemplateBinding Width}">
+                            <Grid Name="PART_GridHost" Width="{TemplateBinding Width}">
 
-                                <ContentPresenter
-                                    Name="PART_FallBackContent"
-                                    Content="{TemplateBinding FallBackContent}" />
+                                <ContentPresenter Name="PART_FallBackContent" Content="{TemplateBinding FallBackContent}" />
 
                                 <ContentPresenter
                                     Name="PART_SelectedContentHost"
-                                    Background="{Binding $parent[controls:DraggableTabControl].SelectedItem.Background}"
+                                    Height="{Binding #PART_GridHost.Height}"
                                     Padding="{TemplateBinding Padding}"
                                     HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
                                     VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"
+                                    Background="{Binding $parent[controls:DraggableTabControl].SelectedItem.Background}"
                                     Content="{TemplateBinding SelectedContent}"
-                                    ContentTemplate="{TemplateBinding SelectedContentTemplate}"
-                                    Height="{Binding #PART_GridHost.Height}" />
+                                    ContentTemplate="{TemplateBinding SelectedContentTemplate}" />
                             </Grid>
                         </Border>
                     </Grid>

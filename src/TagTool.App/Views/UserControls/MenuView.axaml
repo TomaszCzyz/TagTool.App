@@ -1,13 +1,15 @@
 ﻿<UserControl
+    x:Class="TagTool.App.Views.UserControls.MenuView"
     xmlns="https://github.com/avaloniaui"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
     xmlns:userControls="clr-namespace:TagTool.App.ViewModels.UserControls"
-    mc:Ignorable="d" d:DesignWidth="200" d:DesignHeight="75"
-    x:Class="TagTool.App.Views.UserControls.MenuView"
-    x:DataType="userControls:MenuViewModel">
+    d:DesignHeight="75"
+    d:DesignWidth="200"
+    x:DataType="userControls:MenuViewModel"
+    mc:Ignorable="d">
 
     <Design.DataContext>
         <userControls:MenuViewModel />
@@ -29,7 +31,10 @@
 
     <StackPanel Orientation="Horizontal">
         <Button Padding="5" Background="Transparent">
-            <Svg Path="/Assets/Svgs/Light/menu_4_bars.svg" Width="28" Height="28" />
+            <Svg
+                Width="28"
+                Height="28"
+                Path="/Assets/Svgs/Light/menu_4_bars.svg" />
 
             <Button.Flyout>
                 <MenuFlyout Placement="BottomEdgeAlignedLeft">
@@ -79,17 +84,17 @@
             </ToggleButton.Styles>
 
             <avalonia:MaterialIcon
-                Kind="MenuOpen"
                 Width="28"
-                Height="28" />
+                Height="28"
+                Kind="MenuOpen" />
 
         </ToggleButton>
 
         <ToggleButton Background="Transparent" IsChecked="{Binding IsRightToolMenuToggleButtonChecked}">
             <avalonia:MaterialIcon
-                Kind="MenuOpen"
                 Width="28"
-                Height="28" />
+                Height="28"
+                Kind="MenuOpen" />
 
         </ToggleButton>
     </StackPanel>

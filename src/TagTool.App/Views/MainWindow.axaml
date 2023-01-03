@@ -1,29 +1,37 @@
 <Window
+    x:Class="TagTool.App.Views.MainWindow"
     xmlns="https://github.com/avaloniaui"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:vm="using:TagTool.App.ViewModels"
+    xmlns:controls="clr-namespace:TagTool.App.Controls"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:userControls="clr-namespace:TagTool.App.Views.UserControls"
-    xmlns:controls="clr-namespace:TagTool.App.Controls"
-    mc:Ignorable="d" d:DesignWidth="1400" d:DesignHeight="700"
-    x:Class="TagTool.App.Views.MainWindow"
+    xmlns:vm="using:TagTool.App.ViewModels"
     x:Name="RootWindow"
-    Icon="/Assets/avalonia-logo.ico"
     Title="TagTool.App"
+    d:DesignHeight="700"
+    d:DesignWidth="1400"
+    Background="{StaticResource MyLightPrimary200}"
     ExtendClientAreaChromeHints="Default"
-    ExtendClientAreaToDecorationsHint="True"
     ExtendClientAreaTitleBarHeightHint="-1"
-    Background="{StaticResource MyLightPrimary200}">
+    ExtendClientAreaToDecorationsHint="True"
+    Icon="/Assets/avalonia-logo.ico"
+    mc:Ignorable="d">
     <Window.KeyBindings>
-        <KeyBinding Gesture="Escape" Command="{Binding ResetFocusCommand}" CommandParameter="{Binding #RootWindow}" />
-        <KeyBinding Gesture="Ctrl+Q" Command="{Binding FocusNextSearchTabCommand}" CommandParameter="{Binding #RootWindow}" />
+        <KeyBinding
+            Gesture="Escape"
+            Command="{Binding ResetFocusCommand}"
+            CommandParameter="{Binding #RootWindow}" />
+        <KeyBinding
+            Gesture="Ctrl+Q"
+            Command="{Binding FocusNextSearchTabCommand}"
+            CommandParameter="{Binding #RootWindow}" />
     </Window.KeyBindings>
     <Window.Styles>
         <Style Selector="Border.MenuPanel">
             <Setter Property="BorderThickness" Value="1" />
             <Setter Property="BorderBrush">
-                <SolidColorBrush Color="{StaticResource MyLightPrimary800}" Opacity="0.3" />
+                <SolidColorBrush Opacity="0.3" Color="{StaticResource MyLightPrimary800}" />
             </Setter>
             <Setter Property="Background" Value="{StaticResource MyLightPrimary300}" />
         </Style>
@@ -31,10 +39,10 @@
             <Setter Property="Template">
                 <ControlTemplate>
                     <ToggleButton
-                        DataContext="{Binding $parent}"
-                        Background="Transparent"
                         Padding="3"
+                        Background="Transparent"
                         Content="{Binding Content, RelativeSource={RelativeSource TemplatedParent}, Mode=TwoWay}"
+                        DataContext="{Binding $parent}"
                         IsChecked="{Binding IsChecked, RelativeSource={RelativeSource TemplatedParent}, Mode=TwoWay}" />
 
                 </ControlTemplate>
@@ -62,8 +70,8 @@
             Classes="MenuPanel"
             Margin="-1 -1 -1 0"
             PointerPressed="InputElement_OnPointerPressed"
-            PointerReleased="InputElement_OnPointerReleased"
-            PointerMoved="InputElement_OnPointerMoved">
+            PointerMoved="InputElement_OnPointerMoved"
+            PointerReleased="InputElement_OnPointerReleased">
 
             <userControls:MenuView />
         </Border>
@@ -73,17 +81,16 @@
             Grid.Row="1"
             Grid.Column="0"
             Classes="MenuPanel"
-            Margin="-1 -1  0 -1">
+            Margin="-1 -1 0 -1">
 
-            <controls:DraggableTabControl
-                ClickOnAddingButton="DraggableTabControl_OnClickOnAddingButton">
-
+            <controls:DraggableTabControl ClickOnAddingButton="DraggableTabControl_OnClickOnAddingButton">
                 <controls:DraggableTabItem
-                    Header="Hello"
                     Height="50"
+                    Header="Hello"
                     IsClosable="True"
                     AttachedToVisualTree="Visual_OnAttachedToVisualTree"
-                    DetachedFromVisualTree="Visual_OnDetachedFromVisualTree"/>
+                    DetachedFromVisualTree="Visual_OnDetachedFromVisualTree" />
+
             </controls:DraggableTabControl>
             <!-- <TabControl> -->
             <!--     <TabItem Header="tool1">tab1</TabItem> -->
@@ -91,12 +98,20 @@
             <!-- </TabControl> -->
         </Border>
 
-        <GridSplitter Grid.Row="1" Grid.Column="1" ResizeDirection="Columns" Width="4" />
+        <GridSplitter
+            Grid.Row="1"
+            Grid.Column="1"
+            Width="4"
+            ResizeDirection="Columns" />
 
         <!-- Main panel -->
         <userControls:MainPanel Grid.Row="1" Grid.Column="2" />
 
-        <GridSplitter Grid.Row="1" Grid.Column="3" ResizeDirection="Columns" Width="4" />
+        <GridSplitter
+            Grid.Row="1"
+            Grid.Column="3"
+            Width="4"
+            ResizeDirection="Columns" />
 
         <!-- Right tool menu -->
         <Border
@@ -109,7 +124,6 @@
                 <TabItem Header="tool1">tab1</TabItem>
                 <TabItem Header="tool2">tab2</TabItem>
             </TabControl>
-
         </Border>
     </Grid>
 </Window>

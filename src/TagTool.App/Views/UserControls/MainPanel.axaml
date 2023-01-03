@@ -1,35 +1,45 @@
 ﻿<UserControl
+    x:Class="TagTool.App.Views.UserControls.MainPanel"
     xmlns="https://github.com/avaloniaui"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:viewModels="clr-namespace:TagTool.App.ViewModels"
     xmlns:userControls="clr-namespace:TagTool.App.Views.UserControls"
-    mc:Ignorable="d" d:DesignWidth="1400" d:DesignHeight="800"
-    x:Class="TagTool.App.Views.UserControls.MainPanel">
+    xmlns:viewModels="clr-namespace:TagTool.App.ViewModels"
+    d:DesignHeight="800"
+    d:DesignWidth="1400"
+    mc:Ignorable="d">
 
     <Design.DataContext>
         <viewModels:MainWindowViewModel />
     </Design.DataContext>
 
-    <Grid
-        RowDefinitions="*"
-        ColumnDefinitions="*,Auto,*">
+    <Grid ColumnDefinitions="*,Auto,*" RowDefinitions="*">
         <Grid.Styles>
             <Style Selector="GridSplitter">
                 <Setter Property="Background" Value="Transparent" />
             </Style>
         </Grid.Styles>
 
-        <Grid Grid.Column="0" RowDefinitions="*,Auto,*" ColumnDefinitions="*">
+        <Grid
+            Grid.Column="0"
+            ColumnDefinitions="*"
+            RowDefinitions="*,Auto,*">
+
             <userControls:TaggedItemsSearchView Grid.Row="0" />
 
-            <GridSplitter Grid.Row="1" ResizeDirection="Rows" Height="4" />
+            <GridSplitter
+                Grid.Row="1"
+                Height="4"
+                ResizeDirection="Rows" />
 
             <userControls:TaggedItemsSearchView Grid.Row="2" />
         </Grid>
 
-        <GridSplitter Grid.Column="1" ResizeDirection="Columns" Width="4" />
+        <GridSplitter
+            Grid.Column="1"
+            Width="4"
+            ResizeDirection="Columns" />
 
         <userControls:FileSystemView Grid.Column="2" />
     </Grid>

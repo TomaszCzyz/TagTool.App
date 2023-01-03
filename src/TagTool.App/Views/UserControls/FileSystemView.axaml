@@ -1,17 +1,19 @@
 ﻿<UserControl
+    x:Class="TagTool.App.Views.UserControls.FileSystemView"
     xmlns="https://github.com/avaloniaui"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+    xmlns:comparers="clr-namespace:TagTool.App.Comparers"
+    xmlns:converters="clr-namespace:TagTool.App.Converters"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:userControls="clr-namespace:TagTool.App.ViewModels.UserControls"
-    xmlns:converters="clr-namespace:TagTool.App.Converters"
-    xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
     xmlns:userControls1="clr-namespace:TagTool.App.Views.UserControls"
-    xmlns:comparers="clr-namespace:TagTool.App.Comparers"
-    mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="700"
     x:Name="UserControlRoot"
-    x:Class="TagTool.App.Views.UserControls.FileSystemView"
-    x:DataType="userControls:FileSystemViewModel">
+    d:DesignHeight="700"
+    d:DesignWidth="800"
+    x:DataType="userControls:FileSystemViewModel"
+    mc:Ignorable="d">
 
     <UserControl.Resources>
         <converters:FileSizeToStringConverter x:Key="FileSizeToStringConverter" />
@@ -70,11 +72,11 @@
             </Button>
 
             <TextBox
-                Grid.Column="3"
                 Name="AddressTextBox"
+                Grid.Column="3"
                 Margin="5 0 0 0"
-                BorderThickness="0"
                 VerticalContentAlignment="Center"
+                BorderThickness="0"
                 IsVisible="{Binding IsEditing}"
                 Text="{Binding AddressTextBox}"
                 LostFocus="AddressTextBox_OnLostFocus">
@@ -112,19 +114,19 @@
                                 </StackPanel.Styles>
                                 <Button
                                     Classes="ButtonAddressBar Transparent"
-                                    Content="{Binding Name}"
-                                    Command="{Binding NavigateHereCommand}" />
+                                    Command="{Binding NavigateHereCommand}"
+                                    Content="{Binding Name}" />
 
                                 <Button
                                     x:Name="PopupButton"
                                     Classes="ButtonAddressBar Transparent"
-                                    Content="»"
-                                    Command="{Binding OpenPopupCommand}" />
+                                    Command="{Binding OpenPopupCommand}"
+                                    Content="»" />
 
                                 <Popup
                                     IsLightDismissEnabled="True"
-                                    PlacementTarget="{ReflectionBinding #PopupButton}"
-                                    IsOpen="{Binding IsPopupOpen, Mode=TwoWay}">
+                                    IsOpen="{Binding IsPopupOpen, Mode=TwoWay}"
+                                    PlacementTarget="{ReflectionBinding #PopupButton}">
                                     <ContextMenu Items="{Binding Children}">
                                         <ContextMenu.Styles>
                                             <Style Selector="MenuItem">
@@ -141,26 +143,23 @@
                 </ItemsControl>
 
                 <Border
-                    Background="Transparent"
                     HorizontalAlignment="Stretch"
+                    Background="Transparent"
                     PointerPressed="Border_OnPointerPressed" />
 
             </DockPanel>
 
             <Border
                 Grid.Column="4"
+                Width="{Binding $self.Bounds.Height}"
                 BorderBrush="Green"
-                BorderThickness="0"
-                Width="{Binding $self.Bounds.Height}">
+                BorderThickness="0">
                 <Border.Styles>
                     <Style Selector="avalonia|MaterialIcon">
                         <Setter Property="Width" Value="20" />
                         <Setter Property="Height" Value="20" />
                     </Style>
-                    <Style
-                        Selector="
-                            ToggleButton:checked /template/ ContentPresenter#PART_ContentPresenter,
-                            ToggleButton:unchecked /template/ ContentPresenter#PART_ContentPresenter">
+                    <Style Selector="ToggleButton:checked /template/ ContentPresenter#PART_ContentPresenter, ToggleButton:unchecked /template/ ContentPresenter#PART_ContentPresenter">
                         <Setter Property="Background" Value="Transparent" />
                         <Setter Property="Foreground" Value="Black" />
                     </Style>
@@ -179,22 +178,22 @@
                 </Border.Styles>
 
                 <ToggleButton
+                    Padding="0"
                     HorizontalAlignment="Center"
                     VerticalAlignment="Center"
-                    Padding="0"
-                    IsChecked="False"
-                    Command="{Binding ChangeTagsVisibilityCommand}">
+                    Command="{Binding ChangeTagsVisibilityCommand}"
+                    IsChecked="False">
 
                     <Panel>
                         <avalonia:MaterialIcon
                             Classes="tb-checked"
-                            Kind="VisibilityOutline"
-                            IsVisible="{Binding !$parent[ToggleButton].IsChecked}" />
+                            IsVisible="{Binding !$parent[ToggleButton].IsChecked}"
+                            Kind="VisibilityOutline" />
 
                         <avalonia:MaterialIcon
                             Classes="tb-unchecked"
-                            Kind="VisibilityOffOutline"
-                            IsVisible="{Binding $parent[ToggleButton].IsChecked}" />
+                            IsVisible="{Binding $parent[ToggleButton].IsChecked}"
+                            Kind="VisibilityOffOutline" />
 
                     </Panel>
                 </ToggleButton>
@@ -203,15 +202,15 @@
 
         <!-- File system data grid -->
         <DataGrid
-            Grid.Row="1"
             Name="DataGrid"
-            FontFamily="avares://TagTool.App/Assets/Fonts#Lato"
-            SelectionMode="Extended"
-            CanUserResizeColumns="True"
+            Grid.Row="1"
             CanUserReorderColumns="True"
+            CanUserResizeColumns="True"
             CanUserSortColumns="True"
-            SelectedItem="{Binding SelectedItem}"
+            FontFamily="avares://TagTool.App/Assets/Fonts#Lato"
             Items="{Binding Items}"
+            SelectedItem="{Binding SelectedItem}"
+            SelectionMode="Extended"
             LostFocus="DataGrid_OnLostFocus"
             SelectionChanged="DataGrid_OnSelectionChanged">
             <DataGrid.KeyBindings>
@@ -219,38 +218,35 @@
             </DataGrid.KeyBindings>
             <DataGrid.Columns>
                 <DataGridTemplateColumn
-                    Header="Name"
-                    IsReadOnly="True"
-                    CanUserSort="True"
                     Width="*"
-                    CustomSortComparer="{StaticResource TaggableItemViewModelComparer}">
-                    <DataTemplate DataType="userControls:TaggableItemViewModel">
-                        <userControls1:TaggableItemView AttachedToVisualTree="Visual_OnAttachedToVisualTree"/>
-                    </DataTemplate>
-                </DataGridTemplateColumn>
-
-                <DataGridTemplateColumn
-                    Header="Date Created"
-                    IsReadOnly="True"
                     CanUserSort="True"
-                    Width="Auto">
+                    CustomSortComparer="{StaticResource TaggableItemViewModelComparer}"
+                    Header="Name"
+                    IsReadOnly="True">
                     <DataTemplate DataType="userControls:TaggableItemViewModel">
-                        <TextBlock
-                            TextAlignment="Left"
-                            VerticalAlignment="Center"
-                            Text="{Binding DateCreated, StringFormat=\{0:yyyy/MM/dd hh:mm:ss\}}" />
-
+                        <userControls1:TaggableItemView AttachedToVisualTree="Visual_OnAttachedToVisualTree" />
                     </DataTemplate>
                 </DataGridTemplateColumn>
 
                 <DataGridTemplateColumn
-                    Header="Size"
+                    Width="Auto"
+                    CanUserSort="True"
+                    Header="Date Created"
                     IsReadOnly="True">
                     <DataTemplate DataType="userControls:TaggableItemViewModel">
                         <TextBlock
-                            TextAlignment="Right"
                             VerticalAlignment="Center"
-                            Text="{Binding Size, Converter={StaticResource FileSizeToStringConverter}}" />
+                            Text="{Binding DateCreated, StringFormat=\{0:yyyy/MM/dd hh:mm:ss\}}"
+                            TextAlignment="Left" />
+                    </DataTemplate>
+                </DataGridTemplateColumn>
+
+                <DataGridTemplateColumn Header="Size" IsReadOnly="True">
+                    <DataTemplate DataType="userControls:TaggableItemViewModel">
+                        <TextBlock
+                            VerticalAlignment="Center"
+                            Text="{Binding Size, Converter={StaticResource FileSizeToStringConverter}}"
+                            TextAlignment="Right" />
 
                     </DataTemplate>
                 </DataGridTemplateColumn>
@@ -259,43 +255,44 @@
 
         <!-- QuickSearch text field -->
         <Border
-            Grid.Row="1"
             Name="QuickSearchBorder"
-            Opacity="0.7"
-            Background="Orange"
+            Grid.Row="1"
             HorizontalAlignment="Left"
             VerticalAlignment="Top"
+            Background="Orange"
             CornerRadius="4"
-            IsVisible="{Binding QuickSearchText, Converter={x:Static StringConverters.IsNotNullOrEmpty}}">
+            IsVisible="{Binding QuickSearchText, Converter={x:Static StringConverters.IsNotNullOrEmpty}}"
+            Opacity="0.7">
 
             <DockPanel>
                 <avalonia:MaterialIcon
                     DockPanel.Dock="Left"
-                    Kind="Search"
-                    Margin="4 0 0 0" />
+                    Margin="4 0 0 0"
+                    Kind="Search" />
 
                 <TextBlock
                     Name="QuickSearchTextBlock"
                     Padding="4"
-                    Text="{Binding QuickSearchText, Mode=TwoWay}"
-                    Foreground="{Binding HasQuickSearchResults, Mode=OneWay,  Converter={StaticResource BoolToBrushConverter}}" />
+                    Foreground="{Binding HasQuickSearchResults, Mode=OneWay, Converter={StaticResource BoolToBrushConverter}}"
+                    Text="{Binding QuickSearchText, Mode=TwoWay}" />
 
             </DockPanel>
         </Border>
 
         <StackPanel Grid.Row="2" Orientation="Horizontal">
             <TextBlock
-                Margin="5 2 0 0 "
+                Margin="5 2 0 0"
                 FontSize="12"
                 Text="{Binding Items.Count, StringFormat=\{0\} items |}" />
 
             <TextBlock
                 Name="TextBlockSelectedItems"
-                Margin="5 2 0 0 "
+                Margin="5 2 0 0"
                 FontSize="12"
                 Text="" />
 
         </StackPanel>
+
         <ProgressBar
             Grid.Row="2"
             IsIndeterminate="True"
