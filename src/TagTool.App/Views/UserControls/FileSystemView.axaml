@@ -48,7 +48,7 @@
             <Button
                 Grid.Column="0"
                 Classes="NavigationButton"
-                Command="{Binding NavigateBackCommand}">
+                Command="{CompiledBinding NavigateBackCommand}">
 
                 <Svg Path="/Assets/Svgs/Light/arrow_back.svg" />
             </Button>

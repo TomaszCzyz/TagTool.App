@@ -31,6 +31,8 @@
         <FluentTheme Mode="Light" />
         <StyleInclude Source="avares://Avalonia.Controls.DataGrid/Themes/Fluent.xaml" />
         <StyleInclude Source="avares://Material.Icons.Avalonia/App.xaml" />
+        <StyleInclude Source="/Views/Controls/DraggableTabItem.axaml" />
+        <StyleInclude Source="/Views/Controls/DraggableTabControl.axaml" />
         <StyleInclude Source="/Views/TemplatedControls/TagChip.axaml" />
         <StyleInclude Source="/Views/Styles/AutoCompleteBox.axaml" />
         <StyleInclude Source="/Views/Styles/Button.axaml" />
