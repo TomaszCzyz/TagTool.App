@@ -1,6 +1,9 @@
 using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Controls.Primitives;
 using Avalonia.Input;
+using Avalonia.Interactivity;
+using Avalonia.LogicalTree;
 using Avalonia.Markup.Xaml;
 using Microsoft.Extensions.DependencyInjection;
 using TagTool.App.ViewModels;
@@ -48,5 +51,12 @@ public partial class MainWindow : Window
     private void InputElement_OnPointerReleased(object? sender, PointerReleasedEventArgs e)
     {
         _mouseDownForWindowMoving = false;
+    }
+
+    private void Button_OnClick(object? sender, RoutedEventArgs e)
+    {
+        var button = (ILogical)sender!;
+        var popup = button.FindLogicalAncestorOfType<Popup>()!;
+        popup.IsOpen = false;
     }
 }

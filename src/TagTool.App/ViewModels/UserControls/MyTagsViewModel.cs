@@ -1,19 +1,18 @@
 ﻿using System.Collections.ObjectModel;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using Dock.Model.Mvvm.Controls;
 using DynamicData;
 using JetBrains.Annotations;
+using Microsoft.Extensions.DependencyInjection;
 using TagTool.App.Core.Services;
 using TagTool.Backend;
 
 namespace TagTool.App.ViewModels.UserControls;
 
-public partial class MyTagsViewModel : ViewModelBase, ISideTool
+public partial class MyTagsViewModel : Document
 {
     private readonly TagService.TagServiceClient _tagService;
-    private readonly TagSearchService.TagSearchServiceClient _searchService;
-
-    public string Placement { get; set; }
 
     public double Width { get; set; } = 200;
 
@@ -31,16 +30,15 @@ public partial class MyTagsViewModel : ViewModelBase, ISideTool
     [UsedImplicitly]
     public MyTagsViewModel()
     {
-        _tagService = null!;
-        _searchService = null!;
+        _tagService = App.Current.Services.GetRequiredService<ITagToolBackend>().GetTagService();
     }
 
     public MyTagsViewModel(ITagToolBackend tagToolBackend)
     {
         _tagService = tagToolBackend.GetTagService();
-        _searchService = tagToolBackend.GetSearchService();
+        var searchService = tagToolBackend.GetSearchService();
 
-        var getAllReply = _searchService.GetAll(new Empty());
+        var getAllReply = searchService.GetAll(new Empty());
         Items.AddRange(getAllReply.TagNames);
     }
 

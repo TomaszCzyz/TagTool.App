@@ -6,6 +6,7 @@ using Avalonia.Media;
 using Avalonia.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using Dock.Model.Mvvm.Controls;
 using DynamicData;
 using JetBrains.Annotations;
 using Microsoft.Extensions.DependencyInjection;
@@ -15,7 +16,7 @@ using TagTool.Backend;
 
 namespace TagTool.App.ViewModels.UserControls;
 
-public partial class FileSystemViewModel : ViewModelBase
+public partial class FileSystemViewModel : Document
 {
     private readonly TagService.TagServiceClient _tagService;
     private readonly Stack<DirectoryInfo> _navigationHistoryBack = new();

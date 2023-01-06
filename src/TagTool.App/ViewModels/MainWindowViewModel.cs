@@ -4,30 +4,16 @@ using Avalonia.Input;
 using Avalonia.VisualTree;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using Dock.Model.Controls;
 using TagTool.App.Core.Extensions;
+using TagTool.App.Models;
 using TagTool.App.Views.UserControls;
 
 namespace TagTool.App.ViewModels;
 
-public interface ISideTool
-{
-    public string Placement { get; set; }
-
-    public double Width { get; set; }
-}
-
 public partial class MainWindowViewModel : ViewModelBase
 {
     private readonly IFocusManager _focusManager;
-
-    [ObservableProperty]
-    private ObservableCollection<ISideTool> _sideTools = new();
-
-    [ObservableProperty]
-    private ISideTool? _activeLeftTool;
-
-    [ObservableProperty]
-    private ISideTool? _activeRightTool;
 
     [ObservableProperty]
     private GridLength _activeLeftToolWidth = new(250);
@@ -35,16 +21,46 @@ public partial class MainWindowViewModel : ViewModelBase
     [ObservableProperty]
     private GridLength _activeRightToolWidth = new(200);
 
-    private bool IsLeftToolPaneOpen => ActiveLeftTool is not null;
+    [ObservableProperty]
+    private ObservableCollection<string> _tools = new(new[] { "Search", "My Tags", "File Explorer", "Tree File Explorer" });
 
-    private bool IsRightToolPaneOpen => ActiveRightTool is not null;
+    [ObservableProperty]
+    private IRootDock? _layout;
+
+    private readonly MyFactory _factory;
 
     /// <summary>
     ///     ctor for XAML previewer
     /// </summary>
     public MainWindowViewModel()
     {
+        Tools.Add("NewTool");
         _focusManager = null!;
+
+        _factory = new MyFactory();
+
+        Layout = _factory.CreateLayout();
+        if (Layout is { })
+        {
+            _factory.InitLayout(Layout);
+        }
+    }
+
+    [RelayCommand]
+    private void AddDocumentToDock(string type)
+    {
+        if (_factory.LeftDock.IsActive)
+        {
+            _factory.LeftDock.CreateNewDocumentCommand.Execute(type);
+        }
+        else if (_factory.RightDock.IsActive)
+        {
+            _factory.RightDock.CreateNewDocumentCommand.Execute(type);
+        }
+        else
+        {
+            _factory.CentralDock.CreateNewDocumentCommand.Execute(type);
+        }
     }
 
     private InputElement? _previouslyFocusedElement;
