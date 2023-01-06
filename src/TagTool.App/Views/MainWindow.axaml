@@ -87,15 +87,9 @@
                 <controls:DraggableTabItem
                     Height="50"
                     Header="Hello"
-                    IsClosable="True"
-                    AttachedToVisualTree="Visual_OnAttachedToVisualTree"
-                    DetachedFromVisualTree="Visual_OnDetachedFromVisualTree" />
+                    IsClosable="True" />
 
             </controls:DraggableTabControl>
-            <!-- <TabControl> -->
-            <!--     <TabItem Header="tool1">tab1</TabItem> -->
-            <!--     <TabItem Header="tool2">tab2</TabItem> -->
-            <!-- </TabControl> -->
         </Border>
 
         <GridSplitter
@@ -120,10 +114,13 @@
             Classes="MenuPanel"
             Margin="0 -1 -1 -1">
 
-            <TabControl>
-                <TabItem Header="tool1">tab1</TabItem>
-                <TabItem Header="tool2">tab2</TabItem>
-            </TabControl>
+            <controls:DraggableTabControl ClickOnAddingButton="DraggableTabControl_OnClickOnAddingButton">
+                <controls:DraggableTabItem
+                    Height="50"
+                    Header="Hello"
+                    IsClosable="True" />
+
+            </controls:DraggableTabControl>
         </Border>
     </Grid>
 </Window>

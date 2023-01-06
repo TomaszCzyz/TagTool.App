@@ -7,7 +7,7 @@ using Avalonia.Data;
 using Avalonia.LogicalTree;
 using Avalonia.Reactive;
 
-namespace TagTool.App.Controls;
+namespace TagTool.App.Controls.Logic;
 
 public class DraggableTabItemContainerGenerator : ItemContainerGenerator<DraggableTabItem>
 {

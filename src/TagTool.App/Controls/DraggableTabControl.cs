@@ -4,6 +4,7 @@ using Avalonia.Controls;
 using Avalonia.Controls.Generators;
 using Avalonia.Controls.Primitives;
 using Avalonia.Interactivity;
+using TagTool.App.Controls.Logic;
 
 namespace TagTool.App.Controls;
 

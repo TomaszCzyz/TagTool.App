@@ -30,10 +30,10 @@ public partial class MainWindowViewModel : ViewModelBase
     private ISideTool? _activeRightTool;
 
     [ObservableProperty]
-    private GridLength _activeLeftToolWidth = new(250);
+    private GridLength _activeLeftToolWidth = new(350);
 
     [ObservableProperty]
-    private GridLength _activeRightToolWidth = new(200);
+    private GridLength _activeRightToolWidth = new(400);
 
     private bool IsLeftToolPaneOpen => ActiveLeftTool is not null;
 
