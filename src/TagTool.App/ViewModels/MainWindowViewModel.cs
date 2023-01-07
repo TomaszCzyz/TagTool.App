@@ -27,39 +27,38 @@ public partial class MainWindowViewModel : ViewModelBase
     [ObservableProperty]
     private IRootDock? _layout;
 
-    private readonly MyFactory _factory;
+    private readonly MyDockFactory _dockFactory;
 
     /// <summary>
     ///     ctor for XAML previewer
     /// </summary>
     public MainWindowViewModel()
     {
-        Tools.Add("NewTool");
         _focusManager = null!;
 
-        _factory = new MyFactory();
+        _dockFactory = new MyDockFactory();
 
-        Layout = _factory.CreateLayout();
+        Layout = _dockFactory.CreateLayout();
         if (Layout is { })
         {
-            _factory.InitLayout(Layout);
+            _dockFactory.InitLayout(Layout);
         }
     }
 
     [RelayCommand]
     private void AddDocumentToDock(string type)
     {
-        if (_factory.LeftDock.IsActive)
+        if (_dockFactory.LeftDock.IsActive)
         {
-            _factory.LeftDock.CreateNewDocumentCommand.Execute(type);
+            _dockFactory.LeftDock.CreateNewDocumentCommand.Execute(type);
         }
-        else if (_factory.RightDock.IsActive)
+        else if (_dockFactory.RightDock.IsActive)
         {
-            _factory.RightDock.CreateNewDocumentCommand.Execute(type);
+            _dockFactory.RightDock.CreateNewDocumentCommand.Execute(type);
         }
         else
         {
-            _factory.CentralDock.CreateNewDocumentCommand.Execute(type);
+            _dockFactory.CentralDock.CreateNewDocumentCommand.Execute(type);
         }
     }
 
@@ -68,12 +67,24 @@ public partial class MainWindowViewModel : ViewModelBase
     [RelayCommand]
     private void ChangeLeftToolMenuPanelVisibility(bool? isVisible = null)
     {
-        ActiveRightToolWidth = isVisible switch
+        if (_dockFactory.LeftDock.HiddenDockables is null || _dockFactory.LeftDock.VisibleDockables is null) return;
+
+        if (_dockFactory.LeftDock.VisibleDockables.Count != 0)
         {
-            null => ActiveRightToolWidth == new GridLength(0) ? new GridLength(200) : new GridLength(0),
-            true => new GridLength(200),
-            false => new GridLength(0)
-        };
+            for (var i = 0; i < _dockFactory.LeftDock.VisibleDockables.Count; i++)
+            {
+                _dockFactory.LeftDock.HiddenDockables.Add(_dockFactory.LeftDock.VisibleDockables[i]);
+                _dockFactory.LeftDock.VisibleDockables.RemoveAt(i);
+            }
+        }
+        else
+        {
+            for (var i = 0; i < _dockFactory.LeftDock.HiddenDockables.Count; i++)
+            {
+                _dockFactory.LeftDock.VisibleDockables.Add(_dockFactory.LeftDock.HiddenDockables[i]);
+                _dockFactory.LeftDock.HiddenDockables.RemoveAt(i);
+            }
+        }
     }
 
     [RelayCommand]

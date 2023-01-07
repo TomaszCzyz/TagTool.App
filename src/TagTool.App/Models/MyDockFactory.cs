@@ -1,5 +1,4 @@
-﻿using Dock.Avalonia.Controls;
-using Dock.Model.Controls;
+﻿using Dock.Model.Controls;
 using Dock.Model.Core;
 using Dock.Model.Mvvm;
 using Dock.Model.Mvvm.Controls;
@@ -8,7 +7,7 @@ using TagTool.App.ViewModels.UserControls;
 
 namespace TagTool.App.Models;
 
-public class MyFactory : Factory
+public class MyDockFactory : Factory
 {
     private IRootDock? _rootDock;
     private IDocumentDock? _documentDock;
@@ -30,6 +29,7 @@ public class MyFactory : Factory
             ActiveDockable = null,
             IsCollapsable = true,
             VisibleDockables = CreateList<IDockable>(myTags1),
+            HiddenDockables = CreateList<IDockable>(),
             CanCreateDocument = true
         };
 
@@ -37,7 +37,9 @@ public class MyFactory : Factory
         {
             Proportion = 0.25,
             ActiveDockable = null,
+            IsCollapsable = true,
             VisibleDockables = CreateList<IDockable>(myTags2),
+            HiddenDockables = CreateList<IDockable>(),
             CanCreateDocument = true
         };
 
@@ -83,7 +85,7 @@ public class MyFactory : Factory
     public override void InitLayout(IDockable layout)
     {
         DockableLocator = new Dictionary<string, Func<IDockable?>> { ["Root"] = () => _rootDock, ["Files"] = () => _documentDock, };
-        HostWindowLocator = new Dictionary<string, Func<IHostWindow>> { [nameof(IDockWindow)] = () => new HostWindow() };
+        // HostWindowLocator = new Dictionary<string, Func<IHostWindow>> { [nameof(IDockWindow)] = () => new HostWindow() };
 
         base.InitLayout(layout);
     }
