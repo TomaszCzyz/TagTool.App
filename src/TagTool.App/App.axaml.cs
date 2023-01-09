@@ -51,10 +51,6 @@ public class App : Application
         services.AddSingleton<ITagToolBackendConnectionFactory, GrpcChannelFactory>();
         services.AddSingleton<ITagToolBackend, TagToolBackend>();
 
-        services.AddScoped<MyTagsViewModel>();
-        services.AddScoped<TaggedItemsSearchViewModel>();
-        services.AddScoped<FileSystemViewModel>();
-
         services
             .AddOptions<GeneralOptions>()
             .Configure(options => configuration.GetSection(GeneralOptions.General).Bind(options));

@@ -67,24 +67,24 @@ public partial class MainWindowViewModel : ViewModelBase
     [RelayCommand]
     private void ChangeLeftToolMenuPanelVisibility(bool? isVisible = null)
     {
-        if (_dockFactory.LeftDock.HiddenDockables is null || _dockFactory.LeftDock.VisibleDockables is null) return;
-
-        if (_dockFactory.LeftDock.VisibleDockables.Count != 0)
-        {
-            for (var i = 0; i < _dockFactory.LeftDock.VisibleDockables.Count; i++)
-            {
-                _dockFactory.LeftDock.HiddenDockables.Add(_dockFactory.LeftDock.VisibleDockables[i]);
-                _dockFactory.LeftDock.VisibleDockables.RemoveAt(i);
-            }
-        }
-        else
-        {
-            for (var i = 0; i < _dockFactory.LeftDock.HiddenDockables.Count; i++)
-            {
-                _dockFactory.LeftDock.VisibleDockables.Add(_dockFactory.LeftDock.HiddenDockables[i]);
-                _dockFactory.LeftDock.HiddenDockables.RemoveAt(i);
-            }
-        }
+        // if (_dockFactory.LeftDock.HiddenDockables is null || _dockFactory.LeftDock.VisibleDockables is null) return;
+        //
+        // if (_dockFactory.LeftDock.VisibleDockables.Count != 0)
+        // {
+        //     for (var i = 0; i < _dockFactory.LeftDock.VisibleDockables.Count; i++)
+        //     {
+        //         _dockFactory.LeftDock.HiddenDockables.Add(_dockFactory.LeftDock.VisibleDockables[i]);
+        //         _dockFactory.LeftDock.VisibleDockables.RemoveAt(i);
+        //     }
+        // }
+        // else
+        // {
+        //     for (var i = 0; i < _dockFactory.LeftDock.HiddenDockables.Count; i++)
+        //     {
+        //         _dockFactory.LeftDock.VisibleDockables.Add(_dockFactory.LeftDock.HiddenDockables[i]);
+        //         _dockFactory.LeftDock.HiddenDockables.RemoveAt(i);
+        //     }
+        // }
     }
 
     [RelayCommand]
