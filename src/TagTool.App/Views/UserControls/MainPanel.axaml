@@ -1,47 +1,47 @@
 ﻿<UserControl
+    d:DesignHeight="800"
+    d:DesignWidth="1400"
+    mc:Ignorable="d"
+    x:Class="TagTool.App.Views.UserControls.MainPanel"
+    x:CompileBindings="True"
     xmlns="https://github.com/avaloniaui"
-    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:userControls="clr-namespace:TagTool.App.Views.UserControls"
     xmlns:viewModels="clr-namespace:TagTool.App.ViewModels"
-    x:CompileBindings="True"
-    x:Class="TagTool.App.Views.UserControls.MainPanel"
-    d:DesignWidth="1400"
-    d:DesignHeight="800"
-    mc:Ignorable="d">
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
 
     <Design.DataContext>
-        <viewModels:MainWindowViewModel />
+        <viewModels:MainWindowViewModel/>
     </Design.DataContext>
 
     <Grid ColumnDefinitions="*,Auto,*" RowDefinitions="*">
         <Grid.Styles>
             <Style Selector="GridSplitter">
-                <Setter Property="Background" Value="Transparent" />
+                <Setter Property="Background" Value="Transparent"/>
             </Style>
         </Grid.Styles>
 
         <Grid
-            Grid.Column="0"
             ColumnDefinitions="*"
+            Grid.Column="0"
             RowDefinitions="*,Auto,*">
 
-            <userControls:TaggedItemsSearchView Grid.Row="0" />
+            <userControls:TaggedItemsSearchView Grid.Row="0"/>
 
             <GridSplitter
                 Grid.Row="1"
                 Height="4"
-                ResizeDirection="Rows" />
+                ResizeDirection="Rows"/>
 
-            <userControls:TaggedItemsSearchView Grid.Row="2" />
+            <userControls:TaggedItemsSearchView Grid.Row="2"/>
         </Grid>
 
         <GridSplitter
             Grid.Column="1"
-            Width="4"
-            ResizeDirection="Columns" />
+            ResizeDirection="Columns"
+            Width="4"/>
 
-        <userControls:FileSystemView Grid.Column="2" />
+        <userControls:FileSystemView Grid.Column="2"/>
     </Grid>
 </UserControl>

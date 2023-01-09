@@ -1,28 +1,28 @@
 ﻿<UserControl
+    DragDrop.AllowDrop="True"
+    d:DesignHeight="50"
+    d:DesignWidth="450"
+    mc:Ignorable="d"
+    x:Class="TagTool.App.Views.UserControls.TaggableItemView"
+    x:CompileBindings="True"
+    x:DataType="userControls:TaggableItemViewModel"
     xmlns="https://github.com/avaloniaui"
-    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
     xmlns:converters="clr-namespace:TagTool.App.Converters"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:models="clr-namespace:TagTool.App.Core.Models;assembly=TagTool.App.Core"
     xmlns:userControls="clr-namespace:TagTool.App.ViewModels.UserControls"
-    x:CompileBindings="True"
-    x:Class="TagTool.App.Views.UserControls.TaggableItemView"
-    d:DesignWidth="450"
-    d:DesignHeight="50"
-    x:DataType="userControls:TaggableItemViewModel"
-    mc:Ignorable="d"
-    DragDrop.AllowDrop="True">
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
     <UserControl.Background>
-        <SolidColorBrush Opacity="0" Color="White" />
+        <SolidColorBrush Color="White" Opacity="0"/>
     </UserControl.Background>
     <UserControl.Resources>
-        <converters:IconToBitmapConverter x:Key="IconToBitmapConverter" />
+        <converters:IconToBitmapConverter x:Key="IconToBitmapConverter"/>
     </UserControl.Resources>
 
     <Design.DataContext>
-        <userControls:TaggableItemViewModel />
+        <userControls:TaggableItemViewModel/>
     </Design.DataContext>
 
     <Border BorderBrush="Green" BorderThickness="0">
@@ -32,68 +32,68 @@
             <Image
                 Grid.Column="0"
                 Margin="0 0 2 0"
-                Source="{Binding Location, Converter={StaticResource IconToBitmapConverter}, ConverterParameter=25}" />
+                Source="{Binding Location, Converter={StaticResource IconToBitmapConverter}, ConverterParameter=25}"/>
 
             <TextBlock
+                Foreground="Black"
                 Grid.Column="1"
                 HorizontalAlignment="Stretch"
-                VerticalAlignment="Center"
-                Foreground="Black"
                 Inlines="{Binding Inlines}"
-                Text="{Binding DisplayName}">
+                Text="{Binding DisplayName}"
+                VerticalAlignment="Center">
                 <TextBlock.ContextFlyout>
                     <MenuFlyout>
-                        <MenuItem Header="Tag it" Click="TagItMenuItem_OnClick" />
-                        <Separator />
-                        <MenuItem Header="Show in Explorer" />
-                        <Separator />
-                        <MenuItem Header="Rename" />
-                        <MenuItem Header="Copy" />
+                        <MenuItem Click="TagItMenuItem_OnClick" Header="Tag it"/>
+                        <Separator/>
+                        <MenuItem Header="Show in Explorer"/>
+                        <Separator/>
+                        <MenuItem Header="Rename"/>
+                        <MenuItem Header="Copy"/>
                     </MenuFlyout>
                 </TextBlock.ContextFlyout>
             </TextBlock>
 
             <!-- Associated tags -->
             <Border
-                Grid.Column="2"
                 BorderBrush="Green"
                 BorderThickness="0"
+                Grid.Column="2"
                 IsVisible="{Binding AreTagsVisible}">
                 <ItemsControl
+                    HorizontalAlignment="Left"
+                    Items="{Binding AssociatedTags}"
                     Margin="0"
                     Padding="5 0"
-                    HorizontalAlignment="Left"
-                    VerticalAlignment="Center"
-                    Items="{Binding AssociatedTags}">
+                    VerticalAlignment="Center">
                     <ItemsControl.ItemsPanel>
                         <ItemsPanelTemplate>
-                            <StackPanel Orientation="Horizontal" Spacing="2" />
+                            <StackPanel Orientation="Horizontal" Spacing="2"/>
                         </ItemsPanelTemplate>
                     </ItemsControl.ItemsPanel>
                     <ItemsControl.ItemTemplate>
                         <DataTemplate DataType="models:Tag">
                             <Border
-                                Margin="1"
-                                HorizontalAlignment="Left"
-                                VerticalAlignment="Center"
                                 BorderBrush="#0097A7"
                                 BorderThickness="1"
                                 ClipToBounds="True"
-                                CornerRadius="4">
+                                CornerRadius="4"
+                                HorizontalAlignment="Left"
+                                Margin="1"
+                                VerticalAlignment="Center">
 
                                 <TextBlock
-                                    Margin="2 0"
-                                    VerticalAlignment="Center"
                                     FontFamily="avares://TagTool.App/Assets/Fonts#Lato"
                                     FontSize="12"
                                     Inlines="{Binding Inlines}"
                                     IsTabStop="False"
-                                    Text="{Binding Name}">
+                                    Margin="2 0"
+                                    Text="{Binding Name}"
+                                    VerticalAlignment="Center">
                                     <TextBlock.ContextFlyout>
                                         <MenuFlyout>
-                                            <MenuItem Header="Remove" Click="UntagMenuItem_OnClick">
+                                            <MenuItem Click="UntagMenuItem_OnClick" Header="Remove">
                                                 <MenuItem.Icon>
-                                                    <avalonia:MaterialIcon Kind="DeleteOutline" />
+                                                    <avalonia:MaterialIcon Kind="DeleteOutline"/>
                                                 </MenuItem.Icon>
                                             </MenuItem>
                                         </MenuFlyout>

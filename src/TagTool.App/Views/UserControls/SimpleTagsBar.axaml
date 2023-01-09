@@ -1,46 +1,46 @@
 ﻿<UserControl
+    d:DesignHeight="300"
+    d:DesignWidth="550"
+    mc:Ignorable="d"
+    x:Class="TagTool.App.Views.UserControls.SimpleTagsBar"
+    x:CompileBindings="True"
+    x:DataType="userControls:SimpleTagsBarViewModel"
+    x:Name="UserControlRoot"
     xmlns="https://github.com/avaloniaui"
-    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:models="clr-namespace:TagTool.App.Core.Models;assembly=TagTool.App.Core"
     xmlns:templatedControls="clr-namespace:TagTool.App.Views.TemplatedControls"
     xmlns:userControls="clr-namespace:TagTool.App.ViewModels.UserControls"
-    x:CompileBindings="True"
-    x:Class="TagTool.App.Views.UserControls.SimpleTagsBar"
-    x:Name="UserControlRoot"
-    d:DesignWidth="550"
-    d:DesignHeight="300"
-    x:DataType="userControls:SimpleTagsBarViewModel"
-    mc:Ignorable="d">
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
     <UserControl.Styles>
         <Style Selector="ListBox">
-            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="Background" Value="Transparent"/>
         </Style>
         <Style Selector="ListBoxItem">
-            <Setter Property="Padding" Value="0" />
-            <Setter Property="MaxHeight" Value="30" />
+            <Setter Property="Padding" Value="0"/>
+            <Setter Property="MaxHeight" Value="30"/>
         </Style>
     </UserControl.Styles>
 
     <Grid ColumnDefinitions="Auto,*" RowDefinitions="Auto">
 
         <Border
-            Name="PART_BorderBackground"
-            Grid.ColumnSpan="2"
             BorderBrush="#6692B1"
             BorderThickness="2"
-            CornerRadius="16" />
+            CornerRadius="16"
+            Grid.ColumnSpan="2"
+            Name="PART_BorderBackground"/>
 
         <avalonia:MaterialIcon
             Grid.Column="0"
-            Width="20"
             Height="20"
-            Margin="10 0 5 0"
             HorizontalAlignment="Center"
+            Kind="Magnify"
+            Margin="10 0 5 0"
             VerticalAlignment="Center"
-            Kind="Magnify" />
+            Width="20"/>
 
         <ScrollViewer
             Grid.Column="1"
@@ -49,53 +49,53 @@
             VerticalScrollBarVisibility="Visible">
 
             <ListBox
-                Name="TagsListBox"
-                Margin="2"
                 HorizontalAlignment="Left"
-                VerticalAlignment="Center"
                 Items="{Binding EnteredTags}"
-                ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+                Margin="2"
+                Name="TagsListBox"
+                ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                VerticalAlignment="Center">
                 <ListBox.ItemsPanel>
                     <ItemsPanelTemplate>
-                        <WrapPanel />
+                        <WrapPanel/>
                     </ItemsPanelTemplate>
                 </ListBox.ItemsPanel>
                 <ListBox.DataTemplates>
-                    <DataTemplate x:CompileBindings="False" DataType="models:Tag">
+                    <DataTemplate DataType="models:Tag" x:CompileBindings="False">
                         <templatedControls:TagChip
-                            Margin="4 2"
                             DeleteCommand="{Binding #UserControlRoot.DataContext.RemoveTagCommand, FallbackValue=null}"
                             DeleteCommandParameter="{Binding .}"
-                            Text="{Binding Name}" />
+                            Margin="4 2"
+                            Text="{Binding Name}"/>
 
                     </DataTemplate>
                     <DataTemplate DataType="userControls:TagSearchBoxViewModel">
                         <AutoCompleteBox
-                            Name="TagSearchAutoCompleteBox"
+                            AttachedToVisualTree="TagSearchAutoCompleteBox_OnAttachedToVisualTree"
                             Classes="TransparentBackground WrappedPanel"
-                            Margin="2 0"
                             FilterMode="None"
                             IsTextCompletionEnabled="True"
                             Items="{Binding TagsSearchResults}"
+                            Margin="2 0"
+                            Name="TagSearchAutoCompleteBox"
                             SelectedItem="{Binding SelectedItem, Mode=TwoWay}"
                             Text="{Binding Text, Mode=TwoWay}"
-                            Watermark="Next Tag..."
-                            AttachedToVisualTree="TagSearchAutoCompleteBox_OnAttachedToVisualTree">
+                            Watermark="Next Tag...">
                             <AutoCompleteBox.ItemTemplate>
                                 <DataTemplate DataType="models:HighlightedMatch">
                                     <Panel>
                                         <Border
-                                            Margin="2"
-                                            HorizontalAlignment="Center"
-                                            VerticalAlignment="Center"
                                             ClipToBounds="True"
-                                            CornerRadius="2">
+                                            CornerRadius="2"
+                                            HorizontalAlignment="Center"
+                                            Margin="2"
+                                            VerticalAlignment="Center">
 
                                             <TextBlock
-                                                Margin="2 0"
-                                                VerticalAlignment="Center"
                                                 Inlines="{Binding Inlines}"
-                                                IsTabStop="False" />
+                                                IsTabStop="False"
+                                                Margin="2 0"
+                                                VerticalAlignment="Center"/>
 
                                         </Border>
                                     </Panel>
