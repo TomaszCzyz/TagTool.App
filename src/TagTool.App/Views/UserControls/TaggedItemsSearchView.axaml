@@ -1,5 +1,4 @@
 ﻿<UserControl
-    x:Class="TagTool.App.Views.UserControls.TaggedItemsSearchView"
     xmlns="https://github.com/avaloniaui"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
@@ -11,9 +10,12 @@
     xmlns:templatedControls="clr-namespace:TagTool.App.Views.TemplatedControls"
     xmlns:userControls="clr-namespace:TagTool.App.ViewModels.UserControls"
     xmlns:userControls1="clr-namespace:TagTool.App.Views.UserControls"
+    x:CompileBindings="True"
+    x:Class="TagTool.App.Views.UserControls.TaggedItemsSearchView"
     x:Name="UserControlRoot"
-    d:DesignHeight="700"
     d:DesignWidth="700"
+    d:DesignHeight="700"
+    x:DataType="userControls:TaggedItemsSearchViewModel"
     mc:Ignorable="d">
     <UserControl.Resources>
         <converters:FileSizeToStringConverter x:Key="FileSizeToStringConverter" />
@@ -36,7 +38,7 @@
             ColumnDefinitions="Auto,*,Auto"
             RowDefinitions="Auto">
             <Grid.KeyBindings>
-                <KeyBinding Gesture="Ctrl+Enter" Command="{Binding CommitSearchCommand}" />
+                <KeyBinding Gesture="Ctrl+Enter" Command="{ReflectionBinding CommitSearchCommand}" />
             </Grid.KeyBindings>
             <Grid.Styles>
                 <Style Selector="ListBox">
@@ -79,7 +81,7 @@
                 Margin="10 0 5 0"
                 Padding="0"
                 Background="Transparent"
-                Command="{Binding CommitSearchCommand}">
+                Command="{ReflectionBinding CommitSearchCommand}">
 
                 <avalonia:MaterialIcon
                     Width="20"
@@ -105,7 +107,7 @@
                     Items="{Binding EnteredTags}"
                     ScrollViewer.HorizontalScrollBarVisibility="Disabled">
                     <ListBox.DataTemplates>
-                        <DataTemplate DataType="models:Tag">
+                        <DataTemplate x:CompileBindings="False" DataType="models:Tag">
                             <templatedControls:TagChip
                                 Margin="4 2"
                                 DeleteCommand="{Binding #UserControlRoot.DataContext.RemoveTagCommand, FallbackValue=null}"
@@ -113,7 +115,7 @@
                                 Text="{Binding Name}" />
 
                         </DataTemplate>
-                        <DataTemplate DataType="system:String">
+                        <DataTemplate x:CompileBindings="False" DataType="system:String">
                             <TextBox
                                 Classes="Transparent"
                                 GotFocus="InputElement_OnGotFocus"

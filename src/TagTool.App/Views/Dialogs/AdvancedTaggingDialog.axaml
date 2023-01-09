@@ -1,5 +1,4 @@
 ﻿<Window
-    x:Class="TagTool.App.Views.Dialogs.AdvancedTaggingDialog"
     xmlns="https://github.com/avaloniaui"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
@@ -10,20 +9,21 @@
     xmlns:models="clr-namespace:TagTool.App.Core.Models;assembly=TagTool.App.Core"
     xmlns:templatedControls="clr-namespace:TagTool.App.Views.TemplatedControls"
     xmlns:userControls="clr-namespace:TagTool.App.Views.UserControls"
-    Title="AdvancedTaggingDialog"
+    x:Class="TagTool.App.Views.Dialogs.AdvancedTaggingDialog"
+    d:DesignWidth="1600"
+    d:DesignHeight="900"
+    mc:Ignorable="d"
     Width="1600"
     Height="900"
     MinHeight="400"
-    d:DesignHeight="900"
-    d:DesignWidth="1600"
     Background="{x:Null}"
     ExtendClientAreaChromeHints="NoChrome"
     ExtendClientAreaTitleBarHeightHint="20"
     ExtendClientAreaToDecorationsHint="True"
     ShowInTaskbar="True"
+    Title="AdvancedTaggingDialog"
     TransparencyLevelHint="AcrylicBlur"
-    WindowStartupLocation="CenterOwner"
-    mc:Ignorable="d">
+    WindowStartupLocation="CenterOwner">
     <Window.Resources>
         <converters:IconToBitmapConverter x:Key="IconToBitmapConverter" />
     </Window.Resources>

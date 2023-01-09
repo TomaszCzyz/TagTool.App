@@ -1,30 +1,29 @@
 <Window
-    x:Class="TagTool.App.Views.MainWindow"
     xmlns="https://github.com/avaloniaui"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:userControls="clr-namespace:TagTool.App.Views.UserControls"
     xmlns:vm="using:TagTool.App.ViewModels"
+    x:CompileBindings="True"
+    x:Class="TagTool.App.Views.MainWindow"
     x:Name="RootWindow"
-    Title="TagTool.App"
-    d:DesignHeight="700"
     d:DesignWidth="1400"
+    d:DesignHeight="700"
     Background="{StaticResource MyLightPrimary200}"
     ExtendClientAreaChromeHints="Default"
     ExtendClientAreaTitleBarHeightHint="-1"
     ExtendClientAreaToDecorationsHint="True"
     Icon="/Assets/avalonia-logo.ico"
-    mc:Ignorable="d">
+    Title="TagTool.App">
     <Window.KeyBindings>
         <KeyBinding
             Gesture="Escape"
-            Command="{Binding ResetFocusCommand}"
+            Command="{ReflectionBinding ResetFocusCommand}"
             CommandParameter="{Binding #RootWindow}" />
         <KeyBinding
             Gesture="Ctrl+Q"
-            Command="{Binding FocusNextSearchTabCommand}"
+            Command="{ReflectionBinding FocusNextSearchTabCommand}"
             CommandParameter="{Binding #RootWindow}" />
     </Window.KeyBindings>
     <Window.Styles>
@@ -37,7 +36,7 @@
         </Style>
         <Style Selector="RadioButton.SideMenu">
             <Setter Property="Template">
-                <ControlTemplate>
+                <ControlTemplate x:CompileBindings="False">
                     <ToggleButton
                         Padding="3"
                         Background="Transparent"
@@ -100,9 +99,9 @@
                                                 </Style>
                                             </Border.Styles>
 
-                                            <ListBox Items="{Binding ElementName=RootWindow, Path=DataContext.Tools, FallbackValue=null}">
+                                            <ListBox Items="{ReflectionBinding ElementName=RootWindow, Path=DataContext.Tools, FallbackValue=null}">
                                                 <ListBox.ItemTemplate>
-                                                    <DataTemplate>
+                                                    <DataTemplate x:CompileBindings="False">
                                                         <Button
                                                             Margin="0"
                                                             Padding="0"
@@ -125,7 +124,7 @@
                 </Style>
             </Border.Styles>
 
-            <DockControl Layout="{Binding Layout}" />
+            <DockControl Layout="{ReflectionBinding Layout}" />
         </Border>
     </Grid>
 </Window>

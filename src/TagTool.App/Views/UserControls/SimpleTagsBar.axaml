@@ -1,5 +1,4 @@
 ﻿<UserControl
-    x:Class="TagTool.App.Views.UserControls.SimpleTagsBar"
     xmlns="https://github.com/avaloniaui"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
@@ -8,9 +7,11 @@
     xmlns:models="clr-namespace:TagTool.App.Core.Models;assembly=TagTool.App.Core"
     xmlns:templatedControls="clr-namespace:TagTool.App.Views.TemplatedControls"
     xmlns:userControls="clr-namespace:TagTool.App.ViewModels.UserControls"
+    x:CompileBindings="True"
+    x:Class="TagTool.App.Views.UserControls.SimpleTagsBar"
     x:Name="UserControlRoot"
-    d:DesignHeight="300"
     d:DesignWidth="550"
+    d:DesignHeight="300"
     x:DataType="userControls:SimpleTagsBarViewModel"
     mc:Ignorable="d">
     <UserControl.Styles>
@@ -60,7 +61,7 @@
                     </ItemsPanelTemplate>
                 </ListBox.ItemsPanel>
                 <ListBox.DataTemplates>
-                    <DataTemplate DataType="models:Tag">
+                    <DataTemplate x:CompileBindings="False" DataType="models:Tag">
                         <templatedControls:TagChip
                             Margin="4 2"
                             DeleteCommand="{Binding #UserControlRoot.DataContext.RemoveTagCommand, FallbackValue=null}"

@@ -1,5 +1,4 @@
 ﻿<Window
-    x:Class="TagTool.App.Views.Dialogs.TagFileDialog"
     xmlns="https://github.com/avaloniaui"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:converters="clr-namespace:TagTool.App.Converters"
@@ -9,16 +8,17 @@
     xmlns:models="clr-namespace:TagTool.App.Core.Models;assembly=TagTool.App.Core"
     xmlns:templatedControls="clr-namespace:TagTool.App.Views.TemplatedControls"
     xmlns:userControls="clr-namespace:TagTool.App.Views.UserControls"
-    Title="TagFileDialog"
-    d:DesignHeight="350"
+    x:Class="TagTool.App.Views.Dialogs.TagFileDialog"
     d:DesignWidth="600"
+    d:DesignHeight="350"
+    mc:Ignorable="d"
     ExtendClientAreaChromeHints="NoChrome"
     ExtendClientAreaTitleBarHeightHint="-1"
     ExtendClientAreaToDecorationsHint="True"
     ShowInTaskbar="True"
     SizeToContent="WidthAndHeight"
-    WindowStartupLocation="CenterOwner"
-    mc:Ignorable="d">
+    Title="TagFileDialog"
+    WindowStartupLocation="CenterOwner">
 
     <Window.Resources>
         <converters:ArraySizeToBooleanConverter x:Key="ArraySizeToBooleanConverter" Threshold="1" />

@@ -1,5 +1,4 @@
 ﻿<UserControl
-    x:Class="TagTool.App.Views.UserControls.TaggableItemView"
     xmlns="https://github.com/avaloniaui"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
@@ -8,10 +7,13 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:models="clr-namespace:TagTool.App.Core.Models;assembly=TagTool.App.Core"
     xmlns:userControls="clr-namespace:TagTool.App.ViewModels.UserControls"
-    DragDrop.AllowDrop="True"
-    d:DesignHeight="50"
+    x:CompileBindings="True"
+    x:Class="TagTool.App.Views.UserControls.TaggableItemView"
     d:DesignWidth="450"
-    mc:Ignorable="d">
+    d:DesignHeight="50"
+    x:DataType="userControls:TaggableItemViewModel"
+    mc:Ignorable="d"
+    DragDrop.AllowDrop="True">
     <UserControl.Background>
         <SolidColorBrush Opacity="0" Color="White" />
     </UserControl.Background>
@@ -97,7 +99,6 @@
                                         </MenuFlyout>
                                     </TextBlock.ContextFlyout>
                                 </TextBlock>
-
                             </Border>
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>

@@ -6,7 +6,9 @@ using Avalonia.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using DynamicData;
+using Microsoft.Extensions.DependencyInjection;
 using TagTool.App.Core.Models;
+using TagTool.App.Core.Services;
 using TagTool.Backend;
 
 namespace TagTool.App.ViewModels.UserControls;
@@ -43,6 +45,12 @@ public partial class TaggableItemViewModel : ViewModelBase
     private bool _areTagsVisible = true;
 
     public ObservableCollection<Tag> AssociatedTags { get; } = new();
+
+    public TaggableItemViewModel()
+    {
+        _tagService = App.Current.Services.GetRequiredService<ITagToolBackend>().GetTagService();
+        var _ = Dispatcher.UIThread.InvokeAsync(UpdateTags);
+    }
 
     public TaggableItemViewModel(TagService.TagServiceClient tagServiceClient)
     {
