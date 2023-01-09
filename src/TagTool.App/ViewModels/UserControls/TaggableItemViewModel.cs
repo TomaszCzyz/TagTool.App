@@ -18,7 +18,7 @@ public enum TaggedItemType
 }
 
 [DebuggerDisplay("{DisplayName}")]
-public partial class TaggableItemViewModel : ViewModelBase, IFileSystemEntry
+public partial class TaggableItemViewModel : ViewModelBase
 {
     private readonly TagService.TagServiceClient _tagService;
 
