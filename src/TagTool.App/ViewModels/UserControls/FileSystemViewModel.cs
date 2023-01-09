@@ -90,12 +90,14 @@ public partial class FileSystemViewModel : Document
         }
 
         // todo: add cancellation support in a case of large folders
-        Dispatcher.UIThread.Post(() =>
-        {
-            OnQuickSearchTextChangedInner(value);
-        });
+        Dispatcher.UIThread.Post(() => OnQuickSearchTextChangedInner(value));
     }
 
+    /// <summary>
+    ///     Highlights substring that match <paramref name="value" />
+    /// </summary>
+    /// <remarks>Invoke on UI thread</remarks>
+    /// <param name="value">string we search for</param>
     private void OnQuickSearchTextChangedInner(string value)
     {
         foreach (var entry in Items)
@@ -106,12 +108,8 @@ public partial class FileSystemViewModel : Document
             {
                 if (_highlightedItems.Contains(entry))
                 {
-                    // reset previous highlighting 
-                    Dispatcher.UIThread.Post(() =>
-                    {
-                        entry.Inlines.Clear();
-                        entry.Inlines.Add(new Run { Text = entry.DisplayName });
-                    });
+                    entry.Inlines.Clear();
+                    entry.Inlines.Add(new Run { Text = entry.DisplayName });
 
                     _highlightedItems.Remove(entry);
                 }
@@ -126,7 +124,7 @@ public partial class FileSystemViewModel : Document
             _highlightedItems.Add(entry);
         }
 
-        UpdateSelection();
+        UpdateSelectedItem();
     }
 
     private static IEnumerable<Run> CreateHighlightedText(int begin, int end, string name)
@@ -138,7 +136,7 @@ public partial class FileSystemViewModel : Document
         yield return new Run { Text = name[end..] };
     }
 
-    private void UpdateSelection()
+    private void UpdateSelectedItem()
     {
         HasQuickSearchResults = _highlightedItems.Count != 0;
 
