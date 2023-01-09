@@ -122,7 +122,7 @@
                                     x:Name="PopupButton"
                                     Classes="ButtonAddressBar Transparent"
                                     Command="{Binding OpenPopupCommand}"
-                                    Content="»" />
+                                    Content="\" />
 
                                 <Popup
                                     IsLightDismissEnabled="True"

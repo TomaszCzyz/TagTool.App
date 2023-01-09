@@ -29,7 +29,7 @@ public partial class FileSystemViewModel : Document
     private ObservableCollection<AddressSegmentViewModel> _addressSegments = new();
 
     [ObservableProperty]
-    private DirectoryInfo _currentFolder = new(@"C:\");
+    private DirectoryInfo _currentFolder = new("C:");
 
     [ObservableProperty]
     private bool _isEditing;

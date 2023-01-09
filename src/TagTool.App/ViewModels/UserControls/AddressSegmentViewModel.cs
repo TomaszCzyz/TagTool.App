@@ -11,7 +11,7 @@ public partial class AddressSegmentViewModel : ViewModelBase
     [ObservableProperty]
     private bool _isPopupOpen;
 
-    public string Name => _folder.Name;
+    public string Name => _folder.Name.Trim('\\');
 
     public string Address => _folder.FullName;
 
