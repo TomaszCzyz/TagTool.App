@@ -266,6 +266,7 @@
             CanUserResizeColumns="True"
             CanUserSortColumns="True"
             FontFamily="avares://TagTool.App/Assets/Fonts#Lato"
+            FontSize="12"
             HorizontalScrollBarVisibility="Auto"
             Items="{Binding Files}"
             RowBackground="Transparent">
@@ -282,7 +283,7 @@
                     Header="Name"
                     IsReadOnly="True">
                     <DataTemplate DataType="userControls:TaggableItemViewModel">
-                        <userControls1:TaggableItemView Margin="-2 0 0 0" />
+                        <userControls1:TaggableItemView Margin="-2 0 0 0" FontSize="{Binding $parent[DataGrid].FontSize}" />
                     </DataTemplate>
                 </DataGridTemplateColumn>
 
@@ -294,6 +295,7 @@
                     <DataTemplate DataType="userControls:TaggableItemViewModel">
                         <TextBlock
                             VerticalAlignment="Center"
+                            FontSize="{Binding $parent[DataGrid].FontSize}"
                             Text="{Binding DateCreated, StringFormat=\{0:yyyy/MM/dd hh:mm:ss\}}"
                             TextAlignment="Left" />
 
@@ -307,6 +309,7 @@
                     <DataTemplate DataType="userControls:TaggableItemViewModel">
                         <TextBlock
                             VerticalAlignment="Center"
+                            FontSize="{Binding $parent[DataGrid].FontSize}"
                             Text="{Binding Size, Converter={StaticResource FileSizeToStringConverter}}"
                             TextAlignment="Right" />
 

@@ -58,6 +58,7 @@ public partial class TaggedItemsSearchView : UserControl
                 break;
             case Key.Enter when _viewModel.SelectedItemFromPopup is not null:
                 _viewModel.AddTagCommand.Execute(e);
+                SearchHelperPopup.IsOpen = false;
                 e.Handled = true;
                 break;
             case Key.Enter when _viewModel.SelectedItemFromPopup is null:

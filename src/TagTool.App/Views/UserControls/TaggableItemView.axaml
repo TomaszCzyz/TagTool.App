@@ -19,6 +19,7 @@
     </UserControl.Background>
     <UserControl.Resources>
         <converters:IconToBitmapConverter x:Key="IconToBitmapConverter" />
+        <converters:FontSizeConverter x:Key="FontSizeConverter" Ratio="0.7" />
     </UserControl.Resources>
 
     <Design.DataContext>
@@ -36,6 +37,7 @@
 
             <TextBlock
                 Grid.Column="1"
+                Name="DisplayNameTextBlock"
                 HorizontalAlignment="Stretch"
                 VerticalAlignment="Center"
                 Foreground="Black"
@@ -85,7 +87,7 @@
                                     Margin="2 0"
                                     VerticalAlignment="Center"
                                     FontFamily="avares://TagTool.App/Assets/Fonts#Lato"
-                                    FontSize="12"
+                                    FontSize="{Binding #DisplayNameTextBlock, Converter={StaticResource FontSizeConverter}}"
                                     Inlines="{Binding Inlines}"
                                     IsTabStop="False"
                                     Text="{Binding Name}">
