@@ -208,7 +208,7 @@
             CanUserResizeColumns="True"
             CanUserSortColumns="True"
             FontFamily="avares://TagTool.App/Assets/Fonts#Lato"
-            FontSize="12"
+            FontSize="{Binding FontSize}"
             Items="{Binding Items}"
             SelectedItem="{Binding SelectedItem}"
             SelectionMode="Extended"
@@ -220,7 +220,11 @@
                 </Style>
             </DataGrid.Styles>
             <DataGrid.KeyBindings>
-                <KeyBinding Command="{CompiledBinding NavigateCommand}" Gesture="Enter" />
+                <KeyBinding Command="{Binding NavigateCommand}" Gesture="Enter" />
+                <!-- todo: ZoomIn.ZoomOut functionalities should be higher in hierarchy, as should change something like ContentSize property -->
+                <!-- which should be used across all data views -->
+                <KeyBinding Gesture="Ctrl+Add" Command="{CompiledBinding ZoomInCommand}"/>
+                <KeyBinding Gesture="Ctrl+Add" Command="{CompiledBinding ZoomOutCommand}"/>
             </DataGrid.KeyBindings>
             <DataGrid.Columns>
                 <DataGridTemplateColumn

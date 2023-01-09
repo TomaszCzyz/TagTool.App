@@ -20,6 +20,7 @@ public partial class FileSystemView : UserControl
         DataContext = _viewModel;
         InitializeComponent();
 
+        DataGrid.AddHandler(PointerWheelChangedEvent, DataGrid_OnPointerWheelChanged, RoutingStrategies.Tunnel);
         DataGrid.AddHandler(
             KeyDownEvent,
             DataGrid_OnKeyDown, //todo: split this logic to two handlers (one for quick search scenario, one for navigation scenario)
@@ -108,5 +109,21 @@ public partial class FileSystemView : UserControl
     private void DataGrid_OnLostFocus(object? sender, RoutedEventArgs e)
     {
         _viewModel.QuickSearchText = "";
+    }
+
+    private void DataGrid_OnPointerWheelChanged(object? sender, PointerWheelEventArgs e)
+    {
+        if (!e.KeyModifiers.Equals(KeyModifiers.Control)) return;
+
+        if (e.Delta.Y < 0)
+        {
+            _viewModel.ZoomOutCommand.Execute(null);
+        }
+        else
+        {
+            _viewModel.ZoomInCommand.Execute(null);
+        }
+
+        e.Handled = true;
     }
 }

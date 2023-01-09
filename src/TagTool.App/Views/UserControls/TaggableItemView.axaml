@@ -42,7 +42,6 @@
                         <Binding ElementName="DisplayNameTextBlock" Path="FontSize" />
                     </MultiBinding>
                 </Image.Source>
-
             </Image>
 
             <TextBlock
