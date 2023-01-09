@@ -25,7 +25,7 @@
     TransparencyLevelHint="AcrylicBlur"
     WindowStartupLocation="CenterOwner">
     <Window.Resources>
-        <converters:IconToBitmapConverter x:Key="IconToBitmapConverter" />
+        <converters:IconPathToBitmapConverter x:Key="IconToBitmapConverter" />
     </Window.Resources>
     <Window.Styles>
         <Style Selector="Border.Outline">

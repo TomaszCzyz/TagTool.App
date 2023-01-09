@@ -9,7 +9,7 @@ using TagTool.App.Core.Services;
 
 namespace TagTool.App.Converters;
 
-public class IconToBitmapConverter : IValueConverter
+public class IconPathToBitmapConverter : IValueConverter
 {
     private readonly IFileIconProvider _defaultFileIconProvider = App.Current.Services.GetRequiredService<IFileIconProvider>();
     private static readonly IAssetLoader _assets = AvaloniaLocator.Current.GetRequiredService<IAssetLoader>();
@@ -21,8 +21,12 @@ public class IconToBitmapConverter : IValueConverter
     {
         if (value is not string path) return null;
 
-        int length = default;
-        _ = parameter is string s && int.TryParse(s, out length);
+        var length = parameter switch
+        {
+            double x => (int)x,
+            string s => int.TryParse(s, out var v) ? v : default,
+            _ => default
+        };
 
         if (Directory.Exists(path))
         {

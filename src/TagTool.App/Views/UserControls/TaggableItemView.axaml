@@ -10,6 +10,7 @@
     x:Class="TagTool.App.Views.UserControls.TaggableItemView"
     x:CompileBindings="True"
     x:DataType="userControls:TaggableItemViewModel"
+    Name="UserControlRoot"
     d:DesignWidth="450"
     d:DesignHeight="50"
     mc:Ignorable="d"
@@ -18,24 +19,35 @@
         <SolidColorBrush Opacity="0" Color="White" />
     </UserControl.Background>
     <UserControl.Resources>
-        <converters:IconToBitmapConverter x:Key="IconToBitmapConverter" />
         <converters:FontSizeConverter x:Key="FontSizeConverter" Ratio="0.7" />
+        <converters:LocationAndWidthToIconMultiConverter x:Key="LocationAndWidthToIconMultiConverter" />
     </UserControl.Resources>
 
     <Design.DataContext>
         <userControls:TaggableItemViewModel />
     </Design.DataContext>
 
-    <Border BorderBrush="Green" BorderThickness="0">
-        <Grid ColumnDefinitions="25,Auto,*">
-            <Image
-                Grid.Column="0"
-                Margin="0 0 2 0"
-                Source="{Binding Location, Converter={StaticResource IconToBitmapConverter}, ConverterParameter=25}" />
+    <Border BorderBrush="Green" BorderThickness="1">
+        <Grid
+            Name="TopMostGrid"
+            HorizontalAlignment="Left"
+            VerticalAlignment="Center"
+            ColumnDefinitions="Auto,Auto,*"
+            RowDefinitions="Auto">
+
+            <Image Grid.Column="0" Margin="0 0 2 0">
+                <Image.Source>
+                    <MultiBinding Converter="{StaticResource LocationAndWidthToIconMultiConverter}">
+                        <Binding Path="Location" />
+                        <Binding ElementName="DisplayNameTextBlock" Path="FontSize" />
+                    </MultiBinding>
+                </Image.Source>
+
+            </Image>
 
             <TextBlock
-                Grid.Column="1"
                 Name="DisplayNameTextBlock"
+                Grid.Column="1"
                 HorizontalAlignment="Stretch"
                 VerticalAlignment="Center"
                 Foreground="Black"
@@ -71,7 +83,7 @@
                         </ItemsPanelTemplate>
                     </ItemsControl.ItemsPanel>
                     <ItemsControl.ItemTemplate>
-                        <DataTemplate DataType="models:Tag" x:CompileBindings="False">
+                        <DataTemplate x:CompileBindings="False" DataType="models:Tag">
                             <Border
                                 Margin="1"
                                 HorizontalAlignment="Left"

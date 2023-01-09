@@ -214,6 +214,11 @@
             SelectionMode="Extended"
             LostFocus="DataGrid_OnLostFocus"
             SelectionChanged="DataGrid_OnSelectionChanged">
+            <DataGrid.Styles>
+                <Style Selector="DataGridCell">
+                    <Setter Property="MinHeight" Value="16" />
+                </Style>
+            </DataGrid.Styles>
             <DataGrid.KeyBindings>
                 <KeyBinding Command="{CompiledBinding NavigateCommand}" Gesture="Enter" />
             </DataGrid.KeyBindings>
@@ -224,7 +229,7 @@
                     CustomSortComparer="{StaticResource TaggableItemViewModelComparer}"
                     Header="Name"
                     IsReadOnly="True">
-                    <DataTemplate DataType="userControls:TaggableItemViewModel" x:CompileBindings="False">
+                    <DataTemplate x:CompileBindings="False" DataType="userControls:TaggableItemViewModel">
                         <userControls1:TaggableItemView FontSize="{Binding $parent[DataGrid].FontSize}" AttachedToVisualTree="Visual_OnAttachedToVisualTree" />
                     </DataTemplate>
                 </DataGridTemplateColumn>
@@ -234,7 +239,7 @@
                     CanUserSort="True"
                     Header="Date Created"
                     IsReadOnly="True">
-                    <DataTemplate DataType="userControls:TaggableItemViewModel" x:CompileBindings="False">
+                    <DataTemplate x:CompileBindings="False" DataType="userControls:TaggableItemViewModel">
                         <TextBlock
                             VerticalAlignment="Center"
                             FontSize="{Binding $parent[DataGrid].FontSize}"
@@ -244,7 +249,7 @@
                 </DataGridTemplateColumn>
 
                 <DataGridTemplateColumn Header="Size" IsReadOnly="True">
-                    <DataTemplate DataType="userControls:TaggableItemViewModel" x:CompileBindings="False">
+                    <DataTemplate x:CompileBindings="False" DataType="userControls:TaggableItemViewModel">
                         <TextBlock
                             VerticalAlignment="Center"
                             FontSize="{Binding $parent[DataGrid].FontSize}"
