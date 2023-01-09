@@ -1,12 +1,6 @@
 ﻿<UserControl
-    d:DesignHeight="700"
-    d:DesignWidth="800"
-    mc:Ignorable="d"
-    x:Class="TagTool.App.Views.UserControls.FileSystemView"
-    x:CompileBindings="True"
-    x:DataType="userControls:FileSystemViewModel"
-    x:Name="UserControlRoot"
     xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
     xmlns:comparers="clr-namespace:TagTool.App.Comparers"
     xmlns:converters="clr-namespace:TagTool.App.Converters"
@@ -14,84 +8,90 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:userControls="clr-namespace:TagTool.App.ViewModels.UserControls"
     xmlns:userControls1="clr-namespace:TagTool.App.Views.UserControls"
-    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    x:Class="TagTool.App.Views.UserControls.FileSystemView"
+    x:CompileBindings="True"
+    x:DataType="userControls:FileSystemViewModel"
+    x:Name="UserControlRoot"
+    d:DesignWidth="800"
+    d:DesignHeight="700"
+    mc:Ignorable="d">
 
     <UserControl.Resources>
-        <converters:FileSizeToStringConverter x:Key="FileSizeToStringConverter"/>
-        <converters:BoolToBrushConverter x:Key="BoolToBrushConverter"/>
-        <comparers:TaggableItemViewModelComparer x:Key="TaggableItemViewModelComparer"/>
+        <converters:FileSizeToStringConverter x:Key="FileSizeToStringConverter" />
+        <converters:BoolToBrushConverter x:Key="BoolToBrushConverter" />
+        <comparers:TaggableItemViewModelComparer x:Key="TaggableItemViewModelComparer" />
     </UserControl.Resources>
 
     <UserControl.Styles>
         <Style Selector="Button.Transparent">
-            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Background" Value="Transparent" />
         </Style>
     </UserControl.Styles>
 
     <Design.DataContext>
-        <userControls:FileSystemViewModel/>
+        <userControls:FileSystemViewModel />
     </Design.DataContext>
 
     <Grid RowDefinitions="30,*,Auto">
 
         <!-- Address bar -->
-        <Grid ColumnDefinitions="Auto,Auto,Auto,*,Auto" Grid.Row="0">
+        <Grid Grid.Row="0" ColumnDefinitions="Auto,Auto,Auto,*,Auto">
             <Grid.Styles>
                 <Style Selector="Button.NavigationButton">
-                    <Setter Property="Background" Value="Transparent"/>
-                    <Setter Property="Margin" Value="1 4"/>
-                    <Setter Property="Padding" Value="1"/>
-                    <Setter Property="CornerRadius" Value="6"/>
+                    <Setter Property="Background" Value="Transparent" />
+                    <Setter Property="Margin" Value="1 4" />
+                    <Setter Property="Padding" Value="1" />
+                    <Setter Property="CornerRadius" Value="6" />
 
                     <Style Selector="^:disabled /template/ ContentPresenter#PART_ContentPresenter">
-                        <Setter Property="Background" Value="Transparent"/>
+                        <Setter Property="Background" Value="Transparent" />
                     </Style>
                 </Style>
             </Grid.Styles>
             <Button
+                Grid.Column="0"
                 Classes="NavigationButton"
-                Command="{CompiledBinding NavigateBackCommand}"
-                Grid.Column="0">
+                Command="{CompiledBinding NavigateBackCommand}">
 
-                <Svg Path="/Assets/Svgs/Light/arrow_back.svg"/>
+                <Svg Path="/Assets/Svgs/Light/arrow_back.svg" />
             </Button>
 
             <Button
+                Grid.Column="1"
                 Classes="NavigationButton"
-                Command="{Binding NavigateForwardCommand}"
-                Grid.Column="1">
+                Command="{Binding NavigateForwardCommand}">
 
-                <Svg Path="/Assets/Svgs/Light/arrow_forward.svg"/>
+                <Svg Path="/Assets/Svgs/Light/arrow_forward.svg" />
             </Button>
 
             <Button
+                Grid.Column="2"
                 Classes="NavigationButton"
-                Command="{Binding NavigateUpCommand}"
-                Grid.Column="2">
+                Command="{Binding NavigateUpCommand}">
 
-                <Svg Path="/Assets/Svgs/Light/arrow_upward.svg"/>
+                <Svg Path="/Assets/Svgs/Light/arrow_upward.svg" />
             </Button>
 
             <TextBox
-                BorderThickness="0"
-                Grid.Column="3"
-                IsVisible="{Binding IsEditing}"
-                LostFocus="AddressTextBox_OnLostFocus"
-                Margin="5 0 0 0"
                 Name="AddressTextBox"
+                Grid.Column="3"
+                Margin="5 0 0 0"
+                VerticalContentAlignment="Center"
+                BorderThickness="0"
+                IsVisible="{Binding IsEditing}"
                 Text="{Binding AddressTextBox}"
-                VerticalContentAlignment="Center">
+                LostFocus="AddressTextBox_OnLostFocus">
                 <TextBox.KeyBindings>
-                    <KeyBinding Command="{CompiledBinding CancelAddressChangeCommand}" Gesture="Escape"/>
-                    <KeyBinding Command="{CompiledBinding CommitAddressCommand}" Gesture="Enter"/>
+                    <KeyBinding Command="{CompiledBinding CancelAddressChangeCommand}" Gesture="Escape" />
+                    <KeyBinding Command="{CompiledBinding CommitAddressCommand}" Gesture="Enter" />
                 </TextBox.KeyBindings>
             </TextBox>
 
             <!-- Interactive address -->
             <DockPanel
                 Grid.Column="3"
-                IsVisible="{Binding !IsEditing}"
-                Margin="5 0 0 0">
+                Margin="5 0 0 0"
+                IsVisible="{Binding !IsEditing}">
 
                 <ItemsControl
                     DockPanel.Dock="Left"
@@ -99,7 +99,7 @@
                     Items="{Binding AddressSegments}">
                     <ItemsControl.ItemsPanel>
                         <ItemsPanelTemplate>
-                            <StackPanel Orientation="Horizontal"/>
+                            <StackPanel Orientation="Horizontal" />
                         </ItemsPanelTemplate>
                     </ItemsControl.ItemsPanel>
                     <ItemsControl.ItemTemplate>
@@ -107,22 +107,22 @@
                             <StackPanel Orientation="Horizontal">
                                 <StackPanel.Styles>
                                     <Style Selector="Button.ButtonAddressBar">
-                                        <Setter Property="BorderThickness" Value="0"/>
-                                        <Setter Property="Padding" Value="2,4"/>
-                                        <Setter Property="VerticalAlignment" Value="Stretch"/>
-                                        <Setter Property="VerticalContentAlignment" Value="Center"/>
+                                        <Setter Property="BorderThickness" Value="0" />
+                                        <Setter Property="Padding" Value="2,4" />
+                                        <Setter Property="VerticalAlignment" Value="Stretch" />
+                                        <Setter Property="VerticalContentAlignment" Value="Center" />
                                     </Style>
                                 </StackPanel.Styles>
                                 <Button
                                     Classes="ButtonAddressBar Transparent"
                                     Command="{Binding NavigateHereCommand}"
-                                    Content="{Binding Name}"/>
+                                    Content="{Binding Name}" />
 
                                 <Button
+                                    x:Name="PopupButton"
                                     Classes="ButtonAddressBar Transparent"
                                     Command="{Binding OpenPopupCommand}"
-                                    Content="»"
-                                    x:Name="PopupButton"/>
+                                    Content="»" />
 
                                 <Popup
                                     IsLightDismissEnabled="True"
@@ -131,9 +131,9 @@
                                     <ContextMenu Items="{Binding Children}">
                                         <ContextMenu.Styles>
                                             <Style Selector="MenuItem">
-                                                <Setter Property="Header" Value="{Binding Name}"/>
-                                                <Setter Property="Command" Value="{Binding NavigateHereCommand}"/>
-                                                <Setter Property="CommandParameter" Value="{Binding Address}"/>
+                                                <Setter Property="Header" Value="{Binding Name}" />
+                                                <Setter Property="Command" Value="{Binding NavigateHereCommand}" />
+                                                <Setter Property="CommandParameter" Value="{Binding Address}" />
                                             </Style>
                                         </ContextMenu.Styles>
                                     </ContextMenu>
@@ -144,57 +144,57 @@
                 </ItemsControl>
 
                 <Border
-                    Background="Transparent"
                     HorizontalAlignment="Stretch"
-                    PointerPressed="Border_OnPointerPressed"/>
+                    Background="Transparent"
+                    PointerPressed="Border_OnPointerPressed" />
 
             </DockPanel>
 
             <Border
-                BorderBrush="Green"
-                BorderThickness="0"
                 Grid.Column="4"
-                Width="{Binding $self.Bounds.Height}">
+                Width="{Binding $self.Bounds.Height}"
+                BorderBrush="Green"
+                BorderThickness="0">
                 <Border.Styles>
                     <Style Selector="avalonia|MaterialIcon">
-                        <Setter Property="Width" Value="20"/>
-                        <Setter Property="Height" Value="20"/>
+                        <Setter Property="Width" Value="20" />
+                        <Setter Property="Height" Value="20" />
                     </Style>
                     <Style Selector="ToggleButton:checked /template/ ContentPresenter#PART_ContentPresenter, ToggleButton:unchecked /template/ ContentPresenter#PART_ContentPresenter">
-                        <Setter Property="Background" Value="Transparent"/>
-                        <Setter Property="Foreground" Value="Black"/>
+                        <Setter Property="Background" Value="Transparent" />
+                        <Setter Property="Foreground" Value="Black" />
                     </Style>
                     <Style Selector="ToggleButton avalonia|MaterialIcon.tb-checked">
-                        <Setter Property="IsVisible" Value="False"/>
+                        <Setter Property="IsVisible" Value="False" />
                     </Style>
                     <Style Selector="ToggleButton:checked avalonia|MaterialIcon.tb-checked">
-                        <Setter Property="IsVisible" Value="True"/>
+                        <Setter Property="IsVisible" Value="True" />
                     </Style>
                     <Style Selector="ToggleButton avalonia|MaterialIcon.tb-unchecked">
-                        <Setter Property="IsVisible" Value="True"/>
+                        <Setter Property="IsVisible" Value="True" />
                     </Style>
                     <Style Selector="ToggleButton:checked avalonia|MaterialIcon.tb-unchecked">
-                        <Setter Property="IsVisible" Value="False"/>
+                        <Setter Property="IsVisible" Value="False" />
                     </Style>
                 </Border.Styles>
 
                 <ToggleButton
-                    Command="{Binding ChangeTagsVisibilityCommand}"
-                    HorizontalAlignment="Center"
-                    IsChecked="False"
                     Padding="0"
-                    VerticalAlignment="Center">
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    Command="{Binding ChangeTagsVisibilityCommand}"
+                    IsChecked="False">
 
                     <Panel>
                         <avalonia:MaterialIcon
                             Classes="tb-checked"
                             IsVisible="{Binding !$parent[ToggleButton].IsChecked}"
-                            Kind="VisibilityOutline"/>
+                            Kind="VisibilityOutline" />
 
                         <avalonia:MaterialIcon
                             Classes="tb-unchecked"
                             IsVisible="{Binding $parent[ToggleButton].IsChecked}"
-                            Kind="VisibilityOffOutline"/>
+                            Kind="VisibilityOffOutline" />
 
                     </Panel>
                 </ToggleButton>
@@ -203,51 +203,51 @@
 
         <!-- File system data grid -->
         <DataGrid
+            Name="DataGrid"
+            Grid.Row="1"
             CanUserReorderColumns="True"
             CanUserResizeColumns="True"
             CanUserSortColumns="True"
             FontFamily="avares://TagTool.App/Assets/Fonts#Lato"
-            Grid.Row="1"
             Items="{Binding Items}"
-            LostFocus="DataGrid_OnLostFocus"
-            Name="DataGrid"
             SelectedItem="{Binding SelectedItem}"
-            SelectionChanged="DataGrid_OnSelectionChanged"
-            SelectionMode="Extended">
+            SelectionMode="Extended"
+            LostFocus="DataGrid_OnLostFocus"
+            SelectionChanged="DataGrid_OnSelectionChanged">
             <DataGrid.KeyBindings>
-                <KeyBinding Command="{CompiledBinding NavigateCommand}" Gesture="Enter"/>
+                <KeyBinding Command="{CompiledBinding NavigateCommand}" Gesture="Enter" />
             </DataGrid.KeyBindings>
             <DataGrid.Columns>
                 <DataGridTemplateColumn
+                    Width="*"
                     CanUserSort="True"
                     CustomSortComparer="{StaticResource TaggableItemViewModelComparer}"
                     Header="Name"
-                    IsReadOnly="True"
-                    Width="*">
+                    IsReadOnly="True">
                     <DataTemplate DataType="userControls:TaggableItemViewModel">
-                        <userControls1:TaggableItemView AttachedToVisualTree="Visual_OnAttachedToVisualTree"/>
+                        <userControls1:TaggableItemView AttachedToVisualTree="Visual_OnAttachedToVisualTree" />
                     </DataTemplate>
                 </DataGridTemplateColumn>
 
                 <DataGridTemplateColumn
+                    Width="Auto"
                     CanUserSort="True"
                     Header="Date Created"
-                    IsReadOnly="True"
-                    Width="Auto">
+                    IsReadOnly="True">
                     <DataTemplate DataType="userControls:TaggableItemViewModel">
                         <TextBlock
+                            VerticalAlignment="Center"
                             Text="{Binding DateCreated, StringFormat=\{0:yyyy/MM/dd hh:mm:ss\}}"
-                            TextAlignment="Left"
-                            VerticalAlignment="Center"/>
+                            TextAlignment="Left" />
                     </DataTemplate>
                 </DataGridTemplateColumn>
 
                 <DataGridTemplateColumn Header="Size" IsReadOnly="True">
                     <DataTemplate DataType="userControls:TaggableItemViewModel">
                         <TextBlock
+                            VerticalAlignment="Center"
                             Text="{Binding Size, Converter={StaticResource FileSizeToStringConverter}}"
-                            TextAlignment="Right"
-                            VerticalAlignment="Center"/>
+                            TextAlignment="Right" />
 
                     </DataTemplate>
                 </DataGridTemplateColumn>
@@ -256,48 +256,48 @@
 
         <!-- QuickSearch text field -->
         <Border
-            Background="Orange"
-            CornerRadius="4"
+            Name="QuickSearchBorder"
             Grid.Row="1"
             HorizontalAlignment="Left"
+            VerticalAlignment="Top"
+            Background="Orange"
+            CornerRadius="4"
             IsVisible="{Binding QuickSearchText, Converter={x:Static StringConverters.IsNotNullOrEmpty}}"
-            Name="QuickSearchBorder"
-            Opacity="0.7"
-            VerticalAlignment="Top">
+            Opacity="0.7">
 
             <DockPanel>
                 <avalonia:MaterialIcon
                     DockPanel.Dock="Left"
-                    Kind="Search"
-                    Margin="4 0 0 0"/>
+                    Margin="4 0 0 0"
+                    Kind="Search" />
 
                 <TextBlock
-                    Foreground="{Binding HasQuickSearchResults, Mode=OneWay, Converter={StaticResource BoolToBrushConverter}}"
                     Name="QuickSearchTextBlock"
                     Padding="4"
-                    Text="{Binding QuickSearchText, Mode=TwoWay}"/>
+                    Foreground="{Binding HasQuickSearchResults, Mode=OneWay, Converter={StaticResource BoolToBrushConverter}}"
+                    Text="{Binding QuickSearchText, Mode=TwoWay}" />
 
             </DockPanel>
         </Border>
 
         <StackPanel Grid.Row="2" Orientation="Horizontal">
             <TextBlock
-                FontSize="12"
                 Margin="5 2 0 0"
-                Text="{Binding Items.Count, StringFormat=\{0\} items |}"/>
+                FontSize="12"
+                Text="{Binding Items.Count, StringFormat=\{0\} items |}" />
 
             <TextBlock
-                FontSize="12"
-                Margin="5 2 0 0"
                 Name="TextBlockSelectedItems"
-                Text=""/>
+                Margin="5 2 0 0"
+                FontSize="12"
+                Text="" />
 
         </StackPanel>
 
         <ProgressBar
             Grid.Row="2"
             IsIndeterminate="True"
-            IsVisible="False"/>
+            IsVisible="False" />
 
     </Grid>
 </UserControl>

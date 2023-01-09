@@ -1,12 +1,6 @@
 ﻿<UserControl
-    d:DesignHeight="700"
-    d:DesignWidth="700"
-    mc:Ignorable="d"
-    x:Class="TagTool.App.Views.UserControls.TaggedItemsSearchView"
-    x:CompileBindings="True"
-    x:DataType="userControls:TaggedItemsSearchViewModel"
-    x:Name="UserControlRoot"
     xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
     xmlns:converters="clr-namespace:TagTool.App.Converters"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -16,79 +10,85 @@
     xmlns:templatedControls="clr-namespace:TagTool.App.Views.TemplatedControls"
     xmlns:userControls="clr-namespace:TagTool.App.ViewModels.UserControls"
     xmlns:userControls1="clr-namespace:TagTool.App.Views.UserControls"
-    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    x:Class="TagTool.App.Views.UserControls.TaggedItemsSearchView"
+    x:CompileBindings="True"
+    x:DataType="userControls:TaggedItemsSearchViewModel"
+    x:Name="UserControlRoot"
+    d:DesignWidth="700"
+    d:DesignHeight="700"
+    mc:Ignorable="d">
     <UserControl.Resources>
-        <converters:FileSizeToStringConverter x:Key="FileSizeToStringConverter"/>
+        <converters:FileSizeToStringConverter x:Key="FileSizeToStringConverter" />
     </UserControl.Resources>
 
     <Design.DataContext>
-        <userControls:TaggedItemsSearchViewModel/>
+        <userControls:TaggedItemsSearchViewModel />
     </Design.DataContext>
 
     <Grid
-        ColumnDefinitions="*"
         Margin="4"
+        ColumnDefinitions="*"
         RowDefinitions="Auto,Auto,*">
 
         <!-- Search Bar -->
         <Grid
-            ColumnDefinitions="Auto,*,Auto"
-            Grid.Column="0"
             Name="TopMostGrid"
-            RowDefinitions="Auto"
-            VerticalAlignment="Top">
+            Grid.Column="0"
+            VerticalAlignment="Top"
+            ColumnDefinitions="Auto,*,Auto"
+            RowDefinitions="Auto">
             <Grid.KeyBindings>
-                <KeyBinding Command="{ReflectionBinding CommitSearchCommand}" Gesture="Ctrl+Enter"/>
+                <KeyBinding Command="{ReflectionBinding CommitSearchCommand}" Gesture="Ctrl+Enter" />
             </Grid.KeyBindings>
             <Grid.Styles>
                 <Style Selector="ListBox">
-                    <Setter Property="Background" Value="Transparent"/>
+                    <Setter Property="Background" Value="Transparent" />
                     <Setter Property="ItemsPanel">
                         <ItemsPanelTemplate>
-                            <WrapPanel/>
+                            <WrapPanel />
                         </ItemsPanelTemplate>
                     </Setter>
                 </Style>
                 <Style Selector="ListBoxItem">
-                    <Setter Property="Padding" Value="0"/>
-                    <Setter Property="MaxHeight" Value="30"/>
+                    <Setter Property="Padding" Value="0" />
+                    <Setter Property="MaxHeight" Value="30" />
                 </Style>
                 <Style Selector="TextBox.Transparent">
-                    <Setter Property="BorderThickness" Value="0"/>
-                    <Setter Property="Background" Value="Transparent"/>
+                    <Setter Property="BorderThickness" Value="0" />
+                    <Setter Property="Background" Value="Transparent" />
 
                     <!-- pointerover -->
                     <Style Selector="^:pointerover, ^:focus-within, ^:focus">
                         <Style Selector="^ /template/ Border#PART_BorderElement">
-                            <Setter Property="Background" Value="Transparent"/>
-                            <Setter Property="BorderThickness" Value="0"/>
+                            <Setter Property="Background" Value="Transparent" />
+                            <Setter Property="BorderThickness" Value="0" />
                         </Style>
                     </Style>
                 </Style>
             </Grid.Styles>
 
             <Border
+                Name="SearchBarBorder"
+                Grid.ColumnSpan="3"
                 Background="{StaticResource MyLightPrimary300}"
                 BorderBrush="{StaticResource MyLightPrimary600}"
                 BorderThickness="2"
                 ClipToBounds="True"
-                CornerRadius="16"
-                Grid.ColumnSpan="3"
-                Name="SearchBarBorder"/>
+                CornerRadius="16" />
 
             <Button
-                Background="Transparent"
-                Command="{ReflectionBinding CommitSearchCommand}"
                 Grid.Column="0"
                 Margin="10 0 5 0"
-                Padding="0">
+                Padding="0"
+                Background="Transparent"
+                Command="{ReflectionBinding CommitSearchCommand}">
 
                 <avalonia:MaterialIcon
+                    Width="20"
                     Height="20"
                     HorizontalAlignment="Center"
-                    Kind="Magnify"
                     VerticalAlignment="Center"
-                    Width="20"/>
+                    Kind="Magnify" />
 
             </Button>
 
@@ -100,28 +100,28 @@
 
                 <!-- entered tags box -->
                 <ListBox
-                    HorizontalAlignment="Left"
-                    Items="{Binding EnteredTags}"
-                    Margin="2"
                     Name="TagsListBox"
-                    ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-                    VerticalAlignment="Center">
+                    Margin="2"
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Center"
+                    Items="{Binding EnteredTags}"
+                    ScrollViewer.HorizontalScrollBarVisibility="Disabled">
                     <ListBox.DataTemplates>
-                        <DataTemplate DataType="models:Tag" x:CompileBindings="False">
+                        <DataTemplate x:CompileBindings="False" DataType="models:Tag">
                             <templatedControls:TagChip
+                                Margin="4 2"
                                 DeleteCommand="{Binding #UserControlRoot.DataContext.RemoveTagCommand, FallbackValue=null}"
                                 DeleteCommandParameter="{Binding .}"
-                                Margin="4 2"
-                                Text="{Binding Name}"/>
+                                Text="{Binding Name}" />
 
                         </DataTemplate>
-                        <DataTemplate DataType="system:String" x:CompileBindings="False">
+                        <DataTemplate x:CompileBindings="False" DataType="system:String">
                             <TextBox
-                                AttachedToLogicalTree="StyledElement_OnAttachedToLogicalTree"
                                 Classes="Transparent"
                                 GotFocus="InputElement_OnGotFocus"
                                 Text="{Binding #UserControlRoot.DataContext.SearchText, FallbackValue=null}"
-                                Watermark="Next tag..."/>
+                                Watermark="Next tag..."
+                                AttachedToLogicalTree="StyledElement_OnAttachedToLogicalTree" />
 
                         </DataTemplate>
                     </ListBox.DataTemplates>
@@ -129,70 +129,70 @@
             </ScrollViewer>
 
             <Button
-                Background="Transparent"
-                Click="Button_OnClick"
                 Grid.Column="2"
-                HorizontalAlignment="Right"
                 Padding="0 5"
-                VerticalAlignment="Center">
+                HorizontalAlignment="Right"
+                VerticalAlignment="Center"
+                Background="Transparent"
+                Click="Button_OnClick">
 
-                <avalonia:MaterialIcon Kind="MoreVert"/>
+                <avalonia:MaterialIcon Kind="MoreVert" />
             </Button>
 
             <!-- Popup -->
             <Popup
+                Name="SearchHelperPopup"
                 Grid.Column="0"
+                Width="{Binding #TopMostGrid.Bounds.Width}"
                 IsLightDismissEnabled="True"
                 IsOpen="False"
-                Name="SearchHelperPopup"
                 PlacementGravity="Bottom"
                 PlacementTarget="{Binding #TopMostGrid}"
-                Width="{Binding #TopMostGrid.Bounds.Width}"
                 WindowManagerAddShadowHint="False">
 
                 <Border
+                    Margin="0 -1 0 0"
+                    Padding="10"
                     Background="{StaticResource MyLightPrimary300}"
                     BorderBrush="{StaticResource MyLightPrimary600}"
                     BorderThickness="1"
                     ClipToBounds="True"
-                    CornerRadius="16"
-                    Margin="0 -1 0 0"
-                    Padding="10">
+                    CornerRadius="16">
 
                     <Grid ColumnDefinitions="*" RowDefinitions="Auto,*,Auto,*,*">
                         <TextBlock
-                            FontSize="12"
                             Grid.Row="0"
-                            Text="Search results:"/>
+                            FontSize="12"
+                            Text="Search results:" />
 
                         <ListBox
+                            Name="SearchResultsListBox"
                             Grid.Row="1"
                             HorizontalAlignment="Left"
                             Items="{Binding SearchResults}"
-                            Name="SearchResultsListBox"
                             SelectedItem="{Binding SelectedItemFromSearched}"
                             SelectionMode="Single">
                             <ListBox.DataTemplates>
                                 <DataTemplate DataType="models:Tag">
                                     <Border
+                                        Margin="1"
+                                        HorizontalAlignment="Left"
+                                        VerticalAlignment="Center"
                                         BorderBrush="#0097A7"
                                         BorderThickness="1"
                                         ClipToBounds="True"
                                         CornerRadius="4"
-                                        DoubleTapped="InputElement_OnDoubleTapped"
-                                        HorizontalAlignment="Left"
-                                        Margin="1"
-                                        VerticalAlignment="Center">
+                                        DoubleTapped="InputElement_OnDoubleTapped">
 
                                         <TextBlock
+                                            Margin="2 0"
+                                            VerticalAlignment="Center"
                                             FontFamily="avares://TagTool.App/Assets/Fonts#Lato"
                                             FontSize="18"
                                             Foreground=""
                                             Inlines="{Binding Inlines}"
                                             IsTabStop="False"
-                                            Margin="2 0"
-                                            Text="{Binding Name}"
-                                            VerticalAlignment="Center"/>
+                                            Text="{Binding Name}" />
 
                                     </Border>
                                 </DataTemplate>
@@ -200,10 +200,10 @@
                         </ListBox>
 
                         <TextBlock
-                            FontSize="12"
                             Grid.Row="2"
                             Margin="0 5 0 0"
-                            Text="Most popular tags:"/>
+                            FontSize="12"
+                            Text="Most popular tags:" />
 
                         <ListBox
                             Grid.Row="3"
@@ -213,24 +213,24 @@
                             <ListBox.DataTemplates>
                                 <DataTemplate DataType="models:Tag">
                                     <Border
+                                        Margin="1"
+                                        HorizontalAlignment="Left"
+                                        VerticalAlignment="Center"
                                         BorderBrush="#0097A7"
                                         BorderThickness="1"
                                         ClipToBounds="True"
                                         CornerRadius="4"
-                                        DoubleTapped="InputElement_OnDoubleTapped"
-                                        HorizontalAlignment="Left"
-                                        Margin="1"
-                                        VerticalAlignment="Center">
+                                        DoubleTapped="InputElement_OnDoubleTapped">
 
                                         <TextBlock
+                                            Margin="2 0"
+                                            VerticalAlignment="Center"
                                             FontFamily="avares://TagTool.App/Assets/Fonts#Lato"
                                             FontSize="12"
                                             Foreground=""
                                             Inlines="{Binding Inlines}"
                                             IsTabStop="False"
-                                            Margin="2 0"
-                                            Text="{Binding Name}"
-                                            VerticalAlignment="Center"/>
+                                            Text="{Binding Name}" />
                                     </Border>
                                 </DataTemplate>
                             </ListBox.DataTemplates>
@@ -245,12 +245,12 @@
 
                             <RadioButton>
                                 <Label
+                                    Padding="0"
                                     Content="Exclude"
-                                    FontSize="12"
-                                    Padding="0"/>
+                                    FontSize="12" />
                             </RadioButton>
                             <Button Padding="0">
-                                <TextBlock Text="AddSpecialTag"/>
+                                <TextBlock Text="AddSpecialTag" />
                             </Button>
                         </StackPanel>
                     </Grid>
@@ -260,55 +260,55 @@
 
         <!-- SearchResults -->
         <DataGrid
+            Name="SearchResultsDataGrid"
+            Grid.Row="2"
             CanUserReorderColumns="True"
             CanUserResizeColumns="True"
             CanUserSortColumns="True"
             FontFamily="avares://TagTool.App/Assets/Fonts#Lato"
-            Grid.Row="2"
             HorizontalScrollBarVisibility="Auto"
             Items="{Binding Files}"
-            Name="SearchResultsDataGrid"
             RowBackground="Transparent">
             <DataGrid.Styles>
                 <Style Selector="DataGridCell">
-                    <Setter Property="Padding" Value="2 0"/>
+                    <Setter Property="Padding" Value="2 0" />
                 </Style>
             </DataGrid.Styles>
             <DataGrid.Columns>
                 <!-- <DataGridCheckBoxColumn Width="60" Header="✔" CanUserResize="False" /> -->
                 <DataGridTemplateColumn
+                    Width="*"
                     CanUserSort="True"
                     Header="Name"
-                    IsReadOnly="True"
-                    Width="*">
+                    IsReadOnly="True">
                     <DataTemplate DataType="userControls:TaggableItemViewModel">
-                        <userControls1:TaggableItemView Margin="-2 0 0 0"/>
+                        <userControls1:TaggableItemView Margin="-2 0 0 0" />
                     </DataTemplate>
                 </DataGridTemplateColumn>
 
                 <DataGridTemplateColumn
+                    Width="Auto"
                     CanUserSort="True"
                     Header="Date Created"
-                    IsReadOnly="True"
-                    Width="Auto">
+                    IsReadOnly="True">
                     <DataTemplate DataType="userControls:TaggableItemViewModel">
                         <TextBlock
+                            VerticalAlignment="Center"
                             Text="{Binding DateCreated, StringFormat=\{0:yyyy/MM/dd hh:mm:ss\}}"
-                            TextAlignment="Left"
-                            VerticalAlignment="Center"/>
+                            TextAlignment="Left" />
 
                     </DataTemplate>
                 </DataGridTemplateColumn>
 
                 <DataGridTemplateColumn
+                    Width="100"
                     Header="Size"
-                    IsReadOnly="True"
-                    Width="100">
+                    IsReadOnly="True">
                     <DataTemplate DataType="userControls:TaggableItemViewModel">
                         <TextBlock
+                            VerticalAlignment="Center"
                             Text="{Binding Size, Converter={StaticResource FileSizeToStringConverter}}"
-                            TextAlignment="Right"
-                            VerticalAlignment="Center"/>
+                            TextAlignment="Right" />
 
                     </DataTemplate>
                 </DataGridTemplateColumn>

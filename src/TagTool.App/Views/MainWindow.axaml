@@ -1,48 +1,48 @@
 <Window
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:userControls="clr-namespace:TagTool.App.Views.UserControls"
+    xmlns:vm="using:TagTool.App.ViewModels"
+    x:Class="TagTool.App.Views.MainWindow"
+    x:CompileBindings="True"
+    x:Name="RootWindow"
+    d:DesignWidth="1400"
+    d:DesignHeight="700"
     Background="{StaticResource MyLightPrimary200}"
     ExtendClientAreaChromeHints="Default"
     ExtendClientAreaTitleBarHeightHint="-1"
     ExtendClientAreaToDecorationsHint="True"
     Icon="/Assets/avalonia-logo.ico"
-    Title="TagTool.App"
-    d:DesignHeight="700"
-    d:DesignWidth="1400"
-    x:Class="TagTool.App.Views.MainWindow"
-    x:CompileBindings="True"
-    x:Name="RootWindow"
-    xmlns="https://github.com/avaloniaui"
-    xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
-    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:userControls="clr-namespace:TagTool.App.Views.UserControls"
-    xmlns:vm="using:TagTool.App.ViewModels"
-    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    Title="TagTool.App">
     <Window.KeyBindings>
         <KeyBinding
             Command="{ReflectionBinding ResetFocusCommand}"
             CommandParameter="{Binding #RootWindow}"
-            Gesture="Escape"/>
+            Gesture="Escape" />
         <KeyBinding
             Command="{ReflectionBinding FocusNextSearchTabCommand}"
             CommandParameter="{Binding #RootWindow}"
-            Gesture="Ctrl+Q"/>
+            Gesture="Ctrl+Q" />
     </Window.KeyBindings>
     <Window.Styles>
         <Style Selector="Border.MenuPanel">
-            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="BorderThickness" Value="1" />
             <Setter Property="BorderBrush">
-                <SolidColorBrush Color="{StaticResource MyLightPrimary800}" Opacity="0.3"/>
+                <SolidColorBrush Opacity="0.3" Color="{StaticResource MyLightPrimary800}" />
             </Setter>
-            <Setter Property="Background" Value="{StaticResource MyLightPrimary300}"/>
+            <Setter Property="Background" Value="{StaticResource MyLightPrimary300}" />
         </Style>
         <Style Selector="RadioButton.SideMenu">
             <Setter Property="Template">
                 <ControlTemplate x:CompileBindings="False">
                     <ToggleButton
+                        Padding="3"
                         Background="Transparent"
                         Content="{Binding Content, RelativeSource={RelativeSource TemplatedParent}, Mode=TwoWay}"
                         DataContext="{Binding $parent}"
-                        IsChecked="{Binding IsChecked, RelativeSource={RelativeSource TemplatedParent}, Mode=TwoWay}"
-                        Padding="3"/>
+                        IsChecked="{Binding IsChecked, RelativeSource={RelativeSource TemplatedParent}, Mode=TwoWay}" />
 
                 </ControlTemplate>
             </Setter>
@@ -50,21 +50,21 @@
     </Window.Styles>
 
     <Design.DataContext>
-        <vm:MainWindowViewModel/>
+        <vm:MainWindowViewModel />
     </Design.DataContext>
 
     <Grid ColumnDefinitions="*" RowDefinitions="Auto,*">
 
         <!-- Top menu -->
         <Border
-            Classes="MenuPanel"
             Grid.Row="0"
+            Classes="MenuPanel"
             Margin="-1 -1 -1 0"
-            PointerMoved="InputElement_OnPointerMoved"
             PointerPressed="InputElement_OnPointerPressed"
+            PointerMoved="InputElement_OnPointerMoved"
             PointerReleased="InputElement_OnPointerReleased">
 
-            <userControls:MenuView/>
+            <userControls:MenuView />
         </Border>
 
         <!-- Left tool menu -->
@@ -76,10 +76,10 @@
                             <ToggleButton CornerRadius="0">
                                 <Panel Margin="0">
                                     <avalonia:MaterialIcon
+                                        Width="20"
                                         Height="20"
-                                        Kind="Plus"
                                         Padding="0"
-                                        Width="20"/>
+                                        Kind="Plus" />
 
                                     <Popup
                                         IsLightDismissEnabled="True"
@@ -87,15 +87,15 @@
                                         PlacementTarget="{Binding $parent[ToggleButton]}">
 
                                         <Border
-                                            BorderThickness="1"
                                             Margin="0"
-                                            Padding="0">
+                                            Padding="0"
+                                            BorderThickness="1">
                                             <Border.BorderBrush>
-                                                <SolidColorBrush Color="Black" Opacity="0.3"/>
+                                                <SolidColorBrush Opacity="0.3" Color="Black" />
                                             </Border.BorderBrush>
                                             <Border.Styles>
                                                 <Style Selector="ListBoxItem">
-                                                    <Setter Property="Padding" Value="0"/>
+                                                    <Setter Property="Padding" Value="0" />
                                                 </Style>
                                             </Border.Styles>
 
@@ -103,14 +103,14 @@
                                                 <ListBox.ItemTemplate>
                                                     <DataTemplate x:CompileBindings="False">
                                                         <Button
-                                                            Click="Button_OnClick"
+                                                            Margin="0"
+                                                            Padding="0"
+                                                            HorizontalAlignment="Stretch"
                                                             Command="{Binding ElementName=RootWindow, Path=DataContext.AddDocumentToDockCommand, FallbackValue=null}"
                                                             CommandParameter="{Binding .}"
-                                                            HorizontalAlignment="Stretch"
-                                                            Margin="0"
-                                                            Padding="0">
+                                                            Click="Button_OnClick">
 
-                                                            <TextBlock Text="{Binding .}"/>
+                                                            <TextBlock Text="{Binding .}" />
                                                         </Button>
                                                     </DataTemplate>
                                                 </ListBox.ItemTemplate>
@@ -124,7 +124,7 @@
                 </Style>
             </Border.Styles>
 
-            <DockControl Layout="{ReflectionBinding Layout}"/>
+            <DockControl Layout="{ReflectionBinding Layout}" />
         </Border>
     </Grid>
 </Window>
