@@ -2,6 +2,7 @@
 using Avalonia.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using Dock.Model.Mvvm.Controls;
 using DynamicData;
 using Grpc.Core;
 using JetBrains.Annotations;
@@ -12,7 +13,7 @@ using TagTool.Backend;
 
 namespace TagTool.App.ViewModels.UserControls;
 
-public partial class TaggedItemsSearchViewModel : ViewModelBase, IDisposable
+public partial class TaggedItemsSearchViewModel : Document, IDisposable
 {
     private readonly TagSearchService.TagSearchServiceClient _tagSearchService;
     private readonly TagService.TagServiceClient _tagService;

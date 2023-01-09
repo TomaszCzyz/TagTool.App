@@ -2,7 +2,7 @@
     x:Class="TagTool.App.Views.MainWindow"
     xmlns="https://github.com/avaloniaui"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:controls="clr-namespace:TagTool.App.Controls"
+    xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:userControls="clr-namespace:TagTool.App.Views.UserControls"
@@ -54,19 +54,11 @@
         <vm:MainWindowViewModel />
     </Design.DataContext>
 
-    <Grid RowDefinitions="Auto,*">
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="{Binding ActiveLeftToolWidth, Mode=TwoWay}" />
-            <ColumnDefinition Width="Auto" />
-            <ColumnDefinition Width="*" />
-            <ColumnDefinition Width="Auto" />
-            <ColumnDefinition Width="{Binding ActiveRightToolWidth, Mode=TwoWay}" />
-        </Grid.ColumnDefinitions>
+    <Grid ColumnDefinitions="*" RowDefinitions="Auto,*">
 
         <!-- Top menu -->
         <Border
             Grid.Row="0"
-            Grid.ColumnSpan="7"
             Classes="MenuPanel"
             Margin="-1 -1 -1 0"
             PointerPressed="InputElement_OnPointerPressed"
@@ -77,50 +69,63 @@
         </Border>
 
         <!-- Left tool menu -->
-        <Border
-            Grid.Row="1"
-            Grid.Column="0"
-            Classes="MenuPanel"
-            Margin="-1 -1 0 -1">
+        <Border Grid.Row="1">
+            <Border.Styles>
+                <Style Selector="DocumentTabStrip /template/ Button#PART_ButtonCreate">
+                    <Setter Property="Template">
+                        <ControlTemplate>
+                            <ToggleButton CornerRadius="0">
+                                <Panel Margin="0">
+                                    <avalonia:MaterialIcon
+                                        Width="20"
+                                        Height="20"
+                                        Padding="0"
+                                        Kind="Plus" />
 
-            <controls:DraggableTabControl ClickOnAddingButton="DraggableTabControl_OnClickOnAddingButton">
-                <controls:DraggableTabItem
-                    Height="50"
-                    Header="Hello"
-                    IsClosable="True" />
+                                    <Popup
+                                        IsLightDismissEnabled="True"
+                                        IsOpen="{Binding $parent[ToggleButton].IsChecked, Mode=TwoWay}"
+                                        PlacementTarget="{Binding $parent[ToggleButton]}">
 
-            </controls:DraggableTabControl>
-        </Border>
+                                        <Border
+                                            Margin="0"
+                                            Padding="0"
+                                            BorderThickness="1">
+                                            <Border.BorderBrush>
+                                                <SolidColorBrush Opacity="0.3" Color="Black" />
+                                            </Border.BorderBrush>
+                                            <Border.Styles>
+                                                <Style Selector="ListBoxItem">
+                                                    <Setter Property="Padding" Value="0" />
+                                                </Style>
+                                            </Border.Styles>
 
-        <GridSplitter
-            Grid.Row="1"
-            Grid.Column="1"
-            Width="4"
-            ResizeDirection="Columns" />
+                                            <ListBox Items="{Binding ElementName=RootWindow, Path=DataContext.Tools, FallbackValue=null}">
+                                                <ListBox.ItemTemplate>
+                                                    <DataTemplate>
+                                                        <Button
+                                                            Margin="0"
+                                                            Padding="0"
+                                                            HorizontalAlignment="Stretch"
+                                                            Command="{Binding ElementName=RootWindow, Path=DataContext.AddDocumentToDockCommand, FallbackValue=null}"
+                                                            CommandParameter="{Binding .}"
+                                                            Click="Button_OnClick">
 
-        <!-- Main panel -->
-        <userControls:MainPanel Grid.Row="1" Grid.Column="2" />
+                                                            <TextBlock Text="{Binding .}" />
+                                                        </Button>
+                                                    </DataTemplate>
+                                                </ListBox.ItemTemplate>
+                                            </ListBox>
+                                        </Border>
+                                    </Popup>
+                                </Panel>
+                            </ToggleButton>
+                        </ControlTemplate>
+                    </Setter>
+                </Style>
+            </Border.Styles>
 
-        <GridSplitter
-            Grid.Row="1"
-            Grid.Column="3"
-            Width="4"
-            ResizeDirection="Columns" />
-
-        <!-- Right tool menu -->
-        <Border
-            Grid.Row="1"
-            Grid.Column="4"
-            Classes="MenuPanel"
-            Margin="0 -1 -1 -1">
-
-            <controls:DraggableTabControl ClickOnAddingButton="DraggableTabControl_OnClickOnAddingButton">
-                <controls:DraggableTabItem
-                    Height="50"
-                    Header="Hello"
-                    IsClosable="True" />
-
-            </controls:DraggableTabControl>
+            <DockControl Layout="{Binding Layout}" />
         </Border>
     </Grid>
 </Window>

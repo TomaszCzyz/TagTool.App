@@ -7,6 +7,7 @@ using Serilog;
 using TagTool.App.Core.Services;
 using TagTool.App.Options;
 using TagTool.App.ViewModels;
+using TagTool.App.ViewModels.UserControls;
 using TagTool.App.Views;
 
 namespace TagTool.App;
@@ -49,6 +50,10 @@ public class App : Application
         services.AddSingleton<IWordHighlighter, WordHighlighter>();
         services.AddSingleton<ITagToolBackendConnectionFactory, GrpcChannelFactory>();
         services.AddSingleton<ITagToolBackend, TagToolBackend>();
+
+        services.AddScoped<MyTagsViewModel>();
+        services.AddScoped<TaggedItemsSearchViewModel>();
+        services.AddScoped<FileSystemViewModel>();
 
         services
             .AddOptions<GeneralOptions>()

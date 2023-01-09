@@ -1,10 +1,11 @@
 using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Controls.Primitives;
 using Avalonia.Input;
 using Avalonia.Interactivity;
+using Avalonia.LogicalTree;
 using Avalonia.Markup.Xaml;
 using Microsoft.Extensions.DependencyInjection;
-using TagTool.App.Controls;
 using TagTool.App.ViewModels;
 
 namespace TagTool.App.Views;
@@ -52,11 +53,10 @@ public partial class MainWindow : Window
         _mouseDownForWindowMoving = false;
     }
 
-    private void DraggableTabControl_OnClickOnAddingButton(object? sender, RoutedEventArgs e)
+    private void Button_OnClick(object? sender, RoutedEventArgs e)
     {
-        var atw = sender as DraggableTabControl;
-
-        var draggableTabItem = new DraggableTabItem { Header = "Header", Content = new TextBlock { Text = "Content", Margin = new Thickness(10) } };
-        atw?.AddTab(draggableTabItem);
+        var button = (ILogical)sender!;
+        var popup = button.FindLogicalAncestorOfType<Popup>()!;
+        popup.IsOpen = false;
     }
 }
