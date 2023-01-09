@@ -48,6 +48,9 @@ public partial class FileSystemViewModel : Document
     private string _quickSearchText = "";
 
     [ObservableProperty]
+    private bool _areTagsVisible;
+
+    [ObservableProperty]
     private bool _hasQuickSearchResults;
 
     public bool CanNavigateBack => _navigationHistoryBack.Count > 0;
@@ -157,12 +160,11 @@ public partial class FileSystemViewModel : Document
         }
     }
 
-    [RelayCommand]
-    private void ChangeTagsVisibility()
+    partial void OnAreTagsVisibleChanged(bool value)
     {
         foreach (var taggableItemViewModel in Items)
         {
-            taggableItemViewModel.AreTagsVisible ^= true;
+            taggableItemViewModel.AreTagsVisible = value;
         }
     }
 
@@ -321,7 +323,7 @@ public partial class FileSystemViewModel : Document
                     DisplayName = info.Name,
                     Location = info.FullName,
                     DateCreated = info.CreationTime,
-                    AreTagsVisible = true,
+                    AreTagsVisible = AreTagsVisible,
                     Size = info.Length
                 });
 
@@ -333,7 +335,7 @@ public partial class FileSystemViewModel : Document
                     DisplayName = info.Name,
                     Location = info.FullName,
                     DateCreated = info.CreationTime,
-                    AreTagsVisible = true,
+                    AreTagsVisible = AreTagsVisible,
                     Size = null
                 });
 

@@ -27,9 +27,7 @@
     </Design.DataContext>
 
     <Border BorderBrush="Green" BorderThickness="0">
-
         <Grid ColumnDefinitions="25,Auto,*">
-
             <Image
                 Grid.Column="0"
                 Margin="0 0 2 0"
@@ -60,7 +58,7 @@
                 Grid.Column="2"
                 BorderBrush="Green"
                 BorderThickness="0"
-                IsVisible="{Binding AreTagsVisible}">
+                IsVisible="{Binding !AreTagsVisible}">
                 <ItemsControl
                     Margin="0"
                     Padding="5 0"
@@ -73,7 +71,7 @@
                         </ItemsPanelTemplate>
                     </ItemsControl.ItemsPanel>
                     <ItemsControl.ItemTemplate>
-                        <DataTemplate DataType="models:Tag">
+                        <DataTemplate DataType="models:Tag" x:CompileBindings="False">
                             <Border
                                 Margin="1"
                                 HorizontalAlignment="Left"
@@ -87,7 +85,7 @@
                                     Margin="2 0"
                                     VerticalAlignment="Center"
                                     FontFamily="avares://TagTool.App/Assets/Fonts#Lato"
-                                    FontSize="{Binding #DisplayNameTextBlock, Converter={StaticResource FontSizeConverter}}"
+                                    FontSize="{Binding #DisplayNameTextBlock.FontSize, Converter={StaticResource FontSizeConverter}}"
                                     Inlines="{Binding Inlines}"
                                     IsTabStop="False"
                                     Text="{Binding Name}">

@@ -182,18 +182,17 @@
                     Padding="0"
                     HorizontalAlignment="Center"
                     VerticalAlignment="Center"
-                    Command="{Binding ChangeTagsVisibilityCommand}"
-                    IsChecked="False">
+                    IsChecked="{Binding AreTagsVisible}">
 
                     <Panel>
                         <avalonia:MaterialIcon
                             Classes="tb-checked"
-                            IsVisible="{Binding !$parent[ToggleButton].IsChecked}"
+                            IsVisible="{ReflectionBinding !$parent[ToggleButton].IsChecked}"
                             Kind="VisibilityOutline" />
 
                         <avalonia:MaterialIcon
                             Classes="tb-unchecked"
-                            IsVisible="{Binding $parent[ToggleButton].IsChecked}"
+                            IsVisible="{ReflectionBinding $parent[ToggleButton].IsChecked}"
                             Kind="VisibilityOffOutline" />
 
                     </Panel>
@@ -209,6 +208,7 @@
             CanUserResizeColumns="True"
             CanUserSortColumns="True"
             FontFamily="avares://TagTool.App/Assets/Fonts#Lato"
+            FontSize="12"
             Items="{Binding Items}"
             SelectedItem="{Binding SelectedItem}"
             SelectionMode="Extended"
@@ -224,8 +224,8 @@
                     CustomSortComparer="{StaticResource TaggableItemViewModelComparer}"
                     Header="Name"
                     IsReadOnly="True">
-                    <DataTemplate DataType="userControls:TaggableItemViewModel">
-                        <userControls1:TaggableItemView AttachedToVisualTree="Visual_OnAttachedToVisualTree" />
+                    <DataTemplate DataType="userControls:TaggableItemViewModel" x:CompileBindings="False">
+                        <userControls1:TaggableItemView FontSize="{Binding $parent[DataGrid].FontSize}" AttachedToVisualTree="Visual_OnAttachedToVisualTree" />
                     </DataTemplate>
                 </DataGridTemplateColumn>
 
@@ -234,18 +234,20 @@
                     CanUserSort="True"
                     Header="Date Created"
                     IsReadOnly="True">
-                    <DataTemplate DataType="userControls:TaggableItemViewModel">
+                    <DataTemplate DataType="userControls:TaggableItemViewModel" x:CompileBindings="False">
                         <TextBlock
                             VerticalAlignment="Center"
+                            FontSize="{Binding $parent[DataGrid].FontSize}"
                             Text="{Binding DateCreated, StringFormat=\{0:yyyy/MM/dd hh:mm:ss\}}"
                             TextAlignment="Left" />
                     </DataTemplate>
                 </DataGridTemplateColumn>
 
                 <DataGridTemplateColumn Header="Size" IsReadOnly="True">
-                    <DataTemplate DataType="userControls:TaggableItemViewModel">
+                    <DataTemplate DataType="userControls:TaggableItemViewModel" x:CompileBindings="False">
                         <TextBlock
                             VerticalAlignment="Center"
+                            FontSize="{Binding $parent[DataGrid].FontSize}"
                             Text="{Binding Size, Converter={StaticResource FileSizeToStringConverter}}"
                             TextAlignment="Right" />
 
