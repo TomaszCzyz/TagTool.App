@@ -1,4 +1,6 @@
 ﻿using System.Collections.ObjectModel;
+using System.Diagnostics;
+using Avalonia.Controls;
 using CommunityToolkit.Mvvm.Input;
 using DynamicData;
 using JetBrains.Annotations;
@@ -27,6 +29,10 @@ public partial class SimpleTagsBarViewModel : ViewModelBase, ITagsContainer
     /// </summary>
     public SimpleTagsBarViewModel()
     {
+        if (!Design.IsDesignMode)
+        {
+            Debug.Fail("ctor for XAML Previewer should not be invoke during standard execution");
+        }
     }
 
     [UsedImplicitly]

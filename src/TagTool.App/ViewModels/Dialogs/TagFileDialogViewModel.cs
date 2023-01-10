@@ -1,4 +1,6 @@
 ﻿using System.Collections.ObjectModel;
+using System.Diagnostics;
+using Avalonia.Controls;
 using Avalonia.Data;
 using Avalonia.Platform.Storage;
 using Avalonia.Platform.Storage.FileIO;
@@ -43,6 +45,11 @@ public partial class TagFileDialogViewModel : ViewModelBase
     /// </summary>
     public TagFileDialogViewModel()
     {
+        if (!Design.IsDesignMode)
+        {
+            Debug.Fail("ctor for XAML Previewer should not be invoke during standard execution");
+        }
+
         _options = null!; // to suppress warning
     }
 

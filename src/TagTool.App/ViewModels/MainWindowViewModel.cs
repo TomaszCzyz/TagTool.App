@@ -1,4 +1,5 @@
 ﻿using System.Collections.ObjectModel;
+using System.Diagnostics;
 using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.VisualTree;
@@ -36,7 +37,11 @@ public partial class MainWindowViewModel : ViewModelBase
     /// </summary>
     public MainWindowViewModel()
     {
-        // Debug.Fail("");
+        if (!Design.IsDesignMode)
+        {
+            Debug.Fail("ctor for XAML Previewer should not be invoke during standard execution");
+        }
+
         _focusManager = null!;
         _dockFactory = App.Current.Services.GetRequiredService<MyDockFactory>();
 

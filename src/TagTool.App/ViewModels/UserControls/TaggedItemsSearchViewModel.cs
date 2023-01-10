@@ -1,4 +1,6 @@
 ﻿using System.Collections.ObjectModel;
+using System.Diagnostics;
+using Avalonia.Controls;
 using Avalonia.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
@@ -45,6 +47,11 @@ public partial class TaggedItemsSearchViewModel : Document, IDisposable
     /// </summary>
     public TaggedItemsSearchViewModel()
     {
+        if (!Design.IsDesignMode)
+        {
+            Debug.Fail("ctor for XAML Previewer should not be invoke during standard execution");
+        }
+
         _tagSearchService = App.Current.Services.GetRequiredService<ITagToolBackend>().GetSearchService();
         _tagService = App.Current.Services.GetRequiredService<ITagToolBackend>().GetTagService();
         _wordHighlighter = App.Current.Services.GetRequiredService<IWordHighlighter>();

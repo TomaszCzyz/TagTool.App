@@ -1,4 +1,6 @@
 ﻿using System.Collections.ObjectModel;
+using System.Diagnostics;
+using Avalonia.Controls;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Dock.Model.Mvvm.Controls;
@@ -31,6 +33,11 @@ public partial class MyTagsViewModel : Document
     [UsedImplicitly]
     public MyTagsViewModel()
     {
+        if (!Design.IsDesignMode)
+        {
+            Debug.Fail("ctor for XAML Previewer should not be invoke during standard execution");
+        }
+
         _tagService = App.Current.Services.GetRequiredService<ITagToolBackend>().GetTagService();
         _tagSearchService = App.Current.Services.GetRequiredService<ITagToolBackend>().GetSearchService();
 

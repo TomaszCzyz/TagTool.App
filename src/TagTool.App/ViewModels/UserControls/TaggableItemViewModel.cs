@@ -1,6 +1,7 @@
 ﻿using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Globalization;
+using Avalonia.Controls;
 using Avalonia.Controls.Documents;
 using Avalonia.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
@@ -46,8 +47,16 @@ public partial class TaggableItemViewModel : ViewModelBase
 
     public ObservableCollection<Tag> AssociatedTags { get; } = new();
 
+    /// <summary>
+    ///     ctor for XAML previewer
+    /// </summary>
     public TaggableItemViewModel()
     {
+        if (!Design.IsDesignMode)
+        {
+            Debug.Fail("ctor for XAML Previewer should not be invoke during standard execution");
+        }
+
         _tagService = App.Current.Services.GetRequiredService<ITagToolBackend>().GetTagService();
         var _ = Dispatcher.UIThread.InvokeAsync(UpdateTags);
     }

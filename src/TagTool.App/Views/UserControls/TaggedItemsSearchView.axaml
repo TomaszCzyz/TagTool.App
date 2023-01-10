@@ -288,7 +288,7 @@
                     CanUserSort="True"
                     Header="Date Created"
                     IsReadOnly="True">
-                    <DataTemplate DataType="userControls:TaggableItemViewModel" x:CompileBindings="False">
+                    <DataTemplate x:CompileBindings="False" DataType="userControls:TaggableItemViewModel">
                         <TextBlock
                             VerticalAlignment="Center"
                             FontSize="{Binding $parent[DataGrid].FontSize}"

@@ -1,6 +1,7 @@
 ﻿using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
+using Avalonia.Controls;
 using Avalonia.Controls.Documents;
 using Avalonia.Media;
 using Avalonia.Threading;
@@ -74,6 +75,11 @@ public partial class FileSystemViewModel : Document
     /// </summary>
     public FileSystemViewModel()
     {
+        if (!Design.IsDesignMode)
+        {
+            Debug.Fail("ctor for XAML Previewer should not be invoke during standard execution");
+        }
+
         _tagService = App.Current.Services.GetRequiredService<ITagToolBackend>().GetTagService();
 
         Initialize();

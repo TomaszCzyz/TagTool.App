@@ -1,4 +1,6 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
+﻿using System.Diagnostics;
+using Avalonia.Controls;
+using CommunityToolkit.Mvvm.ComponentModel;
 using JetBrains.Annotations;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -19,6 +21,11 @@ public partial class MenuViewModel : ViewModelBase
     /// </summary>
     public MenuViewModel()
     {
+        if (!Design.IsDesignMode)
+        {
+            Debug.Fail("ctor for XAML Previewer should not be invoke during standard execution");
+        }
+
         _parentWindow = App.Current.Services.GetRequiredService<MainWindowViewModel>();
     }
 
