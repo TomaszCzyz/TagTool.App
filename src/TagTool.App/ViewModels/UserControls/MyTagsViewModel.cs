@@ -13,6 +13,7 @@ namespace TagTool.App.ViewModels.UserControls;
 public partial class MyTagsViewModel : Document
 {
     private readonly TagService.TagServiceClient _tagService;
+    private readonly TagSearchService.TagSearchServiceClient _tagSearchService;
 
     public double Width { get; set; } = 200;
 
@@ -31,14 +32,22 @@ public partial class MyTagsViewModel : Document
     public MyTagsViewModel()
     {
         _tagService = App.Current.Services.GetRequiredService<ITagToolBackend>().GetTagService();
+        _tagSearchService = App.Current.Services.GetRequiredService<ITagToolBackend>().GetSearchService();
+
+        Initialize();
     }
 
     public MyTagsViewModel(ITagToolBackend tagToolBackend)
     {
         _tagService = tagToolBackend.GetTagService();
-        var searchService = tagToolBackend.GetSearchService();
+        _tagSearchService = tagToolBackend.GetSearchService();
 
-        var getAllReply = searchService.GetAll(new Empty());
+        Initialize();
+    }
+
+    private void Initialize()
+    {
+        var getAllReply = _tagSearchService.GetAll(new Empty());
         Items.AddRange(getAllReply.TagNames);
     }
 

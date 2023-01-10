@@ -3,19 +3,16 @@ using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.LogicalTree;
 using Avalonia.Markup.Xaml;
-using Microsoft.Extensions.DependencyInjection;
 using TagTool.App.ViewModels.UserControls;
 
 namespace TagTool.App.Views.UserControls;
 
 public partial class TaggedItemsSearchView : UserControl
 {
-    private readonly TaggedItemsSearchViewModel _viewModel = App.Current.Services.GetRequiredService<TaggedItemsSearchViewModel>();
+    private TaggedItemsSearchViewModel ViewModel => (TaggedItemsSearchViewModel)DataContext!;
 
     public TaggedItemsSearchView()
     {
-        var environmentVariables = Environment.GetEnvironmentVariables();
-        // DataContext = _viewModel;
         InitializeComponent();
     }
 
@@ -55,14 +52,14 @@ public partial class TaggedItemsSearchView : UserControl
         switch (e.Key)
         {
             case Key.Back when string.IsNullOrEmpty(textBox.Text):
-                _viewModel.RemoveLastCommand.Execute(e);
+                ViewModel.RemoveLastCommand.Execute(e);
                 break;
-            case Key.Enter when _viewModel.SelectedItemFromPopup is not null:
-                _viewModel.AddTagCommand.Execute(e);
+            case Key.Enter when ViewModel.SelectedItemFromPopup is not null:
+                ViewModel.AddTagCommand.Execute(e);
                 SearchHelperPopup.IsOpen = false;
                 e.Handled = true;
                 break;
-            case Key.Enter when _viewModel.SelectedItemFromPopup is null:
+            case Key.Enter when ViewModel.SelectedItemFromPopup is null:
                 SearchHelperPopup.IsOpen = false;
                 e.Handled = true;
                 break;
@@ -79,13 +76,13 @@ public partial class TaggedItemsSearchView : UserControl
                 e.Handled = true;
                 break;
             default:
-                _viewModel.UpdateSearchCommand.Execute(e);
+                ViewModel.UpdateSearchCommand.Execute(e);
                 break;
         }
     }
 
     private void InputElement_OnDoubleTapped(object? sender, TappedEventArgs e)
     {
-        _viewModel.AddTagCommand.Execute(e);
+        ViewModel.AddTagCommand.Execute(e);
     }
 }

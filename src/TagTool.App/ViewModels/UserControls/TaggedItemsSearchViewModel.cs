@@ -48,6 +48,8 @@ public partial class TaggedItemsSearchViewModel : Document, IDisposable
         _tagSearchService = App.Current.Services.GetRequiredService<ITagToolBackend>().GetSearchService();
         _tagService = App.Current.Services.GetRequiredService<ITagToolBackend>().GetTagService();
         _wordHighlighter = App.Current.Services.GetRequiredService<IWordHighlighter>();
+
+        Initialize();
     }
 
     [UsedImplicitly]
@@ -57,6 +59,11 @@ public partial class TaggedItemsSearchViewModel : Document, IDisposable
         _tagService = tagToolBackend.GetTagService();
         _wordHighlighter = wordHighlighter;
 
+        Initialize();
+    }
+
+    private void Initialize()
+    {
         EnteredTags.CollectionChanged += async (_, _) => await Dispatcher.UIThread.InvokeAsync(CommitSearch);
 
         var tags = new Tag[] { new("Hello") };

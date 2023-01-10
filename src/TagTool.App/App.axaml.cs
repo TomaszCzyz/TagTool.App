@@ -31,7 +31,7 @@ public class App : Application
     {
         if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktopLifetime)
         {
-            var mainWindow = new MainWindow();
+            var mainWindow = new MainWindow { DataContext = Services.GetRequiredService<MainWindowViewModel>() };
 
             desktopLifetime.MainWindow = mainWindow;
 
@@ -54,7 +54,11 @@ public class App : Application
         services.AddSingleton<ITagToolBackend, TagToolBackend>();
 
         services.AddSingleton<MyDockFactory>();
-        services.AddSingleton<MyDocumentDock>();
+        services.AddTransient<MyDocumentDock>();
+
+        services.AddTransient<MyTagsViewModel>();
+        services.AddTransient<TaggedItemsSearchViewModel>();
+        services.AddTransient<FileSystemViewModel>();
 
         services
             .AddOptions<GeneralOptions>()
@@ -79,7 +83,7 @@ public static class ServiceCollectionExtensions
     {
         foreach (var type in scanMarker.Assembly.ExportedTypes.Where(Predicate))
         {
-            services.AddScoped(type);
+            services.AddTransient(type);
         }
     }
 }

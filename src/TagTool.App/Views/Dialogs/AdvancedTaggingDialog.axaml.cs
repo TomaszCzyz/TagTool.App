@@ -5,7 +5,6 @@ using Avalonia.Interactivity;
 using Avalonia.Layout;
 using Avalonia.Markup.Xaml;
 using Avalonia.Platform.Storage;
-using Microsoft.Extensions.DependencyInjection;
 using TagTool.App.ViewModels.Dialogs;
 using TagTool.App.ViewModels.UserControls;
 
@@ -13,11 +12,10 @@ namespace TagTool.App.Views.Dialogs;
 
 public partial class AdvancedTaggingDialog : Window
 {
-    private readonly AdvancedTaggingDialogViewModel _viewModel = App.Current.Services.GetRequiredService<AdvancedTaggingDialogViewModel>();
+    private AdvancedTaggingDialogViewModel ViewModel => (AdvancedTaggingDialogViewModel)DataContext!;
 
     public AdvancedTaggingDialog()
     {
-        DataContext = _viewModel;
         InitializeComponent();
 #if DEBUG
         this.AttachDevTools();
@@ -55,7 +53,7 @@ public partial class AdvancedTaggingDialog : Window
         foreach (var path in paths)
         {
             FileSystemInfo fileSystemInfo = Directory.Exists(path) ? new DirectoryInfo(path) : new FileInfo(path);
-            _viewModel.AddItemCommand.Execute(fileSystemInfo);
+            ViewModel.AddItemCommand.Execute(fileSystemInfo);
         }
     }
 
@@ -72,7 +70,7 @@ public partial class AdvancedTaggingDialog : Window
 
     private void CancelButton_OnClick(object? sender, RoutedEventArgs e)
     {
-        _viewModel.Dispose();
+        ViewModel.Dispose();
         Close();
     }
 

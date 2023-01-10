@@ -5,8 +5,6 @@ using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.LogicalTree;
 using Avalonia.Markup.Xaml;
-using Microsoft.Extensions.DependencyInjection;
-using TagTool.App.ViewModels;
 
 namespace TagTool.App.Views;
 
@@ -14,7 +12,6 @@ public partial class MainWindow : Window
 {
     public MainWindow()
     {
-        DataContext = App.Current.Services.GetRequiredService<MainWindowViewModel>();
         InitializeComponent();
 #if DEBUG
         this.AttachDevTools();

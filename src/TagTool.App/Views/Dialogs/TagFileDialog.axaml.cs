@@ -3,7 +3,6 @@ using Avalonia.Interactivity;
 using Avalonia.Markup.Xaml;
 using Avalonia.Platform.Storage;
 using Avalonia.Platform.Storage.FileIO;
-using Microsoft.Extensions.DependencyInjection;
 using TagTool.App.ViewModels.Dialogs;
 using TagTool.App.ViewModels.UserControls;
 
@@ -11,16 +10,15 @@ namespace TagTool.App.Views.Dialogs;
 
 public partial class TagFileDialog : Window
 {
-    private readonly TagFileDialogViewModel _viewModel = App.Current.Services.GetRequiredService<TagFileDialogViewModel>();
+    private TagFileDialogViewModel ViewModel => (TagFileDialogViewModel)DataContext!;
 
     public TagFileDialog(string startLocation) : this()
     {
-        _viewModel.Text = startLocation;
+        ViewModel.Text = startLocation;
     }
 
     public TagFileDialog()
     {
-        DataContext = _viewModel;
         InitializeComponent();
     }
 
@@ -31,7 +29,7 @@ public partial class TagFileDialog : Window
             Title = "Select file",
             FileTypeFilter = new[] { FilePickerFileTypes.All },
             AllowMultiple = false,
-            SuggestedStartLocation = _viewModel.FilePickerSuggestedStartLocation
+            SuggestedStartLocation = ViewModel.FilePickerSuggestedStartLocation
         };
 
         var result = await GetStorageProvider().OpenFilePickerAsync(options);
@@ -39,7 +37,7 @@ public partial class TagFileDialog : Window
         if (result.Count == 0 || !result[0].TryGetUri(out var filePath)) return;
 
         var folderPath = Directory.GetParent(filePath.LocalPath)?.FullName;
-        _viewModel.FilePickerSuggestedStartLocation = folderPath is null ? null : new BclStorageFolder(folderPath);
+        ViewModel.FilePickerSuggestedStartLocation = folderPath is null ? null : new BclStorageFolder(folderPath);
         SelectFileTextBox.Text = filePath.LocalPath;
     }
 

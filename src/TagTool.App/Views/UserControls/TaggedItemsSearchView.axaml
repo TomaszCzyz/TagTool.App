@@ -265,7 +265,6 @@
             CanUserReorderColumns="True"
             CanUserResizeColumns="True"
             CanUserSortColumns="True"
-            Background="Green"
             ColumnHeaderHeight="16"
             FontFamily="avares://TagTool.App/Assets/Fonts#Lato"
             FontSize="16"

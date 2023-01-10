@@ -75,15 +75,19 @@ public partial class FileSystemViewModel : Document
     public FileSystemViewModel()
     {
         _tagService = App.Current.Services.GetRequiredService<ITagToolBackend>().GetTagService();
-        CurrentFolder = new DirectoryInfo(@"C:\Users\tczyz\MyFiles");
+
+        Initialize();
     }
 
     [UsedImplicitly]
     public FileSystemViewModel(ITagToolBackend tagToolBackend)
     {
         _tagService = tagToolBackend.GetTagService();
-        CurrentFolder = new DirectoryInfo(@"C:\Users\tczyz\MyFiles");
+
+        Initialize();
     }
+
+    private void Initialize() => CurrentFolder = new DirectoryInfo(@"C:\Users\tczyz\MyFiles");
 
     partial void OnQuickSearchTextChanged(string value)
     {

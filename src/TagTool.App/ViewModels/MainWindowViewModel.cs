@@ -39,6 +39,8 @@ public partial class MainWindowViewModel : ViewModelBase
         // Debug.Fail("");
         _focusManager = null!;
         _dockFactory = App.Current.Services.GetRequiredService<MyDockFactory>();
+
+        Initialize();
     }
 
     [UsedImplicitly]
@@ -47,6 +49,11 @@ public partial class MainWindowViewModel : ViewModelBase
         _focusManager = null!;
         _dockFactory = factory;
 
+        Initialize();
+    }
+
+    private void Initialize()
+    {
         Layout = _dockFactory.CreateLayout();
         if (Layout is { })
         {
