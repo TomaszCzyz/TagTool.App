@@ -34,6 +34,7 @@
             </Setter>
             <Setter Property="Background" Value="{StaticResource MyLightPrimary300}" />
         </Style>
+
         <Style Selector="RadioButton.SideMenu">
             <Setter Property="Template">
                 <ControlTemplate x:CompileBindings="False">
@@ -46,6 +47,14 @@
 
                 </ControlTemplate>
             </Setter>
+        </Style>
+
+        <Style Selector="DataGridCell">
+            <Setter Property="MinHeight" Value="16" />
+            <Setter Property="Padding" Value="2 0" />
+        </Style>
+        <Style Selector="DataGridColumnHeader">
+            <Setter Property="MinHeight" Value="16" />
         </Style>
     </Window.Styles>
 

@@ -265,16 +265,13 @@
             CanUserReorderColumns="True"
             CanUserResizeColumns="True"
             CanUserSortColumns="True"
+            Background="Green"
+            ColumnHeaderHeight="16"
             FontFamily="avares://TagTool.App/Assets/Fonts#Lato"
-            FontSize="12"
+            FontSize="16"
             HorizontalScrollBarVisibility="Auto"
             Items="{Binding Files}"
             RowBackground="Transparent">
-            <DataGrid.Styles>
-                <Style Selector="DataGridCell">
-                    <Setter Property="Padding" Value="2 0" />
-                </Style>
-            </DataGrid.Styles>
             <DataGrid.Columns>
                 <!-- <DataGridCheckBoxColumn Width="60" Header="✔" CanUserResize="False" /> -->
                 <DataGridTemplateColumn
@@ -292,7 +289,7 @@
                     CanUserSort="True"
                     Header="Date Created"
                     IsReadOnly="True">
-                    <DataTemplate DataType="userControls:TaggableItemViewModel">
+                    <DataTemplate DataType="userControls:TaggableItemViewModel" x:CompileBindings="False">
                         <TextBlock
                             VerticalAlignment="Center"
                             FontSize="{Binding $parent[DataGrid].FontSize}"
