@@ -29,7 +29,7 @@ public partial class FileSystemViewModel : Document
     private ObservableCollection<AddressSegmentViewModel> _addressSegments = new();
 
     [ObservableProperty]
-    private double _fontSize = 13;
+    private double _fontSize = 16;
 
     [ObservableProperty]
     private DirectoryInfo _currentFolder = new("C:");

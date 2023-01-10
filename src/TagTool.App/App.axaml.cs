@@ -5,6 +5,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Serilog;
 using TagTool.App.Core.Services;
+using TagTool.App.Models;
+using TagTool.App.Models.Docks;
 using TagTool.App.Options;
 using TagTool.App.ViewModels;
 using TagTool.App.ViewModels.UserControls;
@@ -50,6 +52,9 @@ public class App : Application
         services.AddSingleton<IWordHighlighter, WordHighlighter>();
         services.AddSingleton<ITagToolBackendConnectionFactory, GrpcChannelFactory>();
         services.AddSingleton<ITagToolBackend, TagToolBackend>();
+
+        services.AddSingleton<MyDockFactory>();
+        services.AddSingleton<MyDocumentDock>();
 
         services
             .AddOptions<GeneralOptions>()

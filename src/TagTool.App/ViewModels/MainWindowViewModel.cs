@@ -5,6 +5,8 @@ using Avalonia.VisualTree;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Dock.Model.Controls;
+using JetBrains.Annotations;
+using Microsoft.Extensions.DependencyInjection;
 using TagTool.App.Core.Extensions;
 using TagTool.App.Models;
 using TagTool.App.Views.UserControls;
@@ -34,9 +36,16 @@ public partial class MainWindowViewModel : ViewModelBase
     /// </summary>
     public MainWindowViewModel()
     {
+        // Debug.Fail("");
         _focusManager = null!;
+        _dockFactory = App.Current.Services.GetRequiredService<MyDockFactory>();
+    }
 
-        _dockFactory = new MyDockFactory();
+    [UsedImplicitly]
+    public MainWindowViewModel(MyDockFactory factory)
+    {
+        _focusManager = null!;
+        _dockFactory = factory;
 
         Layout = _dockFactory.CreateLayout();
         if (Layout is { })

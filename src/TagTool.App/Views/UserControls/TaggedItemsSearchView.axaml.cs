@@ -14,7 +14,8 @@ public partial class TaggedItemsSearchView : UserControl
 
     public TaggedItemsSearchView()
     {
-        DataContext = _viewModel;
+        var environmentVariables = Environment.GetEnvironmentVariables();
+        // DataContext = _viewModel;
         InitializeComponent();
     }
 
