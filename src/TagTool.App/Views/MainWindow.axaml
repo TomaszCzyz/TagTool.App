@@ -69,8 +69,8 @@
             Grid.Row="0"
             Classes="MenuPanel"
             Margin="-1 -1 -1 0"
-            PointerPressed="InputElement_OnPointerPressed"
             PointerMoved="InputElement_OnPointerMoved"
+            PointerPressed="InputElement_OnPointerPressed"
             PointerReleased="InputElement_OnPointerReleased">
 
             <userControls:MenuView />

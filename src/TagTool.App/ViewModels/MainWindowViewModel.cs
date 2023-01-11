@@ -6,6 +6,7 @@ using Avalonia.VisualTree;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Dock.Model.Controls;
+using Dock.Model.Core;
 using JetBrains.Annotations;
 using Microsoft.Extensions.DependencyInjection;
 using TagTool.App.Core.Extensions;
@@ -86,26 +87,49 @@ public partial class MainWindowViewModel : ViewModelBase
     private InputElement? _previouslyFocusedElement;
 
     [RelayCommand]
-    private void ChangeLeftToolMenuPanelVisibility(bool? isVisible = null)
+    private void ChangeLeftToolMenuPanelVisibility(object param)
     {
-        // if (_dockFactory.LeftDock.HiddenDockables is null || _dockFactory.LeftDock.VisibleDockables is null) return;
-        //
-        // if (_dockFactory.LeftDock.VisibleDockables.Count != 0)
-        // {
-        //     for (var i = 0; i < _dockFactory.LeftDock.VisibleDockables.Count; i++)
-        //     {
-        //         _dockFactory.LeftDock.HiddenDockables.Add(_dockFactory.LeftDock.VisibleDockables[i]);
-        //         _dockFactory.LeftDock.VisibleDockables.RemoveAt(i);
-        //     }
-        // }
-        // else
-        // {
-        //     for (var i = 0; i < _dockFactory.LeftDock.HiddenDockables.Count; i++)
-        //     {
-        //         _dockFactory.LeftDock.VisibleDockables.Add(_dockFactory.LeftDock.HiddenDockables[i]);
-        //         _dockFactory.LeftDock.HiddenDockables.RemoveAt(i);
-        //     }
-        // }
+        if (param is not bool isVisible) return;
+
+        if (!isVisible)
+        {
+            HideAllTabs(_dockFactory.LeftDock);
+            _dockFactory.CollapseDock(_dockFactory.LeftDock);
+        }
+        else
+        {
+            UnhideAllTabs(_dockFactory.LeftDock);
+        }
+    }
+
+    private void HideAllTabs(IDock dock)
+    {
+        Debug.Assert(dock.HiddenDockables is not null);
+        Debug.Assert(dock.VisibleDockables is not null);
+
+        if (dock.VisibleDockables.Count == 0) return;
+
+        for (var i = 0; i < dock.VisibleDockables.Count; i++)
+        {
+            dock.HiddenDockables.Add(dock.VisibleDockables[i]);
+            dock.VisibleDockables.RemoveAt(i);
+        }
+    }
+
+    private void UnhideAllTabs(IDock dock)
+    {
+        Debug.Assert(dock.HiddenDockables is not null);
+        Debug.Assert(dock.VisibleDockables is not null);
+
+        if (dock.HiddenDockables.Count == 0) return;
+
+        for (var i = 0; i < dock.HiddenDockables.Count; i++)
+        {
+            _dockFactory.AddDockable(dock, dock.HiddenDockables[i]);
+            _dockFactory.UpdateDockable(dock, dock.Owner);
+            // dock.VisibleDockables.Add();
+            dock.HiddenDockables.RemoveAt(i);
+        }
     }
 
     [RelayCommand]

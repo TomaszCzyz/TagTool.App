@@ -75,6 +75,8 @@
         <ToggleButton
             Name="ShowLeftToolMenuButton"
             Background="Transparent"
+            Command="{ReflectionBinding $parent[Window].DataContext.ChangeLeftToolMenuPanelVisibilityCommand}"
+            CommandParameter="{Binding $self.IsChecked}"
             IsChecked="{Binding IsLeftToolMenuToggleButtonChecked}">
             <ToggleButton.Styles>
                 <Style Selector="avalonia|MaterialIcon">

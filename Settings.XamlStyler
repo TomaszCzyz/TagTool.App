@@ -22,7 +22,7 @@
         "*:*, *",
         "PageSource, PageIndex, Offset, Color, TargetName, Property, Value, StartPoint, EndPoint",
         "Storyboard.*, From, To, Duration",
-		    "LostFocus, Click, AttachedToLogicalTree, DetachedFromLogicalTree, AttachedToVisualTree, DetachedFromVisualTree, SelectionChanged, PointerPressed, PointerMoved, PointerReleased, EffectiveViewportChanged"
+		    "AttachedToLogicalTree, AttachedToVisualTree, Click, DetachedFromLogicalTree, DetachedFromVisualTree, EffectiveViewportChanged, GotFocus, LostFocus, PointerMoved, PointerPressed, PointerReleased, SelectionChanged"
     ],
     "FirstLineAttributes": "",
     "OrderAttributesByName": true,

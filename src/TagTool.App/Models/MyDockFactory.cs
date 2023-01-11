@@ -37,19 +37,21 @@ public class MyDockFactory : Factory
 
         LeftDock = _serviceProvider.GetRequiredService<MyDocumentDock>();
         LeftDock.Proportion = 0.25;
-        LeftDock.IsCollapsable = false;
+        LeftDock.IsCollapsable = true;
         LeftDock.VisibleDockables = CreateList<IDockable>(myTags1);
+        LeftDock.HiddenDockables = CreateList<IDockable>();
         LeftDock.CanCreateDocument = true;
 
         RightDock = _serviceProvider.GetRequiredService<MyDocumentDock>();
         RightDock.Proportion = 0.25;
         RightDock.IsCollapsable = false;
         RightDock.VisibleDockables = CreateList<IDockable>(myTags2);
+        RightDock.HiddenDockables = CreateList<IDockable>();
         RightDock.CanCreateDocument = true;
 
         CentralDock = _serviceProvider.GetRequiredService<MyDocumentDock>();
         CentralDock.Proportion = double.NaN;
-        CentralDock.IsCollapsable = false;
+        CentralDock.IsCollapsable = true;
         CentralDock.VisibleDockables = CreateList<IDockable>(taggedItemsSearchViewModel, fileSystemViewModel);
         CentralDock.CanCreateDocument = true;
 
