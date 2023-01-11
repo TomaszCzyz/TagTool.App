@@ -11,6 +11,7 @@ using JetBrains.Annotations;
 using Microsoft.Extensions.DependencyInjection;
 using TagTool.App.Core.Models;
 using TagTool.App.Core.Services;
+using TagTool.App.Models;
 using TagTool.Backend;
 
 namespace TagTool.App.ViewModels.UserControls;
@@ -23,6 +24,9 @@ public partial class TaggedItemsSearchViewModel : Document, IDisposable
 
     [ObservableProperty]
     private string? _searchText;
+
+    [ObservableProperty]
+    private bool _areSpecialTagsVisible;
 
     [ObservableProperty]
     private Tag? _selectedItemFromSearched;
@@ -39,6 +43,9 @@ public partial class TaggedItemsSearchViewModel : Document, IDisposable
     public ObservableCollection<object> EnteredTags { get; set; } = new();
 
     public ObservableCollection<TaggableItemViewModel> Files { get; set; } = new();
+
+    public ObservableCollection<string> AvailableSpacialTags { get; set; }
+        = new(new[] { ".name", ".regex", ".olderThan", ".youngerThan", ".smallerThan" });
 
     private IEnumerable<Tag> Tags => EnteredTags.Where(o => o.GetType() == typeof(Tag)).Cast<Tag>().ToArray();
 
@@ -153,6 +160,13 @@ public partial class TaggedItemsSearchViewModel : Document, IDisposable
     }
 
     [RelayCommand]
+    private void AddSpecialTag(NameSpecialTag tag)
+    {
+        SearchText = "";
+        EnteredTags.Insert(EnteredTags.Count - 1, new Tag($".name:{tag.FileName}"));
+    }
+
+    [RelayCommand]
     private void AddTag()
     {
         var itemToAdd = SelectedItemFromPopup;
@@ -169,13 +183,19 @@ public partial class TaggedItemsSearchViewModel : Document, IDisposable
 
     partial void OnSearchTextChanged(string? value)
     {
+        if (value?.StartsWith('.') ?? false) // special tag
+        {
+            AreSpecialTagsVisible = true;
+            return;
+        }
+
+        AreSpecialTagsVisible = false;
+
         _cts?.Cancel(false);
         _cts?.Dispose();
         _cts = new CancellationTokenSource();
 
-        async void Action() => await DoSearch(value, _cts.Token);
-
-        Dispatcher.UIThread.InvokeAsync(Action, DispatcherPriority.MaxValue);
+        Dispatcher.UIThread.InvokeAsync(async () => await DoSearch(value, _cts.Token), DispatcherPriority.MaxValue);
     }
 
     private async Task DoSearch(string? value, CancellationToken ct)

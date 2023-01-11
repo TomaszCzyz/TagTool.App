@@ -1,0 +1,35 @@
+﻿<Window
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    x:Class="TagTool.App.Views.Dialogs.NameSpecialTagDialog"
+    d:DesignWidth="250"
+    d:DesignHeight="350"
+    mc:Ignorable="d"
+    ExtendClientAreaChromeHints="NoChrome"
+    ExtendClientAreaTitleBarHeightHint="-1"
+    ExtendClientAreaToDecorationsHint="True"
+    ShowInTaskbar="False"
+    SizeToContent="WidthAndHeight"
+    Title="NameSpecialTagDialog"
+    WindowStartupLocation="CenterOwner">
+
+    <Grid
+        Margin="10"
+        ColumnDefinitions="Auto"
+        RowDefinitions="Auto,Auto,Auto">
+
+        <TextBox Name="FileNameTextBox" Watermark="enter file name..." />
+
+        <CheckBox
+            Name="CaseSensitiveCheckBox"
+            Grid.Row="1"
+            Content="case sensitive" />
+
+        <CheckBox
+            Name="MatchSubstringsCheckBox"
+            Grid.Row="2"
+            Content="match substrings" />
+    </Grid>
+</Window>

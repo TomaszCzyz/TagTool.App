@@ -3,7 +3,9 @@ using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.LogicalTree;
 using Avalonia.Markup.Xaml;
+using TagTool.App.Models;
 using TagTool.App.ViewModels.UserControls;
+using TagTool.App.Views.Dialogs;
 
 namespace TagTool.App.Views.UserControls;
 
@@ -84,5 +86,14 @@ public partial class TaggedItemsSearchView : UserControl
     private void InputElement_OnDoubleTapped(object? sender, TappedEventArgs e)
     {
         ViewModel.AddTagCommand.Execute(e);
+    }
+
+    private async void SpecialTagInputElement_OnDoubleTapped(object? sender, TappedEventArgs e)
+    {
+        var dialog = new NameSpecialTagDialog();
+
+        var result = await dialog.ShowDialog<NameSpecialTag?>((Window)VisualRoot!);
+
+        ViewModel.AddSpecialTagCommand.Execute(result);
     }
 }
