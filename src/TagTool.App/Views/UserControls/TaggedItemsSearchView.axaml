@@ -186,7 +186,6 @@
                                         <TextBlock
                                             Margin="2 0"
                                             VerticalAlignment="Center"
-                                            FontFamily="avares://TagTool.App/Assets/Fonts#Lato"
                                             FontSize="18"
                                             IsTabStop="False"
                                             Text="{Binding .}" />
@@ -196,6 +195,7 @@
                             </ListBox.DataTemplates>
                         </ListBox>
 
+                        <!-- Search results -->
                         <TextBlock
                             Grid.Row="2"
                             FontSize="12"
@@ -223,7 +223,6 @@
                                         <TextBlock
                                             Margin="2 0"
                                             VerticalAlignment="Center"
-                                            FontFamily="avares://TagTool.App/Assets/Fonts#Lato"
                                             FontSize="18"
                                             Inlines="{Binding Inlines}"
                                             IsTabStop="False"
@@ -234,14 +233,16 @@
                             </ListBox.DataTemplates>
                         </ListBox>
 
+                        <!-- Popular tags -->
                         <TextBlock
                             Grid.Row="4"
                             Margin="0 5 0 0"
                             FontSize="12"
-                            Text="Most popular tags:" />
+                            Text="Popular tags:" />
 
                         <ListBox
                             Grid.Row="5"
+                            Name="PopularTagsListBox"
                             Items="{Binding PopularTags}"
                             SelectedItem="{Binding SelectedItemFromPopular}"
                             SelectionMode="Single">
@@ -260,7 +261,6 @@
                                         <TextBlock
                                             Margin="2 0"
                                             VerticalAlignment="Center"
-                                            FontFamily="avares://TagTool.App/Assets/Fonts#Lato"
                                             FontSize="12"
                                             Inlines="{Binding Inlines}"
                                             IsTabStop="False"
@@ -290,7 +290,6 @@
             CanUserResizeColumns="True"
             CanUserSortColumns="True"
             ColumnHeaderHeight="16"
-            FontFamily="avares://TagTool.App/Assets/Fonts#Lato"
             FontSize="16"
             HorizontalScrollBarVisibility="Auto"
             Items="{Binding Files}"

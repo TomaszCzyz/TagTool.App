@@ -83,7 +83,7 @@ public partial class TaggedItemsSearchViewModel : Document, IDisposable
         var tags = new Tag[] { new("Hello") };
         EnteredTags.AddRange(tags);
 
-        var popularTags = new Tag[] { new("SomeTag"), new("Tag"), new("SomeTag"), new("Picture"), new("Tag"), new("Picture"), new("Picture") };
+        var popularTags = new Tag[] { new("SomeTag"), new("Tag"), new("AnotherTag"), new("Picture"), new("PrettyTag"), new("Cold") };
         PopularTags.AddRange(popularTags);
 
         var searchResults = new Tag[] { new("Result1"), new("Tag"), new("Result2"), new("Picture"), new("SearchTag") };

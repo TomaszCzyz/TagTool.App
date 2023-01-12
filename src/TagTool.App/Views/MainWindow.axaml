@@ -14,6 +14,7 @@
     ExtendClientAreaChromeHints="Default"
     ExtendClientAreaTitleBarHeightHint="-1"
     ExtendClientAreaToDecorationsHint="True"
+    FontFamily="avares://TagTool.App/Assets/Fonts#Lato"
     Icon="/Assets/avalonia-logo.ico"
     Title="TagTool.App">
     <Window.KeyBindings>

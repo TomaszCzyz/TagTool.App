@@ -7,7 +7,8 @@ namespace TagTool.App.Converters;
 public class LocationAndWidthToIconMultiConverter : IMultiValueConverter
 {
     private static readonly IconPathToBitmapConverter _iconPathToBitmapConverter = new();
-    private const double IconToFontSizeRatio = 1.5;
+
+    public double IconToFontSizeRatio { get; set; } = 1.5;
 
     public object? Convert(IList<object?> values, Type targetType, object? parameter, CultureInfo culture)
     {

@@ -3,6 +3,7 @@ using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.LogicalTree;
 using Avalonia.Markup.Xaml;
+using TagTool.App.Extensions;
 using TagTool.App.Models;
 using TagTool.App.ViewModels.UserControls;
 using TagTool.App.Views.Dialogs;
@@ -16,6 +17,19 @@ public partial class TaggedItemsSearchView : UserControl
     public TaggedItemsSearchView()
     {
         InitializeComponent();
+
+        SearchResultsListBox.AddHandler(KeyDownEvent, SearchResultsListBox_OnKeyDown, handledEventsToo: true);
+    }
+
+    private void SearchResultsListBox_OnKeyDown(object? sender, KeyEventArgs e)
+    {
+        var listBox = (ListBox)sender!;
+        switch (e.Key)
+        {
+            case Key.Right when listBox.IsLastItemSelected():
+                PopularTagsListBox.Focus();
+                break;
+        }
     }
 
     private void InitializeComponent()
@@ -38,7 +52,6 @@ public partial class TaggedItemsSearchView : UserControl
         var textBox = (TextBox)sender!;
 
         textBox.AddHandler(KeyDownEvent, OnKeyDown, RoutingStrategies.Tunnel);
-        // textBox.AddHandler(KeyDownEvent, EnsurePopupOpen, RoutingStrategies.Tunnel);
         textBox.AddHandler(PointerPressedEvent, EnsurePopupOpen, RoutingStrategies.Tunnel);
     }
 
@@ -66,11 +79,11 @@ public partial class TaggedItemsSearchView : UserControl
                 e.Handled = true;
                 break;
             case Key.Right:
-                SearchResultsListBox.SelectedIndex++;
+                SelectNextTagInPopup();
                 e.Handled = true;
                 break;
             case Key.Left:
-                SearchResultsListBox.SelectedIndex--;
+                SelectPreviousTagInPopup();
                 e.Handled = true;
                 break;
             case Key.Down when !SearchHelperPopup.IsOpen: // focus search results in dataGrid
@@ -80,6 +93,58 @@ public partial class TaggedItemsSearchView : UserControl
             default:
                 ViewModel.UpdateSearchCommand.Execute(e);
                 break;
+        }
+    }
+
+    private ListBox[] SelectableListBoxes => new[] { SearchResultsListBox, PopularTagsListBox };
+
+    private void SelectPreviousTagInPopup()
+    {
+        var selectedListBox = Array.Find(SelectableListBoxes, listBox => listBox.SelectedItem is not null) ?? SearchResultsListBox;
+
+        if (!selectedListBox.IsFirstItemSelected())
+        {
+            selectedListBox.SelectedIndex--;
+            return;
+        }
+
+        // reset selection of current listBox and go to the last elem of 'previous' list box
+        selectedListBox.SelectedIndex = -1;
+
+        if (ReferenceEquals(selectedListBox, SearchResultsListBox))
+        {
+            PopularTagsListBox.SelectLast();
+            return;
+        }
+
+        if (ReferenceEquals(selectedListBox, PopularTagsListBox))
+        {
+            SearchResultsListBox.SelectLast();
+        }
+    }
+
+    private void SelectNextTagInPopup()
+    {
+        var selectedListBox = Array.Find(SelectableListBoxes, listBox => listBox.SelectedItem is not null) ?? SearchResultsListBox;
+
+        if (!selectedListBox.IsLastItemSelected())
+        {
+            selectedListBox.SelectedIndex++;
+            return;
+        }
+
+        // reset selection of current listBox and go to the first elem of 'next' list box
+        selectedListBox.SelectedIndex = -1;
+
+        if (ReferenceEquals(selectedListBox, SearchResultsListBox))
+        {
+            PopularTagsListBox.SelectFirst();
+            return;
+        }
+
+        if (ReferenceEquals(selectedListBox, PopularTagsListBox))
+        {
+            SearchResultsListBox.SelectFirst();
         }
     }
 

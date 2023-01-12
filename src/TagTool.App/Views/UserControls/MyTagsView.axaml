@@ -55,7 +55,6 @@
                                 <TextBlock
                                     Margin="2 0"
                                     VerticalAlignment="Center"
-                                    FontFamily="avares://TagTool.App/Assets/Fonts#Lato"
                                     FontSize="18"
                                     IsTabStop="False"
                                     Text="{Binding .}" />

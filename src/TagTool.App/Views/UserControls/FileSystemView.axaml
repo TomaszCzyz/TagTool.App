@@ -208,7 +208,6 @@
             CanUserResizeColumns="True"
             CanUserSortColumns="True"
             ColumnHeaderHeight="16"
-            FontFamily="avares://TagTool.App/Assets/Fonts#Lato"
             FontSize="{Binding FontSize}"
             Items="{Binding Items}"
             SelectedItem="{Binding SelectedItem}"

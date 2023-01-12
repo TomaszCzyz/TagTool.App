@@ -45,7 +45,6 @@
         <Setter Property="Margin" Value="1" />
         <Setter Property="HorizontalAlignment" Value="Left" />
         <Setter Property="FontSize" Value="18" />
-        <Setter Property="FontFamily" Value="avares://TagTool.App/Assets/Fonts#Lato" />
         <Setter Property="FontWeight" Value="Regular" />
         <Setter Property="Foreground" Value="#464646" />
         <!-- <Setter Property="Foreground" Value="#007181" /> -->
