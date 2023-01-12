@@ -291,7 +291,7 @@
             CanUserResizeColumns="True"
             CanUserSortColumns="True"
             ColumnHeaderHeight="16"
-            FontSize="16"
+            FontSize="{DynamicResource AppContentFontSize}"
             HorizontalScrollBarVisibility="Auto"
             Items="{Binding Files}"
             RowBackground="Transparent">

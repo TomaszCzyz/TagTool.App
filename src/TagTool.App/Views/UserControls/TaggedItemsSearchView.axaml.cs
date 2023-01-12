@@ -70,6 +70,10 @@ public partial class TaggedItemsSearchView : UserControl
             case Key.Down when !SearchHelperPopup.IsOpen:
                 SearchResultsDataGrid.Focus();
                 break;
+            case Key.D1 when e.KeyModifiers.Equals(KeyModifiers.Shift): // exclamation mark
+                // todo: change some visuals
+                e.Handled = false;
+                break;
             default:
                 e.Handled = false;
                 break;

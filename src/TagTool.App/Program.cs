@@ -42,7 +42,7 @@ public static class Program
             .MinimumLevel.Override("Microsoft", Serilog.Events.LogEventLevel.Warning)
             .Enrich.FromLogContext()
             .Enrich.With(new PropertyEnricher("ApplicationName", "TagToolApp"))
-            .WriteTo.SQLite(logsDbPath, storeTimestampInUtc: true, batchSize: 10)
+            .WriteTo.SQLite(logsDbPath, storeTimestampInUtc: true, batchSize: 10, formatProvider: CultureInfo.CurrentCulture)
             .CreateLogger();
     }
 }

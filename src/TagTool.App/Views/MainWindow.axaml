@@ -77,8 +77,11 @@
             <userControls:MenuView />
         </Border>
 
-        <!-- Left tool menu -->
-        <Border Grid.Row="1">
+        <!-- Main content -->
+        <Border
+            Grid.Row="1"
+            KeyDown="MainContentBorder_OnKeyDown"
+            PointerWheelChanged="InputElement_OnPointerWheelChanged">
             <Border.Styles>
                 <Style Selector="DocumentTabStrip /template/ Button#PART_ButtonCreate">
                     <Setter Property="Template">

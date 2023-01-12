@@ -55,4 +55,30 @@ public partial class MainWindow : Window
         var popup = button.FindLogicalAncestorOfType<Popup>()!;
         popup.IsOpen = false;
     }
+
+    private double _appContentFontSizeCache = (double)App.Current.Resources["AppContentFontSize"]!;
+
+    private void ChangeFontSize(bool zoomIn)
+    {
+        _appContentFontSizeCache += zoomIn ? 1 : -1;
+        App.Current.Resources["AppContentFontSize"] = _appContentFontSizeCache;
+    }
+
+    private void InputElement_OnPointerWheelChanged(object? sender, PointerWheelEventArgs e)
+    {
+        if (!e.KeyModifiers.Equals(KeyModifiers.Control)) return;
+
+        ChangeFontSize(e.Delta.Y < 0);
+
+        e.Handled = true;
+    }
+
+    private void MainContentBorder_OnKeyDown(object? sender, KeyEventArgs e)
+    {
+        if (!e.KeyModifiers.Equals(KeyModifiers.Control) || (e.Key != Key.Add && e.Key != Key.Subtract)) return;
+
+        ChangeFontSize(e.Key == Key.Add);
+
+        e.Handled = true;
+    }
 }

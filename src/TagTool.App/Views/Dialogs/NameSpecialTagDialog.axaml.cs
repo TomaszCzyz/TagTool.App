@@ -34,8 +34,6 @@ public partial class NameSpecialTagDialog : Window
         switch (e.Key)
         {
             case Key.Enter when !string.IsNullOrEmpty(FileNameTextBox.Text):
-                e.Handled = true;
-
                 var nameSpecialTag = new NameSpecialTag
                 {
                     FileName = FileNameTextBox.Text,
@@ -45,28 +43,9 @@ public partial class NameSpecialTagDialog : Window
 
                 Close(nameSpecialTag);
                 break;
-            case Key.Enter:
-                e.Handled = true;
-
-                Close(null!);
-                break;
-            case Key.Escape:
-                e.Handled = true;
-
+            case Key.Escape or Key.Enter:
                 Close(null!);
                 break;
         }
     }
-
-    // private void CancelButton_OnClick(object? sender, RoutedEventArgs e)
-    // {
-    //     Close();
-    // }
-    //
-    // private void TagButton_OnClick(object? sender, RoutedEventArgs e)
-    // {
-    //     var simpleTagsBarViewModel = (SimpleTagsBarViewModel)TagsToApplySimpleTagsBar.DataContext!;
-    //
-    //     Close((SelectFileTextBox.Text, simpleTagsBarViewModel.Tags));
-    // }
 }

@@ -23,7 +23,7 @@ public partial class TaggedItemsSearchViewModel : Document, IDisposable
     private readonly IWordHighlighter _wordHighlighter;
 
     [ObservableProperty]
-    private string? _searchText;
+    private string _searchText = "";
 
     [ObservableProperty]
     private bool _areSpecialTagsVisible;
@@ -167,10 +167,18 @@ public partial class TaggedItemsSearchViewModel : Document, IDisposable
 
         if (itemToAdd is null || EnteredTags.Contains(itemToAdd)) return;
 
+        if (SearchText.StartsWith('!'))
+        {
+            var excludeItemToAdd = itemToAdd with { Name = itemToAdd.Name?.Insert(0, "exclude:") };
+            EnteredTags.Insert(EnteredTags.Count - 1, excludeItemToAdd);
+        }
+        else
+        {
+            EnteredTags.Insert(EnteredTags.Count - 1, itemToAdd);
+        }
+
         SearchText = "";
         SearchResults.Remove(itemToAdd);
-
-        EnteredTags.Insert(EnteredTags.Count - 1, itemToAdd);
     }
 
     private CancellationTokenSource? _cts;
@@ -189,7 +197,7 @@ public partial class TaggedItemsSearchViewModel : Document, IDisposable
         _cts?.Dispose();
         _cts = new CancellationTokenSource();
 
-        Dispatcher.UIThread.InvokeAsync(async () => await DoSearch(value, _cts.Token), DispatcherPriority.MaxValue);
+        Dispatcher.UIThread.InvokeAsync(async () => await DoSearch(value?.TrimStart('!'), _cts.Token), DispatcherPriority.MaxValue);
     }
 
     private async Task DoSearch(string? value, CancellationToken ct)

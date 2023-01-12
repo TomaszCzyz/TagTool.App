@@ -208,7 +208,7 @@
             CanUserResizeColumns="True"
             CanUserSortColumns="True"
             ColumnHeaderHeight="16"
-            FontSize="{Binding FontSize}"
+            FontSize="{DynamicResource AppContentFontSize}"
             Items="{Binding Items}"
             SelectedItem="{Binding SelectedItem}"
             SelectionMode="Extended"

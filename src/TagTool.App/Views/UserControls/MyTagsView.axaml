@@ -17,7 +17,6 @@
 
     <StackPanel HorizontalAlignment="Stretch" Orientation="Vertical">
         <StackPanel Margin="0 8 0 0" Orientation="Vertical">
-
             <Expander
                 HorizontalAlignment="Stretch"
                 CornerRadius="8"
@@ -55,7 +54,7 @@
                                 <TextBlock
                                     Margin="2 0"
                                     VerticalAlignment="Center"
-                                    FontSize="18"
+                                    FontSize="{DynamicResource AppContentFontSize}"
                                     IsTabStop="False"
                                     Text="{Binding .}" />
 
