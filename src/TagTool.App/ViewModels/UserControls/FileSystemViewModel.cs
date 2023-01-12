@@ -30,9 +30,6 @@ public partial class FileSystemViewModel : Document
     private ObservableCollection<AddressSegmentViewModel> _addressSegments = new();
 
     [ObservableProperty]
-    private double _fontSize = 16;
-
-    [ObservableProperty]
     private DirectoryInfo _currentFolder = new("C:");
 
     [ObservableProperty]
@@ -177,18 +174,6 @@ public partial class FileSystemViewModel : Document
         {
             taggableItemViewModel.AreTagsVisible = value;
         }
-    }
-
-    [RelayCommand]
-    private void ZoomIn()
-    {
-        FontSize++;
-    }
-
-    [RelayCommand]
-    private void ZoomOut()
-    {
-        FontSize--;
     }
 
     [RelayCommand(CanExecute = nameof(HasQuickSearchResults))]

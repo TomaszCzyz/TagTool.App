@@ -37,6 +37,6 @@
 
         <!-- global font size -->
         <x:Double x:Key="ControlContentThemeFontSize">14</x:Double>
-        <x:Double x:Key="AppContentFontSize">8</x:Double>
+        <x:Double x:Key="AppContentFontSize">16</x:Double>
     </Application.Resources>
 </Application>

@@ -216,10 +216,6 @@
             SelectionChanged="DataGrid_OnSelectionChanged">
             <DataGrid.KeyBindings>
                 <KeyBinding Command="{Binding NavigateCommand}" Gesture="Enter" />
-                <!-- todo: ZoomIn.ZoomOut functionalities should be higher in hierarchy, as should change something like ContentSize property -->
-                <!-- which should be used across all data views -->
-                <KeyBinding Command="{CompiledBinding ZoomInCommand}" Gesture="Ctrl+Add" />
-                <KeyBinding Command="{CompiledBinding ZoomOutCommand}" Gesture="Ctrl+Add" />
             </DataGrid.KeyBindings>
             <DataGrid.Columns>
                 <DataGridTemplateColumn
