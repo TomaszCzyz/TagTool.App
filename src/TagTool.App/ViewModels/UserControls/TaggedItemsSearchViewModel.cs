@@ -154,12 +154,6 @@ public partial class TaggedItemsSearchViewModel : Document, IDisposable
     }
 
     [RelayCommand]
-    private void UpdateSearch()
-    {
-        SelectedItemFromSearched = SearchResults.FirstOrDefault();
-    }
-
-    [RelayCommand]
     private void AddSpecialTag(NameSpecialTag tag)
     {
         SearchText = "";
@@ -228,6 +222,9 @@ public partial class TaggedItemsSearchViewModel : Document, IDisposable
         {
             // this.Log().Debug("Streaming of tag names hints for SearchBar was cancelled");
         }
+
+        // does it has to be here? it is here because updating results reset selection of the list 
+        SelectedItemFromSearched = SearchResults.FirstOrDefault();
     }
 
     public void Dispose()

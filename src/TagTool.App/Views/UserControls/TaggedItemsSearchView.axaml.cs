@@ -17,19 +17,6 @@ public partial class TaggedItemsSearchView : UserControl
     public TaggedItemsSearchView()
     {
         InitializeComponent();
-
-        SearchResultsListBox.AddHandler(KeyDownEvent, SearchResultsListBox_OnKeyDown, handledEventsToo: true);
-    }
-
-    private void SearchResultsListBox_OnKeyDown(object? sender, KeyEventArgs e)
-    {
-        var listBox = (ListBox)sender!;
-        switch (e.Key)
-        {
-            case Key.Right when listBox.IsLastItemSelected():
-                PopularTagsListBox.Focus();
-                break;
-        }
     }
 
     private void InitializeComponent()
@@ -52,17 +39,14 @@ public partial class TaggedItemsSearchView : UserControl
         var textBox = (TextBox)sender!;
 
         textBox.AddHandler(KeyDownEvent, OnKeyDown, RoutingStrategies.Tunnel);
-        textBox.AddHandler(PointerPressedEvent, EnsurePopupOpen, RoutingStrategies.Tunnel);
-    }
-
-    private void EnsurePopupOpen(object? sender, RoutedEventArgs e)
-    {
-        SearchHelperPopup.IsOpen = true;
     }
 
     private void OnKeyDown(object? sender, KeyEventArgs e)
     {
         var textBox = (TextBox)sender!;
+
+        SearchHelperPopup.IsOpen = true;
+        e.Handled = true;
 
         switch (e.Key)
         {
@@ -72,26 +56,21 @@ public partial class TaggedItemsSearchView : UserControl
             case Key.Enter when ViewModel.SelectedItemFromPopup is not null:
                 ViewModel.AddTagCommand.Execute(e);
                 SearchHelperPopup.IsOpen = false;
-                e.Handled = true;
                 break;
             case Key.Enter when ViewModel.SelectedItemFromPopup is null:
                 SearchHelperPopup.IsOpen = false;
-                e.Handled = true;
                 break;
             case Key.Right:
                 SelectNextTagInPopup();
-                e.Handled = true;
                 break;
             case Key.Left:
                 SelectPreviousTagInPopup();
-                e.Handled = true;
                 break;
             case Key.Down when !SearchHelperPopup.IsOpen: // focus search results in dataGrid
                 SearchResultsDataGrid.Focus();
-                e.Handled = true;
                 break;
             default:
-                ViewModel.UpdateSearchCommand.Execute(e);
+                e.Handled = false;
                 break;
         }
     }
