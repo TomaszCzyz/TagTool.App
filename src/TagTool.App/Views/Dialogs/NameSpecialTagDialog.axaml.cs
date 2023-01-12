@@ -48,12 +48,12 @@ public partial class NameSpecialTagDialog : Window
             case Key.Enter:
                 e.Handled = true;
 
-                Close(null);
+                Close(null!);
                 break;
             case Key.Escape:
                 e.Handled = true;
 
-                Close(null);
+                Close(null!);
                 break;
         }
     }

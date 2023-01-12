@@ -93,6 +93,7 @@
 
             <ScrollViewer
                 Grid.Column="1"
+                PointerPressed="SearchBarInputElement_OnPointerPressed"
                 HorizontalAlignment="Stretch"
                 VerticalAlignment="Top"
                 VerticalScrollBarVisibility="Visible">

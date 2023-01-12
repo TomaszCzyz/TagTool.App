@@ -12,6 +12,7 @@ namespace TagTool.App.Views.UserControls;
 
 public partial class TaggedItemsSearchView : UserControl
 {
+    private TextBox? _textBox;
     private TaggedItemsSearchViewModel ViewModel => (TaggedItemsSearchViewModel)DataContext!;
 
     public TaggedItemsSearchView()
@@ -36,9 +37,9 @@ public partial class TaggedItemsSearchView : UserControl
 
     private void StyledElement_OnAttachedToLogicalTree(object? sender, LogicalTreeAttachmentEventArgs e)
     {
-        var textBox = (TextBox)sender!;
+        _textBox = (TextBox)sender!;
 
-        textBox.AddHandler(KeyDownEvent, OnKeyDown, RoutingStrategies.Tunnel);
+        _textBox.AddHandler(KeyDownEvent, OnKeyDown, RoutingStrategies.Tunnel);
     }
 
     private void OnKeyDown(object? sender, KeyEventArgs e)
@@ -66,7 +67,7 @@ public partial class TaggedItemsSearchView : UserControl
             case Key.Left:
                 SelectPreviousTagInPopup();
                 break;
-            case Key.Down when !SearchHelperPopup.IsOpen: // focus search results in dataGrid
+            case Key.Down when !SearchHelperPopup.IsOpen:
                 SearchResultsDataGrid.Focus();
                 break;
             default:
@@ -139,5 +140,10 @@ public partial class TaggedItemsSearchView : UserControl
         var result = await dialog.ShowDialog<NameSpecialTag?>((Window)VisualRoot!);
 
         ViewModel.AddSpecialTagCommand.Execute(result);
+    }
+
+    private void SearchBarInputElement_OnPointerPressed(object? sender, PointerPressedEventArgs e)
+    {
+        _textBox?.Focus();
     }
 }

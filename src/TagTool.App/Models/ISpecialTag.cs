@@ -9,7 +9,7 @@ public class NameSpecialTag : ISpecialTag
 {
     public string SpecialTagName { get; } = nameof(NameSpecialTag);
 
-    public string FileName { get; init; }
+    public string FileName { get; init; } = null!;
 
     public bool CaseSensitive { get; init; }
 
