@@ -1,0 +1,69 @@
+﻿<Styles
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:controls="using:TagTool.App.Views.TemplatedControls"
+    xmlns:converters="clr-namespace:TagTool.App.Converters">
+    <Styles.Resources>
+        <converters:FontSizeConverter x:Key="FontSizeConverter" Ratio="0.4" />
+    </Styles.Resources>
+
+    <Design.PreviewWith>
+        <StackPanel Margin="10" Spacing="0">
+            <controls:SpecialTag
+                FontSize="18"
+                SpecialTagName="FileName"
+                Text="PartOfNamey" />
+            <controls:SpecialTag SpecialTagName="FileName" Text="PartOfName" />
+        </StackPanel>
+    </Design.PreviewWith>
+
+    <Style Selector="controls|SpecialTag">
+        <Setter Property="Background" Value="White" />
+        <Setter Property="BorderThickness" Value="1" />
+        <Setter Property="BorderBrush" Value="Orange" />
+        <Setter Property="ClipToBounds" Value="False" />
+        <Setter Property="CornerRadius" Value="4" />
+        <Setter Property="Template">
+            <ControlTemplate>
+                <Grid RowDefinitions="Auto, Auto">
+
+                    <Border
+                        Name="PART_MainTextBorder"
+                        Grid.Row="1"
+                        Background="{TemplateBinding Background}"
+                        BorderBrush="{TemplateBinding BorderBrush}"
+                        BorderThickness="{TemplateBinding BorderThickness}"
+                        CornerRadius="{TemplateBinding CornerRadius}">
+
+                        <TextBlock
+                            Name="MainTextBlock"
+                            Margin="2 0"
+                            FontFamily="{TemplateBinding FontFamily}"
+                            FontSize="{TemplateBinding FontSize}"
+                            FontStyle="{TemplateBinding FontStyle}"
+                            FontWeight="{TemplateBinding FontWeight}"
+                            Foreground="{TemplateBinding Foreground}"
+                            Text="{TemplateBinding Text}" />
+
+                    </Border>
+
+                    <TextBlock
+                        Grid.Row="0"
+                        Margin="8 0 0 -4"
+                        Padding="2 0"
+                        HorizontalAlignment="Left"
+                        VerticalAlignment="Top"
+                        Background="{TemplateBinding Background}"
+                        FontFamily="{TemplateBinding FontFamily}"
+                        FontSize="{TemplateBinding FontSize, Converter={StaticResource FontSizeConverter}}"
+                        FontStyle="{TemplateBinding FontStyle}"
+                        FontWeight="{TemplateBinding FontWeight}"
+                        Foreground="{TemplateBinding Foreground}"
+                        Text="{TemplateBinding SpecialTagName}" />
+
+                </Grid>
+            </ControlTemplate>
+        </Setter>
+    </Style>
+</Styles>
+
