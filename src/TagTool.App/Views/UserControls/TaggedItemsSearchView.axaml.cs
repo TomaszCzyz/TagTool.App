@@ -149,5 +149,6 @@ public partial class TaggedItemsSearchView : UserControl
     private void SearchBarInputElement_OnPointerPressed(object? sender, PointerPressedEventArgs e)
     {
         _textBox?.Focus();
+        SearchHelperPopup.IsOpen = true;
     }
 }

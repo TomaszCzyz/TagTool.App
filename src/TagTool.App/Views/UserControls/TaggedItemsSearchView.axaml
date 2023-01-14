@@ -150,7 +150,7 @@
                 IsOpen="False"
                 PlacementGravity="Bottom"
                 PlacementTarget="{Binding #TopMostGrid}"
-                WindowManagerAddShadowHint="False">
+                WindowManagerAddShadowHint="True">
 
                 <Border
                     Margin="0 -1 0 0"
