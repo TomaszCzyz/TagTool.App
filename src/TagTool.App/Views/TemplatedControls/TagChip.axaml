@@ -29,6 +29,7 @@
                     Classes="Implicit"
                     IsDeletable="False"
                     Text="ImplicitTest" />
+
             </StackPanel>
         </StackPanel>
     </Design.PreviewWith>
@@ -53,7 +54,7 @@
         <Setter Property="CornerRadius" Value="4" />
         <Setter Property="Template">
             <ControlTemplate>
-                <Grid ColumnDefinitions="Auto,*" RowDefinitions="Auto">
+                <Grid ColumnDefinitions="Auto,Auto" RowDefinitions="Auto">
                     <Border
                         Name="PART_Border"
                         Grid.ColumnSpan="2"
@@ -75,8 +76,8 @@
                         Name="PART_DeleteButton"
                         Grid.Column="1"
                         Classes="InCircle"
-                        Width="14"
-                        Height="14"
+                        Width="12"
+                        Height="12"
                         Margin="-4 2 4 2"
                         IsVisible="{TemplateBinding IsDeletable}">
 

@@ -80,8 +80,8 @@ public partial class TaggedItemsSearchViewModel : Document, IDisposable
     {
         EnteredTags.CollectionChanged += async (_, _) => await Dispatcher.UIThread.InvokeAsync(CommitSearch);
 
-        var tags = new Tag[] { new("Hello") };
-        EnteredTags.AddRange(tags);
+        EnteredTags.Add(new Tag("Hello"));
+        EnteredTags.Add(new NameSpecialTag { FileName = "Hello" });
 
         var popularTags = new Tag[] { new("SomeTag"), new("Tag"), new("AnotherTag"), new("Picture"), new("PrettyTag"), new("Cold") };
         PopularTags.AddRange(popularTags);
@@ -138,7 +138,7 @@ public partial class TaggedItemsSearchViewModel : Document, IDisposable
     }
 
     [RelayCommand]
-    private void RemoveTag(Tag tag)
+    private void RemoveTag(object tag)
     {
         EnteredTags.Remove(tag);
     }
@@ -157,7 +157,7 @@ public partial class TaggedItemsSearchViewModel : Document, IDisposable
     private void AddSpecialTag(NameSpecialTag tag)
     {
         SearchText = "";
-        EnteredTags.Insert(EnteredTags.Count - 1, new Tag($".name:{tag.FileName}"));
+        EnteredTags.Insert(EnteredTags.Count - 1, new NameSpecialTag { FileName = tag.FileName });
     }
 
     [RelayCommand]

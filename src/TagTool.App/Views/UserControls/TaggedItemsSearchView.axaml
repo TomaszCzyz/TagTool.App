@@ -6,6 +6,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:models="clr-namespace:TagTool.App.Core.Models;assembly=TagTool.App.Core"
+    xmlns:models1="clr-namespace:TagTool.App.Models"
     xmlns:system="clr-namespace:System;assembly=System.Runtime"
     xmlns:templatedControls="clr-namespace:TagTool.App.Views.TemplatedControls"
     xmlns:userControls="clr-namespace:TagTool.App.ViewModels.UserControls"
@@ -16,7 +17,8 @@
     x:Name="UserControlRoot"
     d:DesignWidth="700"
     d:DesignHeight="700"
-    mc:Ignorable="d">
+    mc:Ignorable="d"
+    Background="{StaticResource MyLightPrimary200}">
     <UserControl.Resources>
         <converters:FileSizeToStringConverter x:Key="FileSizeToStringConverter" />
     </UserControl.Resources>
@@ -50,7 +52,7 @@
                     </Setter>
                 </Style>
                 <Style Selector="ListBoxItem">
-                    <Setter Property="Padding" Value="0" />
+                    <Setter Property="Padding" Value="2 2 0 0" />
                     <Setter Property="MaxHeight" Value="30" />
                 </Style>
                 <Style Selector="TextBox.Transparent">
@@ -93,10 +95,10 @@
 
             <ScrollViewer
                 Grid.Column="1"
-                PointerPressed="SearchBarInputElement_OnPointerPressed"
                 HorizontalAlignment="Stretch"
                 VerticalAlignment="Top"
-                VerticalScrollBarVisibility="Visible">
+                VerticalScrollBarVisibility="Visible"
+                PointerPressed="SearchBarInputElement_OnPointerPressed">
 
                 <!-- entered tags box -->
                 <ListBox
@@ -110,13 +112,27 @@
                     <ListBox.DataTemplates>
                         <DataTemplate x:CompileBindings="False" DataType="models:Tag">
                             <templatedControls:TagChip
-                                Margin="4 2"
+                                Margin="0 2"
                                 BorderThickness="1 1 1 2"
                                 DeleteCommand="{Binding #UserControlRoot.DataContext.RemoveTagCommand, FallbackValue=null}"
                                 DeleteCommandParameter="{Binding .}"
                                 Text="{Binding Name}" />
 
                         </DataTemplate>
+
+                        <DataTemplate x:CompileBindings="False" DataType="models1:NameSpecialTag">
+                            <templatedControls:SpecialTag
+                                Classes="LargeSpecialTag"
+                                Margin="0 -5 0 0"
+                                BorderThickness="1 1 1 2"
+                                ClipRectangleFill="{StaticResource MyLightPrimary200}"
+                                DeleteCommand="{Binding #UserControlRoot.DataContext.RemoveTagCommand, FallbackValue=null}"
+                                DeleteCommandParameter="{Binding .}"
+                                SpecialTagName="Name"
+                                Text="{Binding FileName}" />
+
+                        </DataTemplate>
+
                         <DataTemplate x:CompileBindings="False" DataType="system:String">
                             <TextBox
                                 Classes="Transparent"
@@ -242,8 +258,8 @@
                             Text="Popular tags:" />
 
                         <ListBox
-                            Grid.Row="5"
                             Name="PopularTagsListBox"
+                            Grid.Row="5"
                             Items="{Binding PopularTags}"
                             SelectedItem="{Binding SelectedItemFromPopular}"
                             SelectionMode="Single">

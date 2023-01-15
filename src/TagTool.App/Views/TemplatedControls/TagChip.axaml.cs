@@ -6,12 +6,14 @@ using Avalonia.Controls.Metadata;
 using Avalonia.Controls.Primitives;
 using Avalonia.Interactivity;
 using Avalonia.VisualTree;
+using JetBrains.Annotations;
 
 namespace TagTool.App.Views.TemplatedControls;
 
 [TemplatePart(Name = DeleteButtonPartName, Type = typeof(Button))]
 public sealed class TagChip : TemplatedControl
 {
+    [UsedImplicitly]
     public const string DeleteButtonPartName = "PART_DeleteButton";
 
     private Button? _deleteButton;
