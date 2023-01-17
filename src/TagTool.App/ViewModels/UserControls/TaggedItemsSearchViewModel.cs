@@ -81,7 +81,7 @@ public partial class TaggedItemsSearchViewModel : Document, IDisposable
         EnteredTags.CollectionChanged += async (_, _) => await Dispatcher.UIThread.InvokeAsync(CommitSearch);
 
         EnteredTags.Add(new Tag("Hello"));
-        EnteredTags.Add(new NameSpecialTag { FileName = "Hello" });
+        // EnteredTags.Add(new NameSpecialTag { FileName = "Hello" });
 
         var popularTags = new Tag[] { new("SomeTag"), new("Tag"), new("AnotherTag"), new("Picture"), new("PrettyTag"), new("Cold") };
         PopularTags.AddRange(popularTags);
