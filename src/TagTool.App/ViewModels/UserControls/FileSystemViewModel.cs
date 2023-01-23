@@ -104,7 +104,7 @@ public partial class FileSystemViewModel : Document
     }
 
     /// <summary>
-    ///     Highlights substring that match <paramref name="value" />
+    ///     Highlights substring that matches <paramref name="value" />
     /// </summary>
     /// <remarks>Invoke on UI thread</remarks>
     /// <param name="value">string we search for</param>
