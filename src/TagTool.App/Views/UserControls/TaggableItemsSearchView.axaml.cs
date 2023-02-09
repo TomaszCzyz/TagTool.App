@@ -151,4 +151,16 @@ public partial class TaggableItemsSearchView : UserControl
         _textBox?.Focus();
         SearchHelperPopup.IsOpen = true;
     }
+
+    private void LogicalOperatorToggleButton_OnClick(object? sender, RoutedEventArgs e)
+    {
+        var button = (Button)sender!;
+
+        button.Content = button.Content switch
+        {
+            '|' => '&',
+            '&' => '|',
+            _ => throw new ArgumentOutOfRangeException(nameof(sender), "unknown operator")
+        };
+    }
 }

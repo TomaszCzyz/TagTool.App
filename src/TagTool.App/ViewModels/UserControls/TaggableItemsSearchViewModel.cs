@@ -16,6 +16,11 @@ using TagTool.Backend;
 
 namespace TagTool.App.ViewModels.UserControls;
 
+public class LogicalOperator
+{
+    public char Op { get; set; } = '|';
+}
+
 public partial class TaggableItemsSearchViewModel : Document, IDisposable
 {
     private readonly TagSearchService.TagSearchServiceClient _tagSearchService;
@@ -81,6 +86,7 @@ public partial class TaggableItemsSearchViewModel : Document, IDisposable
         EnteredTags.CollectionChanged += async (_, _) => await Dispatcher.UIThread.InvokeAsync(CommitSearch);
 
         EnteredTags.Add(new Tag("Hello"));
+        EnteredTags.Add(new LogicalOperator { Op = '|' });
         // EnteredTags.Add(new NameSpecialTag { FileName = "Hello" });
 
         var popularTags = new Tag[] { new("SomeTag"), new("Tag"), new("AnotherTag"), new("Picture"), new("PrettyTag"), new("Cold") };
@@ -140,7 +146,9 @@ public partial class TaggableItemsSearchViewModel : Document, IDisposable
     [RelayCommand]
     private void RemoveTag(object tag)
     {
-        EnteredTags.Remove(tag);
+        var tagIndex = EnteredTags.IndexOf(tag);
+        EnteredTags.RemoveAt(tagIndex + 1);
+        EnteredTags.RemoveAt(tagIndex);
     }
 
     [RelayCommand]
@@ -150,7 +158,10 @@ public partial class TaggableItemsSearchViewModel : Document, IDisposable
 
         if (lastTag is null) return;
 
-        EnteredTags.Remove(lastTag);
+        var lastTagIndex = EnteredTags.IndexOf(lastTag);
+
+        EnteredTags.RemoveAt(lastTagIndex + 1);
+        EnteredTags.RemoveAt(lastTagIndex);
     }
 
     [RelayCommand]
@@ -158,6 +169,7 @@ public partial class TaggableItemsSearchViewModel : Document, IDisposable
     {
         SearchText = "";
         EnteredTags.Insert(EnteredTags.Count - 1, new NameSpecialTag { FileName = tag.FileName });
+        EnteredTags.Insert(EnteredTags.Count - 1, new LogicalOperator());
     }
 
     [RelayCommand]
@@ -176,6 +188,8 @@ public partial class TaggableItemsSearchViewModel : Document, IDisposable
         {
             EnteredTags.Insert(EnteredTags.Count - 1, itemToAdd);
         }
+
+        EnteredTags.Insert(EnteredTags.Count - 1, new LogicalOperator());
 
         SearchText = "";
         SearchResults.Remove(itemToAdd);

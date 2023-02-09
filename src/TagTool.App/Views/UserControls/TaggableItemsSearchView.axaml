@@ -161,6 +161,11 @@
                             VerticalAlignment="Center"
                             Items="{Binding EnteredTags}"
                             ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+                            <ListBox.Styles>
+                                <Style Selector="Button.LogicalOperatorButton:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+                                    <Setter Property="Foreground" Value="{StaticResource MyLightSecondary500}" />
+                                </Style>
+                            </ListBox.Styles>
                             <ListBox.DataTemplates>
                                 <DataTemplate x:CompileBindings="False" DataType="models:Tag">
                                     <!-- <templatedControls:TagChip -->
@@ -201,13 +206,20 @@
                                                 Kind="Close" />
 
                                         </Button>
-
-                                        <TextBlock
-                                            Grid.Column="2"
-                                            FontSize="18"
-                                            Foreground="{StaticResource MyLightSecondary500}"
-                                            Text="|" />
                                     </Grid>
+                                </DataTemplate>
+
+                                <DataTemplate x:CompileBindings="False" DataType="userControls:LogicalOperator">
+                                    <Button
+                                        Name="LogicalOperatorToggleButton"
+                                        Classes="LogicalOperatorButton"
+                                        Padding="1 0"
+                                        FontSize="18"
+                                        Foreground="{StaticResource MyLightSecondary500}"
+                                        Background="Transparent"
+                                        Content="{Binding Op, Mode=TwoWay}"
+                                        Click="LogicalOperatorToggleButton_OnClick" />
+
                                 </DataTemplate>
 
                                 <DataTemplate x:CompileBindings="False" DataType="models1:NameSpecialTag">
