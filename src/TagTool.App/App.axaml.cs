@@ -1,6 +1,7 @@
 using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
+using Dock.Model.Core;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Serilog;
@@ -9,7 +10,6 @@ using TagTool.App.Models;
 using TagTool.App.Models.Docks;
 using TagTool.App.Options;
 using TagTool.App.ViewModels;
-using TagTool.App.ViewModels.UserControls;
 using TagTool.App.Views;
 
 namespace TagTool.App;
@@ -56,10 +56,6 @@ public class App : Application
         services.AddSingleton<MyDockFactory>();
         services.AddTransient<MyDocumentDock>();
 
-        services.AddTransient<MyTagsViewModel>();
-        services.AddTransient<TaggedItemsSearchViewModel>();
-        services.AddTransient<FileSystemViewModel>();
-
         services
             .AddOptions<GeneralOptions>()
             .Configure(options => configuration.GetSection(GeneralOptions.General).Bind(options));
@@ -77,11 +73,18 @@ public class App : Application
 
 public static class ServiceCollectionExtensions
 {
-    private static Func<Type, bool> Predicate => x => typeof(ViewModelBase).IsAssignableFrom(x) && x is { IsInterface: false, IsAbstract: false };
+    private static Func<Type, bool> ViewModelBasePredicate
+        => x => typeof(ViewModelBase).IsAssignableFrom(x) && x is { IsInterface: false, IsAbstract: false };
+
+    private static Func<Type, bool> DockablePredicate
+        => x => typeof(IDockable).IsAssignableFrom(x) && x is { IsInterface: false, IsAbstract: false };
 
     public static void AddViewModels(this IServiceCollection services, Type scanMarker)
     {
-        foreach (var type in scanMarker.Assembly.ExportedTypes.Where(Predicate))
+        var viewModelsBases = scanMarker.Assembly.ExportedTypes.Where(ViewModelBasePredicate);
+        var dockables = scanMarker.Assembly.ExportedTypes.Where(DockablePredicate);
+
+        foreach (var type in viewModelsBases.Union(dockables))
         {
             services.AddTransient(type);
         }
