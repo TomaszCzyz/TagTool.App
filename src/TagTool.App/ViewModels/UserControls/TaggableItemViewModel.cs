@@ -58,7 +58,10 @@ public partial class TaggableItemViewModel : ViewModelBase
         }
 
         _tagService = App.Current.Services.GetRequiredService<ITagToolBackend>().GetTagService();
-        var _ = Dispatcher.UIThread.InvokeAsync(UpdateTags);
+        // var _ = Dispatcher.UIThread.InvokeAsync(UpdateTags);
+
+        DisplayName = "TestDisplayName";
+        AssociatedTags.AddRange(new[] { new Tag("Tag1"), new Tag("Tag2"), new Tag("Tag3") });
     }
 
     public TaggableItemViewModel(TagService.TagServiceClient tagServiceClient)
