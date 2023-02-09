@@ -2,10 +2,12 @@
     xmlns="https://github.com/avaloniaui"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:TagTool.App"
+    xmlns:system="clr-namespace:System;assembly=System.Runtime"
     x:Class="TagTool.App.App">
     <Application.DataTemplates>
         <local:ViewLocator />
     </Application.DataTemplates>
+
     <Application.Styles>
         <FluentTheme Mode="Light" />
         <StyleInclude Source="avares://Dock.Avalonia/Themes/DockFluentTheme.axaml" />
@@ -17,8 +19,20 @@
         <StyleInclude Source="/Views/Styles/Button.axaml" />
         <StyleInclude Source="/Views/Styles/TextBox.axaml" />
         <StyleInclude Source="/Views/Styles/DataGridRow.axaml" />
+
+        <Style Selector="DocumentControl /template/ Grid#PART_Grid">
+            <Setter Property="Height" Value="0" />
+        </Style>
+        <Style Selector="DocumentTabStrip /template/ Button#PART_ButtonCreate">
+            <Setter Property="VerticalAlignment" Value="Center" />
+        </Style>
     </Application.Styles>
     <Application.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceInclude Source="/Views/Styles/MyDocumentTabStripItem.axaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
         <Color x:Key="MyLightPrimary900">#04272F</Color>
         <Color x:Key="MyLightPrimary800">#073F5F</Color>
         <Color x:Key="MyLightPrimary700">#0B5E8E</Color>
@@ -39,5 +53,13 @@
         <!-- global font size -->
         <x:Double x:Key="ControlContentThemeFontSize">14</x:Double>
         <x:Double x:Key="AppContentFontSize">16</x:Double>
+        <Color x:Key="AppFontColor">#333</Color>
+        <system:Double x:Key="DockFontSizeNormal">14</system:Double>
+
+        <SolidColorBrush x:Key="DockApplicationAccentBrushLow">#007ACC</SolidColorBrush>
+        <SolidColorBrush x:Key="DockApplicationAccentBrushMed">#DADADA</SolidColorBrush>
+        <SolidColorBrush x:Key="DockApplicationAccentBrushHigh">#52B0EF</SolidColorBrush>
+        <SolidColorBrush x:Key="DockApplicationAccentForegroundBrush">#F0F0F0</SolidColorBrush>
+        <SolidColorBrush x:Key="DockApplicationAccentBrushIndicator">#007ACC</SolidColorBrush>
     </Application.Resources>
 </Application>

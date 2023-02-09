@@ -67,6 +67,7 @@ public partial class TaggableItemViewModel : ViewModelBase
     public TaggableItemViewModel(TagService.TagServiceClient tagServiceClient)
     {
         _tagService = tagServiceClient;
+        // todo: it freezes UI for very large folders!!!
         var _ = Dispatcher.UIThread.InvokeAsync(UpdateTags);
     }
 
