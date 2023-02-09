@@ -10,12 +10,12 @@ using TagTool.App.Views.Dialogs;
 
 namespace TagTool.App.Views.UserControls;
 
-public partial class TaggedItemsSearchView : UserControl
+public partial class TaggableItemsSearchView : UserControl
 {
     private TextBox? _textBox;
-    private TaggedItemsSearchViewModel ViewModel => (TaggedItemsSearchViewModel)DataContext!;
+    private TaggableItemsSearchViewModel ViewModel => (TaggableItemsSearchViewModel)DataContext!;
 
-    public TaggedItemsSearchView()
+    public TaggableItemsSearchView()
     {
         InitializeComponent();
     }

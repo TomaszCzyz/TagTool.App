@@ -27,14 +27,14 @@
             ColumnDefinitions="*"
             RowDefinitions="*,Auto,*">
 
-            <userControls:TaggedItemsSearchView Grid.Row="0" />
+            <userControls:TaggableItemsSearchView Grid.Row="0" />
 
             <GridSplitter
                 Grid.Row="1"
                 Height="4"
                 ResizeDirection="Rows" />
 
-            <userControls:TaggedItemsSearchView Grid.Row="2" />
+            <userControls:TaggableItemsSearchView Grid.Row="2" />
         </Grid>
 
         <GridSplitter

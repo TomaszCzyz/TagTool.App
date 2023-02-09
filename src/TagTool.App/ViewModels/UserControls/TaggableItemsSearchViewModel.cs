@@ -16,7 +16,7 @@ using TagTool.Backend;
 
 namespace TagTool.App.ViewModels.UserControls;
 
-public partial class TaggedItemsSearchViewModel : Document, IDisposable
+public partial class TaggableItemsSearchViewModel : Document, IDisposable
 {
     private readonly TagSearchService.TagSearchServiceClient _tagSearchService;
     private readonly TagService.TagServiceClient _tagService;
@@ -52,7 +52,7 @@ public partial class TaggedItemsSearchViewModel : Document, IDisposable
     /// <summary>
     ///     ctor for XAML previewer
     /// </summary>
-    public TaggedItemsSearchViewModel()
+    public TaggableItemsSearchViewModel()
     {
         if (!Design.IsDesignMode)
         {
@@ -67,7 +67,7 @@ public partial class TaggedItemsSearchViewModel : Document, IDisposable
     }
 
     [UsedImplicitly]
-    public TaggedItemsSearchViewModel(ITagToolBackend tagToolBackend, IWordHighlighter wordHighlighter)
+    public TaggableItemsSearchViewModel(ITagToolBackend tagToolBackend, IWordHighlighter wordHighlighter)
     {
         _tagSearchService = tagToolBackend.GetSearchService();
         _tagService = tagToolBackend.GetTagService();

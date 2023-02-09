@@ -26,7 +26,7 @@ public partial class MyDocumentDock : DocumentDock
         var (documentType, tabName) = type switch
         {
             "My Tags" => (typeof(MyTagsViewModel), "MyTags"),
-            "Search" => (typeof(TaggedItemsSearchViewModel), "Search"),
+            "Search" => (typeof(TaggableItemsSearchViewModel), "Search"),
             "File Explorer" => (typeof(FileSystemViewModel), "FileExplorer"),
             _ => throw new ArgumentOutOfRangeException(nameof(type), type, null)
         };

@@ -11,9 +11,9 @@
     xmlns:templatedControls="clr-namespace:TagTool.App.Views.TemplatedControls"
     xmlns:userControls="clr-namespace:TagTool.App.ViewModels.UserControls"
     xmlns:userControls1="clr-namespace:TagTool.App.Views.UserControls"
-    x:Class="TagTool.App.Views.UserControls.TaggedItemsSearchView"
+    x:Class="TagTool.App.Views.UserControls.TaggableItemsSearchView"
     x:CompileBindings="True"
-    x:DataType="userControls:TaggedItemsSearchViewModel"
+    x:DataType="userControls:TaggableItemsSearchViewModel"
     x:Name="UserControlRoot"
     d:DesignWidth="700"
     d:DesignHeight="700"
@@ -51,7 +51,7 @@
     </UserControl.Styles>
 
     <Design.DataContext>
-        <userControls:TaggedItemsSearchViewModel />
+        <userControls:TaggableItemsSearchViewModel />
     </Design.DataContext>
 
     <Panel>
