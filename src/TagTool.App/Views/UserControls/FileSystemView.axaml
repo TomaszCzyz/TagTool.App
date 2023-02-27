@@ -201,60 +201,36 @@
         </Grid>
 
         <!-- File system data grid -->
-        <DataGrid
+        <ListBox
             Name="DataGrid"
             Grid.Row="1"
-            CanUserReorderColumns="True"
-            CanUserResizeColumns="True"
-            CanUserSortColumns="True"
-            ColumnHeaderHeight="16"
+            Focusable="True"
             FontSize="{DynamicResource AppContentFontSize}"
             Items="{Binding Items}"
             SelectedItem="{Binding SelectedItem}"
-            SelectionMode="Extended"
+            SelectionMode="Multiple"
             LostFocus="DataGrid_OnLostFocus"
             SelectionChanged="DataGrid_OnSelectionChanged">
-            <DataGrid.KeyBindings>
-                <KeyBinding Command="{Binding NavigateCommand}" Gesture="Enter" />
-            </DataGrid.KeyBindings>
-            <DataGrid.Columns>
-                <DataGridTemplateColumn
-                    Width="*"
-                    CanUserSort="True"
-                    CustomSortComparer="{StaticResource TaggableItemViewModelComparer}"
-                    Header="Name"
-                    IsReadOnly="True">
-                    <DataTemplate x:CompileBindings="False" DataType="userControls:TaggableItemViewModel">
-                        <userControls1:TaggableItemView FontSize="{Binding $parent[DataGrid].FontSize}" AttachedToVisualTree="Visual_OnAttachedToVisualTree" />
-                    </DataTemplate>
-                </DataGridTemplateColumn>
+            <ListBox.DataTemplates>
+                <DataTemplate x:CompileBindings="False" DataType="userControls:TaggableItemViewModel">
+                    <Grid ColumnDefinitions="*,Auto,75">
+                        <userControls1:TaggableItemView FontSize="14" AttachedToVisualTree="Visual_OnAttachedToVisualTree" />
 
-                <DataGridTemplateColumn
-                    Width="Auto"
-                    CanUserSort="True"
-                    Header="Date Created"
-                    IsReadOnly="True">
-                    <DataTemplate x:CompileBindings="False" DataType="userControls:TaggableItemViewModel">
                         <TextBlock
+                            Grid.Column="1"
                             VerticalAlignment="Center"
-                            FontSize="{Binding $parent[DataGrid].FontSize}"
                             Text="{Binding DateCreated, StringFormat=\{0:yyyy/MM/dd hh:mm:ss\}}"
                             TextAlignment="Left" />
-                    </DataTemplate>
-                </DataGridTemplateColumn>
 
-                <DataGridTemplateColumn Header="Size" IsReadOnly="True">
-                    <DataTemplate x:CompileBindings="False" DataType="userControls:TaggableItemViewModel">
                         <TextBlock
+                            Grid.Column="2"
                             VerticalAlignment="Center"
-                            FontSize="{Binding $parent[DataGrid].FontSize}"
                             Text="{Binding Size, Converter={StaticResource FileSizeToStringConverter}}"
                             TextAlignment="Right" />
-
-                    </DataTemplate>
-                </DataGridTemplateColumn>
-            </DataGrid.Columns>
-        </DataGrid>
+                    </Grid>
+                </DataTemplate>
+            </ListBox.DataTemplates>
+        </ListBox>
 
         <!-- QuickSearch text field -->
         <Border

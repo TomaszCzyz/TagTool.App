@@ -16,6 +16,12 @@ public partial class MainWindow : Window
 #if DEBUG
         this.AttachDevTools();
 #endif
+        AddHandler(KeyDownEvent, EscapePressedHandler);
+
+        void EscapePressedHandler(object? sender, KeyEventArgs args)
+        {
+            if (args.Key == Key.Escape) Focus();
+        }
     }
 
     private void InitializeComponent()

@@ -164,7 +164,7 @@ public partial class FileSystemViewModel : Document
                 return;
             }
 
-            _quickSearchSelectedItem = SelectedItem = _highlightedItems[0];
+            _quickSearchSelectedItem = SelectedItem = _highlightedItems.FirstOrDefault();
         }
     }
 
@@ -187,7 +187,7 @@ public partial class FileSystemViewModel : Document
             return;
         }
 
-        _quickSearchSelectedItem = SelectedItem = _highlightedItems[0];
+        _quickSearchSelectedItem = SelectedItem = _highlightedItems.FirstOrDefault();
     }
 
     [RelayCommand(CanExecute = nameof(HasQuickSearchResults))]
@@ -201,7 +201,7 @@ public partial class FileSystemViewModel : Document
             return;
         }
 
-        _quickSearchSelectedItem = SelectedItem = _highlightedItems[^1];
+        _quickSearchSelectedItem = SelectedItem = _highlightedItems.LastOrDefault();
     }
 
     [RelayCommand]

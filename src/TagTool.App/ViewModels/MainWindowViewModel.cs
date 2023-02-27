@@ -144,13 +144,6 @@ public partial class MainWindowViewModel : ViewModelBase
     }
 
     [RelayCommand]
-    private void ResetFocus(object element)
-    {
-        _focusManager.Focus((InputElement)element);
-        _previouslyFocusedElement = null;
-    }
-
-    [RelayCommand]
     private void FocusNextSearchTab(object element)
     {
         var focusTargets = FindAllVisibleSearchBars((Window)element);

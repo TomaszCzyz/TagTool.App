@@ -19,10 +19,6 @@
     Title="TagTool.App">
     <Window.KeyBindings>
         <KeyBinding
-            Command="{ReflectionBinding ResetFocusCommand}"
-            CommandParameter="{Binding #RootWindow}"
-            Gesture="Escape" />
-        <KeyBinding
             Command="{ReflectionBinding FocusNextSearchTabCommand}"
             CommandParameter="{Binding #RootWindow}"
             Gesture="Ctrl+Q" />
