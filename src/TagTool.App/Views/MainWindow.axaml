@@ -16,7 +16,8 @@
     ExtendClientAreaToDecorationsHint="True"
     FontFamily="avares://TagTool.App/Assets/Fonts#Lato"
     Icon="/Assets/avalonia-logo.ico"
-    Title="TagTool.App">
+    Title="TagTool.App"
+    DragDrop.AllowDrop="True">
     <Window.KeyBindings>
         <KeyBinding
             Command="{ReflectionBinding FocusNextSearchTabCommand}"

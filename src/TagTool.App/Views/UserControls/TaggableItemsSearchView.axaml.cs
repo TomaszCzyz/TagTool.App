@@ -1,4 +1,6 @@
-﻿using Avalonia.Controls;
+﻿using System.Diagnostics;
+using Avalonia.Controls;
+using Avalonia.Controls.Primitives;
 using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.LogicalTree;
@@ -18,11 +20,54 @@ public partial class TaggableItemsSearchView : UserControl
     public TaggableItemsSearchView()
     {
         InitializeComponent();
+
+        TopMostGrid.AddHandler(DragDrop.DropEvent, Drop);
+        TopMostGrid.AddHandler(DragDrop.DragOverEvent, DragOver);
+    }
+
+    protected override void OnApplyTemplate(TemplateAppliedEventArgs e)
+    {
+        var window = (Window)VisualRoot!;
+        window.AddHandler(DragDrop.DragEnterEvent, (_, _) => DragDropInfoAreaBorder.IsVisible = true);
+        window.AddHandler(DragDrop.DragLeaveEvent, (_, _) => DragDropInfoAreaBorder.IsVisible = false);
+        window.AddHandler(DragDrop.DropEvent, (_, _) => DragDropInfoAreaBorder.IsVisible = false);
+
+        base.OnApplyTemplate(e);
     }
 
     private void InitializeComponent()
     {
         AvaloniaXamlLoader.Load(this);
+    }
+
+    private void Drop(object? sender, DragEventArgs e)
+    {
+        if (!e.Data.Contains(DataFormats.FileNames)) return;
+        if (e.Data.GetFileNames() is not { } paths) return;
+
+        foreach (var path in paths)
+        {
+            FileSystemInfo fileSystemInfo = Directory.Exists(path) ? new DirectoryInfo(path) : new FileInfo(path);
+            Debug.WriteLine(fileSystemInfo.FullName);
+        }
+    }
+
+    private void DragOver(object? sender, DragEventArgs e)
+    {
+        // Only allow Copy or Link as Drop Operations.
+        e.DragEffects &= (DragDropEffects.Copy | DragDropEffects.Link);
+
+        // Only allow if the dragged data contains text or filenames.
+        if (!e.Data.Contains(DataFormats.Text) && !e.Data.Contains(DataFormats.FileNames))
+        {
+            e.DragEffects = DragDropEffects.None;
+        }
+    }
+
+    private async void AdvancedTaggingFileButton_OnClick(object? sender, RoutedEventArgs e)
+    {
+        var dialog = new AdvancedTaggingDialog();
+        await dialog.ShowDialog((Window)VisualRoot!);
     }
 
     private void Button_OnClick(object? sender, RoutedEventArgs e)

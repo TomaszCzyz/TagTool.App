@@ -56,13 +56,38 @@
 
     <Panel>
         <Grid
+            Name="TopMostGrid"
+            DragDrop.AllowDrop="True"
             Margin="4"
+            Background="#00bbbbbb"
             ColumnDefinitions="*"
             RowDefinitions="Auto,Auto,*">
+
+            <Border
+                Name="DragDropInfoAreaBorder"
+                Grid.RowSpan="3"
+                Grid.Column="0"
+                DragDrop.AllowDrop="True"
+                Background="#aaa"
+                BorderBrush="#888"
+                BorderDashArray="5,3"
+                BorderThickness="8"
+                CornerRadius="10"
+                IsVisible="False"
+                Opacity="0.6">
+
+                <TextBlock
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    FontSize="20"
+                    Text="Drop file(s) or folder(s) here" />
+
+            </Border>
 
             <!-- Search Bar -->
             <Border
                 Name="SearchBarBorder"
+                Grid.Row="0"
                 Grid.Column="0"
                 Classes="SearchBox">
                 <Border.Transitions>
@@ -71,7 +96,7 @@
                     </Transitions>
                 </Border.Transitions>
                 <Grid
-                    Name="TopMostGrid"
+                    Name="SearchBarGrid"
                     VerticalAlignment="Top"
                     ColumnDefinitions="Auto,*,Auto"
                     RowDefinitions="Auto">
@@ -214,10 +239,10 @@
                                         Name="LogicalOperatorToggleButton"
                                         Classes="LogicalOperatorButton"
                                         Padding="1 0"
-                                        FontSize="18"
-                                        Foreground="{StaticResource MyLightSecondary500}"
                                         Background="Transparent"
                                         Content="{Binding Op, Mode=TwoWay}"
+                                        FontSize="18"
+                                        Foreground="{StaticResource MyLightSecondary500}"
                                         Click="LogicalOperatorToggleButton_OnClick" />
 
                                 </DataTemplate>
@@ -263,7 +288,7 @@
                     <Popup
                         Name="SearchHelperPopup"
                         Grid.Column="0"
-                        Width="{Binding #TopMostGrid.Bounds.Width}"
+                        Width="{Binding #SearchBarGrid.Bounds.Width}"
                         IsLightDismissEnabled="True"
                         IsOpen="False"
                         PlacementGravity="Bottom"
