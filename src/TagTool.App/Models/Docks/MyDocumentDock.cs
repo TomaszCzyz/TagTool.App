@@ -28,6 +28,7 @@ public partial class MyDocumentDock : DocumentDock
             "My Tags" => (typeof(MyTagsViewModel), "MyTags"),
             "Search" => (typeof(TaggableItemsSearchViewModel), "Search"),
             "File Explorer" => (typeof(FileSystemViewModel), "FileExplorer"),
+            "Items Tagger" => (typeof(ItemsTaggingTabViewModel), "ItemsTagger"),
             _ => throw new ArgumentOutOfRangeException(nameof(type), type, null)
         };
 

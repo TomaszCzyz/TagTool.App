@@ -1,5 +1,4 @@
-﻿using System.Diagnostics;
-using System.Globalization;
+﻿using System.Globalization;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Input;
@@ -9,7 +8,6 @@ using Avalonia.Markup.Xaml;
 using Avalonia.VisualTree;
 using TagTool.App.Core.Helpers;
 using TagTool.App.ViewModels.UserControls;
-using TagTool.App.Views.Dialogs;
 
 namespace TagTool.App.Views.UserControls;
 

@@ -42,12 +42,11 @@ public partial class TaggableItemsSearchView : UserControl
 
     private void Drop(object? sender, DragEventArgs e)
     {
-        if (!e.Data.Contains(DataFormats.FileNames)) return;
-        if (e.Data.GetFileNames() is not { } paths) return;
+        if (!e.Data.Contains(DataFormats.FileNames) || e.Data.GetFileNames() is not { } fullFileNames) return;
 
-        foreach (var path in paths)
+        foreach (var path in fullFileNames)
         {
-            FileSystemInfo fileSystemInfo = Directory.Exists(path) ? new DirectoryInfo(path) : new FileInfo(path);
+            var fileSystemInfo = (FileSystemInfo)(Directory.Exists(path) ? new DirectoryInfo(path) : new FileInfo(path));
             Debug.WriteLine(fileSystemInfo.FullName);
         }
     }

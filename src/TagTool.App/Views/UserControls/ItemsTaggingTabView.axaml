@@ -1,0 +1,69 @@
+﻿<UserControl
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:userControls="clr-namespace:TagTool.App.ViewModels.UserControls"
+    xmlns:userControls1="clr-namespace:TagTool.App.Views.UserControls"
+    x:Class="TagTool.App.Views.UserControls.ItemsTaggingTabView"
+    d:DesignWidth="800"
+    d:DesignHeight="450"
+    mc:Ignorable="d">
+    <UserControl.Styles>
+        <Style Selector="Border.Outline">
+            <Setter Property="CornerRadius" Value="4" />
+            <Setter Property="BorderBrush">
+                <SolidColorBrush Opacity="0.6" Color="Gray" />
+            </Setter>
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="ClipToBounds" Value="True" />
+        </Style>
+        <Style Selector="GridSplitter">
+            <Setter Property="Background" Value="Transparent" />
+        </Style>
+    </UserControl.Styles>
+
+    <Design.DataContext>
+        <userControls:ItemsTaggingTabViewModel />
+    </Design.DataContext>
+
+    <Grid Margin="4" RowDefinitions="Auto,*">
+        <CheckBox Content="Use internal storage" IsChecked="True" />
+
+        <Border
+            Name="DragDropInfoAreaBorder"
+            Grid.Row="1"
+            Grid.Column="0"
+            Background="#bbb"
+            BorderBrush="#666"
+            BorderDashArray="6,3"
+            BorderThickness="8"
+            CornerRadius="4"
+            IsVisible="False"
+            Opacity="0.7"
+            ZIndex="1">
+
+            <TextBlock
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                FontSize="20"
+                Text="Drop file(s) or folder(s) here" />
+
+        </Border>
+
+        <Border
+            Grid.Row="1"
+            DragDrop.AllowDrop="True"
+            Classes="Outline">
+
+            <ListBox Name="ItemsListBox" Items="{Binding ItemsToTag}">
+                <ListBox.DataTemplates>
+                    <DataTemplate x:CompileBindings="False" DataType="userControls:TaggableItemViewModel">
+                        <userControls1:TaggableItemView FontSize="14" />
+                    </DataTemplate>
+                </ListBox.DataTemplates>
+            </ListBox>
+        </Border>
+    </Grid>
+</UserControl>
+
