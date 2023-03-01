@@ -47,6 +47,7 @@ public partial class TaggableItemsSearchViewModel : Document, IDisposable
 
     public ObservableCollection<object> EnteredTags { get; set; } = new();
 
+    // todo: rename it Items or something like that
     public ObservableCollection<TaggableItemViewModel> Files { get; set; } = new();
 
     public ObservableCollection<string> AvailableSpacialTags { get; set; }
@@ -165,6 +166,27 @@ public partial class TaggableItemsSearchViewModel : Document, IDisposable
     }
 
     [RelayCommand]
+    private async Task AddNewItems(IEnumerable<FileSystemInfo> infos)
+    {
+        // todo: check if this item is already tagged; if yes.. then popup to make sure user wants to add tag "JustAdded"
+        foreach (var info in infos)
+        {
+            const string tagName = "JustAdded";
+            var tagRequest = info switch
+            {
+                DirectoryInfo dirInfo => new TagRequest { TagNames = { tagName }, FolderInfo = new FolderDescription { Path = dirInfo.FullName } },
+                FileInfo fileInfo => new TagRequest { TagNames = { tagName }, FileInfo = new FileDescription { Path = fileInfo.FullName } },
+                _ => throw new ArgumentOutOfRangeException(nameof(infos))
+            };
+
+            var reply = _tagService.Tag(tagRequest);
+            if (!reply.Result.IsSuccess) continue;
+
+            await CommitSearch();
+        }
+    }
+
+    [RelayCommand]
     private void AddSpecialTag(NameSpecialTag tag)
     {
         SearchText = "";
@@ -172,6 +194,7 @@ public partial class TaggableItemsSearchViewModel : Document, IDisposable
         EnteredTags.Insert(EnteredTags.Count - 1, new LogicalOperator());
     }
 
+    // todo: rename method name to be more descriptive, like "AddTagToSearchField" and check command usages
     [RelayCommand]
     private void AddTag()
     {

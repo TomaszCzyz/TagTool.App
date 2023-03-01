@@ -44,11 +44,12 @@ public partial class TaggableItemsSearchView : UserControl
     {
         if (!e.Data.Contains(DataFormats.FileNames) || e.Data.GetFileNames() is not { } fullFileNames) return;
 
-        foreach (var path in fullFileNames)
-        {
-            var fileSystemInfo = (FileSystemInfo)(Directory.Exists(path) ? new DirectoryInfo(path) : new FileInfo(path));
-            Debug.WriteLine(fileSystemInfo.FullName);
-        }
+        var fileSystemInfos = fullFileNames
+            .Select(path => (FileSystemInfo)(Directory.Exists(path)
+                ? new DirectoryInfo(path)
+                : new FileInfo(path)));
+
+        ViewModel.AddNewItemsCommand.Execute(fileSystemInfos);
     }
 
     private void DragOver(object? sender, DragEventArgs e)

@@ -72,35 +72,41 @@ public partial class TaggableItemViewModel : ViewModelBase
     }
 
     [RelayCommand]
-    private async Task TagIt(string tagName)
+    private void TagIt(string tagName)
     {
         var tagRequest = TaggedItemType == TaggedItemType.Folder
             ? new TagRequest { TagNames = { tagName }, FolderInfo = new FolderDescription { Path = Location } }
             : new TagRequest { TagNames = { tagName }, FileInfo = new FileDescription { Path = Location } };
 
-        var streamingCall = _tagService.Tag();
+        var tagReply = _tagService.Tag(tagRequest);
 
-        await streamingCall.RequestStream.WriteAsync(tagRequest);
-        await streamingCall.RequestStream.CompleteAsync();
-
-        // todo: add only if success
-        AssociatedTags.Add(new Tag(tagName));
+        if (tagReply.Result.IsSuccess)
+        {
+            AssociatedTags.Add(new Tag(tagName));
+        }
+        else
+        {
+            Debug.WriteLine($"Unable to tag item {tagRequest}");
+        }
     }
 
     [RelayCommand]
-    private async Task UntagItem(string tagName)
+    private void UntagItem(string tagName)
     {
         var untagRequest = TaggedItemType == TaggedItemType.Folder
             ? new UntagRequest { TagNames = { tagName }, FolderInfo = new FolderDescription { Path = Location } }
             : new UntagRequest { TagNames = { tagName }, FileInfo = new FileDescription { Path = Location } };
 
-        var streamingCall = _tagService.Untag();
+        var reply = _tagService.Untag(untagRequest);
 
-        await streamingCall.RequestStream.WriteAsync(untagRequest);
-        await streamingCall.RequestStream.CompleteAsync();
-
-        // todo: remove only if success
-        AssociatedTags.Remove(new Tag(tagName));
+        if (reply.Result.IsSuccess)
+        {
+            AssociatedTags.Remove(new Tag(tagName));
+        }
+        else
+        {
+            Debug.WriteLine($"Unable to tag item {untagRequest}");
+        }
     }
 
     private void UpdateTags()
