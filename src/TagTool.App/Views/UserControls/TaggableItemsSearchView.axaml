@@ -428,59 +428,34 @@
             </Border>
 
             <!-- SearchResults -->
-            <DataGrid
-                Name="SearchResultsDataGrid"
-                Grid.Row="2"
-                CanUserReorderColumns="True"
-                CanUserResizeColumns="True"
-                CanUserSortColumns="True"
-                ColumnHeaderHeight="16"
+            <ListBox
+                Name="DataGrid"
+                Grid.Row="1"
+                Background="Transparent"
+                Focusable="True"
                 FontSize="{DynamicResource AppContentFontSize}"
-                HorizontalScrollBarVisibility="Auto"
                 Items="{Binding Files}"
-                RowBackground="Transparent">
-                <DataGrid.Columns>
-                    <!-- <DataGridCheckBoxColumn Width="60" Header="✔" CanUserResize="False" /> -->
-                    <DataGridTemplateColumn
-                        Width="*"
-                        CanUserSort="True"
-                        Header="Name"
-                        IsReadOnly="True">
-                        <DataTemplate DataType="userControls:TaggableItemViewModel">
-                            <userControls1:TaggableItemView Margin="-2 0 0 0" FontSize="{Binding $parent[DataGrid].FontSize}" />
-                        </DataTemplate>
-                    </DataGridTemplateColumn>
+                SelectionMode="Multiple">
+                <ListBox.DataTemplates>
+                    <DataTemplate x:CompileBindings="False" DataType="userControls:TaggableItemViewModel">
+                        <Grid ColumnDefinitions="*,Auto,75">
+                            <userControls1:TaggableItemView FontSize="14" />
 
-                    <DataGridTemplateColumn
-                        Width="Auto"
-                        CanUserSort="True"
-                        Header="Date Created"
-                        IsReadOnly="True">
-                        <DataTemplate x:CompileBindings="False" DataType="userControls:TaggableItemViewModel">
                             <TextBlock
+                                Grid.Column="1"
                                 VerticalAlignment="Center"
-                                FontSize="{Binding $parent[DataGrid].FontSize}"
                                 Text="{Binding DateCreated, StringFormat=\{0:yyyy/MM/dd hh:mm:ss\}}"
                                 TextAlignment="Left" />
 
-                        </DataTemplate>
-                    </DataGridTemplateColumn>
-
-                    <DataGridTemplateColumn
-                        Width="100"
-                        Header="Size"
-                        IsReadOnly="True">
-                        <DataTemplate DataType="userControls:TaggableItemViewModel">
                             <TextBlock
+                                Grid.Column="2"
                                 VerticalAlignment="Center"
-                                FontSize="{Binding $parent[DataGrid].FontSize}"
                                 Text="{Binding Size, Converter={StaticResource FileSizeToStringConverter}}"
                                 TextAlignment="Right" />
-
-                        </DataTemplate>
-                    </DataGridTemplateColumn>
-                </DataGrid.Columns>
-            </DataGrid>
+                        </Grid>
+                    </DataTemplate>
+                </ListBox.DataTemplates>
+            </ListBox>
         </Grid>
     </Panel>
 </UserControl>

@@ -258,6 +258,7 @@
             </DockPanel>
         </Border>
 
+        <!-- Footer -->
         <StackPanel Grid.Row="2" Orientation="Horizontal">
             <TextBlock
                 Margin="5 2 0 0"
