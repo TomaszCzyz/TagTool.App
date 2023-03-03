@@ -429,7 +429,7 @@
 
             <!-- SearchResults -->
             <ListBox
-                Name="DataGrid"
+                Name="SearchResultsDataGrid"
                 Grid.Row="1"
                 Background="Transparent"
                 Focusable="True"
@@ -438,7 +438,7 @@
                 SelectionMode="Multiple">
                 <ListBox.DataTemplates>
                     <DataTemplate x:CompileBindings="False" DataType="userControls:TaggableItemViewModel">
-                        <Grid ColumnDefinitions="*,Auto,75">
+                        <Grid ColumnDefinitions="*,Auto,75" DragDrop.AllowDrop="True">
                             <userControls1:TaggableItemView FontSize="14" />
 
                             <TextBlock

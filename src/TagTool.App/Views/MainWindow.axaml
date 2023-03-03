@@ -4,20 +4,26 @@
     xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:userControls="clr-namespace:TagTool.App.Views.UserControls"
+    xmlns:viewModels="clr-namespace:TagTool.App.ViewModels.UserControls"
     xmlns:vm="using:TagTool.App.ViewModels"
     x:Class="TagTool.App.Views.MainWindow"
     x:CompileBindings="True"
     x:Name="RootWindow"
     d:DesignWidth="1400"
     d:DesignHeight="700"
+    DragDrop.AllowDrop="True"
     Background="{StaticResource MyLightPrimary200}"
     ExtendClientAreaChromeHints="Default"
     ExtendClientAreaTitleBarHeightHint="-1"
     ExtendClientAreaToDecorationsHint="True"
     FontFamily="avares://TagTool.App/Assets/Fonts#Lato"
     Icon="/Assets/avalonia-logo.ico"
-    Title="TagTool.App"
-    DragDrop.AllowDrop="True">
+    Title="TagTool.App">
+    <Window.DataTemplates>
+        <DataTemplate DataType="viewModels:NotificationViewModel">
+            <userControls:CustomNotificationView />
+        </DataTemplate>
+    </Window.DataTemplates>
     <Window.KeyBindings>
         <KeyBinding
             Command="{ReflectionBinding FocusNextSearchTabCommand}"

@@ -1,23 +1,29 @@
 ﻿using System.Collections.ObjectModel;
 using System.Diagnostics;
 using Avalonia.Controls;
+using Avalonia.Controls.Notifications;
 using Avalonia.Input;
 using Avalonia.VisualTree;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using CommunityToolkit.Mvvm.Messaging;
 using Dock.Model.Controls;
 using Dock.Model.Core;
 using JetBrains.Annotations;
 using Microsoft.Extensions.DependencyInjection;
 using TagTool.App.Core.Extensions;
 using TagTool.App.Models;
+using TagTool.App.Models.Messages;
+using TagTool.App.ViewModels.UserControls;
 using TagTool.App.Views.UserControls;
 
 namespace TagTool.App.ViewModels;
 
-public partial class MainWindowViewModel : ViewModelBase
+public partial class MainWindowViewModel : ViewModelBase, IRecipient<NewNotificationMessage>
 {
     private readonly IFocusManager _focusManager;
+
+    public WindowNotificationManager? NotificationManager { get; set; }
 
     [ObservableProperty]
     private GridLength _activeLeftToolWidth = new(250);
@@ -60,6 +66,8 @@ public partial class MainWindowViewModel : ViewModelBase
 
     private void Initialize()
     {
+        WeakReferenceMessenger.Default.Register(this);
+
         Layout = _dockFactory.CreateLayout();
         if (Layout is { })
         {
@@ -170,4 +178,14 @@ public partial class MainWindowViewModel : ViewModelBase
             .Where(logical => logical.GetType() == typeof(SimpleTagsBar) && logical.IsVisible)
             .Select(visual => visual.FindDescendantOfType<AutoCompleteBox>())
             .ToArray();
+
+    public void Receive(NewNotificationMessage message)
+    {
+        // NotificationManager?.Show(new Notification("Welcome", "Avalonia now supports Notifications."));
+        NotificationManager?.Show(
+            new NotificationViewModel
+            {
+                Title = "Hey There!", Message = message.Value.Message, NotificationManager = NotificationManager,
+            });
+    }
 }

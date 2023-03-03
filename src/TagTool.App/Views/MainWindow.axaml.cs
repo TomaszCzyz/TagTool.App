@@ -1,15 +1,19 @@
 using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Controls.Notifications;
 using Avalonia.Controls.Primitives;
 using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.LogicalTree;
 using Avalonia.Markup.Xaml;
+using TagTool.App.ViewModels;
 
 namespace TagTool.App.Views;
 
 public partial class MainWindow : Window
 {
+    private MainWindowViewModel ViewModel => (MainWindowViewModel)DataContext!;
+
     public MainWindow()
     {
         InitializeComponent();
@@ -27,6 +31,14 @@ public partial class MainWindow : Window
     private void InitializeComponent()
     {
         AvaloniaXamlLoader.Load(this);
+    }
+
+    protected override void OnApplyTemplate(TemplateAppliedEventArgs e)
+    {
+        ViewModel.NotificationManager = new WindowNotificationManager((Window)VisualRoot!)
+        {
+            Position = NotificationPosition.BottomLeft, MaxItems = 3, Margin = new Thickness(0, 0, 15, 40)
+        };
     }
 
     private bool _mouseDownForWindowMoving;
