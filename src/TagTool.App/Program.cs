@@ -1,8 +1,5 @@
-﻿using System.Globalization;
-using Avalonia;
+﻿using Avalonia;
 using Avalonia.Svg.Skia;
-using Serilog;
-using Serilog.Core.Enrichers;
 
 namespace TagTool.App;
 
@@ -16,8 +13,6 @@ public static class Program
 
     private static AppBuilder BuildAvaloniaApp()
     {
-        SetupSerilog();
-
         // todo: check if it is needed in non-debug mode
         GC.KeepAlive(typeof(SvgImageExtension).Assembly);
         GC.KeepAlive(typeof(Avalonia.Svg.Skia.Svg).Assembly);
@@ -27,22 +22,5 @@ public static class Program
             .LogToTrace();
 
         return appBuilder;
-    }
-
-    private static void SetupSerilog()
-    {
-        var logsDbPath = Path.Combine(
-            Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
-            "TagToolBackend",
-            "Logs",
-            "applog.db");
-
-        Log.Logger = new LoggerConfiguration()
-            .MinimumLevel.Verbose()
-            .MinimumLevel.Override("Microsoft", Serilog.Events.LogEventLevel.Warning)
-            .Enrich.FromLogContext()
-            .Enrich.With(new PropertyEnricher("ApplicationName", "TagToolApp"))
-            .WriteTo.SQLite(logsDbPath, storeTimestampInUtc: true, batchSize: 10, formatProvider: CultureInfo.CurrentCulture)
-            .CreateLogger();
     }
 }

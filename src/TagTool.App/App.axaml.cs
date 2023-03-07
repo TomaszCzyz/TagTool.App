@@ -1,10 +1,14 @@
+using System.Globalization;
 using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
 using Dock.Model.Core;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using Serilog;
+using Serilog.Core.Enrichers;
+using Serilog.Events;
 using TagTool.App.Core.Services;
 using TagTool.App.Models;
 using TagTool.App.Models.Docks;
@@ -47,6 +51,14 @@ public class App : Application
 
         var configuration = CreateConfiguration();
 
+        SetupSerilog();
+
+        services.AddLogging(x =>
+        {
+            x.SetMinimumLevel(LogLevel.Trace);
+            x.AddSerilog(Log.Logger, dispose: true);
+        });
+
         services.AddSingleton(configuration);
         services.AddSingleton<IFileIconProvider, DefaultFileIconProvider>();
         services.AddSingleton<IWordHighlighter, WordHighlighter>();
@@ -69,6 +81,31 @@ public class App : Application
         => new ConfigurationBuilder()
             .AddJsonFile("defaultAppSettings.json", optional: false, reloadOnChange: true)
             .Build();
+
+    private static void SetupSerilog()
+    {
+        // var logsDbPath = Path.Combine(
+        //     Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
+        //     "TagToolBackend",
+        //     "Logs",
+        //     "applog.db");
+
+        const string outputTemplate = "[{Timestamp:HH:mm:ss} {Level:u3} {SourceContext}]{NewLine} {Message:lj}{NewLine}{Exception}";
+
+        Log.Logger = new LoggerConfiguration()
+            .MinimumLevel.Verbose()
+            .MinimumLevel.Override("Microsoft", LogEventLevel.Warning)
+            .Enrich.FromLogContext()
+            .Enrich.With(new PropertyEnricher("ApplicationName", "TagToolApp"))
+            .WriteTo.Debug(formatProvider: CultureInfo.InvariantCulture, outputTemplate: outputTemplate)
+            .WriteTo.File(
+                @"C:\Users\tczyz\Documents\TagToolApp\TagToolAppLogs.txt",
+                outputTemplate: outputTemplate,
+                formatProvider: CultureInfo.InvariantCulture,
+                shared: true)
+            // .WriteTo.SQLite(logsDbPath, storeTimestampInUtc: true, batchSize: 10, formatProvider: CultureInfo.CurrentCulture)
+            .CreateLogger();
+    }
 }
 
 public static class ServiceCollectionExtensions
