@@ -165,10 +165,31 @@ public partial class TaggableItemsSearchViewModel : Document, IDisposable
         EnteredTags.RemoveAt(lastTagIndex);
     }
 
+    public async Task<List<FileSystemInfo>> VerifyItemsToAdd(IEnumerable<FileSystemInfo> infos)
+    {
+        var alreadyTaggedItems = new List<FileSystemInfo>();
+        foreach (var info in infos)
+        {
+            var request = info switch
+            {
+                DirectoryInfo dirInfo => new GetItemInfoRequest { Type = "folder", ItemIdentifier = dirInfo.FullName },
+                FileInfo fileInfo => new GetItemInfoRequest { Type = "file", ItemIdentifier = fileInfo.FullName },
+                _ => throw new ArgumentOutOfRangeException(nameof(infos))
+            };
+
+            var reply = await _tagService.GetItemInfoAsync(request);
+            if (reply.Tags.Count != 0)
+            {
+                alreadyTaggedItems.Add(info);
+            }
+        }
+
+        return alreadyTaggedItems;
+    }
+
     [RelayCommand]
     private async Task AddNewItems(IEnumerable<FileSystemInfo> infos)
     {
-        // todo: check if this item is already tagged; if yes.. then popup to make sure user wants to add tag "JustAdded"
         foreach (var info in infos)
         {
             const string tagName = "JustAdded";

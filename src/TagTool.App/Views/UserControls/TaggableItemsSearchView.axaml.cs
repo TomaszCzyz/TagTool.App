@@ -1,5 +1,4 @@
-﻿using System.Diagnostics;
-using Avalonia.Controls;
+﻿using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
 using Avalonia.Input;
 using Avalonia.Interactivity;
@@ -47,16 +46,35 @@ public partial class TaggableItemsSearchView : UserControl
         AvaloniaXamlLoader.Load(this);
     }
 
-    private void Drop(object? sender, DragEventArgs e)
+    private async void Drop(object? sender, DragEventArgs e)
     {
-        if (!e.Data.Contains(DataFormats.FileNames) || e.Data.GetFileNames() is not { } fullFileNames) return;
+        var fileNames = e.Data.GetFileNames()?.ToArray() ?? Array.Empty<string>();
+        if (!e.Data.Contains(DataFormats.FileNames) || fileNames.Length == 0) return;
 
-        var fileSystemInfos = fullFileNames
-            .Select(path => (FileSystemInfo)(Directory.Exists(path)
-                ? new DirectoryInfo(path)
-                : new FileInfo(path)));
+        var fileSystemInfos = fileNames
+            .Select(path => (FileSystemInfo)(Directory.Exists(path) ? new DirectoryInfo(path) : new FileInfo(path)))
+            .ToArray();
 
-        ViewModel.AddNewItemsCommand.Execute(fileSystemInfos);
+        var dialog = new YesNoDialog { Question = "Use internal storage" };
+        var result = await dialog.ShowDialog<(bool Answer, bool Remember)>((Window)VisualRoot!);
+
+        var alreadyTaggedItems = await ViewModel.VerifyItemsToAdd(fileSystemInfos);
+        var addTagToExisting = false;
+        if (alreadyTaggedItems.Count != 0)
+        {
+            var names = string.Join("\n", alreadyTaggedItems);
+            var dialog2 = new YesNoDialog
+            {
+                Question = $"Following items are already tracked:\n {names}\nDo you want add \"JustAdded\" tag to them too?"
+            };
+            var result2 = await dialog2.ShowDialog<(bool Answer, bool Remember)>((Window)VisualRoot!);
+
+            addTagToExisting = result2.Answer;
+        }
+
+        var toTag = addTagToExisting ? fileSystemInfos : fileSystemInfos.Except(alreadyTaggedItems);
+
+        ViewModel.AddNewItemsCommand.Execute(toTag);
     }
 
     private void DragOver(object? sender, DragEventArgs e)
