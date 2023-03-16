@@ -46,17 +46,18 @@
                                 Margin="1"
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Center"
-                                BorderBrush="#0097A7"
-                                BorderThickness="1"
+                                BorderBrush="{StaticResource MyLightSecondary500}"
+                                BorderThickness="0"
                                 ClipToBounds="True"
                                 CornerRadius="4">
 
                                 <TextBlock
-                                    Margin="2 0"
+                                    Margin="0"
                                     VerticalAlignment="Center"
+                                    Foreground="{StaticResource MyLightSecondary500}"
                                     FontSize="{DynamicResource AppContentFontSize}"
                                     IsTabStop="False"
-                                    Text="{Binding .}" />
+                                    Text="{Binding ., StringFormat='{}{0}  |'}"/>
 
                             </Border>
                         </DataTemplate>
@@ -78,6 +79,7 @@
                     Command="{Binding CreateTagCommand}"
                     Content="CreateTag" />
             </Grid>
+            <Button Content="Click" Command="{Binding NewNotCommand}"></Button>
         </StackPanel>
     </StackPanel>
 </UserControl>
