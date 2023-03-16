@@ -86,6 +86,21 @@ public partial class MyTagsViewModel : Document
     }
 
     [RelayCommand]
+    private void RemoveTag(string tagName)
+    {
+        var deleteTagsRequest = new DeleteTagRequest { TagName = tagName, DeleteIfInUse = false };
+
+        _logger.LogInformation("Requesting tag deletion {Request}", deleteTagsRequest);
+
+        var deleteTagsReply =  _tagService.DeleteTag(deleteTagsRequest);
+
+        if (deleteTagsReply.Result.IsSuccess)
+        {
+            Items.Remove(tagName);
+        }
+    }
+
+    [RelayCommand]
     private void NewNot()
     {
         WeakReferenceMessenger.Default.Send(new NewNotificationMessage(new Notification("title", "message from MyTagsViewModel")));

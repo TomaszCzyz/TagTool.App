@@ -1,10 +1,14 @@
-﻿using Avalonia.Controls;
+﻿using Avalonia;
+using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Markup.Xaml;
+using Avalonia.VisualTree;
+using JetBrains.Annotations;
 using TagTool.App.ViewModels.UserControls;
 
 namespace TagTool.App.Views.UserControls;
 
+[UsedImplicitly]
 public partial class MyTagsView : UserControl
 {
     private MyTagsViewModel ViewModel => (MyTagsViewModel)DataContext!;
@@ -12,8 +16,6 @@ public partial class MyTagsView : UserControl
     public MyTagsView()
     {
         InitializeComponent();
-
-        TagsListBox.AddHandler(PointerPressedEvent,  InputElement_OnPointerPressed, handledEventsToo: true);
     }
 
     private void InitializeComponent()
@@ -21,13 +23,20 @@ public partial class MyTagsView : UserControl
         AvaloniaXamlLoader.Load(this);
     }
 
-    private async void InputElement_OnPointerPressed(object? sender, PointerPressedEventArgs e)
+    private void Visual_OnAttachedToVisualTree(object? sender, VisualTreeAttachmentEventArgs e)
     {
-        if (ViewModel.SelectedTag is null) return;
+        var listBoxItem = e.Parent.FindAncestorOfType<ListBoxItem>()!;
 
-        var dragData = new DataObject();
-        dragData.Set("draggedTag", ViewModel.SelectedTag!);
+        listBoxItem.AddHandler(PointerPressedEvent, HandleDrag, handledEventsToo: true);
 
-        var _ = await DragDrop.DoDragDrop(e, dragData, DragDropEffects.Link);
+        async void HandleDrag(object? sender, PointerPressedEventArgs e)
+        {
+            if (ViewModel.SelectedTag is null || e.GetCurrentPoint(null).Properties.PointerUpdateKind != PointerUpdateKind.LeftButtonPressed) return;
+
+            var dragData = new DataObject();
+            dragData.Set("draggedTag", ViewModel.SelectedTag!);
+
+            var _ = await DragDrop.DoDragDrop(e, dragData, DragDropEffects.Link);
+        }
     }
 }

@@ -1,12 +1,14 @@
 ﻿<UserControl
     xmlns="https://github.com/avaloniaui"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:userControls="clr-namespace:TagTool.App.ViewModels.UserControls"
     x:Class="TagTool.App.Views.UserControls.MyTagsView"
     x:CompileBindings="True"
     x:DataType="userControls:MyTagsViewModel"
+    x:Name="RootUserControl"
     d:DesignWidth="800"
     d:DesignHeight="450"
     mc:Ignorable="d">
@@ -40,6 +42,18 @@
                             <WrapPanel />
                         </ItemsPanelTemplate>
                     </ListBox.ItemsPanel>
+                    <ListBox.ContextFlyout>
+                        <MenuFlyout>
+                            <MenuItem
+                                Command="{ReflectionBinding #RootUserControl.DataContext.RemoveTagCommand}"
+                                CommandParameter="{Binding #TagsListBox.SelectedItem}"
+                                Header="Remove">
+                                <MenuItem.Icon>
+                                    <avalonia:MaterialIcon Kind="DeleteOutline" />
+                                </MenuItem.Icon>
+                            </MenuItem>
+                        </MenuFlyout>
+                    </ListBox.ContextFlyout>
                     <ListBox.ItemTemplate>
                         <DataTemplate>
                             <Border
@@ -54,10 +68,11 @@
                                 <TextBlock
                                     Margin="0"
                                     VerticalAlignment="Center"
-                                    Foreground="{StaticResource MyLightSecondary500}"
                                     FontSize="{DynamicResource AppContentFontSize}"
+                                    Foreground="{StaticResource MyLightSecondary500}"
                                     IsTabStop="False"
-                                    Text="{Binding ., StringFormat='{}{0}  |'}"/>
+                                    Text="{Binding ., StringFormat='{}{0}  |'}"
+                                    AttachedToVisualTree="Visual_OnAttachedToVisualTree" />
 
                             </Border>
                         </DataTemplate>
@@ -79,7 +94,7 @@
                     Command="{Binding CreateTagCommand}"
                     Content="CreateTag" />
             </Grid>
-            <Button Content="Click" Command="{Binding NewNotCommand}"></Button>
+            <Button Command="{Binding NewNotCommand}" Content="Click" />
         </StackPanel>
     </StackPanel>
 </UserControl>
