@@ -90,7 +90,7 @@ public class App : Application
         //     "Logs",
         //     "applog.db");
 
-        const string outputTemplate = "[{Timestamp:HH:mm:ss} {Level:u3} {SourceContext}]{NewLine} {Message:lj}{NewLine}{Exception}";
+        const string outputTemplate = "[{Timestamp:HH:mm:ss} {Level:u3} {SourceContext}]{NewLine}{Message:lj}{NewLine}{Exception}";
 
         Log.Logger = new LoggerConfiguration()
             .MinimumLevel.Verbose()

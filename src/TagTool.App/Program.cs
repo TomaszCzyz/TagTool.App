@@ -1,4 +1,5 @@
 ﻿using Avalonia;
+using Avalonia.Logging;
 using Avalonia.Svg.Skia;
 
 namespace TagTool.App;
@@ -19,7 +20,7 @@ public static class Program
         var appBuilder = AppBuilder
             .Configure<App>()
             .UsePlatformDetect()
-            .LogToTrace();
+            .LogToTrace(LogEventLevel.Error);
 
         return appBuilder;
     }
