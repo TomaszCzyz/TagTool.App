@@ -2,11 +2,13 @@
 using System.Diagnostics;
 using Avalonia.Controls;
 using Avalonia.Controls.Notifications;
+using Avalonia.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
 using Dock.Model.Mvvm.Controls;
 using DynamicData;
+using Grpc.Core;
 using JetBrains.Annotations;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -20,7 +22,6 @@ public partial class MyTagsViewModel : Document
 {
     private readonly ILogger<MyTagsViewModel> _logger;
     private readonly TagService.TagServiceClient _tagService;
-    private readonly TagSearchService.TagSearchServiceClient _tagSearchService;
 
     public double Width { get; set; } = 200;
 
@@ -45,7 +46,6 @@ public partial class MyTagsViewModel : Document
 
         _logger = App.Current.Services.GetRequiredService<ILogger<MyTagsViewModel>>();
         _tagService = App.Current.Services.GetRequiredService<ITagToolBackend>().GetTagService();
-        _tagSearchService = App.Current.Services.GetRequiredService<ITagToolBackend>().GetSearchService();
 
         Initialize();
     }
@@ -54,15 +54,19 @@ public partial class MyTagsViewModel : Document
     {
         _logger = logger;
         _tagService = tagToolBackend.GetTagService();
-        _tagSearchService = tagToolBackend.GetSearchService();
 
         Initialize();
     }
 
     private void Initialize()
     {
-        var getAllReply = _tagSearchService.GetAll(new Empty());
-        Items.AddRange(getAllReply.TagNames);
+        var streamingCall = _tagService.SearchTags(new SearchTagsRequest { Name = "*", SearchType = SearchTagsRequest.Types.SearchType.Wildcard });
+
+        var tagNames = new List<string>();
+
+        Task.Run(async () => await streamingCall.ResponseStream.ReadAllAsync().ForEachAsync(reply => tagNames.Add(reply.TagName)));
+
+        Dispatcher.UIThread.InvokeAsync(() => Items.AddRange(tagNames));
     }
 
     [RelayCommand]
@@ -70,11 +74,12 @@ public partial class MyTagsViewModel : Document
     {
         if (string.IsNullOrEmpty(CreateTagText)) return;
 
-        var createTagsRequest = new CreateTagsRequest { TagNames = { CreateTagText } };
+        var createTagsRequest = new CreateTagRequest { TagName = CreateTagText };
 
         _logger.LogInformation("Requesting tag creation {Request}", createTagsRequest);
 
-        var createTagsReply = _tagService.CreateTags(createTagsRequest);
+        var createTagsReply = _tagService.CreateTag(createTagsRequest);
+        // todo: check is success
 
         // todo: make extension method 'AddIfNotExists(..)'
         if (!Items.Contains(CreateTagText))
@@ -88,15 +93,29 @@ public partial class MyTagsViewModel : Document
     [RelayCommand]
     private void RemoveTag(string tagName)
     {
-        var deleteTagsRequest = new DeleteTagRequest { TagName = tagName, DeleteIfInUse = false };
+        var deleteTagsRequest = new DeleteTagRequest { TagName = tagName, DeleteUsedToo = false };
 
         _logger.LogInformation("Requesting tag deletion {Request}", deleteTagsRequest);
 
-        var deleteTagsReply =  _tagService.DeleteTag(deleteTagsRequest);
+        var deleteTagsReply = _tagService.DeleteTag(deleteTagsRequest);
 
-        if (deleteTagsReply.Result.IsSuccess)
+        switch (deleteTagsReply.ResultCase)
         {
-            Items.Remove(tagName);
+            case DeleteTagReply.ResultOneofCase.DeletedTagName:
+                Items.Remove(tagName);
+                break;
+            case DeleteTagReply.ResultOneofCase.ErrorMessage:
+                var notification = new Notification(
+                    "Fail to remove tag",
+                    $"Tag {tagName} wan not remove.\nBackend service message:\n{deleteTagsReply.ErrorMessage}",
+                    NotificationType.Warning);
+
+                WeakReferenceMessenger.Default.Send(new NewNotificationMessage(notification));
+                break;
+            case DeleteTagReply.ResultOneofCase.None:
+                break;
+            default:
+                throw new ArgumentOutOfRangeException(deleteTagsReply.ResultCase.ToString());
         }
     }
 

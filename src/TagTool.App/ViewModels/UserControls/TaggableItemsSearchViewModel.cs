@@ -9,10 +9,12 @@ using DynamicData;
 using Grpc.Core;
 using JetBrains.Annotations;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using TagTool.App.Core.Models;
 using TagTool.App.Core.Services;
 using TagTool.App.Models;
 using TagTool.Backend;
+using TagTool.Backend.DomainTypes;
 
 namespace TagTool.App.ViewModels.UserControls;
 
@@ -23,7 +25,7 @@ public class LogicalOperator
 
 public partial class TaggableItemsSearchViewModel : Document, IDisposable
 {
-    private readonly TagSearchService.TagSearchServiceClient _tagSearchService;
+    private readonly ILogger<TaggableItemsSearchViewModel> _logger;
     private readonly TagService.TagServiceClient _tagService;
     private readonly IWordHighlighter _wordHighlighter;
 
@@ -65,7 +67,7 @@ public partial class TaggableItemsSearchViewModel : Document, IDisposable
             Debug.Fail("ctor for XAML Previewer should not be invoke during standard execution");
         }
 
-        _tagSearchService = App.Current.Services.GetRequiredService<ITagToolBackend>().GetSearchService();
+        _logger = App.Current.Services.GetRequiredService<ILogger<TaggableItemsSearchViewModel>>();
         _tagService = App.Current.Services.GetRequiredService<ITagToolBackend>().GetTagService();
         _wordHighlighter = App.Current.Services.GetRequiredService<IWordHighlighter>();
 
@@ -73,9 +75,12 @@ public partial class TaggableItemsSearchViewModel : Document, IDisposable
     }
 
     [UsedImplicitly]
-    public TaggableItemsSearchViewModel(ITagToolBackend tagToolBackend, IWordHighlighter wordHighlighter)
+    public TaggableItemsSearchViewModel(
+        ILogger<TaggableItemsSearchViewModel> logger,
+        ITagToolBackend tagToolBackend,
+        IWordHighlighter wordHighlighter)
     {
-        _tagSearchService = tagToolBackend.GetSearchService();
+        _logger = logger;
         _tagService = tagToolBackend.GetTagService();
         _wordHighlighter = wordHighlighter;
 
@@ -102,42 +107,30 @@ public partial class TaggableItemsSearchViewModel : Document, IDisposable
     [RelayCommand]
     private async Task CommitSearch()
     {
-        var getItemsRequest = new GetItemsRequest { TagNames = { Tags.Select(tag => tag.Name).ToArray() } };
-        var streamingCall = _tagService.GetItems(getItemsRequest);
-
+        var reply = await _tagService.GetItemsByTagsAsync(new GetItemsByTagsRequest { TagNames = { Tags.Select(tag => tag.Name).ToArray() } });
         var results = new List<TaggableItemViewModel>();
-        while (await streamingCall.ResponseStream.MoveNext())
+
+        foreach (var taggedItem in reply.TaggedItem)
         {
-            var reply = streamingCall.ResponseStream.Current;
-            var tags = reply.TagNames.Select(s => new Tag(s)).ToArray();
-
-            TaggedItemType type;
-            long? size;
-            FileSystemInfo info;
-            if (reply.FileInfo is not null)
+            var (info, type) = taggedItem.Item.ItemType switch
             {
-                type = TaggedItemType.File;
-                info = new FileInfo(reply.FileInfo.Path);
-                size = ((FileInfo)info).Length;
-            }
-            else
-            {
-                type = TaggedItemType.Folder;
-                info = new DirectoryInfo(reply.FolderInfo.Path);
-                size = null;
-            }
+                "file" => ((FileSystemInfo)new FileInfo(taggedItem.Item.Identifier), TaggedItemType.File),
+                "folder" => (new DirectoryInfo(taggedItem.Item.Identifier), TaggedItemType.Folder),
+                _ => throw new ArgumentOutOfRangeException()
+            };
 
-            results.Add(
-                new TaggableItemViewModel(_tagService)
-                {
-                    TaggedItemType = type,
-                    DisplayName = info.Name,
-                    Location = info.FullName,
-                    DateCreated = info.CreationTime,
-                    AreTagsVisible = true,
-                    Size = size,
-                    AssociatedTags = { tags }
-                });
+            var taggableItemViewModel = new TaggableItemViewModel(_tagService)
+            {
+                TaggedItemType = type,
+                Size = info is FileInfo fileInfo ? fileInfo.Length : null,
+                DisplayName = info.Name,
+                Location = info.FullName,
+                DateCreated = info.CreationTime,
+                AreTagsVisible = true,
+                AssociatedTags = { taggedItem.TagNames.Select(s => new Tag(s)).ToArray() }
+            };
+
+            results.Add(taggableItemViewModel);
         }
 
         Files.Clear();
@@ -172,13 +165,13 @@ public partial class TaggableItemsSearchViewModel : Document, IDisposable
         {
             var request = info switch
             {
-                DirectoryInfo dirInfo => new GetItemInfoRequest { Type = "folder", ItemIdentifier = dirInfo.FullName },
-                FileInfo fileInfo => new GetItemInfoRequest { Type = "file", ItemIdentifier = fileInfo.FullName },
+                DirectoryInfo dirInfo => new GetItemRequest { Item = new Item { ItemType = "folder", Identifier = dirInfo.FullName } },
+                FileInfo fileInfo => new GetItemRequest { Item = new Item { ItemType = "file", Identifier = fileInfo.FullName } },
                 _ => throw new ArgumentOutOfRangeException(nameof(infos))
             };
 
-            var reply = await _tagService.GetItemInfoAsync(request);
-            if (reply.Tags.Count != 0)
+            var reply = await _tagService.GetItemAsync(request);
+            if (reply.TaggedItem.TagNames.Count != 0)
             {
                 alreadyTaggedItems.Add(info);
             }
@@ -195,16 +188,29 @@ public partial class TaggableItemsSearchViewModel : Document, IDisposable
             const string tagName = "JustAdded";
             var tagRequest = info switch
             {
-                DirectoryInfo dirInfo => new TagRequest { TagNames = { tagName }, FolderInfo = new FolderDescription { Path = dirInfo.FullName } },
-                FileInfo fileInfo => new TagRequest { TagNames = { tagName }, FileInfo = new FileDescription { Path = fileInfo.FullName } },
+                DirectoryInfo dirInfo => new TagItemRequest
+                {
+                    Item = new Item { ItemType = "folder", Identifier = dirInfo.FullName }, TagName = tagName
+                },
+                FileInfo fileInfo => new TagItemRequest { Item = new Item { ItemType = "file", Identifier = fileInfo.FullName }, TagName = tagName },
                 _ => throw new ArgumentOutOfRangeException(nameof(infos))
             };
 
-            var reply = _tagService.Tag(tagRequest);
-            if (!reply.Result.IsSuccess) continue;
+            var reply = await _tagService.TagItemAsync(tagRequest);
 
-            await CommitSearch();
+            switch (reply.ResultCase)
+            {
+                case TagItemReply.ResultOneofCase.TaggedItem:
+                    break;
+                case TagItemReply.ResultOneofCase.ErrorMessage:
+                    _logger.LogWarning("Unable to add tag item {Item} with a tag {TagName} to", tagRequest.Item, tagName);
+                    continue;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(infos));
+            }
         }
+
+        await CommitSearch();
     }
 
     [RelayCommand]
@@ -264,10 +270,11 @@ public partial class TaggableItemsSearchViewModel : Document, IDisposable
 
         SearchResults.Clear(); // todo: it breaks without throttle
 
-        var matchTagsRequest = new MatchTagsRequest { PartialTagName = value, MaxReturn = 50 };
         var callOptions = new CallOptions().WithCancellationToken(ct);
 
-        using var streamingCall = _tagSearchService.MatchTags(matchTagsRequest, callOptions);
+        using var streamingCall = _tagService.SearchTags(
+            new SearchTagsRequest { Name = value, SearchType = SearchTagsRequest.Types.SearchType.Partial, ResultsLimit = 15 },
+            callOptions);
 
         try
         {
@@ -275,13 +282,13 @@ public partial class TaggableItemsSearchViewModel : Document, IDisposable
             {
                 var reply = streamingCall.ResponseStream.Current;
 
-                var highlightInfos = reply.MatchedParts
+                var highlightInfos = reply.MatchedPart
                     .Select(match => new HighlightInfo(match.StartIndex, match.Length))
                     .ToArray();
 
-                var inlines = _wordHighlighter.CreateInlines(reply.MatchedTagName, highlightInfos);
+                var inlines = _wordHighlighter.CreateInlines(reply.TagName, highlightInfos);
 
-                SearchResults.Add(new Tag(reply.MatchedTagName, inlines));
+                SearchResults.Add(new Tag(reply.TagName, inlines));
             }
         }
         catch (RpcException e) when (e.Status.StatusCode == StatusCode.Cancelled)

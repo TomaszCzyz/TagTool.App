@@ -11,6 +11,7 @@ using Microsoft.Extensions.DependencyInjection;
 using TagTool.App.Core.Models;
 using TagTool.App.Core.Services;
 using TagTool.Backend;
+using TagTool.Backend.DomainTypes;
 
 namespace TagTool.App.ViewModels.UserControls;
 
@@ -72,54 +73,71 @@ public partial class TaggableItemViewModel : ViewModelBase
     }
 
     [RelayCommand]
-    private void TagIt(string tagName)
+    private async Task TagIt(string tagName)
     {
-        var tagRequest = TaggedItemType == TaggedItemType.Folder
-            ? new TagRequest { TagNames = { tagName }, FolderInfo = new FolderDescription { Path = Location } }
-            : new TagRequest { TagNames = { tagName }, FileInfo = new FileDescription { Path = Location } };
-
-        var tagReply = _tagService.Tag(tagRequest);
-
-        if (tagReply.Result.IsSuccess)
+        var tagRequest = new TagItemRequest
         {
-            AssociatedTags.Add(new Tag(tagName));
-        }
-        else
+            TagName = tagName, Item = new Item { ItemType = TaggedItemType == TaggedItemType.Folder ? "folder" : "file", Identifier = Location }
+        };
+
+        var tagReply = await _tagService.TagItemAsync(tagRequest);
+
+        switch (tagReply.ResultCase)
         {
-            Debug.WriteLine($"Unable to tag item {tagRequest}");
+            case TagItemReply.ResultOneofCase.TaggedItem:
+                AssociatedTags.Add(new Tag(tagName));
+                break;
+            case TagItemReply.ResultOneofCase.ErrorMessage:
+                Debug.WriteLine($"Unable to tag item {tagRequest}");
+                break;
+            default:
+                throw new ArgumentOutOfRangeException();
         }
     }
 
     [RelayCommand]
-    private void UntagItem(string tagName)
+    private async Task UntagItem(string tagName)
     {
-        var untagRequest = TaggedItemType == TaggedItemType.Folder
-            ? new UntagRequest { TagNames = { tagName }, FolderInfo = new FolderDescription { Path = Location } }
-            : new UntagRequest { TagNames = { tagName }, FileInfo = new FileDescription { Path = Location } };
-
-        var reply = _tagService.Untag(untagRequest);
-
-        if (reply.Result.IsSuccess)
+        var untagItemRequest = new UntagItemRequest
         {
-            AssociatedTags.Remove(new Tag(tagName));
-        }
-        else
+            TagName = tagName, Item = new Item { Identifier = Location, ItemType = TaggedItemType == TaggedItemType.Folder ? "folder" : "file" }
+        };
+
+        var reply = await _tagService.UntagItemAsync(untagItemRequest);
+
+        switch (reply.ResultCase)
         {
-            Debug.WriteLine($"Unable to tag item {untagRequest}");
+            case UntagItemReply.ResultOneofCase.TaggedItem:
+                AssociatedTags.Remove(new Tag(tagName));
+                break;
+            case UntagItemReply.ResultOneofCase.ErrorMessage:
+                Debug.WriteLine($"Unable to tag item {untagItemRequest}");
+                break;
+            default:
+                throw new ArgumentOutOfRangeException();
         }
     }
 
     private void UpdateTags()
     {
-        var getItemInfoRequest = new GetItemInfoRequest
+        var getItemInfoRequest = new GetItemRequest
         {
-            Type = TaggedItemType.ToString().ToLower(CultureInfo.InvariantCulture), ItemIdentifier = Location
+            Item = new Item { ItemType = TaggedItemType.ToString().ToLower(CultureInfo.InvariantCulture), Identifier = Location }
         };
 
-        var getItemInfoReply = _tagService.GetItemInfo(getItemInfoRequest);
+        var getItemReply = _tagService.GetItem(getItemInfoRequest);
 
-        // todo: change to AddIfNotExists
-        AssociatedTags.Clear();
-        AssociatedTags.AddRange(getItemInfoReply.Tags.Select(s => new Tag(s)).ToList());
+        switch (getItemReply.ResultCase)
+        {
+            case GetItemReply.ResultOneofCase.TaggedItem:
+                AssociatedTags.Clear();
+                AssociatedTags.AddRange(getItemReply.TaggedItem.TagNames.Select(s => new Tag(s)));
+                break;
+            case GetItemReply.ResultOneofCase.ErrorMessage:
+                Debug.WriteLine("Update tags failed");
+                break;
+            default:
+                throw new ArgumentOutOfRangeException();
+        }
     }
 }

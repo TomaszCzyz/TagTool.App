@@ -4,7 +4,7 @@ namespace TagTool.App.Core.Services;
 
 public interface ITagToolBackend
 {
-    public TagSearchService.TagSearchServiceClient GetSearchService();
+    public FileActionsService.FileActionsServiceClient GetFileActionsService();
 
     public TagService.TagServiceClient GetTagService();
 }
@@ -18,7 +18,7 @@ public class TagToolBackend : ITagToolBackend
         _connectionFactory = connectionFactory;
     }
 
-    public TagSearchService.TagSearchServiceClient GetSearchService() => new(_connectionFactory.Create());
+    public FileActionsService.FileActionsServiceClient GetFileActionsService() => new(_connectionFactory.Create());
 
     public TagService.TagServiceClient GetTagService() => new(_connectionFactory.Create());
 }

@@ -20,8 +20,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Protobuf Include="Protos\TagSearchService.proto" GrpcServices="Client" />
     <Protobuf Include="Protos\TagService.proto" GrpcServices="Client" />
+    <Protobuf Include="Protos\DomainTypes.proto" GrpcServices="Client" />
+    <Protobuf Include="Protos\FileActionsService.proto" GrpcServices="Client" />
   </ItemGroup>
 
 </Project>

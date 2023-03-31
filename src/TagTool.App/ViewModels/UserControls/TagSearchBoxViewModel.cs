@@ -14,7 +14,7 @@ namespace TagTool.App.ViewModels.UserControls;
 
 public partial class TagSearchBoxViewModel : ViewModelBase, IDisposable
 {
-    private readonly TagSearchService.TagSearchServiceClient _tagSearchService;
+    private readonly TagService.TagServiceClient _tagService;
 
     public ITagsContainer? TagsContainer { get; set; }
 
@@ -32,7 +32,7 @@ public partial class TagSearchBoxViewModel : ViewModelBase, IDisposable
     [UsedImplicitly]
     public TagSearchBoxViewModel()
     {
-        _tagSearchService = null!;
+        _tagService = null!;
 
         TagsSearchResults.Add(new HighlightedMatch { MatchedText = "someMatch" });
         TagsSearchResults.Add(new HighlightedMatch { MatchedText = "NewTag" });
@@ -41,7 +41,7 @@ public partial class TagSearchBoxViewModel : ViewModelBase, IDisposable
 
     public TagSearchBoxViewModel(ITagToolBackend tagToolBackend)
     {
-        _tagSearchService = tagToolBackend.GetSearchService();
+        _tagService = tagToolBackend.GetTagService();
         TagsSearchResults.Add(new HighlightedMatch { MatchedText = "NewTag" });
         TagsSearchResults.Add(new HighlightedMatch { MatchedText = "someOtherMatch" });
         TagsSearchResults.Add(new HighlightedMatch { MatchedText = "someMatch" });
@@ -81,10 +81,10 @@ public partial class TagSearchBoxViewModel : ViewModelBase, IDisposable
 
         TagsSearchResults.Clear(); // todo: it breaks without throttle
 
-        var matchTagsRequest = new MatchTagsRequest { PartialTagName = value, MaxReturn = 50 };
+        var searchTagsRequest = new SearchTagsRequest { SearchType = SearchTagsRequest.Types.SearchType.Partial, Name = value, ResultsLimit = 50 };
         var callOptions = new CallOptions().WithCancellationToken(ct);
 
-        using var streamingCall = _tagSearchService.MatchTags(matchTagsRequest, callOptions);
+        using var streamingCall = _tagService.SearchTags(searchTagsRequest, callOptions);
 
         try
         {
@@ -92,11 +92,11 @@ public partial class TagSearchBoxViewModel : ViewModelBase, IDisposable
             {
                 var reply = streamingCall.ResponseStream.Current;
 
-                var highlightInfos = reply.MatchedParts
+                var highlightInfos = reply.MatchedPart
                     .Select(match => new HighlightInfo(match.StartIndex, match.Length))
                     .ToArray();
 
-                var viewListItem = new HighlightedMatch { Score = reply.Score, Inlines = FindSpans(reply.MatchedTagName, highlightInfos) };
+                var viewListItem = new HighlightedMatch { Inlines = FindSpans(reply.TagName, highlightInfos) };
 
                 TagsSearchResults.Add(viewListItem);
             }
