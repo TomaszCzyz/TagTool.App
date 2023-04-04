@@ -9,6 +9,9 @@ package TagToolBackend;
 service FileActionsService {
   rpc CanRenameFile (stream CanRenameFileRequest) returns (stream CanRenameFileReply);
   rpc RenameFile (RenameFileRequest) returns (RenameFileReply);
+  rpc MoveFile (MoveFileRequest) returns (MoveFileReply);
+  rpc DeleteFile (DeleteFileRequest) returns (DeleteFileReply);
+  rpc OpenFile (OpenFileRequest) returns (OpenFileReply);
 }
 
 message CanRenameFileRequest {
@@ -29,23 +32,39 @@ message RenameFileReply {
   Result result = 2;
 }
 
-message MoveFile {
+message MoveFileRequest {
   Item item = 1;
-  string from = 2;
-  string to = 3;
+  string destination = 2;
 }
 
-message MoveAction {
-  string from = 1;
-  string to = 2;
+message MoveFileReply {
+  oneof result {
+    // New location of a moved file.
+    string newLocation = 1;
+    // The Error message.
+    string errorMessage = 2;
+  };
 }
 
-message DeleteAction {
-  string what = 1;
+message DeleteFileRequest {
+  Item item = 1;
 }
 
-message RenameAction {
-  string what = 1;
+message DeleteFileReply {
+  oneof result {
+    // New location of a moved file.
+    string deletedFileFullName = 1;
+    // The Error message.
+    string errorMessage = 2;
+  };
+}
+
+message OpenFileRequest {
+  string fullFileName = 1;
+}
+
+message OpenFileReply {
+  Result result = 1;
 }
 
 message CutAction {
@@ -53,10 +72,6 @@ message CutAction {
 }
 
 message PasteAction {
-  string what = 1;
-}
-
-message OpenAction {
   string what = 1;
 }
 

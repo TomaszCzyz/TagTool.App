@@ -20,6 +20,7 @@ namespace TagTool.App.ViewModels.UserControls;
 public partial class FileSystemViewModel : Document
 {
     private readonly TagService.TagServiceClient _tagService;
+    private readonly FileActionsService.FileActionsServiceClient _fileActionsService;
     private readonly Stack<DirectoryInfo> _navigationHistoryBack = new();
     private readonly Stack<DirectoryInfo> _navigationHistoryForward = new();
 
@@ -77,6 +78,7 @@ public partial class FileSystemViewModel : Document
             Debug.Fail("ctor for XAML Previewer should not be invoke during standard execution");
         }
 
+        _fileActionsService = App.Current.Services.GetRequiredService<ITagToolBackend>().GetFileActionsService();
         _tagService = App.Current.Services.GetRequiredService<ITagToolBackend>().GetTagService();
 
         Initialize();
@@ -85,6 +87,7 @@ public partial class FileSystemViewModel : Document
     [UsedImplicitly]
     public FileSystemViewModel(ITagToolBackend tagToolBackend)
     {
+        _fileActionsService = tagToolBackend.GetFileActionsService();
         _tagService = tagToolBackend.GetTagService();
 
         Initialize();
@@ -286,14 +289,9 @@ public partial class FileSystemViewModel : Document
     {
         if (!file.Exists) return;
 
-        using var process = new Process();
+        var _ = _fileActionsService.OpenFile(new OpenFileRequest { FullFileName = file.FullName });
 
-        process.StartInfo.FileName = file.FullName;
-        process.StartInfo.UseShellExecute = true;
-
-        process.Start();
-
-        if (file.Directory is not null)
+        if (file.Directory is not null && file.Directory.FullName != CurrentFolder.FullName)
         {
             NavigateTo(file.Directory, false);
         }
