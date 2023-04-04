@@ -27,6 +27,7 @@ public partial class TaggableItemsSearchViewModel : Document, IDisposable
 {
     private readonly ILogger<TaggableItemsSearchViewModel> _logger;
     private readonly TagService.TagServiceClient _tagService;
+    private readonly FileActionsService.FileActionsServiceClient _fileActionsService;
     private readonly IWordHighlighter _wordHighlighter;
 
     [ObservableProperty]
@@ -69,6 +70,7 @@ public partial class TaggableItemsSearchViewModel : Document, IDisposable
 
         _logger = App.Current.Services.GetRequiredService<ILogger<TaggableItemsSearchViewModel>>();
         _tagService = App.Current.Services.GetRequiredService<ITagToolBackend>().GetTagService();
+        _fileActionsService = App.Current.Services.GetRequiredService<ITagToolBackend>().GetFileActionsService();
         _wordHighlighter = App.Current.Services.GetRequiredService<IWordHighlighter>();
 
         Initialize();
@@ -82,6 +84,7 @@ public partial class TaggableItemsSearchViewModel : Document, IDisposable
     {
         _logger = logger;
         _tagService = tagToolBackend.GetTagService();
+        _fileActionsService = tagToolBackend.GetFileActionsService();
         _wordHighlighter = wordHighlighter;
 
         Initialize();
@@ -171,7 +174,8 @@ public partial class TaggableItemsSearchViewModel : Document, IDisposable
             };
 
             var reply = await _tagService.GetItemAsync(request);
-            if (reply.TaggedItem.TagNames.Count != 0)
+
+            if (reply.ResultCase is GetItemReply.ResultOneofCase.TaggedItem && reply.TaggedItem.TagNames.Count != 0)
             {
                 alreadyTaggedItems.Add(info);
             }
@@ -181,22 +185,22 @@ public partial class TaggableItemsSearchViewModel : Document, IDisposable
     }
 
     [RelayCommand]
-    private async Task AddNewItems(IEnumerable<FileSystemInfo> infos)
+    private async Task AddNewItems((IEnumerable<FileSystemInfo> Infos, bool MoveToInternalStorage) input)
     {
-        foreach (var info in infos)
+        foreach (var info in input.Infos)
         {
             const string tagName = "JustAdded";
-            var tagRequest = info switch
-            {
-                DirectoryInfo dirInfo => new TagItemRequest
-                {
-                    Item = new Item { ItemType = "folder", Identifier = dirInfo.FullName }, TagName = tagName
-                },
-                FileInfo fileInfo => new TagItemRequest { Item = new Item { ItemType = "file", Identifier = fileInfo.FullName }, TagName = tagName },
-                _ => throw new ArgumentOutOfRangeException(nameof(infos))
-            };
+
+            var itemType = info is FileInfo ? "file" : "folder";
+            var item = new Item { ItemType = itemType, Identifier = info.FullName };
+            var tagRequest = new TagItemRequest { Item = item, TagName = tagName };
 
             var reply = await _tagService.TagItemAsync(tagRequest);
+
+            if (input.MoveToInternalStorage)
+            {
+                await MoveToInternalStorage(info, item);
+            }
 
             switch (reply.ResultCase)
             {
@@ -206,11 +210,22 @@ public partial class TaggableItemsSearchViewModel : Document, IDisposable
                     _logger.LogWarning("Unable to add tag item {Item} with a tag {TagName} to", tagRequest.Item, tagName);
                     continue;
                 default:
-                    throw new ArgumentOutOfRangeException(nameof(infos));
+                    throw new ArgumentOutOfRangeException(nameof(input));
             }
         }
 
         await CommitSearch();
+    }
+
+    private async Task MoveToInternalStorage(FileSystemInfo info, Item item)
+    {
+        switch (info)
+        {
+            case FileInfo:
+                var request = new MoveFileRequest { Item = item, Destination = "CommonStorage" };
+                var reply = await _fileActionsService.MoveFileAsync(request);
+                break;
+        }
     }
 
     [RelayCommand]

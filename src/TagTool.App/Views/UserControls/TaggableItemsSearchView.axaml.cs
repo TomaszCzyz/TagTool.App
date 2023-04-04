@@ -55,8 +55,8 @@ public partial class TaggableItemsSearchView : UserControl
             .Select(path => (FileSystemInfo)(Directory.Exists(path) ? new DirectoryInfo(path) : new FileInfo(path)))
             .ToArray();
 
-        var dialog = new YesNoDialog { Question = "Use internal storage" };
-        var result = await dialog.ShowDialog<(bool Answer, bool Remember)>((Window)VisualRoot!);
+        var dialog = new YesNoDialog { Question = "Use internal storage?" };
+        var (answer, remember) = await dialog.ShowDialog<(bool Answer, bool Remember)>((Window)VisualRoot!);
 
         var alreadyTaggedItems = await ViewModel.VerifyItemsToAdd(fileSystemInfos);
         var addTagToExisting = false;
@@ -74,7 +74,7 @@ public partial class TaggableItemsSearchView : UserControl
 
         var toTag = addTagToExisting ? fileSystemInfos : fileSystemInfos.Except(alreadyTaggedItems);
 
-        ViewModel.AddNewItemsCommand.Execute(toTag);
+        ViewModel.AddNewItemsCommand.Execute((toTag, answer));
     }
 
     private void DragOver(object? sender, DragEventArgs e)
