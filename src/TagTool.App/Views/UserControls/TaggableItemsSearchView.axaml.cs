@@ -27,18 +27,11 @@ public partial class TaggableItemsSearchView : UserControl
     protected override void OnApplyTemplate(TemplateAppliedEventArgs e)
     {
         var window = (Window)VisualRoot!;
-        window.AddHandler(DragDrop.DragEnterEvent, DragEnterHandler);
+        window.AddHandler(DragDrop.DragEnterEvent, (_, args) => DragDropInfoAreaBorder.IsVisible = args.Data.Contains(DataFormats.FileNames));
         window.AddHandler(DragDrop.DragLeaveEvent, (_, _) => DragDropInfoAreaBorder.IsVisible = false);
         window.AddHandler(DragDrop.DropEvent, (_, _) => DragDropInfoAreaBorder.IsVisible = false);
 
         base.OnApplyTemplate(e);
-    }
-
-    private void DragEnterHandler(object? sender, DragEventArgs e)
-    {
-        if (!e.Data.Contains(DataFormats.FileNames)) return;
-
-        DragDropInfoAreaBorder.IsVisible = true;
     }
 
     private void InitializeComponent()

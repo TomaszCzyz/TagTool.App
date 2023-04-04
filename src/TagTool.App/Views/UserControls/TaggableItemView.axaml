@@ -12,7 +12,7 @@
     x:DataType="userControls:TaggableItemViewModel"
     Name="UserControlRoot"
     d:DesignWidth="450"
-    d:DesignHeight="50"
+    d:DesignHeight="150"
     mc:Ignorable="d"
     DragDrop.AllowDrop="True">
     <UserControl.Background>
@@ -27,7 +27,12 @@
         <userControls:TaggableItemViewModel />
     </Design.DataContext>
 
-    <Border BorderBrush="Green" BorderThickness="0">
+    <Border
+        Name="DragDropInfoAreaBorder"
+        Padding="6"
+        Background="#00FFFFFF"
+        BorderBrush="Transparent"
+        BorderThickness="2">
         <Grid
             Name="TopMostGrid"
             HorizontalAlignment="Left"
@@ -118,7 +123,7 @@
                                         FontSize="{Binding #DisplayNameTextBlock.FontSize, Converter={StaticResource FontSizeConverter}}"
                                         Foreground="{StaticResource MyLightSecondary500}"
                                         Text="|" />
-                                    
+
                                 </DockPanel>
 
                             </Border>
