@@ -61,9 +61,9 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Center"
                                 BorderBrush="{StaticResource MyLightSecondary500}"
-                                BorderThickness="0"
+                                BorderThickness="0 0 1 1"
                                 ClipToBounds="True"
-                                CornerRadius="4">
+                                CornerRadius="2">
 
                                 <TextBlock
                                     Margin="0"
@@ -71,7 +71,7 @@
                                     FontSize="{DynamicResource AppContentFontSize}"
                                     Foreground="{StaticResource MyLightSecondary500}"
                                     IsTabStop="False"
-                                    Text="{Binding ., StringFormat='{}{0}  |'}"
+                                    Text="{Binding ., StringFormat='{}{0} '}"
                                     AttachedToVisualTree="Visual_OnAttachedToVisualTree" />
 
                             </Border>

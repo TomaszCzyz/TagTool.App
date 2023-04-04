@@ -219,6 +219,8 @@
                                             Margin="-4 2 0 2"
                                             Padding="0"
                                             VerticalAlignment="Top"
+                                            Command="{ReflectionBinding #UserControlRoot.DataContext.RemoveTagCommand}"
+                                            CommandParameter="{Binding .}"
                                             CornerRadius="100"
                                             Opacity="{Binding $parent[ListBoxItem].Opacity, Converter={StaticResource DoubleRangeConverter}}">
 
@@ -438,7 +440,7 @@
                 SelectionMode="Multiple">
                 <ListBox.DataTemplates>
                     <DataTemplate x:CompileBindings="False" DataType="userControls:TaggableItemViewModel">
-                        <Grid ColumnDefinitions="*,Auto,75" DragDrop.AllowDrop="True">
+                        <Grid DragDrop.AllowDrop="True" ColumnDefinitions="*,Auto,75">
                             <userControls1:TaggableItemView FontSize="14" />
 
                             <TextBlock
