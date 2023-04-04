@@ -60,13 +60,12 @@ public partial class MyTagsViewModel : Document
 
     private void Initialize()
     {
-        var streamingCall = _tagService.SearchTags(new SearchTagsRequest { Name = "*", SearchType = SearchTagsRequest.Types.SearchType.Wildcard });
-
-        var tagNames = new List<string>();
-
-        Task.Run(async () => await streamingCall.ResponseStream.ReadAllAsync().ForEachAsync(reply => tagNames.Add(reply.TagName)));
-
-        Dispatcher.UIThread.InvokeAsync(() => Items.AddRange(tagNames));
+        Dispatcher.UIThread.InvokeAsync(async () =>
+        {
+            var searchTagsRequest = new SearchTagsRequest { Name = "*", SearchType = SearchTagsRequest.Types.SearchType.Wildcard, ResultsLimit = 20 };
+            var streamingCall = _tagService.SearchTags(searchTagsRequest);
+            await streamingCall.ResponseStream.ReadAllAsync().ForEachAsync(reply => Items.Add(reply.TagName));
+        });
     }
 
     [RelayCommand]

@@ -2,7 +2,6 @@ using System.Globalization;
 using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
-using Dock.Model.Core;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -10,6 +9,7 @@ using Serilog;
 using Serilog.Core.Enrichers;
 using Serilog.Events;
 using TagTool.App.Core.Services;
+using TagTool.App.Extensions;
 using TagTool.App.Models;
 using TagTool.App.Models.Docks;
 using TagTool.App.Options;
@@ -105,25 +105,5 @@ public class App : Application
                 shared: true)
             // .WriteTo.SQLite(logsDbPath, storeTimestampInUtc: true, batchSize: 10, formatProvider: CultureInfo.CurrentCulture)
             .CreateLogger();
-    }
-}
-
-public static class ServiceCollectionExtensions
-{
-    private static Func<Type, bool> ViewModelBasePredicate
-        => x => typeof(ViewModelBase).IsAssignableFrom(x) && x is { IsInterface: false, IsAbstract: false };
-
-    private static Func<Type, bool> DockablePredicate
-        => x => typeof(IDockable).IsAssignableFrom(x) && x is { IsInterface: false, IsAbstract: false };
-
-    public static void AddViewModels(this IServiceCollection services, Type scanMarker)
-    {
-        var viewModelsBases = scanMarker.Assembly.ExportedTypes.Where(ViewModelBasePredicate);
-        var dockables = scanMarker.Assembly.ExportedTypes.Where(DockablePredicate);
-
-        foreach (var type in viewModelsBases.Union(dockables))
-        {
-            services.AddTransient(type);
-        }
     }
 }

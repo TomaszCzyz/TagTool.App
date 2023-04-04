@@ -50,7 +50,7 @@ public partial class FileSystemViewModel : Document
     private string _quickSearchText = "";
 
     [ObservableProperty]
-    private bool _areTagsVisible;
+    private bool _areTagsVisible = true;
 
     [ObservableProperty]
     private bool _hasQuickSearchResults;
