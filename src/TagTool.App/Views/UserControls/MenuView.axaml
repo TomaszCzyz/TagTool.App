@@ -77,7 +77,7 @@
             Background="Transparent"
             Command="{ReflectionBinding $parent[Window].DataContext.ChangeLeftToolMenuPanelVisibilityCommand}"
             CommandParameter="{Binding $self.IsChecked}"
-            IsChecked="{Binding IsLeftToolMenuToggleButtonChecked}">
+            IsChecked="False">
             <ToggleButton.Styles>
                 <Style Selector="avalonia|MaterialIcon">
                     <Setter Property="RenderTransform">
@@ -93,7 +93,7 @@
 
         </ToggleButton>
 
-        <ToggleButton Background="Transparent" IsChecked="{Binding IsRightToolMenuToggleButtonChecked}">
+        <ToggleButton Background="Transparent" IsChecked="False">
             <avalonia:MaterialIcon
                 Width="28"
                 Height="28"

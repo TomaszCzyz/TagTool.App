@@ -3,7 +3,6 @@ using System.Diagnostics;
 using Avalonia.Controls;
 using Avalonia.Data;
 using Avalonia.Platform.Storage;
-using Avalonia.Platform.Storage.FileIO;
 using CommunityToolkit.Mvvm.ComponentModel;
 using JetBrains.Annotations;
 using Microsoft.Extensions.Options;
@@ -25,14 +24,16 @@ public partial class TagFileDialogViewModel : ViewModelBase
     {
         get
         {
-            if (_options.FilePickerStartFolder is null) return new BclStorageFolder(nameof(Environment.SpecialFolder.Desktop));
-
-            return _options.FilePickerStartFolderMode switch
-            {
-                FilePickerStartFolderMode.Fixed => new BclStorageFolder(_options.FilePickerStartFolder),
-                FilePickerStartFolderMode.Previous => new BclStorageFolder(_options.FilePickerStartFolder),
-                _ => new BclStorageFolder(nameof(Environment.SpecialFolder.Desktop))
-            };
+            // todo: fix it (broke when updating to preview6) 
+            // if (_options.FilePickerStartFolder is null) return new BclStorageFolder(nameof(Environment.SpecialFolder.Desktop));
+            //
+            // return _options.FilePickerStartFolderMode switch
+            // {
+            //     FilePickerStartFolderMode.Fixed => new BclStorageFolder(_options.FilePickerStartFolder),
+            //     FilePickerStartFolderMode.Previous => new BclStorageFolder(_options.FilePickerStartFolder),
+            //     _ => new BclStorageFolder(nameof(Environment.SpecialFolder.Desktop))
+            // };
+            return null;
         }
         set
         {

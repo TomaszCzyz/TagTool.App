@@ -3,7 +3,6 @@ using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
 using Avalonia.Input;
 using Avalonia.Interactivity;
-using Avalonia.Markup.Xaml;
 
 namespace TagTool.App.Views.Dialogs;
 
@@ -25,11 +24,6 @@ public partial class YesNoDialog : Window
     {
         base.OnApplyTemplate(e);
         QuestionTextBlock.Text = Question;
-    }
-
-    private void InitializeComponent()
-    {
-        AvaloniaXamlLoader.Load(this);
     }
 
     protected override void OnLoaded()

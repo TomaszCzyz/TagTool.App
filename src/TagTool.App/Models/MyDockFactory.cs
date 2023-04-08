@@ -26,12 +26,10 @@ public class MyDockFactory : Factory
     public override IRootDock CreateLayout()
     {
         var myTags1 = _serviceProvider.GetRequiredService<MyTagsViewModel>();
-        var myTags2 = _serviceProvider.GetRequiredService<MyTagsViewModel>();
         var taggableItemsSearchViewModel = _serviceProvider.GetRequiredService<TaggableItemsSearchViewModel>();
         var fileSystemViewModel = _serviceProvider.GetRequiredService<FileSystemViewModel>();
 
         myTags1.Title = "MyTags";
-        myTags2.Title = "MyTags";
         taggableItemsSearchViewModel.Title = "Search";
         fileSystemViewModel.Title = "FileSystem";
 
@@ -39,15 +37,13 @@ public class MyDockFactory : Factory
         LeftDock.Proportion = 0.25;
         LeftDock.IsCollapsable = true;
         LeftDock.VisibleDockables = CreateList<IDockable>(myTags1);
-        LeftDock.HiddenDockables = CreateList<IDockable>();
         LeftDock.CanCreateDocument = true;
 
-        RightDock = _serviceProvider.GetRequiredService<MyDocumentDock>();
-        RightDock.Proportion = 0.25;
-        RightDock.IsCollapsable = false;
-        RightDock.VisibleDockables = CreateList<IDockable>(myTags2);
-        RightDock.HiddenDockables = CreateList<IDockable>();
-        RightDock.CanCreateDocument = true;
+        // RightDock = _serviceProvider.GetRequiredService<MyDocumentDock>();
+        // RightDock.Proportion = 0.25;
+        // RightDock.IsCollapsable = false;
+        // RightDock.HiddenDockables = CreateList<IDockable>();
+        // RightDock.CanCreateDocument = true;
 
         CentralDock = _serviceProvider.GetRequiredService<MyDocumentDock>();
         CentralDock.Proportion = double.NaN;
@@ -62,9 +58,9 @@ public class MyDockFactory : Factory
             (
                 LeftDock,
                 new ProportionalDockSplitter(),
-                CentralDock,
-                new ProportionalDockSplitter(),
-                RightDock
+                CentralDock
+                // new ProportionalDockSplitter(),
+                // RightDock
             )
         };
 

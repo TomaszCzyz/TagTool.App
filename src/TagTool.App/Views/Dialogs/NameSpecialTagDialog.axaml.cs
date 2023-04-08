@@ -1,7 +1,6 @@
 ﻿using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Input;
-using Avalonia.Markup.Xaml;
 using TagTool.App.Models;
 
 namespace TagTool.App.Views.Dialogs;
@@ -24,11 +23,6 @@ public partial class NameSpecialTagDialog : Window
         FileNameTextBox.Focus();
     }
 
-    private void InitializeComponent()
-    {
-        AvaloniaXamlLoader.Load(this);
-    }
-
     private void OnKeyDown(object? sender, KeyEventArgs e)
     {
         switch (e.Key)
@@ -44,7 +38,7 @@ public partial class NameSpecialTagDialog : Window
                 Close(nameSpecialTag);
                 break;
             case Key.Escape or Key.Enter:
-                Close(null!);
+                Close(null);
                 break;
         }
     }

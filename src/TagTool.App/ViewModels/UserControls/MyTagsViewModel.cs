@@ -7,7 +7,6 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
 using Dock.Model.Mvvm.Controls;
-using DynamicData;
 using Grpc.Core;
 using JetBrains.Annotations;
 using Microsoft.Extensions.DependencyInjection;

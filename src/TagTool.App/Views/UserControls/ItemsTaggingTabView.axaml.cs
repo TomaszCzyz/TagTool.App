@@ -1,7 +1,6 @@
 ﻿using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
 using Avalonia.Input;
-using Avalonia.Markup.Xaml;
 using TagTool.App.ViewModels.UserControls;
 
 namespace TagTool.App.Views.UserControls;
@@ -15,11 +14,6 @@ public partial class ItemsTaggingTabView : UserControl
         InitializeComponent();
         ItemsListBox.AddHandler(DragDrop.DropEvent, Drop);
         // DragDropInfoAreaBorder.AddHandler(DragDrop.DragOverEvent, DragOver);
-    }
-
-    private void InitializeComponent()
-    {
-        AvaloniaXamlLoader.Load(this);
     }
 
     protected override void OnApplyTemplate(TemplateAppliedEventArgs e)

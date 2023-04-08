@@ -1,7 +1,6 @@
 ﻿using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Input;
-using Avalonia.Markup.Xaml;
 using TagTool.App.ViewModels.UserControls;
 
 namespace TagTool.App.Views.UserControls;
@@ -13,11 +12,6 @@ public partial class FilePreviewer : UserControl
     public FilePreviewer()
     {
         InitializeComponent();
-    }
-
-    private void InitializeComponent()
-    {
-        AvaloniaXamlLoader.Load(this);
     }
 
     private void PreviewImage_OnPointerWheelChanged(object? sender, PointerWheelEventArgs e)

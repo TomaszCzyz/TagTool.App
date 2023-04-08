@@ -3,7 +3,6 @@ using Avalonia.Controls.Primitives;
 using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.LogicalTree;
-using Avalonia.Markup.Xaml;
 using TagTool.App.Extensions;
 using TagTool.App.Models;
 using TagTool.App.ViewModels.UserControls;
@@ -32,11 +31,6 @@ public partial class TaggableItemsSearchView : UserControl
         window.AddHandler(DragDrop.DropEvent, (_, _) => DragDropInfoAreaBorder.IsVisible = false);
 
         base.OnApplyTemplate(e);
-    }
-
-    private void InitializeComponent()
-    {
-        AvaloniaXamlLoader.Load(this);
     }
 
     private async void Drop(object? sender, DragEventArgs e)

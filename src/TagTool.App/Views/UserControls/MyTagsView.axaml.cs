@@ -1,7 +1,6 @@
 ﻿using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Input;
-using Avalonia.Markup.Xaml;
 using Avalonia.VisualTree;
 using JetBrains.Annotations;
 using TagTool.App.ViewModels.UserControls;
@@ -16,11 +15,6 @@ public partial class MyTagsView : UserControl
     public MyTagsView()
     {
         InitializeComponent();
-    }
-
-    private void InitializeComponent()
-    {
-        AvaloniaXamlLoader.Load(this);
     }
 
     private void Visual_OnAttachedToVisualTree(object? sender, VisualTreeAttachmentEventArgs e)

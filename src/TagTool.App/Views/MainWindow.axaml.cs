@@ -5,7 +5,6 @@ using Avalonia.Controls.Primitives;
 using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.LogicalTree;
-using Avalonia.Markup.Xaml;
 using TagTool.App.ViewModels;
 
 namespace TagTool.App.Views;
@@ -26,11 +25,6 @@ public partial class MainWindow : Window
         {
             if (args.Key == Key.Escape) Focus();
         }
-    }
-
-    private void InitializeComponent()
-    {
-        AvaloniaXamlLoader.Load(this);
     }
 
     protected override void OnApplyTemplate(TemplateAppliedEventArgs e)

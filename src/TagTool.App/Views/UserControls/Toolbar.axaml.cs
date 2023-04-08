@@ -1,6 +1,5 @@
 ﻿using Avalonia.Controls;
 using Avalonia.Interactivity;
-using Avalonia.Markup.Xaml;
 using Microsoft.Extensions.DependencyInjection;
 using TagTool.App.Core.Models;
 using TagTool.App.ViewModels.UserControls;
@@ -19,11 +18,6 @@ public partial class Toolbar : UserControl
     }
 
     private Window GetWindow() => (Window)VisualRoot!;
-
-    private void InitializeComponent()
-    {
-        AvaloniaXamlLoader.Load(this);
-    }
 
     private async void AddFileButton_OnClick(object? sender, RoutedEventArgs e)
     {

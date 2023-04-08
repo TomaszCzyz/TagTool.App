@@ -2,7 +2,6 @@
 using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.LogicalTree;
-using Avalonia.Markup.Xaml;
 using Avalonia.Media;
 using TagTool.App.Core.Models;
 using TagTool.App.ViewModels.UserControls;
@@ -23,11 +22,6 @@ public partial class TaggableItemView : UserControl
         AddHandler(DragDrop.DragEnterEvent, (_, _) => DragDropInfoAreaBorder.BorderBrush = Brushes.Gray);
         AddHandler(DragDrop.DragLeaveEvent, (_, _) => DragDropInfoAreaBorder.BorderBrush = Brushes.Transparent);
         AddHandler(DragDrop.DropEvent, (_, _) => DragDropInfoAreaBorder.BorderBrush = Brushes.Transparent);
-    }
-
-    private void InitializeComponent()
-    {
-        AvaloniaXamlLoader.Load(this);
     }
 
     private void DragOver(object? sender, DragEventArgs e)

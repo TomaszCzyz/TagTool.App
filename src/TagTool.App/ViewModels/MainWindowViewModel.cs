@@ -8,7 +8,6 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
 using Dock.Model.Controls;
-using Dock.Model.Core;
 using JetBrains.Annotations;
 using Microsoft.Extensions.DependencyInjection;
 using TagTool.App.Core.Extensions;
@@ -101,42 +100,7 @@ public partial class MainWindowViewModel : ViewModelBase, IRecipient<NewNotifica
 
         if (!isVisible)
         {
-            HideAllTabs(_dockFactory.LeftDock);
             _dockFactory.CollapseDock(_dockFactory.LeftDock);
-        }
-        else
-        {
-            UnhideAllTabs(_dockFactory.LeftDock);
-        }
-    }
-
-    private void HideAllTabs(IDock dock)
-    {
-        Debug.Assert(dock.HiddenDockables is not null);
-        Debug.Assert(dock.VisibleDockables is not null);
-
-        if (dock.VisibleDockables.Count == 0) return;
-
-        for (var i = 0; i < dock.VisibleDockables.Count; i++)
-        {
-            dock.HiddenDockables.Add(dock.VisibleDockables[i]);
-            dock.VisibleDockables.RemoveAt(i);
-        }
-    }
-
-    private void UnhideAllTabs(IDock dock)
-    {
-        Debug.Assert(dock.HiddenDockables is not null);
-        Debug.Assert(dock.VisibleDockables is not null);
-
-        if (dock.HiddenDockables.Count == 0) return;
-
-        for (var i = 0; i < dock.HiddenDockables.Count; i++)
-        {
-            _dockFactory.AddDockable(dock, dock.HiddenDockables[i]);
-            _dockFactory.UpdateDockable(dock, dock.Owner);
-            // dock.VisibleDockables.Add();
-            dock.HiddenDockables.RemoveAt(i);
         }
     }
 

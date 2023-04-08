@@ -2,7 +2,6 @@
 using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Interactivity;
-using Avalonia.Markup.Xaml;
 using TagTool.App.ViewModels.UserControls;
 
 namespace TagTool.App.Views.UserControls;
@@ -12,11 +11,6 @@ public partial class SimpleTagsBar : UserControl
     public SimpleTagsBar()
     {
         InitializeComponent();
-    }
-
-    private void InitializeComponent()
-    {
-        AvaloniaXamlLoader.Load(this);
     }
 
     private void TagSearchAutoCompleteBox_OnAttachedToVisualTree(object? sender, VisualTreeAttachmentEventArgs e)

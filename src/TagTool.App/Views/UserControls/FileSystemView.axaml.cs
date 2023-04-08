@@ -4,7 +4,6 @@ using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.LogicalTree;
-using Avalonia.Markup.Xaml;
 using Avalonia.VisualTree;
 using TagTool.App.Core.Helpers;
 using TagTool.App.ViewModels.UserControls;
@@ -21,11 +20,6 @@ public partial class FileSystemView : UserControl
 
         // todo: split this logic to two handlers (one for quick search scenario, one for navigation scenario)
         DataGrid.AddHandler(KeyDownEvent, DataGrid_OnKeyDown, handledEventsToo: true);
-    }
-
-    private void InitializeComponent()
-    {
-        AvaloniaXamlLoader.Load(this);
     }
 
     private void AddressTextBox_OnLostFocus(object? sender, RoutedEventArgs e)

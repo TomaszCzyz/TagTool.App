@@ -1,8 +1,6 @@
 ﻿using Avalonia.Controls;
 using Avalonia.Interactivity;
-using Avalonia.Markup.Xaml;
 using Avalonia.Platform.Storage;
-using Avalonia.Platform.Storage.FileIO;
 using TagTool.App.ViewModels.Dialogs;
 using TagTool.App.ViewModels.UserControls;
 
@@ -34,19 +32,15 @@ public partial class TagFileDialog : Window
 
         var result = await GetStorageProvider().OpenFilePickerAsync(options);
 
-        if (result.Count == 0 || !result[0].TryGetUri(out var filePath)) return;
+        if (result.Count == 0) return;
 
+        var filePath = result[0].Path;
         var folderPath = Directory.GetParent(filePath.LocalPath)?.FullName;
-        ViewModel.FilePickerSuggestedStartLocation = folderPath is null ? null : new BclStorageFolder(folderPath);
+        // ViewModel.FilePickerSuggestedStartLocation = folderPath is null ? null : new BclStorageFolder(folderPath);
         SelectFileTextBox.Text = filePath.LocalPath;
     }
 
     private IStorageProvider GetStorageProvider() => ((TopLevel)VisualRoot!).StorageProvider;
-
-    private void InitializeComponent()
-    {
-        AvaloniaXamlLoader.Load(this);
-    }
 
     private void CancelButton_OnClick(object? sender, RoutedEventArgs e)
     {

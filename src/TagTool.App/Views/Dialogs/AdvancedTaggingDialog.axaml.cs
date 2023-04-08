@@ -3,7 +3,6 @@ using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Layout;
-using Avalonia.Markup.Xaml;
 using Avalonia.Platform.Storage;
 using TagTool.App.ViewModels.Dialogs;
 using TagTool.App.ViewModels.UserControls;
@@ -26,11 +25,6 @@ public partial class AdvancedTaggingDialog : Window
         AddHandler(DragDrop.DragEnterEvent, (_, _) => DragDropInfoAreaBorder.IsVisible = true);
         AddHandler(DragDrop.DragLeaveEvent, (_, _) => DragDropInfoAreaBorder.IsVisible = false);
         AddHandler(DragDrop.DropEvent, (_, _) => DragDropInfoAreaBorder.IsVisible = false);
-    }
-
-    private void InitializeComponent()
-    {
-        AvaloniaXamlLoader.Load(this);
     }
 
     private void DragOver(object? sender, DragEventArgs e)
@@ -91,9 +85,7 @@ public partial class AdvancedTaggingDialog : Window
 
         foreach (var folder in result)
         {
-            if (!folder.TryGetUri(out var folderPath)) continue;
-
-            viewModel.AddItemCommand.Execute(new DirectoryInfo(folderPath.LocalPath));
+            viewModel.AddItemCommand.Execute(new DirectoryInfo(folder.Path.LocalPath));
         }
     }
 

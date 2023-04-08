@@ -7,7 +7,7 @@ namespace TagTool.App;
 
 public class ViewLocator : IDataTemplate
 {
-    public IControl Build(object? param)
+    public Control Build(object? param)
     {
         if (param is null)
         {
