@@ -28,10 +28,12 @@ public class MyDockFactory : Factory
         var myTags1 = _serviceProvider.GetRequiredService<MyTagsViewModel>();
         var taggableItemsSearchViewModel = _serviceProvider.GetRequiredService<TaggableItemsSearchViewModel>();
         var fileSystemViewModel = _serviceProvider.GetRequiredService<FileSystemViewModel>();
+        var fileSystemSearchViewModel = _serviceProvider.GetRequiredService<FileSystemSearchViewModel>();
 
         myTags1.Title = "MyTags";
-        taggableItemsSearchViewModel.Title = "Search";
+        taggableItemsSearchViewModel.Title = "TagSearch";
         fileSystemViewModel.Title = "FileSystem";
+        fileSystemSearchViewModel.Title = "Search";
 
         LeftDock = _serviceProvider.GetRequiredService<MyDocumentDock>();
         LeftDock.Proportion = 0.25;
@@ -48,7 +50,7 @@ public class MyDockFactory : Factory
         CentralDock = _serviceProvider.GetRequiredService<MyDocumentDock>();
         CentralDock.Proportion = double.NaN;
         CentralDock.IsCollapsable = true;
-        CentralDock.VisibleDockables = CreateList<IDockable>(taggableItemsSearchViewModel, fileSystemViewModel);
+        CentralDock.VisibleDockables = CreateList<IDockable>(taggableItemsSearchViewModel, fileSystemViewModel, fileSystemSearchViewModel);
         CentralDock.CanCreateDocument = true;
 
         var mainLayout = new ProportionalDock

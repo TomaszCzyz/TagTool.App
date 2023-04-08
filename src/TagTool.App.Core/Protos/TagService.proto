@@ -19,9 +19,9 @@ service TagService {
   // Untags an item if one exists.
   rpc UntagItem(UntagItemRequest) returns (UntagItemReply);
 
-  // Returns info about an item if one exists.
+  // Gets an info about an item if one exists.
   rpc GetItem(GetItemRequest) returns (GetItemReply);
-  // Returns items which are tagged with one or more of supplied tags.
+  // Gets items which are tagged with one or more of supplied tags.
   rpc GetItemsByTags(GetItemsByTagsRequest) returns (GetItemsByTagsReply);
 
   // Checks if given items exists in tagged items database. 
@@ -32,6 +32,11 @@ service TagService {
 
   // Searches existing tags for matches or partial matches.
   rpc SearchTags(SearchTagsRequest) returns (stream SearchTagsReply);
+
+  // Reverts effects of the last command, such as CreateTag, TagItem, e.t.c.
+  rpc Undo(UndoRequest) returns (UndoReply);
+  // Repeats command reverted by Undo endpoint.
+  rpc Redo(RedoRequest) returns (RedoReply);
 }
 
 // The request to create a new tag.
@@ -188,5 +193,23 @@ message SearchTagsReply {
     int32 startIndex = 1;
     // The length of a substring.
     int32 length = 2;
+  }
+}
+
+message UndoRequest {}
+
+message UndoReply {
+  oneof result {
+    string undoCommand = 1;
+    string errorMessage = 2;
+  }
+}
+
+message RedoRequest {}
+
+message RedoReply {
+  oneof result {
+    string redoCommand = 1;
+    string errorMessage = 2;
   }
 }

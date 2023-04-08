@@ -23,6 +23,8 @@
     <Protobuf Include="Protos\TagService.proto" GrpcServices="Client" />
     <Protobuf Include="Protos\DomainTypes.proto" GrpcServices="Client" />
     <Protobuf Include="Protos\FileActionsService.proto" GrpcServices="Client" />
+    <Protobuf Include="Protos\FolderActionsService.proto" GrpcServices="Client" />
+    <Protobuf Include="Protos\FileSystemSearcher.proto" GrpcServices="Client" />
   </ItemGroup>
 
 </Project>

@@ -1,0 +1,52 @@
+﻿<UserControl
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:userControls="clr-namespace:TagTool.App.ViewModels.UserControls"
+    xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+    mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+    x:Class="TagTool.App.Views.UserControls.FileSystemSearchView"
+    x:DataType="userControls:FileSystemSearchViewModel"
+    x:CompileBindings="True">
+
+    <Design.DataContext>
+        <userControls:FileSystemSearchViewModel />
+    </Design.DataContext>
+
+    <Border>
+        <Grid ColumnDefinitions="*" RowDefinitions="Auto, *, Auto">
+
+            <!-- Root folder bar -->
+            <Grid ColumnDefinitions="Auto,*,Auto,Auto" RowDefinitions="Auto" HorizontalAlignment="Stretch">
+                <Label Grid.Column="0" Content="Root:" VerticalAlignment="Center" />
+                <TextBox Grid.Column="1" Text="{Binding SearchRoot}" HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch" />
+                <Button
+                    Grid.Column="2"
+                    Padding="4"
+                    Background="Transparent"
+                    Command="{ReflectionBinding StartSearchCommand}">
+
+                    <avalonia:MaterialIcon
+                        Width="20"
+                        Height="20"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        Foreground="{StaticResource MyLightSecondary500}"
+                        Kind="Magnify" />
+
+                </Button>
+            </Grid>
+
+            <!-- Search results -->
+            <ListBox Grid.Row="1" Items="{Binding SearchResults}">
+
+            </ListBox>
+
+            <!-- Currently search directory bar-->
+            <Border Grid.Row="2" BorderBrush="Gray" BorderThickness="1">
+                <TextBlock Text="{Binding CurrentlySearchDir,TargetNullValue='Waiting for search to start...'}"></TextBlock>
+            </Border>
+        </Grid>
+    </Border>
+</UserControl>
