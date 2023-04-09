@@ -49,6 +49,7 @@ public partial class FileSystemSearchViewModel : Document, IDisposable
 
     private AsyncDuplexStreamingCall<SearchRequest, SearchReply>? _streamingCall;
     private CancellationTokenSource? _cts;
+    private string? _currentlySearchDirBuffer;
 
     [RelayCommand]
     private async Task StartSearch()
@@ -82,7 +83,7 @@ public partial class FileSystemSearchViewModel : Document, IDisposable
                         SearchResults.Add(reply.FullName);
                         break;
                     case SearchReply.ContentOneofCase.CurrentlySearchDir:
-                        CurrentlySearchDir = reply.CurrentlySearchDir;
+                        _currentlySearchDirBuffer = reply.CurrentlySearchDir;
                         break;
                 }
             }
@@ -99,6 +100,25 @@ public partial class FileSystemSearchViewModel : Document, IDisposable
         if (IsSearching)
         {
             await _streamingCall.RequestStream.WriteAsync(new SearchRequest { ExcludedPaths = { fullPath } });
+        }
+        else
+        {
+            CurrentlySearchDir = null;
+        }
+    }
+
+    partial void OnIsSearchingChanged(bool value)
+    {
+        if (value)
+        {
+            DispatcherTimer.Run(
+                () =>
+                {
+                    CurrentlySearchDir = _currentlySearchDirBuffer;
+                    return IsSearching;
+                },
+                TimeSpan.FromMilliseconds(250),
+                DispatcherPriority.Normal);
         }
     }
 
