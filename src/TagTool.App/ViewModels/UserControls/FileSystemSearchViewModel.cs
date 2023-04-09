@@ -101,10 +101,6 @@ public partial class FileSystemSearchViewModel : Document, IDisposable
         {
             await _streamingCall.RequestStream.WriteAsync(new SearchRequest { ExcludedPaths = { fullPath } });
         }
-        else
-        {
-            CurrentlySearchDir = null;
-        }
     }
 
     partial void OnIsSearchingChanged(bool value)
@@ -114,11 +110,19 @@ public partial class FileSystemSearchViewModel : Document, IDisposable
             DispatcherTimer.Run(
                 () =>
                 {
-                    CurrentlySearchDir = _currentlySearchDirBuffer;
+                    if (IsSearching)
+                    {
+                        CurrentlySearchDir = _currentlySearchDirBuffer;
+                    }
+
                     return IsSearching;
                 },
                 TimeSpan.FromMilliseconds(250),
                 DispatcherPriority.Normal);
+        }
+        else
+        {
+            CurrentlySearchDir = null;
         }
     }
 
