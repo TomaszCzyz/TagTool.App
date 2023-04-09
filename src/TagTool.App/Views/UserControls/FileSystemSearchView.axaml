@@ -43,9 +43,13 @@
 
             </ListBox>
 
+            <ProgressBar Grid.Row="1" VerticalAlignment="Bottom" IsIndeterminate="{Binding IsSearching}" IsEnabled="True"></ProgressBar>
+
             <!-- Currently search directory bar-->
             <Border Grid.Row="2" BorderBrush="Gray" BorderThickness="1">
-                <TextBlock Text="{Binding CurrentlySearchDir,TargetNullValue='Waiting for search to start...'}"></TextBlock>
+                <TextBlock
+                    Text="{Binding CurrentlySearchDir,TargetNullValue='Waiting for search to start...'}"
+                    PointerPressed="InputElement_OnPointerPressed" />
             </Border>
         </Grid>
     </Border>

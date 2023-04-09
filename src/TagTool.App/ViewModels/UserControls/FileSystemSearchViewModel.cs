@@ -23,6 +23,9 @@ public partial class FileSystemSearchViewModel : Document, IDisposable
     [ObservableProperty]
     private string? _currentlySearchDir;
 
+    [ObservableProperty]
+    private bool _isSearching;
+
     public ObservableCollection<string> SearchResults { get; set; } = new();
 
     /// <summary>
@@ -65,6 +68,7 @@ public partial class FileSystemSearchViewModel : Document, IDisposable
             ExcludedPaths = { @"C:\Users\tczyz\MyFiles\Documents", @"C:\Users\tczyz\MyFiles\Andrzej" }
         };
 
+        IsSearching = true;
         await _streamingCall.RequestStream.WriteAsync(searchRequest);
 
         Dispatcher.UIThread.Post(async () =>
@@ -82,7 +86,20 @@ public partial class FileSystemSearchViewModel : Document, IDisposable
                         break;
                 }
             }
+
+            IsSearching = false;
         });
+    }
+
+    [RelayCommand]
+    private async Task AddExcludedPath(string fullPath)
+    {
+        if (string.IsNullOrEmpty(fullPath)) return;
+
+        if (IsSearching)
+        {
+            await _streamingCall.RequestStream.WriteAsync(new SearchRequest { ExcludedPaths = { fullPath } });
+        }
     }
 
     public void Dispose()
