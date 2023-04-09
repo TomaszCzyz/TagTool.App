@@ -1,4 +1,5 @@
-﻿using Avalonia.Controls;
+﻿using Avalonia;
+using Avalonia.Controls;
 using Avalonia.Input;
 using TagTool.App.ViewModels.UserControls;
 
@@ -13,16 +14,16 @@ public partial class FileSystemSearchView : UserControl
         InitializeComponent();
     }
 
-    private void InputElement_OnPointerPressed(object? sender, PointerPressedEventArgs e)
+    private void InputElement_OnTapped(object? sender, TappedEventArgs e)
     {
-        var t = (sender as TextBlock)!;
-        var p = e.GetIntermediatePoints(t)[0];
+        var textBlock = (sender as TextBlock)!;
+        var point = e.GetPosition(textBlock);
 
-        var clickedDir = FindClickedDir(t, p);
+        var clickedDir = FindClickedDir(textBlock, point);
         ViewModel.AddExcludedPathCommand.Execute(clickedDir);
     }
 
-    private static string FindClickedDir(TextBlock t, PointerPoint p)
+    private static string FindClickedDir(TextBlock t, Point p)
     {
         var path = t.Text.AsSpan();
         var last = 0;
@@ -36,7 +37,7 @@ public partial class FileSystemSearchView : UserControl
             }
 
             var rect = t.TextLayout.HitTestTextRange(last, at).First();
-            if (rect.Contains(p.Position))
+            if (rect.Contains(p))
             {
                 return t.Text?[..(last + at)] ?? "";
             }
