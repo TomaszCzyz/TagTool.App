@@ -5,10 +5,43 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:userControls="clr-namespace:TagTool.App.ViewModels.UserControls"
     xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+    xmlns:userControls1="clr-namespace:TagTool.App.Views.UserControls"
+    xmlns:converters="clr-namespace:TagTool.App.Converters"
     mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
     x:Class="TagTool.App.Views.UserControls.FileSystemSearchView"
     x:DataType="userControls:FileSystemSearchViewModel"
     x:CompileBindings="True">
+    <UserControl.Resources>
+        <converters:FileSizeToStringConverter x:Key="FileSizeToStringConverter" />
+
+        <avalonia:MaterialIcon
+            x:Key="NormalSearchIcon"
+            Width="20"
+            Height="20"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Center"
+            Foreground="CornflowerBlue"
+            Kind="CircleSmall" />
+
+        <avalonia:MaterialIcon
+            x:Key="WildCardSearchIcon"
+            Width="20"
+            Height="20"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Center"
+            Foreground="GreenYellow"
+            Kind="CircleHalf" />
+
+        <avalonia:MaterialIcon
+            x:Key="RegexSearchIcon"
+            Width="20"
+            Height="20"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Center"
+            Foreground="{StaticResource MyLightSecondary500}"
+            Kind="CircleMedium" />
+
+    </UserControl.Resources>
 
     <Design.DataContext>
         <userControls:FileSystemSearchViewModel />
@@ -18,11 +51,13 @@
         <Grid ColumnDefinitions="*" RowDefinitions="Auto, *, Auto">
 
             <!-- Root folder bar -->
-            <Grid ColumnDefinitions="Auto,*,Auto,Auto" RowDefinitions="Auto" HorizontalAlignment="Stretch">
-                <Label Grid.Column="0" Content="Root:" VerticalAlignment="Center" />
-                <TextBox Grid.Column="1" Text="{Binding SearchRoot}" HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch" />
+            <Grid ColumnDefinitions="Auto,*,Auto,Auto" RowDefinitions="Auto, Auto">
+                <Label Grid.Row="0" Grid.Column="0" Content="Search in:" VerticalAlignment="Center" />
+
+                <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding SearchRoot}" HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch" />
+
                 <Button
-                    Grid.Column="2"
+                    Grid.Row="0" Grid.Column="2"
                     Padding="4"
                     Background="Transparent"
                     Command="{ReflectionBinding StartSearchCommand}">
@@ -36,18 +71,88 @@
                         Kind="Magnify" />
 
                 </Button>
+
+                <Label Grid.Row="1" Grid.Column="0" Content="Search for:" VerticalAlignment="Center" />
+
+                <TextBox
+                    Grid.Row="1" Grid.Column="1" Text="{Binding SearchPhrase}" HorizontalAlignment="Stretch"
+                    HorizontalContentAlignment="Stretch">
+                    <TextBox.Styles>
+                        <Style Selector="ToggleButton.SearchType:unchecked">
+                            <Setter Property="Content">
+                                <Template>
+                                    <Border Background="Transparent" ToolTip.Tip="Exact Search" Child="{DynamicResource NormalSearchIcon}"></Border>
+                                </Template>
+                            </Setter>
+                        </Style>
+                        <Style Selector="ToggleButton.SearchType:indeterminate">
+                            <Setter Property="Content">
+                                <Template>
+                                    <Border Background="Transparent" ToolTip.Tip="WildCard Search" Child="{DynamicResource WildCardSearchIcon}"></Border>
+                                </Template>
+                            </Setter>
+                        </Style>
+                        <Style Selector="ToggleButton.SearchType:checked">
+                            <Setter Property="Content">
+                                <Template>
+                                    <Border Background="Transparent" ToolTip.Tip="Regex Search" Child="{DynamicResource RegexSearchIcon}"></Border>
+                                </Template>
+                            </Setter>
+                        </Style>
+                    </TextBox.Styles>
+                    <TextBox.InnerRightContent>
+                        <StackPanel Orientation="Horizontal">
+                            <ToggleButton Padding="3" IsChecked="{Binding !IgnoreCase}">
+                                <avalonia:MaterialIcon
+                                    Width="20"
+                                    Height="20"
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Center"
+                                    Foreground="{StaticResource MyLightSecondary500}"
+                                    Kind="FormatLetterCase" />
+
+                            </ToggleButton>
+
+                            <ToggleButton Classes="SearchType" IsChecked="{Binding SearchType}" IsThreeState="True" Padding="3" />
+
+                        </StackPanel>
+                    </TextBox.InnerRightContent>
+                </TextBox>
             </Grid>
 
             <!-- Search results -->
             <ListBox Grid.Row="1" Items="{Binding SearchResults}">
+                <ListBox.DataTemplates>
+                    <DataTemplate x:CompileBindings="False" DataType="userControls:TaggableItemViewModel">
+                        <Grid ColumnDefinitions="*,Auto,75">
+                            <userControls1:TaggableItemView FontSize="14" />
+
+                            <TextBlock
+                                Grid.Column="1"
+                                VerticalAlignment="Center"
+                                Text="{Binding DateCreated, StringFormat=\{0:yyyy/MM/dd hh:mm:ss\}}"
+                                TextAlignment="Left" />
+
+                            <TextBlock
+                                Grid.Column="2"
+                                VerticalAlignment="Center"
+                                Text="{Binding Size, Converter={StaticResource FileSizeToStringConverter}}"
+                                TextAlignment="Right" />
+
+                        </Grid>
+                    </DataTemplate>
+                </ListBox.DataTemplates>
 
             </ListBox>
 
-            <ProgressBar Grid.Row="1" VerticalAlignment="Bottom" IsIndeterminate="{Binding IsSearching}" IsEnabled="True"></ProgressBar>
+            <ProgressBar
+                Grid.Row="1" VerticalAlignment="Bottom" IsIndeterminate="{Binding StartSearchCommand.IsRunning}"
+                IsVisible="{Binding StartSearchCommand.IsRunning}" />
 
             <!-- Currently search directory bar-->
             <Border Grid.Row="2" BorderBrush="Gray" BorderThickness="1">
                 <TextBlock
+                    Margin="0 2"
                     Text="{Binding CurrentlySearchDir,TargetNullValue='Waiting for search to start...'}"
                     Tapped="InputElement_OnTapped" />
             </Border>
