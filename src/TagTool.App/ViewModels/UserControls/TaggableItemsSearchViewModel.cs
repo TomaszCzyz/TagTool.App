@@ -10,6 +10,8 @@ using Grpc.Core;
 using JetBrains.Annotations;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using OpenAI.GPT3.Interfaces;
+using OpenAI.GPT3.ObjectModels.RequestModels;
 using TagTool.App.Core.Models;
 using TagTool.App.Core.Services;
 using TagTool.App.Models;
@@ -28,6 +30,7 @@ public partial class TaggableItemsSearchViewModel : Document, IDisposable
     private readonly ILogger<TaggableItemsSearchViewModel> _logger;
     private readonly TagService.TagServiceClient _tagService;
     private readonly FileActionsService.FileActionsServiceClient _fileActionsService;
+    private readonly IOpenAIService _openAiService;
     private readonly IWordHighlighter _wordHighlighter;
 
     [ObservableProperty]
@@ -68,6 +71,7 @@ public partial class TaggableItemsSearchViewModel : Document, IDisposable
             Debug.Fail("ctor for XAML Previewer should not be invoke during standard execution");
         }
 
+        _openAiService = App.Current.Services.GetRequiredService<IOpenAIService>();
         _logger = App.Current.Services.GetRequiredService<ILogger<TaggableItemsSearchViewModel>>();
         _tagService = App.Current.Services.GetRequiredService<ITagToolBackend>().GetTagService();
         _fileActionsService = App.Current.Services.GetRequiredService<ITagToolBackend>().GetFileActionsService();
@@ -80,12 +84,14 @@ public partial class TaggableItemsSearchViewModel : Document, IDisposable
     public TaggableItemsSearchViewModel(
         ILogger<TaggableItemsSearchViewModel> logger,
         ITagToolBackend tagToolBackend,
-        IWordHighlighter wordHighlighter)
+        IWordHighlighter wordHighlighter,
+        IOpenAIService openAiService)
     {
         _logger = logger;
         _tagService = tagToolBackend.GetTagService();
         _fileActionsService = tagToolBackend.GetFileActionsService();
         _wordHighlighter = wordHighlighter;
+        _openAiService = openAiService;
 
         Initialize();
     }
@@ -258,6 +264,73 @@ public partial class TaggableItemsSearchViewModel : Document, IDisposable
 
         SearchText = "";
         SearchResults.Remove(itemToAdd);
+    }
+
+    [RelayCommand]
+    private async Task RecordAudio(bool isChecked)
+    {
+        if (isChecked)
+        {
+            StartRecord();
+        }
+        else
+        {
+            StopRecord();
+            var outputFilePath = _bassAudioCaptureService?.OutputFilePath;
+            if (outputFilePath is null) return;
+
+            // todo: prompt language should depend on user language 
+            var audioCreateTranscriptionRequest = new AudioCreateTranscriptionRequest
+            {
+                Model = OpenAI.GPT3.ObjectModels.Models.WhisperV1,
+                File = await File.ReadAllBytesAsync(outputFilePath),
+                Prompt = "Voice command to search tag with names like NewTag, Year2022, Picture, HelloWorld",
+                ResponseFormat = "text",
+                FileName = "TagToSearchCommand.wav",
+                Language = "en" // does not make things faster... 
+            };
+
+            _logger.LogInformation("Sending request {@AudioCreateTranscriptionRequest}", audioCreateTranscriptionRequest);
+            var transcription = await _openAiService.Audio.CreateTranscription(audioCreateTranscriptionRequest, CancellationToken.None);
+            if (transcription.Error is not null)
+            {
+                _logger.LogWarning("OpenAi replied with {Error} and {Text}", transcription.Error, transcription.Text);
+                return;
+            }
+
+            _logger.LogInformation("OpenAi replied with transcription: {Text}", transcription.Text);
+
+            var completionsRequest = new CompletionCreateRequest
+            {
+                Prompt = $"Extract tag names from the text: {transcription.Text.Trim('\n').Trim()}. Create comma separated list from these tags",
+                Model = OpenAI.GPT3.ObjectModels.Models.TextDavinciV3,
+                MaxTokens = 50
+            };
+
+            _logger.LogInformation("Sending request {@CompletionCreateRequest}", completionsRequest);
+            var editCreateResponse = await _openAiService.Completions.CreateCompletion(completionsRequest);
+            if (editCreateResponse.Error is not null)
+            {
+                _logger.LogWarning("OpenAi replied with {Error} and {@Choices}", editCreateResponse.Error, editCreateResponse.Choices);
+                return;
+            }
+
+            _logger.LogInformation("OpenAi replied with choices {@Choices}", editCreateResponse.Choices);
+        }
+    }
+
+    private BassAudioCaptureService? _bassAudioCaptureService;
+
+    private void StartRecord()
+    {
+        _bassAudioCaptureService = new BassAudioCaptureService(3);
+        _bassAudioCaptureService?.Start();
+    }
+
+    private void StopRecord()
+    {
+        _bassAudioCaptureService?.Stop();
+        _bassAudioCaptureService?.Dispose();
     }
 
     private CancellationTokenSource? _cts;

@@ -98,7 +98,7 @@
                 <Grid
                     Name="SearchBarGrid"
                     VerticalAlignment="Top"
-                    ColumnDefinitions="Auto,*,Auto"
+                    ColumnDefinitions="Auto,*,Auto,Auto"
                     RowDefinitions="Auto">
                     <Grid.KeyBindings>
                         <KeyBinding Command="{ReflectionBinding CommitSearchCommand}" Gesture="Ctrl+Enter" />
@@ -127,7 +127,8 @@
                                 <Setter Property="Opacity" Value="1" />
                             </Style>
 
-                            <Style Selector="^:pointerover /template/ ContentPresenter#PART_ContentPresenter, ^:selected /template/ ContentPresenter#PART_ContentPresenter">
+                            <Style
+                                Selector="^:pointerover /template/ ContentPresenter#PART_ContentPresenter, ^:selected /template/ ContentPresenter#PART_ContentPresenter">
                                 <Setter Property="Background" Value="Transparent" />
                             </Style>
                         </Style>
@@ -275,11 +276,25 @@
                         </ListBox>
                     </ScrollViewer>
 
-                    <Button
+                    <ToggleButton
                         Grid.Column="2"
                         Padding="0 5"
                         HorizontalAlignment="Right"
                         VerticalAlignment="Center"
+                        Background="Transparent"
+                        Foreground="{StaticResource MyLightSecondary500}"
+                        Command="{ReflectionBinding RecordAudioCommand}"
+                        CommandParameter="{Binding $self.IsChecked}">
+
+                        <avalonia:MaterialIcon Kind="Microphone" />
+                    </ToggleButton>
+
+                    <Button
+                        Grid.Column="3"
+                        Padding="0 5"
+                        HorizontalAlignment="Right"
+                        VerticalAlignment="Center"
+                        Foreground="{StaticResource MyLightSecondary500}"
                         Background="Transparent"
                         Click="Button_OnClick">
 

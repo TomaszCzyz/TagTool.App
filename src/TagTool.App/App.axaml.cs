@@ -5,6 +5,9 @@ using Avalonia.Markup.Xaml;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using OpenAI.GPT3;
+using OpenAI.GPT3.Interfaces;
+using OpenAI.GPT3.Managers;
 using Serilog;
 using Serilog.Core.Enrichers;
 using Serilog.Events;
@@ -59,6 +62,13 @@ public class App : Application
             x.AddSerilog(Log.Logger, dispose: true);
         });
 
+        services.AddOptions<OpenAiOptions>().Configure(settings =>
+        {
+            settings.ApiKey = Environment.GetEnvironmentVariable("OPEN_AI_API_KEY") ?? throw new InvalidOperationException();
+            settings.DefaultModelId = OpenAI.GPT3.ObjectModels.Models.ChatGpt3_5Turbo;
+        });
+        services.AddHttpClient<IOpenAIService, OpenAIService>();
+
         services.AddSingleton(configuration);
         services.AddSingleton<IFileIconProvider, DefaultFileIconProvider>();
         services.AddSingleton<IWordHighlighter, WordHighlighter>();
@@ -95,6 +105,7 @@ public class App : Application
         Log.Logger = new LoggerConfiguration()
             .MinimumLevel.Verbose()
             .MinimumLevel.Override("Microsoft", LogEventLevel.Warning)
+            .MinimumLevel.Override("System.Net.Http.HttpClient.IOpenAIService", LogEventLevel.Warning)
             .Enrich.FromLogContext()
             .Enrich.With(new PropertyEnricher("ApplicationName", "TagToolApp"))
             .WriteTo.Debug(formatProvider: CultureInfo.InvariantCulture, outputTemplate: outputTemplate)
