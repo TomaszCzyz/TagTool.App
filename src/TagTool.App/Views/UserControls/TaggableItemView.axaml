@@ -44,7 +44,7 @@
                 <Image.Source>
                     <MultiBinding Converter="{StaticResource LocationAndWidthToIconMultiConverter}">
                         <Binding Path="Location" />
-                        <Binding ElementName="DisplayNameTextBlock" Path="FontSize" />
+                        <Binding Path="#DisplayNameTextBlock.FontSize" />
                     </MultiBinding>
                 </Image.Source>
             </Image>

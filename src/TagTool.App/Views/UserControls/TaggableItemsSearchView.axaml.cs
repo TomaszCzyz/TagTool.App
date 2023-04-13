@@ -64,24 +64,6 @@ public partial class TaggableItemsSearchView : UserControl
         ViewModel.AddNewItemsCommand.Execute((toTag, answer));
     }
 
-    private void DragOver(object? sender, DragEventArgs e)
-    {
-        // Only allow Copy or Link as Drop Operations.
-        e.DragEffects &= (DragDropEffects.Copy | DragDropEffects.Link);
-
-        // Only allow if the dragged data contains text or filenames.
-        if (!e.Data.Contains(DataFormats.Text) && !e.Data.Contains(DataFormats.FileNames))
-        {
-            e.DragEffects = DragDropEffects.None;
-        }
-    }
-
-    private async void AdvancedTaggingFileButton_OnClick(object? sender, RoutedEventArgs e)
-    {
-        var dialog = new AdvancedTaggingDialog();
-        await dialog.ShowDialog((Window)VisualRoot!);
-    }
-
     private void Button_OnClick(object? sender, RoutedEventArgs e)
     {
         SearchHelperPopup.IsOpen ^= true;

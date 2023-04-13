@@ -30,6 +30,7 @@ public partial class MyTagsView : UserControl
             var dragData = new DataObject();
             dragData.Set("draggedTag", ViewModel.SelectedTag!);
 
+            // maybe remove await?
             var _ = await DragDrop.DoDragDrop(e, dragData, DragDropEffects.Link);
         }
     }

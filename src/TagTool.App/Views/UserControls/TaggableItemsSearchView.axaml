@@ -22,7 +22,6 @@
     Background="{StaticResource MyLightPrimary200}">
     <UserControl.Resources>
         <converters:FileSizeToStringConverter x:Key="FileSizeToStringConverter" />
-        <converters:DoubleToBoolConverter x:Key="DoubleToBoolConverter" Threshold=".51" />
         <converters:DoubleRangeConverter
             x:Key="DoubleRangeConverter"
             InputMax="1.0"
@@ -230,7 +229,7 @@
                                             Margin="-4 2 0 2"
                                             Padding="0"
                                             VerticalAlignment="Top"
-                                            Command="{ReflectionBinding #UserControlRoot.DataContext.RemoveTagCommand}"
+                                            Command="{ReflectionBinding #UserControlRoot.DataContext.RemoveTagCommand, FallbackValue=null}"
                                             CommandParameter="{Binding .}"
                                             CornerRadius="100"
                                             Opacity="{Binding $parent[ListBoxItem].Opacity, Converter={StaticResource DoubleRangeConverter}}">

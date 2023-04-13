@@ -75,7 +75,7 @@
         <ToggleButton
             Name="ShowLeftToolMenuButton"
             Background="Transparent"
-            Command="{ReflectionBinding $parent[Window].DataContext.ChangeLeftToolMenuPanelVisibilityCommand}"
+            Command="{ReflectionBinding $parent[Window].DataContext.ChangeLeftToolMenuPanelVisibilityCommand, FallbackValue=null}"
             CommandParameter="{Binding $self.IsChecked}"
             IsChecked="False">
             <ToggleButton.Styles>

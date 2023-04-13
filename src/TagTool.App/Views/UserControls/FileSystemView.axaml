@@ -2,7 +2,6 @@
     xmlns="https://github.com/avaloniaui"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
-    xmlns:comparers="clr-namespace:TagTool.App.Comparers"
     xmlns:converters="clr-namespace:TagTool.App.Converters"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -19,7 +18,6 @@
     <UserControl.Resources>
         <converters:FileSizeToStringConverter x:Key="FileSizeToStringConverter" />
         <converters:BoolToBrushConverter x:Key="BoolToBrushConverter" />
-        <comparers:TaggableItemViewModelComparer x:Key="TaggableItemViewModelComparer" />
     </UserControl.Resources>
 
     <UserControl.Styles>

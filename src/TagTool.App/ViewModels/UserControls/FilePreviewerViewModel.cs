@@ -57,7 +57,7 @@ public partial class FilePreviewerViewModel : ViewModelBase, IDisposable
 
     public void Dispose()
     {
-        _current?.Dispose();
+        Current?.Dispose();
         GC.SuppressFinalize(this);
     }
 }
