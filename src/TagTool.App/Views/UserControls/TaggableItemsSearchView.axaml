@@ -11,6 +11,7 @@
     xmlns:templatedControls="clr-namespace:TagTool.App.Views.TemplatedControls"
     xmlns:userControls="clr-namespace:TagTool.App.ViewModels.UserControls"
     xmlns:userControls1="clr-namespace:TagTool.App.Views.UserControls"
+    xmlns:avaloniaProgressRing="clr-namespace:AvaloniaProgressRing;assembly=AvaloniaProgressRing"
     x:Class="TagTool.App.Views.UserControls.TaggableItemsSearchView"
     x:CompileBindings="True"
     x:DataType="userControls:TaggableItemsSearchViewModel"
@@ -30,6 +31,15 @@
             OutputMin="0.0" />
     </UserControl.Resources>
     <UserControl.Styles>
+        <Style Selector="ToggleButton.TransparentBackgroundWhenChecked:checked">
+            <Style Selector="^ /template/ ContentPresenter#PART_ContentPresenter">
+                <Setter Property="Background" Value="Transparent" />
+            </Style>
+
+            <Style Selector="^:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+                <Setter Property="Background" Value="{DynamicResource ToggleButtonBackgroundCheckedPointerOver}" />
+            </Style>
+        </Style>
         <Style Selector="Border.SearchBox">
             <Setter Property="BorderThickness" Value="1 1 1 2" />
             <Setter Property="ClipToBounds" Value="True" />
@@ -276,7 +286,9 @@
                         </ListBox>
                     </ScrollViewer>
 
+                    <!-- Record button -->
                     <ToggleButton
+                        Classes="TransparentBackgroundWhenChecked"
                         Grid.Column="2"
                         Padding="0 5"
                         HorizontalAlignment="Right"
@@ -286,7 +298,37 @@
                         Command="{ReflectionBinding RecordAudioCommand}"
                         CommandParameter="{Binding $self.IsChecked}">
 
-                        <avalonia:MaterialIcon Kind="Microphone" />
+                        <Panel MaxHeight="20">
+                            <avalonia:MaterialIcon Kind="Microphone">
+                                <avalonia:MaterialIcon.IsVisible>
+                                    <MultiBinding Converter="{x:Static BoolConverters.And}">
+                                        <Binding Path="!RecordAudioCommand.IsRunning" />
+                                        <Binding Path="!IsActive" />
+                                    </MultiBinding>
+                                </avalonia:MaterialIcon.IsVisible>
+                            </avalonia:MaterialIcon>
+
+                            <ProgressBar
+                                Orientation="Vertical"
+                                Foreground="{StaticResource MyLightSecondary500}"
+                                IsVisible="{Binding IsActive}"
+                                Minimum="{Binding MinVoiceIntensity}"
+                                Maximum="{Binding MaxVoiceIntensity}"
+                                Value="{Binding VoiceIntensity}"
+                                MinHeight="{Binding $parent.Bounds.Height}"
+                                MinWidth="10" 
+                                Width="10"/>
+
+                            <avaloniaProgressRing:ProgressRing
+                                Width="20"
+                                Height="20"
+                                IsActive="{Binding RecordAudioCommand.IsRunning}"
+                                HorizontalAlignment="Left"
+                                VerticalAlignment="Top"
+                                Foreground="{StaticResource MyLightSecondary500}"
+                                Margin="0" />
+
+                        </Panel>
                     </ToggleButton>
 
                     <Button

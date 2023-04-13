@@ -74,6 +74,7 @@ public class App : Application
         services.AddSingleton<IWordHighlighter, WordHighlighter>();
         services.AddSingleton<ITagToolBackendConnectionFactory, GrpcChannelFactory>();
         services.AddSingleton<ITagToolBackend, TagToolBackend>();
+        services.AddTransient<ISpeechToTagSearchService, SpeechToTagSearchService>();
 
         services.AddSingleton<MyDockFactory>();
         services.AddTransient<MyDocumentDock>();
@@ -108,7 +109,7 @@ public class App : Application
             .MinimumLevel.Override("System.Net.Http.HttpClient.IOpenAIService", LogEventLevel.Warning)
             .Enrich.FromLogContext()
             .Enrich.With(new PropertyEnricher("ApplicationName", "TagToolApp"))
-            .WriteTo.Debug(formatProvider: CultureInfo.InvariantCulture, outputTemplate: outputTemplate)
+            .WriteTo.Debug(outputTemplate: outputTemplate, formatProvider: CultureInfo.InvariantCulture)
             .WriteTo.File(
                 @"C:\Users\tczyz\Documents\TagToolApp\TagToolAppLogs.txt",
                 outputTemplate: outputTemplate,

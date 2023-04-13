@@ -1,11 +1,11 @@
 ﻿using System.Globalization;
 using System.Runtime.InteropServices;
-using JetBrains.Annotations;
 using ManagedBass;
+using NWaves.Signals;
+using NWaves.Utils;
 
 namespace TagTool.App.Core.Services;
 
-[UsedImplicitly]
 public class BassAudioCaptureService : IDisposable
 {
     private static readonly string _outputPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "MBass");
@@ -13,6 +13,7 @@ public class BassAudioCaptureService : IDisposable
     private byte[]? _buffer;
     private readonly int _deviceId;
     private readonly int _handle;
+    private readonly int _frequency;
     private readonly WaveFileWriter _writer;
 
     public string OutputFilePath { get; }
@@ -38,6 +39,7 @@ public class BassAudioCaptureService : IDisposable
         var info = Bass.RecordingInfo;
         _handle = Bass.RecordStart(info.Frequency, info.Channels, BassFlags.RecordPause, AudioChunkCaptured);
         _deviceId = deviceIdId;
+        _frequency = frequency;
         _writer = new WaveFileWriter(new FileStream(OutputFilePath, FileMode.Create, FileAccess.Write, FileShare.Read), new WaveFormat());
     }
 
@@ -66,6 +68,25 @@ public class BassAudioCaptureService : IDisposable
     public void Start() => Bass.ChannelPlay(_handle);
 
     public void Stop() => Bass.ChannelStop(_handle);
+
+    public bool IsActive() => Bass.ChannelIsActive(_handle) == PlaybackState.Playing;
+
+    public double GetVoiceIntensity()
+    {
+        if (_buffer is null) return 0d;
+
+        var sampleCount = _buffer.Length / 2;
+
+        var signal = new DiscreteSignal(_frequency, sampleCount);
+        using var reader = new BinaryReader(new MemoryStream(_buffer));
+
+        for (var i = 0; i < sampleCount; i++)
+        {
+            signal[i] = reader.ReadInt16() / 32768f;
+        }
+
+        return Scale.ToDecibel(signal.Rms() * 1.2);
+    }
 
     public void Dispose()
     {
