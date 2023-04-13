@@ -4,6 +4,7 @@ using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Layout;
 using Avalonia.Platform.Storage;
+using Microsoft.AspNetCore.Mvc.TagHelpers;
 using TagTool.App.ViewModels.Dialogs;
 using TagTool.App.ViewModels.UserControls;
 
@@ -33,7 +34,7 @@ public partial class AdvancedTaggingDialog : Window
         e.DragEffects &= (DragDropEffects.Copy | DragDropEffects.Link);
 
         // Only allow if the dragged data contains text or filenames.
-        if (!e.Data.Contains(DataFormats.Text) && !e.Data.Contains(DataFormats.FileNames))
+        if (!e.Data.Contains(DataFormats.Text) && !e.Data.Contains(DataFormats.Files))
         {
             e.DragEffects = DragDropEffects.None;
         }
@@ -41,10 +42,10 @@ public partial class AdvancedTaggingDialog : Window
 
     private void Drop(object? sender, DragEventArgs e)
     {
-        if (!e.Data.Contains(DataFormats.FileNames)) return;
-        if (e.Data.GetFileNames() is not { } paths) return;
+        if (!e.Data.Contains(DataFormats.Files)) return;
+        if (e.Data.GetFiles() is not { } paths) return;
 
-        foreach (var path in paths)
+        foreach (var path in paths.Select(item => item.Path.AbsolutePath))
         {
             FileSystemInfo fileSystemInfo = Directory.Exists(path) ? new DirectoryInfo(path) : new FileInfo(path);
             ViewModel.AddItemCommand.Execute(fileSystemInfo);

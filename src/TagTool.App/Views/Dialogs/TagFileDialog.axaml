@@ -1,7 +1,6 @@
 ﻿<Window
     xmlns="https://github.com/avaloniaui"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:converters="clr-namespace:TagTool.App.Converters"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:dialogs="clr-namespace:TagTool.App.ViewModels.Dialogs"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -19,10 +18,6 @@
     SizeToContent="WidthAndHeight"
     Title="TagFileDialog"
     WindowStartupLocation="CenterOwner">
-
-    <Window.Resources>
-        <converters:ArraySizeToBooleanConverter x:Key="ArraySizeToBooleanConverter" Threshold="1" />
-    </Window.Resources>
 
     <Design.DataContext>
         <dialogs:TagFileDialogViewModel />

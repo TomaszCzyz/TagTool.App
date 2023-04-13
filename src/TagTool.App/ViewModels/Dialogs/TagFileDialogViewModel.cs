@@ -24,7 +24,7 @@ public partial class TagFileDialogViewModel : ViewModelBase
     {
         get
         {
-            // todo: fix it (broke when updating to preview6) 
+            // todo: fix it (broke when updating to preview6)
             // if (_options.FilePickerStartFolder is null) return new BclStorageFolder(nameof(Environment.SpecialFolder.Desktop));
             //
             // return _options.FilePickerStartFolderMode switch

@@ -3,6 +3,7 @@ using Avalonia.Controls.Primitives;
 using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.LogicalTree;
+using Avalonia.Platform.Storage;
 using TagTool.App.Extensions;
 using TagTool.App.Models;
 using TagTool.App.ViewModels.UserControls;
@@ -26,7 +27,7 @@ public partial class TaggableItemsSearchView : UserControl
     protected override void OnApplyTemplate(TemplateAppliedEventArgs e)
     {
         var window = (Window)VisualRoot!;
-        window.AddHandler(DragDrop.DragEnterEvent, (_, args) => DragDropInfoAreaBorder.IsVisible = args.Data.Contains(DataFormats.FileNames));
+        window.AddHandler(DragDrop.DragEnterEvent, (_, args) => DragDropInfoAreaBorder.IsVisible = args.Data.Contains(DataFormats.Files));
         window.AddHandler(DragDrop.DragLeaveEvent, (_, _) => DragDropInfoAreaBorder.IsVisible = false);
         window.AddHandler(DragDrop.DropEvent, (_, _) => DragDropInfoAreaBorder.IsVisible = false);
 
@@ -35,10 +36,11 @@ public partial class TaggableItemsSearchView : UserControl
 
     private async void Drop(object? sender, DragEventArgs e)
     {
-        var fileNames = e.Data.GetFileNames()?.ToArray() ?? Array.Empty<string>();
-        if (!e.Data.Contains(DataFormats.FileNames) || fileNames.Length == 0) return;
+        var fileNames = e.Data.GetFiles()?.ToArray() ?? Array.Empty<IStorageItem>();
+        if (!e.Data.Contains(DataFormats.Files) || fileNames.Length == 0) return;
 
         var fileSystemInfos = fileNames
+            .Select(item => item.Path.AbsolutePath)
             .Select(path => (FileSystemInfo)(Directory.Exists(path) ? new DirectoryInfo(path) : new FileInfo(path)))
             .ToArray();
 
