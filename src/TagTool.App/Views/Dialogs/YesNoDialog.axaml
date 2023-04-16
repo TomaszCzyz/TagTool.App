@@ -14,7 +14,6 @@
     SizeToContent="WidthAndHeight"
     Title="NameSpecialTagDialog"
     WindowStartupLocation="CenterOwner">
-    
 
     <Grid
         Margin="10"
@@ -35,8 +34,8 @@
             Orientation="Horizontal"
             Spacing="10">
 
-            <Button Name="YesButton" Content="Yes" Click="YesButton_OnClick"/>
-            <Button Content="No" Click="NoButton_OnClick"/>
+            <Button Name="YesButton" Content="Yes" Click="YesButton_OnClick" />
+            <Button Content="No" Click="NoButton_OnClick" />
         </StackPanel>
     </Grid>
 </Window>

@@ -6,5 +6,4 @@ public interface IUserSettingService
 
 public class UserSettingsService : IUserSettingService
 {
-    
 }

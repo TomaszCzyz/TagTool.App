@@ -315,8 +315,8 @@
                                 Maximum="{Binding MaxVoiceIntensity}"
                                 Value="{Binding VoiceIntensity}"
                                 MinHeight="{Binding $parent.Bounds.Height}"
-                                MinWidth="10" 
-                                Width="10"/>
+                                MinWidth="10"
+                                Width="10" />
 
                             <avaloniaProgressRing:ProgressRing
                                 Width="20"

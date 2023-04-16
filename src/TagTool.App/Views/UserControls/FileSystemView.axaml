@@ -212,7 +212,7 @@
             <ListBox.Styles>
                 <Style Selector="ListBoxItem">
                     <Setter Property="Padding" Value="2" />
-                </Style>            
+                </Style>
             </ListBox.Styles>
             <ListBox.DataTemplates>
                 <DataTemplate x:CompileBindings="False" DataType="userControls:TaggableItemViewModel">

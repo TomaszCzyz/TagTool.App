@@ -4,7 +4,6 @@ using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Layout;
 using Avalonia.Platform.Storage;
-using Microsoft.AspNetCore.Mvc.TagHelpers;
 using TagTool.App.ViewModels.Dialogs;
 using TagTool.App.ViewModels.UserControls;
 
