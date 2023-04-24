@@ -1,16 +1,18 @@
 ﻿<UserControl
     xmlns="https://github.com/avaloniaui"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+    xmlns:converters="clr-namespace:TagTool.App.Converters"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:userControls="clr-namespace:TagTool.App.ViewModels.UserControls"
-    xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
     xmlns:userControls1="clr-namespace:TagTool.App.Views.UserControls"
-    xmlns:converters="clr-namespace:TagTool.App.Converters"
-    mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
     x:Class="TagTool.App.Views.UserControls.FileSystemSearchView"
+    x:CompileBindings="True"
     x:DataType="userControls:FileSystemSearchViewModel"
-    x:CompileBindings="True">
+    d:DesignWidth="800"
+    d:DesignHeight="450"
+    mc:Ignorable="d">
     <UserControl.Resources>
         <converters:FileSizeToStringConverter x:Key="FileSizeToStringConverter" />
 
@@ -52,12 +54,22 @@
 
             <!-- Root folder bar -->
             <Grid ColumnDefinitions="Auto,*,Auto,Auto" RowDefinitions="Auto, Auto">
-                <Label Grid.Row="0" Grid.Column="0" Content="Search in:" VerticalAlignment="Center" />
+                <Label
+                    Grid.Row="0"
+                    Grid.Column="0"
+                    VerticalAlignment="Center"
+                    Content="Search in:" />
 
-                <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding SearchRoot}" HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch" />
+                <TextBox
+                    Grid.Row="0"
+                    Grid.Column="1"
+                    HorizontalAlignment="Stretch"
+                    HorizontalContentAlignment="Stretch"
+                    Text="{Binding SearchRoot}" />
 
                 <Button
-                    Grid.Row="0" Grid.Column="2"
+                    Grid.Row="0"
+                    Grid.Column="2"
                     Padding="4"
                     Background="Transparent"
                     Command="{ReflectionBinding StartSearchCommand}">
@@ -72,30 +84,46 @@
 
                 </Button>
 
-                <Label Grid.Row="1" Grid.Column="0" Content="Search for:" VerticalAlignment="Center" />
+                <Label
+                    Grid.Row="1"
+                    Grid.Column="0"
+                    VerticalAlignment="Center"
+                    Content="Search for:" />
 
                 <TextBox
-                    Grid.Row="1" Grid.Column="1" Text="{Binding SearchPhrase}" HorizontalAlignment="Stretch"
-                    HorizontalContentAlignment="Stretch">
+                    Grid.Row="1"
+                    Grid.Column="1"
+                    HorizontalAlignment="Stretch"
+                    HorizontalContentAlignment="Stretch"
+                    Text="{Binding SearchPhrase}">
                     <TextBox.Styles>
                         <Style Selector="ToggleButton.SearchType:unchecked">
                             <Setter Property="Content">
                                 <Template>
-                                    <Border Background="Transparent" ToolTip.Tip="Exact Search" Child="{DynamicResource NormalSearchIcon}"></Border>
+                                    <Border
+                                        Background="Transparent"
+                                        Child="{DynamicResource NormalSearchIcon}"
+                                        ToolTip.Tip="Exact Search" />
                                 </Template>
                             </Setter>
                         </Style>
                         <Style Selector="ToggleButton.SearchType:indeterminate">
                             <Setter Property="Content">
                                 <Template>
-                                    <Border Background="Transparent" ToolTip.Tip="WildCard Search" Child="{DynamicResource WildCardSearchIcon}"></Border>
+                                    <Border
+                                        Background="Transparent"
+                                        Child="{DynamicResource WildCardSearchIcon}"
+                                        ToolTip.Tip="WildCard Search" />
                                 </Template>
                             </Setter>
                         </Style>
                         <Style Selector="ToggleButton.SearchType:checked">
                             <Setter Property="Content">
                                 <Template>
-                                    <Border Background="Transparent" ToolTip.Tip="Regex Search" Child="{DynamicResource RegexSearchIcon}"></Border>
+                                    <Border
+                                        Background="Transparent"
+                                        Child="{DynamicResource RegexSearchIcon}"
+                                        ToolTip.Tip="Regex Search" />
                                 </Template>
                             </Setter>
                         </Style>
@@ -113,7 +141,11 @@
 
                             </ToggleButton>
 
-                            <ToggleButton Classes="SearchType" IsChecked="{Binding SearchType}" IsThreeState="True" Padding="3" />
+                            <ToggleButton
+                                Classes="SearchType"
+                                Padding="3"
+                                IsChecked="{Binding SearchType}"
+                                IsThreeState="True" />
 
                         </StackPanel>
                     </TextBox.InnerRightContent>
@@ -146,15 +178,20 @@
             </ListBox>
 
             <ProgressBar
-                Grid.Row="1" VerticalAlignment="Bottom" IsIndeterminate="{Binding StartSearchCommand.IsRunning}"
+                Grid.Row="1"
+                VerticalAlignment="Bottom"
+                IsIndeterminate="{Binding StartSearchCommand.IsRunning}"
                 IsVisible="{Binding StartSearchCommand.IsRunning}" />
 
-            <!-- Currently search directory bar-->
-            <Border Grid.Row="2" BorderBrush="Gray" BorderThickness="1">
+            <!-- Currently search directory bar -->
+            <Border
+                Grid.Row="2"
+                BorderBrush="Gray"
+                BorderThickness="1">
                 <TextBlock
                     Margin="0 2"
-                    Text="{Binding CurrentlySearchDir,TargetNullValue='Waiting for search to start...'}"
-                    Tapped="InputElement_OnTapped" />
+                    Tapped="InputElement_OnTapped"
+                    Text="{Binding CurrentlySearchDir, TargetNullValue='Waiting for search to start...'}" />
             </Border>
         </Grid>
     </Border>

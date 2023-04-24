@@ -134,10 +134,10 @@
                             Path="Text" />
                         <Binding ElementName="SelectFileTextBox" Path="!(DataValidationErrors.HasErrors)" />
                         <!-- <Binding -->
-                        <!--     Converter="{StaticResource ArraySizeToBooleanConverter}" -->
-                        <!--     ElementName="TagsToApplySimpleTagsBar" -->
-                        <!--     FallbackValue="null" -->
-                        <!--     Path="TagsListBox.Items.Count" /> -->
+                        <!-- Converter="{StaticResource ArraySizeToBooleanConverter}" -->
+                        <!-- ElementName="TagsToApplySimpleTagsBar" -->
+                        <!-- FallbackValue="null" -->
+                        <!-- Path="TagsListBox.Items.Count" /> -->
 
                     </MultiBinding>
                 </Button.IsEnabled>
