@@ -59,7 +59,7 @@ public partial class TaggableItemViewModel : ViewModelBase
         }
 
         _tagService = App.Current.Services.GetRequiredService<ITagToolBackend>().GetTagService();
-        // var _ = Dispatcher.UIThread.InvokeAsync(UpdateTags);
+        var _ = Dispatcher.UIThread.InvokeAsync(UpdateTags, DispatcherPriority.Background);
 
         DisplayName = "TestDisplayName";
         AssociatedTags.AddRange(new[] { new Tag("Tag1"), new Tag("Tag2"), new Tag("Tag3") });
@@ -68,8 +68,8 @@ public partial class TaggableItemViewModel : ViewModelBase
     public TaggableItemViewModel(TagService.TagServiceClient tagServiceClient)
     {
         _tagService = tagServiceClient;
-        // todo: it freezes UI for very large folders!!!
-        var _ = Dispatcher.UIThread.InvokeAsync(UpdateTags);
+        // todo: add cancellation token support (tags should not be loaded for example when folder has been exited or tags are not visible)
+        var _ = Dispatcher.UIThread.InvokeAsync(UpdateTags, DispatcherPriority.Background);
     }
 
     [RelayCommand]
@@ -118,14 +118,14 @@ public partial class TaggableItemViewModel : ViewModelBase
         }
     }
 
-    private void UpdateTags()
+    private async Task UpdateTags()
     {
         var getItemInfoRequest = new GetItemRequest
         {
             Item = new Item { ItemType = TaggedItemType.ToString().ToLower(CultureInfo.InvariantCulture), Identifier = Location }
         };
 
-        var getItemReply = _tagService.GetItem(getItemInfoRequest);
+        var getItemReply = await _tagService.GetItemAsync(getItemInfoRequest);
 
         switch (getItemReply.ResultCase)
         {
