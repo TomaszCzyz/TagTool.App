@@ -7,6 +7,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
 using Dock.Model.Mvvm.Controls;
+using Google.Protobuf.WellKnownTypes;
 using Grpc.Core;
 using JetBrains.Annotations;
 using Microsoft.Extensions.DependencyInjection;
@@ -14,6 +15,7 @@ using Microsoft.Extensions.Logging;
 using TagTool.App.Core.Services;
 using TagTool.App.Models.Messages;
 using TagTool.Backend;
+using TagTool.Backend.DomainTypes;
 
 namespace TagTool.App.ViewModels.UserControls;
 
@@ -72,7 +74,7 @@ public partial class MyTagsViewModel : Document
     {
         if (string.IsNullOrEmpty(CreateTagText)) return;
 
-        var createTagsRequest = new CreateTagRequest { TagName = CreateTagText };
+        var createTagsRequest = new CreateTagRequest { Tag = Any.Pack(new NormalTag { Name = CreateTagText }) };
 
         _logger.LogInformation("Requesting tag creation {Request}", createTagsRequest);
 
@@ -91,7 +93,7 @@ public partial class MyTagsViewModel : Document
     [RelayCommand]
     private void RemoveTag(string tagName)
     {
-        var deleteTagsRequest = new DeleteTagRequest { TagName = tagName, DeleteUsedToo = false };
+        var deleteTagsRequest = new DeleteTagRequest { Tag = Any.Pack(new NormalTag { Name = tagName }), DeleteUsedToo = false };
 
         _logger.LogInformation("Requesting tag deletion {Request}", deleteTagsRequest);
 

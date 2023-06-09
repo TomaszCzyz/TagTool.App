@@ -6,6 +6,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Dock.Model.Mvvm.Controls;
 using DynamicData;
+using Google.Protobuf.WellKnownTypes;
 using Grpc.Core;
 using JetBrains.Annotations;
 using Microsoft.Extensions.DependencyInjection;
@@ -114,10 +115,16 @@ public partial class TaggableItemsSearchViewModel : Document, IDisposable
     [RelayCommand]
     private async Task CommitSearch()
     {
-        var reply = await _tagService.GetItemsByTagsAsync(new GetItemsByTagsRequest { TagNames = { Tags.Select(tag => tag.Name).ToArray() } });
+        var query = Tags
+            .Select(tag => Any.Pack(new NormalTag { Name = tag.Name }))
+            .Select(any => new GetItemsByTagsV2Request.Types.TagQueryParam { Tag = any, Include = true });
+
+        var reply = await _tagService
+            .GetItemsByTagsV2Async(new GetItemsByTagsV2Request { QueryParams = { query } });
+
         var results = new List<TaggableItemViewModel>();
 
-        foreach (var taggedItem in reply.TaggedItem)
+        foreach (var taggedItem in reply.TaggedItems)
         {
             var (info, type) = taggedItem.Item.ItemType switch
             {
@@ -134,7 +141,7 @@ public partial class TaggableItemsSearchViewModel : Document, IDisposable
                 Location = info.FullName,
                 DateCreated = info.CreationTime,
                 AreTagsVisible = true,
-                AssociatedTags = { taggedItem.TagNames.Select(s => new Tag(s)).ToArray() }
+                AssociatedTags = { taggedItem.Tags.Select(s => new Tag(s.Unpack<NormalTag>().Name)).ToArray() }
             };
 
             results.Add(taggableItemViewModel);
@@ -179,7 +186,7 @@ public partial class TaggableItemsSearchViewModel : Document, IDisposable
 
             var reply = await _tagService.GetItemAsync(request);
 
-            if (reply.ResultCase is GetItemReply.ResultOneofCase.TaggedItem && reply.TaggedItem.TagNames.Count != 0)
+            if (reply.ResultCase is GetItemReply.ResultOneofCase.TaggedItem && reply.TaggedItem.Tags.Count != 0)
             {
                 alreadyTaggedItems.Add(info);
             }
@@ -197,7 +204,7 @@ public partial class TaggableItemsSearchViewModel : Document, IDisposable
 
             var itemType = info is FileInfo ? "file" : "folder";
             var item = new Item { ItemType = itemType, Identifier = info.FullName };
-            var tagRequest = new TagItemRequest { Item = item, TagName = tagName };
+            var tagRequest = new TagItemRequest { Item = item, Tag = Any.Pack(new NormalTag { Name = tagName }) };
 
             var reply = await _tagService.TagItemAsync(tagRequest);
 
@@ -280,7 +287,7 @@ public partial class TaggableItemsSearchViewModel : Document, IDisposable
             var words = await _speechToTagSearchService.GetTranscriptionWords(_bassAudioCaptureService?.OutputFilePath);
 
             var searchTags = words
-                .Where(tagName => _tagService.DoesTagExists(new DoesTagExistsRequest { TagName = tagName }).Exists)
+                .Where(tagName => _tagService.DoesTagExists(new DoesTagExistsRequest { Tag = Any.Pack(new NormalTag { Name = tagName }) }).Exists)
                 .Select(tagName => new Tag(tagName))
                 .Where(tag => !EnteredTags.Contains(tag))
                 .ToArray();

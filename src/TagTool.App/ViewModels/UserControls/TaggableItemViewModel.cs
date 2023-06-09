@@ -7,6 +7,7 @@ using Avalonia.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using DynamicData;
+using Google.Protobuf.WellKnownTypes;
 using Microsoft.Extensions.DependencyInjection;
 using TagTool.App.Core.Models;
 using TagTool.App.Core.Services;
@@ -77,7 +78,8 @@ public partial class TaggableItemViewModel : ViewModelBase
     {
         var tagRequest = new TagItemRequest
         {
-            TagName = tagName, Item = new Item { ItemType = TaggedItemType == TaggedItemType.Folder ? "folder" : "file", Identifier = Location }
+            Tag = Any.Pack(new NormalTag { Name = tagName }),
+            Item = new Item { ItemType = TaggedItemType == TaggedItemType.Folder ? "folder" : "file", Identifier = Location }
         };
 
         var tagReply = await _tagService.TagItemAsync(tagRequest);
@@ -100,7 +102,8 @@ public partial class TaggableItemViewModel : ViewModelBase
     {
         var untagItemRequest = new UntagItemRequest
         {
-            TagName = tagName, Item = new Item { Identifier = Location, ItemType = TaggedItemType == TaggedItemType.Folder ? "folder" : "file" }
+            Tag = Any.Pack(new NormalTag { Name = tagName }),
+            Item = new Item { Identifier = Location, ItemType = TaggedItemType == TaggedItemType.Folder ? "folder" : "file" }
         };
 
         var reply = await _tagService.UntagItemAsync(untagItemRequest);
@@ -131,7 +134,7 @@ public partial class TaggableItemViewModel : ViewModelBase
         {
             case GetItemReply.ResultOneofCase.TaggedItem:
                 AssociatedTags.Clear();
-                AssociatedTags.AddRange(getItemReply.TaggedItem.TagNames.Select(s => new Tag(s)));
+                AssociatedTags.AddRange(getItemReply.TaggedItem.Tags.Select(s => new Tag(s.Unpack<NormalTag>().Name)));
                 break;
             case GetItemReply.ResultOneofCase.ErrorMessage:
                 Debug.WriteLine("Update tags failed");
