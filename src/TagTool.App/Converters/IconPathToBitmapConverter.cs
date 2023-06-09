@@ -5,7 +5,7 @@ using Avalonia.Data.Converters;
 using Avalonia.Media.Imaging;
 using Avalonia.Platform;
 using Microsoft.Extensions.DependencyInjection;
-using TagTool.App.Core.Services;
+using TagTool.App.Services;
 
 namespace TagTool.App.Converters;
 

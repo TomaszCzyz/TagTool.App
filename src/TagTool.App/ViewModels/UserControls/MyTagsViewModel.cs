@@ -12,8 +12,8 @@ using Grpc.Core;
 using JetBrains.Annotations;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using TagTool.App.Core.Services;
 using TagTool.App.Models.Messages;
+using TagTool.App.Services;
 using TagTool.Backend;
 using TagTool.Backend.DomainTypes;
 

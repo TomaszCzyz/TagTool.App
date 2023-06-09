@@ -6,8 +6,8 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Grpc.Core;
 using JetBrains.Annotations;
-using TagTool.App.Core.Models;
-using TagTool.App.Core.Services;
+using TagTool.App.Models;
+using TagTool.App.Services;
 using TagTool.Backend;
 
 namespace TagTool.App.ViewModels.UserControls;

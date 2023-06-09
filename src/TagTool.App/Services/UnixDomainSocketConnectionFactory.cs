@@ -2,7 +2,7 @@
 using System.Net.Sockets;
 using Grpc.Net.Client;
 
-namespace TagTool.App.Core.Services;
+namespace TagTool.App.Services;
 
 public class UnixDomainSocketConnectionFactory
 {

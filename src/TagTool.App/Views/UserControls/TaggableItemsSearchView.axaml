@@ -6,7 +6,7 @@
     xmlns:converters="clr-namespace:TagTool.App.Converters"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:models="clr-namespace:TagTool.App.Core.Models;assembly=TagTool.App.Core"
+    xmlns:models="clr-namespace:TagTool.App.Models"
     xmlns:models1="clr-namespace:TagTool.App.Models"
     xmlns:system="clr-namespace:System;assembly=System.Runtime"
     xmlns:templatedControls="clr-namespace:TagTool.App.Views.TemplatedControls"

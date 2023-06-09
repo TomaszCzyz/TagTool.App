@@ -1,7 +1,7 @@
 ﻿using Avalonia.Controls;
 using Avalonia.Interactivity;
 using Microsoft.Extensions.DependencyInjection;
-using TagTool.App.Core.Models;
+using TagTool.App.Models;
 using TagTool.App.ViewModels.UserControls;
 using TagTool.App.Views.Dialogs;
 

@@ -4,7 +4,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using DynamicData;
 using TagTool.App.Comparers;
-using TagTool.App.Core.Models;
+using TagTool.App.Models;
 
 namespace TagTool.App.ViewModels.Dialogs;
 

@@ -1,6 +1,6 @@
 ﻿using System.Globalization;
 using Avalonia.Data.Converters;
-using TagTool.App.Core.Extensions;
+using TagTool.App.Extensions;
 
 namespace TagTool.App.Converters;
 

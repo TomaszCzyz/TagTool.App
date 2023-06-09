@@ -11,11 +11,11 @@ using OpenAI.GPT3.Managers;
 using Serilog;
 using Serilog.Core.Enrichers;
 using Serilog.Events;
-using TagTool.App.Core.Services;
 using TagTool.App.Extensions;
 using TagTool.App.Models;
 using TagTool.App.Models.Docks;
 using TagTool.App.Options;
+using TagTool.App.Services;
 using TagTool.App.ViewModels;
 using TagTool.App.Views;
 

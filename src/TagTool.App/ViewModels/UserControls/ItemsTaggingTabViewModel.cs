@@ -6,7 +6,7 @@ using Dock.Model.Mvvm.Controls;
 using DynamicData;
 using JetBrains.Annotations;
 using Microsoft.Extensions.DependencyInjection;
-using TagTool.App.Core.Services;
+using TagTool.App.Services;
 using TagTool.Backend;
 
 namespace TagTool.App.ViewModels.UserControls;

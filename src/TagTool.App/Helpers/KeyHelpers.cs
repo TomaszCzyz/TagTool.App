@@ -1,6 +1,6 @@
 using Avalonia.Input;
 
-namespace TagTool.App.Core.Helpers;
+namespace TagTool.App.Helpers;
 
 public static class KeyHelpers
 {

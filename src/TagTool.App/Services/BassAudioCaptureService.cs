@@ -4,7 +4,7 @@ using ManagedBass;
 using NWaves.Signals;
 using NWaves.Utils;
 
-namespace TagTool.App.Core.Services;
+namespace TagTool.App.Services;
 
 public class BassAudioCaptureService : IDisposable
 {

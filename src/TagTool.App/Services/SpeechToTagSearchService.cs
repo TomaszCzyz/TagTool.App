@@ -3,7 +3,7 @@ using Microsoft.Extensions.Logging;
 using OpenAI.GPT3.Interfaces;
 using OpenAI.GPT3.ObjectModels.RequestModels;
 
-namespace TagTool.App.Core.Services;
+namespace TagTool.App.Services;
 
 public interface ISpeechToTagSearchService
 {

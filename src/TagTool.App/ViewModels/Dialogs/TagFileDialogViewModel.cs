@@ -6,7 +6,7 @@ using Avalonia.Platform.Storage;
 using CommunityToolkit.Mvvm.ComponentModel;
 using JetBrains.Annotations;
 using Microsoft.Extensions.Options;
-using TagTool.App.Core.Models;
+using TagTool.App.Models;
 using TagTool.App.Options;
 
 namespace TagTool.App.ViewModels.Dialogs;
