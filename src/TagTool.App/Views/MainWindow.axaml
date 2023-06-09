@@ -115,7 +115,7 @@
                                                 </Style>
                                             </Border.Styles>
 
-                                            <ListBox Items="{ReflectionBinding ElementName=RootWindow, Path=DataContext.Tools, FallbackValue=null}">
+                                            <ListBox ItemsSource="{ReflectionBinding ElementName=RootWindow, Path=DataContext.Tools, FallbackValue=null}">
                                                 <ListBox.ItemTemplate>
                                                     <DataTemplate x:CompileBindings="False">
                                                         <Button

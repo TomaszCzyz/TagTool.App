@@ -99,7 +99,7 @@
                     Grid.Row="1"
                     Grid.Column="0"
                     MinWidth="100"
-                    Items="{Binding Items}"
+                    ItemsSource="{Binding Items}"
                     SelectedItems="{Binding SelectedItems}"
                     SelectionMode="Multiple"
                     SelectionChanged="TreeView_OnSelectionChanged">
@@ -138,7 +138,7 @@
                                     Grid.Column="2"
                                     Background="Transparent"
                                     IsEnabled="False"
-                                    Items="{Binding Tags}">
+                                    ItemsSource="{Binding Tags}">
                                     <ListBox.ItemsPanel>
                                         <ItemsPanelTemplate>
                                             <StackPanel Orientation="Horizontal" />
@@ -174,7 +174,6 @@
             DragDrop.AllowDrop="True"
             Background="Gray"
             BorderBrush="#444444"
-            BorderDashArray="5,5"
             BorderThickness="10"
             IsVisible="False"
             Opacity="0.7">
@@ -222,7 +221,7 @@
                     <ListBox
                         Name="SelectedFilesListBox"
                         Background="Transparent"
-                        Items="{Binding SelectedItems}"
+                        ItemsSource="{Binding SelectedItems}"
                         SelectionMode="Multiple" />
 
                 </StackPanel>
@@ -241,7 +240,7 @@
                 <StackPanel>
                     <TextBlock Text="{Binding RowDescription}" />
 
-                    <ListBox Background="Transparent" Items="{Binding ExistingTags}">
+                    <ListBox Background="Transparent" ItemsSource="{Binding ExistingTags}">
                         <ListBox.Styles>
                             <Style Selector="ListBoxItem">
                                 <Setter Property="Padding" Value="1 1 0 0" />
@@ -274,7 +273,7 @@
                 <StackPanel>
                     <TextBlock Text="Implicit tags:" />
 
-                    <ListBox Background="Transparent" Items="{Binding ImplicitTags}">
+                    <ListBox Background="Transparent" ItemsSource="{Binding ImplicitTags}">
                         <ListBox.Styles>
                             <Style Selector="ListBoxItem">
                                 <Setter Property="Padding" Value="1 1 0 0" />

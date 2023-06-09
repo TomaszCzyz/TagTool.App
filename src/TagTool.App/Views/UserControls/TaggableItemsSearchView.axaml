@@ -79,7 +79,6 @@
                 DragDrop.AllowDrop="True"
                 Background="#aaa"
                 BorderBrush="#888"
-                BorderDashArray="5,3"
                 BorderThickness="8"
                 CornerRadius="10"
                 IsVisible="False"
@@ -193,7 +192,7 @@
                             Padding="4"
                             HorizontalAlignment="Left"
                             VerticalAlignment="Center"
-                            Items="{Binding EnteredTags}"
+                            ItemsSource="{Binding EnteredTags}"
                             ScrollViewer.HorizontalScrollBarVisibility="Disabled">
                             <ListBox.Styles>
                                 <Style Selector="Button.LogicalOperatorButton:pointerover /template/ ContentPresenter#PART_ContentPresenter">
@@ -372,7 +371,7 @@
                                 <ListBox
                                     Grid.Row="1"
                                     IsVisible="{Binding AreSpecialTagsVisible}"
-                                    Items="{Binding AvailableSpacialTags}">
+                                    ItemsSource="{Binding AvailableSpacialTags}">
                                     <ListBox.DataTemplates>
                                         <DataTemplate DataType="system:String">
                                             <Border
@@ -406,7 +405,7 @@
                                     Name="SearchResultsListBox"
                                     Grid.Row="3"
                                     HorizontalAlignment="Left"
-                                    Items="{Binding SearchResults}"
+                                    ItemsSource="{Binding SearchResults}"
                                     SelectedItem="{Binding SelectedItemFromSearched}"
                                     SelectionMode="Single">
                                     <ListBox.DataTemplates>
@@ -444,7 +443,7 @@
                                 <ListBox
                                     Name="PopularTagsListBox"
                                     Grid.Row="5"
-                                    Items="{Binding PopularTags}"
+                                    ItemsSource="{Binding PopularTags}"
                                     SelectedItem="{Binding SelectedItemFromPopular}"
                                     SelectionMode="Single">
                                     <ListBox.DataTemplates>
@@ -491,7 +490,7 @@
                 Background="Transparent"
                 Focusable="True"
                 FontSize="{DynamicResource AppContentFontSize}"
-                Items="{Binding Files}"
+                ItemsSource="{Binding Files}"
                 SelectionMode="Multiple">
                 <ListBox.DataTemplates>
                     <DataTemplate x:CompileBindings="False" DataType="userControls:TaggableItemViewModel">

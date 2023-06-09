@@ -35,7 +35,7 @@
                 </Expander.Styles>
                 <ListBox
                     Name="TagsListBox"
-                    Items="{Binding Items}"
+                    ItemsSource="{Binding Items}"
                     SelectedItem="{Binding SelectedTag}">
                     <ListBox.ItemsPanel>
                         <ItemsPanelTemplate>

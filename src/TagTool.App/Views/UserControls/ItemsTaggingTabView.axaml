@@ -36,7 +36,6 @@
             Grid.Column="0"
             Background="#bbb"
             BorderBrush="#666"
-            BorderDashArray="6,3"
             BorderThickness="8"
             CornerRadius="4"
             IsVisible="False"
@@ -56,7 +55,7 @@
             DragDrop.AllowDrop="True"
             Classes="Outline">
 
-            <ListBox Name="ItemsListBox" Items="{Binding ItemsToTag}">
+            <ListBox Name="ItemsListBox" ItemsSource="{Binding ItemsToTag}">
                 <ListBox.DataTemplates>
                     <DataTemplate x:CompileBindings="False" DataType="userControls:TaggableItemViewModel">
                         <userControls1:TaggableItemView FontSize="14" />

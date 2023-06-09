@@ -95,7 +95,7 @@
             Grid.Column="2"
             Classes="Outline">
 
-            <ListBox Background="Transparent" Items="{Binding ImplicitTags}">
+            <ListBox Background="Transparent" ItemsSource="{Binding ImplicitTags}">
                 <ListBox.Styles>
                     <Style Selector="ListBoxItem">
                         <Setter Property="Padding" Value="1 1 0 0" />

@@ -153,7 +153,7 @@
             </Grid>
 
             <!-- Search results -->
-            <ListBox Grid.Row="1" Items="{Binding SearchResults}">
+            <ListBox Grid.Row="1" ItemsSource="{Binding SearchResults}">
                 <ListBox.DataTemplates>
                     <DataTemplate x:CompileBindings="False" DataType="userControls:TaggableItemViewModel">
                         <Grid ColumnDefinitions="*,Auto,75">

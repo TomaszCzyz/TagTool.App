@@ -80,7 +80,7 @@
                     Padding="5 0"
                     HorizontalAlignment="Left"
                     VerticalAlignment="Center"
-                    Items="{Binding AssociatedTags}">
+                    ItemsSource="{Binding AssociatedTags}">
                     <ItemsControl.ItemsPanel>
                         <ItemsPanelTemplate>
                             <StackPanel Orientation="Horizontal" Spacing="2" />

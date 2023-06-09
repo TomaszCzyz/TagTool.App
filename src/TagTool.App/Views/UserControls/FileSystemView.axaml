@@ -94,7 +94,7 @@
                 <ItemsControl
                     DockPanel.Dock="Left"
                     HorizontalAlignment="Left"
-                    Items="{Binding AddressSegments}">
+                    ItemsSource="{Binding AddressSegments}">
                     <ItemsControl.ItemsPanel>
                         <ItemsPanelTemplate>
                             <StackPanel Orientation="Horizontal" />
@@ -126,7 +126,7 @@
                                     IsLightDismissEnabled="True"
                                     IsOpen="{Binding IsPopupOpen, Mode=TwoWay}"
                                     PlacementTarget="{ReflectionBinding #PopupButton}">
-                                    <ContextMenu Items="{Binding Children}">
+                                    <ContextMenu ItemsSource="{Binding Children}">
                                         <ContextMenu.Styles>
                                             <Style Selector="MenuItem">
                                                 <Setter Property="Header" Value="{Binding Name}" />
@@ -204,7 +204,7 @@
             Grid.Row="1"
             Focusable="True"
             FontSize="{DynamicResource AppContentFontSize}"
-            Items="{Binding Items}"
+            ItemsSource="{Binding Items}"
             SelectedItem="{Binding SelectedItem}"
             SelectionMode="Multiple"
             LostFocus="DataGrid_OnLostFocus"

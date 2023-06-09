@@ -11,11 +11,13 @@ namespace TagTool.App.Converters;
 
 public class IconPathToBitmapConverter : IValueConverter
 {
-    private readonly IFileIconProvider _defaultFileIconProvider = App.Current.Services.GetRequiredService<IFileIconProvider>();
-    private static readonly IAssetLoader _assets = AvaloniaLocator.Current.GetRequiredService<IAssetLoader>();
+    private const string DefaultFileIconAssetUri = "avares://TagTool.App/Assets/Images/round_description_black_36dp.png";
+    private const string DefaultFolderIconAssetUri = "avares://TagTool.App/Assets/Images/windows_folder_icon.png";
 
-    private static readonly Stream _defaultFileIcon = _assets.Open(new Uri("avares://TagTool.App/Assets/Images/round_description_black_36dp.png"));
-    private static readonly Stream _defaultFolderIcon = _assets.Open(new Uri("avares://TagTool.App/Assets/Images/windows_folder_icon.png"));
+    private static readonly Stream _defaultFileIcon = AssetLoader.Open(new Uri(DefaultFileIconAssetUri));
+    private static readonly Stream _defaultFolderIcon = AssetLoader.Open(new Uri(DefaultFolderIconAssetUri));
+
+    private readonly IFileIconProvider _defaultFileIconProvider = App.Current.Services.GetRequiredService<IFileIconProvider>();
 
     public object? Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
     {

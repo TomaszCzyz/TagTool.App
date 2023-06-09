@@ -128,7 +128,8 @@ public partial class MainWindowViewModel : ViewModelBase, IRecipient<NewNotifica
         };
 
         _previouslyFocusedElement = elementToFocus;
-        _focusManager.Focus(elementToFocus);
+
+        // _focusManager.Focus(elementToFocus);
     }
 
     private InputElement? NextToFocus(AutoCompleteBox?[] focusTargets)
