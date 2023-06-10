@@ -4,7 +4,9 @@ using Avalonia.Controls;
 using Avalonia.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using Dock.Model.Mvvm.Controls;
 using DynamicData;
+using Grpc.Core;
 using JetBrains.Annotations;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -20,7 +22,7 @@ public sealed class TextBoxMarker
 
 public sealed record QuerySegment(bool Include, bool MustBePresent, ITag Tag);
 
-public partial class TaggableItemsSearchBarViewModel : ViewModelBase, IDisposable
+public partial class TaggableItemsSearchBarViewModel : Document, IDisposable
 {
     private readonly ILogger<TaggableItemsSearchBarViewModel> _logger;
     private readonly TagService.TagServiceClient _tagService;
@@ -65,7 +67,6 @@ public partial class TaggableItemsSearchBarViewModel : ViewModelBase, IDisposabl
 
     private void Initialize()
     {
-        // QuerySegments.CollectionChanged += async (_, _) => await Dispatcher.UIThread.InvokeAsync(CommitSearch);
         QuerySegments.CollectionChanged
             += (_, args) =>
             {
@@ -76,12 +77,28 @@ public partial class TaggableItemsSearchBarViewModel : ViewModelBase, IDisposabl
 
                 if (args.NewItems is not null)
                 {
-                    DisplayedSearchBarElements.AddOrInsertRange(args.NewItems.OfType<object>(), 0);
+                    DisplayedSearchBarElements.AddOrInsertRange(args.NewItems.OfType<object>(), DisplayedSearchBarElements.Count - 1);
                 }
             };
 
         QuerySegments.Add(new QuerySegment(true, false, new TextTag("Default")));
         QuerySegments.Add(new QuerySegment(true, false, new TextTag("Default2")));
+    }
+
+    public async Task<IEnumerable<object>> GetTagsAsync(string? searchText, CancellationToken cancellationToken)
+    {
+        var streamingCall = _tagService.SearchTags(
+            new SearchTagsRequest { Name = "*", SearchType = SearchTagsRequest.Types.SearchType.Wildcard, ResultsLimit = 50 },
+            cancellationToken: cancellationToken);
+
+        var results = await streamingCall.ResponseStream
+            .ReadAllAsync(cancellationToken)
+            .Select(reply => reply.TagName)
+            .Where(tagName => !QuerySegments.Select(segment => segment.Tag.DisplayText).Contains(tagName))
+            .Select(dummy => (object)dummy)
+            .ToListAsync(cancellationToken: cancellationToken);
+
+        return results;
     }
 
     [RelayCommand]
@@ -95,6 +112,12 @@ public partial class TaggableItemsSearchBarViewModel : ViewModelBase, IDisposabl
 
         // todo: inform other component (which is responsible for displaying found items) that query has changed
         var _ = await _tagService.GetItemsByTagsV2Async(new GetItemsByTagsV2Request { QueryParams = { tagQueryParams } });
+    }
+
+    [RelayCommand]
+    private void AddTagToSearchQuery(string tagName)
+    {
+        QuerySegments.Add(new QuerySegment(true, false, new TextTag(tagName)));
     }
 
     [RelayCommand]

@@ -31,7 +31,8 @@ public partial class MainWindowViewModel : ViewModelBase, IRecipient<NewNotifica
     private GridLength _activeRightToolWidth = new(200);
 
     [ObservableProperty]
-    private ObservableCollection<string> _tools = new(new[] { "Search", "My Tags", "File Explorer", "Items Tagger", "Tree File Explorer" });
+    private ObservableCollection<string> _tools
+        = new(new[] { "Search", "My Tags", "File Explorer", "Items Tagger", "Tree File Explorer", "New Search Bar" });
 
     [ObservableProperty]
     private IRootDock? _layout;

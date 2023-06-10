@@ -46,7 +46,8 @@
         Background="Transparent"
         BorderThickness="1 1 1 2"
         ClipToBounds="True"
-        CornerRadius="4">
+        CornerRadius="4"
+        PointerPressed="SearchBarBorder_OnPointerPressed">
         <Border.Transitions>
             <Transitions>
                 <BrushTransition Property="BorderBrush" Duration="0:0:0.2" />
@@ -127,19 +128,18 @@
             <ScrollViewer
                 Grid.Column="1"
                 HorizontalAlignment="Stretch"
-                VerticalAlignment="Top"
-                VerticalScrollBarVisibility="Hidden"
-                PointerPressed="SearchBarInputElement_OnPointerPressed">
+                VerticalAlignment="Top">
 
                 <!-- Query box -->
                 <ListBox
                     Name="TagsListBox"
+                    ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                    ScrollViewer.VerticalScrollBarVisibility="Hidden"
                     Margin="2"
                     Padding="4"
                     HorizontalAlignment="Left"
                     VerticalAlignment="Center"
                     ItemsSource="{Binding DisplayedSearchBarElements}"
-                    ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                     SelectionMode="Single">
                     <ListBox.DataTemplates>
                         <DataTemplate x:CompileBindings="False" DataType="userControls:QuerySegment">
@@ -180,10 +180,17 @@
                         </DataTemplate>
 
                         <DataTemplate x:CompileBindings="False" DataType="userControls:TextBoxMarker">
-                            <TextBox
-                                Classes="Transparent"
-                                Text="{Binding #UserControlRoot.DataContext.SearchText, FallbackValue=null}"
-                                Watermark="Next tag..." />
+                            <!-- <TextBox -->
+                            <!-- Classes="Transparent" -->
+                            <!-- Text="{Binding #UserControlRoot.DataContext.SearchText, FallbackValue=null}" -->
+                            <!-- Watermark="Next tag..." -->
+                            <!-- AttachedToLogicalTree="StyledElement_OnAttachedToLogicalTree" /> -->
+
+                            <AutoCompleteBox
+                                FilterMode="Contains"
+                                IsTextCompletionEnabled="True"
+                                Watermark="Next Tag..."
+                                AttachedToLogicalTree="AutoCompleteBox_OnAttachedToLogicalTree" />
 
                         </DataTemplate>
                         <!-- <DataTemplate x:CompileBindings="False" DataType="models1:NameSpecialTag"> -->
