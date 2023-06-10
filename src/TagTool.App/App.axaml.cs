@@ -95,12 +95,6 @@ public class App : Application
 
     private static void SetupSerilog()
     {
-        // var logsDbPath = Path.Combine(
-        //     Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
-        //     "TagToolBackend",
-        //     "Logs",
-        //     "applog.db");
-
         const string outputTemplate = "[{Timestamp:HH:mm:ss} {Level:u3} {SourceContext}]{NewLine}{Message:lj}{NewLine}{Exception}";
 
         Log.Logger = new LoggerConfiguration()
@@ -115,7 +109,6 @@ public class App : Application
                 outputTemplate: outputTemplate,
                 formatProvider: CultureInfo.InvariantCulture,
                 shared: true)
-            // .WriteTo.SQLite(logsDbPath, storeTimestampInUtc: true, batchSize: 10, formatProvider: CultureInfo.CurrentCulture)
             .CreateLogger();
     }
 }
