@@ -173,6 +173,18 @@
                                                     Text="{Binding DisplayText}" />
 
                                             </DataTemplate>
+                                            <DataTemplate x:Key="TagTool.App.Models.DayRangeTag" DataType="models:ITag">
+                                                <TextBlock
+                                                    Grid.Column="0"
+                                                    Classes="Transparent"
+                                                    Margin="4 1"
+                                                    VerticalAlignment="Center"
+                                                    FontSize="18"
+                                                    Foreground="DarkGreen"
+                                                    IsTabStop="False"
+                                                    Text="{Binding DisplayText}" />
+
+                                            </DataTemplate>
                                         </dataTemplates:TagsTemplateSelector>
                                     </ContentControl.DataTemplates>
                                 </ContentControl>

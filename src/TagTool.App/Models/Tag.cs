@@ -26,7 +26,7 @@ public sealed class DayTag : ITag
 
 public sealed class DayRangeTag : ITag
 {
-    public string DisplayText => $"{Begin}:{End}";
+    public string DisplayText => $"{Begin}-{End}";
 
     public DayOfWeek Begin { get; init; }
 
