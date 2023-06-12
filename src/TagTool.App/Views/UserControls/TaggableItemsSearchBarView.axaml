@@ -5,7 +5,9 @@
     xmlns:avaloniaProgressRing="clr-namespace:AvaloniaProgressRing;assembly=AvaloniaProgressRing"
     xmlns:converters="clr-namespace:TagTool.App.Converters"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:dataTemplates="clr-namespace:TagTool.App.DataTemplates"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:models="clr-namespace:TagTool.App.Models"
     xmlns:userControls="clr-namespace:TagTool.App.ViewModels.UserControls"
     x:Class="TagTool.App.Views.UserControls.TaggableItemsSearchBarView"
     x:DataType="userControls:TaggableItemsSearchBarViewModel"
@@ -144,15 +146,36 @@
                     <ListBox.DataTemplates>
                         <DataTemplate x:CompileBindings="False" DataType="userControls:QuerySegment">
                             <Grid ColumnDefinitions="Auto,Auto, Auto" RowDefinitions="Auto">
-                                <TextBlock
-                                    Grid.Column="0"
-                                    Classes="Transparent"
-                                    Margin="4 1"
-                                    VerticalAlignment="Center"
-                                    FontSize="18"
-                                    Foreground="{StaticResource MyLightSecondary500}"
-                                    IsTabStop="False"
-                                    Text="{Binding Tag.DisplayText}" />
+                                <ContentControl Content="{Binding Tag}">
+                                    <ContentControl.DataTemplates>
+                                        <dataTemplates:TagsTemplateSelector>
+                                            <DataTemplate x:Key="TagTool.App.Models.TextTag" DataType="models:ITag">
+                                                <TextBlock
+                                                    Grid.Column="0"
+                                                    Classes="Transparent"
+                                                    Margin="4 1"
+                                                    VerticalAlignment="Center"
+                                                    FontSize="18"
+                                                    Foreground="{StaticResource MyLightSecondary500}"
+                                                    IsTabStop="False"
+                                                    Text="{Binding DisplayText}" />
+
+                                            </DataTemplate>
+                                            <DataTemplate x:Key="TagTool.App.Models.DayTag" DataType="models:ITag">
+                                                <TextBlock
+                                                    Grid.Column="0"
+                                                    Classes="Transparent"
+                                                    Margin="4 1"
+                                                    VerticalAlignment="Center"
+                                                    FontSize="18"
+                                                    Foreground="{StaticResource MyLightPrimary400}"
+                                                    IsTabStop="False"
+                                                    Text="{Binding DisplayText}" />
+
+                                            </DataTemplate>
+                                        </dataTemplates:TagsTemplateSelector>
+                                    </ContentControl.DataTemplates>
+                                </ContentControl>
 
                                 <Button
                                     Grid.Column="1"
@@ -180,12 +203,6 @@
                         </DataTemplate>
 
                         <DataTemplate x:CompileBindings="False" DataType="userControls:TextBoxMarker">
-                            <!-- <TextBox -->
-                            <!-- Classes="Transparent" -->
-                            <!-- Text="{Binding #UserControlRoot.DataContext.SearchText, FallbackValue=null}" -->
-                            <!-- Watermark="Next tag..." -->
-                            <!-- AttachedToLogicalTree="StyledElement_OnAttachedToLogicalTree" /> -->
-
                             <AutoCompleteBox
                                 FilterMode="Contains"
                                 IsTextCompletionEnabled="True"
@@ -193,28 +210,6 @@
                                 AttachedToLogicalTree="AutoCompleteBox_OnAttachedToLogicalTree" />
 
                         </DataTemplate>
-                        <!-- <DataTemplate x:CompileBindings="False" DataType="models1:NameSpecialTag"> -->
-                        <!-- <templatedControls:SpecialTag -->
-                        <!-- Classes="LargeSpecialTag" -->
-                        <!-- Margin="0 -5 0 0" -->
-                        <!-- BorderThickness="1 1 1 2" -->
-                        <!-- ClipRectangleFill="{StaticResource MyLightPrimary200}" -->
-                        <!-- DeleteCommand="{Binding #UserControlRoot.DataContext.RemoveTagCommand, FallbackValue=null}" -->
-                        <!-- DeleteCommandParameter="{Binding .}" -->
-                        <!-- SpecialTagName="Name" -->
-                        <!-- Text="{Binding FileName}" /> -->
-
-                        <!-- </DataTemplate> -->
-
-                        <!-- <DataTemplate x:CompileBindings="False" DataType="system:String"> -->
-                        <!-- <TextBox -->
-                        <!-- Classes="Transparent" -->
-                        <!-- Text="{Binding #UserControlRoot.DataContext.SearchText, FallbackValue=null}" -->
-                        <!-- Watermark="Next tag..." -->
-                        <!-- AttachedToLogicalTree="StyledElement_OnAttachedToLogicalTree" -->
-                        <!-- GotFocus="InputElement_OnGotFocus" /> -->
-                        <!--  -->
-                        <!-- </DataTemplate> -->
                     </ListBox.DataTemplates>
                 </ListBox>
             </ScrollViewer>

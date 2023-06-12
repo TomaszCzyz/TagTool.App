@@ -24,17 +24,17 @@ public static class TagMapper
         if (anyTag.Is(NormalTag.Descriptor))
         {
             var normalTag = anyTag.Unpack<NormalTag>();
-            tag = new TextTag(normalTag.Name);
+            tag = new TextTag { Name = normalTag.Name };
         }
         else if (anyTag.Is(Backend.DomainTypes.DayTag.Descriptor))
         {
             var dayTag = anyTag.Unpack<Backend.DomainTypes.DayTag>();
-            tag = new DayTag((DayOfWeek)dayTag.Day);
+            tag = new DayTag { DayOfWeek = (DayOfWeek)dayTag.Day };
         }
         else if (anyTag.Is(Backend.DomainTypes.DayRangeTag.Descriptor))
         {
             var dayRangeTag = anyTag.Unpack<Backend.DomainTypes.DayRangeTag>();
-            tag = new DayRangeTag((DayOfWeek)dayRangeTag.BeginDay, (DayOfWeek)dayRangeTag.EndDay);
+            tag = new DayRangeTag { Begin = (DayOfWeek)dayRangeTag.BeginDay, End = (DayOfWeek)dayRangeTag.EndDay };
         }
 
         return tag ?? throw new ArgumentException("Unable to match tag type");

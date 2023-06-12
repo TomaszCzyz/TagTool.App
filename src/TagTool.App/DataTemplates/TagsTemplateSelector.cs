@@ -1,0 +1,28 @@
+﻿using Avalonia.Controls;
+using Avalonia.Controls.Templates;
+using Avalonia.Metadata;
+using TagTool.App.Models;
+
+namespace TagTool.App.DataTemplates;
+
+public class TagsTemplateSelector : IDataTemplate
+{
+    [Content]
+    // ReSharper disable once CollectionNeverUpdated.Global
+    public Dictionary<string, IDataTemplate> AvailableTemplates { get; } = new();
+
+    // Build the DataTemplate here
+    public Control? Build(object? param)
+    {
+        var key = param?.ToString() ?? throw new ArgumentNullException(nameof(param));
+
+        return AvailableTemplates[key].Build(param);
+    }
+
+    public bool Match(object? data)
+    {
+        var key = data?.ToString();
+
+        return data is ITag && !string.IsNullOrEmpty(key) && AvailableTemplates.ContainsKey(key);
+    }
+}

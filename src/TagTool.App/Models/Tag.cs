@@ -10,17 +10,25 @@ public interface ITag
     string DisplayText { get; }
 }
 
-public sealed record TextTag(string Name) : ITag
+public sealed class TextTag : ITag
 {
     public string DisplayText => Name;
+
+    public required string Name { get; init; }
 }
 
-public sealed record DayTag(DayOfWeek DayOfWeek) : ITag
+public sealed class DayTag : ITag
 {
     public string DisplayText => CultureInfo.CurrentCulture.DateTimeFormat.GetDayName(DayOfWeek);
+
+    public required DayOfWeek DayOfWeek { get; init; }
 }
 
-public sealed record DayRangeTag(DayOfWeek Begin, DayOfWeek End) : ITag
+public sealed class DayRangeTag : ITag
 {
     public string DisplayText => $"{Begin}:{End}";
+
+    public DayOfWeek Begin { get; init; }
+
+    public DayOfWeek End { get; init; }
 }

@@ -81,8 +81,9 @@ public partial class TaggableItemsSearchBarViewModel : Document, IDisposable
                 }
             };
 
-        QuerySegments.Add(new QuerySegment(true, false, new TextTag("Default")));
-        QuerySegments.Add(new QuerySegment(true, false, new TextTag("Default2")));
+        QuerySegments.Add(new QuerySegment(true, false, new TextTag { Name = "Default" }));
+        QuerySegments.Add(new QuerySegment(true, false, new TextTag { Name = "Tag2" }));
+        QuerySegments.Add(new QuerySegment(true, false, new DayTag { DayOfWeek = DayOfWeek.Sunday }));
     }
 
     public async Task<IEnumerable<object>> GetTagsAsync(string? searchText, CancellationToken cancellationToken)
@@ -117,7 +118,7 @@ public partial class TaggableItemsSearchBarViewModel : Document, IDisposable
     [RelayCommand]
     private void AddTagToSearchQuery(string tagName)
     {
-        QuerySegments.Add(new QuerySegment(true, false, new TextTag(tagName)));
+        QuerySegments.Add(new QuerySegment(true, false, new TextTag { Name = tagName }));
     }
 
     [RelayCommand]
