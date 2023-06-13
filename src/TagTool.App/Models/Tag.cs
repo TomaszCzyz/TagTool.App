@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using System.Globalization;
 using Avalonia.Controls.Documents;
 
@@ -10,6 +11,7 @@ public interface ITag
     string DisplayText { get; }
 }
 
+[DebuggerDisplay("{DisplayText}")]
 public sealed class TextTag : ITag
 {
     public string DisplayText => Name;

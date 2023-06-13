@@ -146,12 +146,11 @@
                     <ListBox.DataTemplates>
                         <DataTemplate x:CompileBindings="False" DataType="userControls:QuerySegment">
                             <Grid ColumnDefinitions="Auto,Auto, Auto" RowDefinitions="Auto">
-                                <ContentControl Content="{Binding Tag}">
+                                <ContentControl Grid.Column="0" Content="{Binding Tag}">
                                     <ContentControl.DataTemplates>
                                         <dataTemplates:TagsTemplateSelector>
                                             <DataTemplate x:Key="TagTool.App.Models.TextTag" DataType="models:ITag">
                                                 <TextBlock
-                                                    Grid.Column="0"
                                                     Classes="Transparent"
                                                     Margin="4 1"
                                                     VerticalAlignment="Center"
@@ -163,7 +162,6 @@
                                             </DataTemplate>
                                             <DataTemplate x:Key="TagTool.App.Models.DayTag" DataType="models:ITag">
                                                 <TextBlock
-                                                    Grid.Column="0"
                                                     Classes="Transparent"
                                                     Margin="4 1"
                                                     VerticalAlignment="Center"
@@ -175,7 +173,6 @@
                                             </DataTemplate>
                                             <DataTemplate x:Key="TagTool.App.Models.DayRangeTag" DataType="models:ITag">
                                                 <TextBlock
-                                                    Grid.Column="0"
                                                     Classes="Transparent"
                                                     Margin="4 1"
                                                     VerticalAlignment="Center"
@@ -216,7 +213,7 @@
 
                         <DataTemplate x:CompileBindings="False" DataType="userControls:TextBoxMarker">
                             <AutoCompleteBox
-                                FilterMode="Contains"
+                                FilterMode="None"
                                 IsTextCompletionEnabled="True"
                                 Watermark="Next Tag..."
                                 AttachedToLogicalTree="AutoCompleteBox_OnAttachedToLogicalTree" />

@@ -37,7 +37,8 @@ public static class TagMapper
             tag = new DayRangeTag { Begin = (DayOfWeek)dayRangeTag.BeginDay, End = (DayOfWeek)dayRangeTag.EndDay };
         }
 
-        return tag ?? throw new ArgumentException("Unable to match tag type");
+        return tag ?? new TextTag{Name = "UnknownTagType"};
+        // return tag ?? throw new ArgumentException("Unable to match tag type");
     }
 
     public static Any MapToDto(ITag tag)

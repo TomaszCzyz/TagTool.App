@@ -96,7 +96,8 @@ public partial class TagSearchBoxViewModel : ViewModelBase, IDisposable
                     .Select(match => new HighlightInfo(match.StartIndex, match.Length))
                     .ToArray();
 
-                var viewListItem = new HighlightedMatch { Inlines = FindSpans(reply.TagName, highlightInfos) };
+                var viewListItem
+                    = new HighlightedMatch { Inlines = FindSpans(TagMapper.TagMapper.MapToDomain(reply.Tag).DisplayText, highlightInfos) };
 
                 TagsSearchResults.Add(viewListItem);
             }

@@ -95,10 +95,10 @@ public partial class TaggableItemsSearchBarViewModel : Document, IDisposable
 
         var results = await streamingCall.ResponseStream
             .ReadAllAsync(cancellationToken)
-            .Select(reply => reply.TagName)
-            .Where(tagName => !QuerySegments.Select(segment => segment.Tag.DisplayText).Contains(tagName))
-            .Select(dummy => (object)dummy)
-            .ToListAsync(cancellationToken: cancellationToken);
+            .Select(reply => TagMapper.TagMapper.MapToDomain(reply.Tag))
+            .Where(tag => !QuerySegments.Select(segment => segment.Tag).Contains(tag))
+            .Select(tag => (object)tag.DisplayText)
+            .ToListAsync(cancellationToken);
 
         return results;
     }

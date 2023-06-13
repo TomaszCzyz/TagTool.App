@@ -11,7 +11,6 @@ public class TagsTemplateSelector : IDataTemplate
     // ReSharper disable once CollectionNeverUpdated.Global
     public Dictionary<string, IDataTemplate> AvailableTemplates { get; } = new();
 
-    // Build the DataTemplate here
     public Control? Build(object? param)
     {
         var key = param?.ToString() ?? throw new ArgumentNullException(nameof(param));

@@ -65,7 +65,9 @@ public partial class MyTagsViewModel : Document
         {
             var searchTagsRequest = new SearchTagsRequest { Name = "*", SearchType = SearchTagsRequest.Types.SearchType.Wildcard, ResultsLimit = 20 };
             var streamingCall = _tagService.SearchTags(searchTagsRequest);
-            await streamingCall.ResponseStream.ReadAllAsync().ForEachAsync(reply => Items.Add(reply.TagName));
+            await streamingCall.ResponseStream
+                .ReadAllAsync()
+                .ForEachAsync(reply => Items.Add(TagMapper.TagMapper.MapToDomain(reply.Tag).DisplayText));
         });
     }
 

@@ -377,9 +377,9 @@ public partial class TaggableItemsSearchViewModel : Document, IDisposable
                     .Select(match => new HighlightInfo(match.StartIndex, match.Length))
                     .ToArray();
 
-                var inlines = _wordHighlighter.CreateInlines(reply.TagName, highlightInfos);
+                var inlines = _wordHighlighter.CreateInlines(TagMapper.TagMapper.MapToDomain(reply.Tag).DisplayText, highlightInfos);
 
-                SearchResults.Add(new Tag(reply.TagName, inlines));
+                // SearchResults.Add(new Tag(reply.TagName, inlines));
             }
         }
         catch (RpcException e) when (e.Status.StatusCode == StatusCode.Cancelled)
