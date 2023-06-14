@@ -24,7 +24,26 @@ public sealed class TextBoxMarker
 {
 }
 
-public sealed record QuerySegment(bool Include, bool MustBePresent, ITag Tag);
+public enum QuerySegmentState
+{
+    Exclude = 0,
+    Include = 1,
+    MustBePresent = 2
+}
+
+[DebuggerDisplay("State: {State}, Tag: {Tag}")]
+public sealed class QuerySegment
+{
+    public QuerySegmentState State { get; set; } = QuerySegmentState.Include;
+
+    public required ITag Tag { get; init; }
+
+    private bool Equals(QuerySegment other) => Tag.Equals(other.Tag);
+
+    public override bool Equals(object? obj) => ReferenceEquals(this, obj) || obj is QuerySegment other && Equals(other);
+
+    public override int GetHashCode() => Tag.GetHashCode();
+}
 
 public partial class TaggableItemsSearchBarViewModel : Document, IDisposable
 {
@@ -33,6 +52,9 @@ public partial class TaggableItemsSearchBarViewModel : Document, IDisposable
     private readonly ISpeechToTagSearchService _speechToTagSearchService;
 
     public ObservableCollection<object> DisplayedSearchBarElements { get; } = new() { new TextBoxMarker() };
+
+    [ObservableProperty]
+    private object? _selectedItem;
 
     public ObservableCollection<QuerySegment> QuerySegments { get; } = new();
 
@@ -74,6 +96,14 @@ public partial class TaggableItemsSearchBarViewModel : Document, IDisposable
         QuerySegments.CollectionChanged
             += (_, args) =>
             {
+                if (args.OldItems?.Count == 1
+                    && args.NewItems?.Count == 1
+                    && (args.OldItems[0] as QuerySegment)!.Equals(args.NewItems[0] as QuerySegment))
+                {
+                    DisplayedSearchBarElements!.Replace(args.OldItems[0], args.NewItems[0]);
+                    return;
+                }
+
                 if (args.OldItems is not null)
                 {
                     DisplayedSearchBarElements.RemoveMany(args.OldItems.OfType<object>());
@@ -85,10 +115,10 @@ public partial class TaggableItemsSearchBarViewModel : Document, IDisposable
                 }
             };
 
-        QuerySegments.Add(new QuerySegment(true, false, new TextTag { Name = "Default" }));
-        QuerySegments.Add(new QuerySegment(true, false, new TextTag { Name = "Tag2" }));
-        QuerySegments.Add(new QuerySegment(true, false, new DayTag { DayOfWeek = DayOfWeek.Sunday }));
-        QuerySegments.Add(new QuerySegment(true, false, new DayRangeTag { Begin = DayOfWeek.Monday, End = DayOfWeek.Thursday }));
+        QuerySegments.Add(new QuerySegment { Tag = new TextTag { Name = "Default" } });
+        QuerySegments.Add(new QuerySegment { State = QuerySegmentState.Exclude, Tag = new TextTag { Name = "Tag2" } });
+        QuerySegments.Add(new QuerySegment { State = QuerySegmentState.MustBePresent, Tag = new DayTag { DayOfWeek = DayOfWeek.Sunday } });
+        QuerySegments.Add(new QuerySegment { Tag = new DayRangeTag { Begin = DayOfWeek.Monday, End = DayOfWeek.Thursday } });
     }
 
     public bool FilterAlreadyUsedTags(string? _, object? item)
@@ -96,7 +126,7 @@ public partial class TaggableItemsSearchBarViewModel : Document, IDisposable
            && tagNameFromDropDown != "Unknown TagType"
            && !QuerySegments.Select(segment => segment.Tag.DisplayText).Contains(tagNameFromDropDown);
 
-    public async Task<IEnumerable<object>> GetTagsAsync(string? searchText, CancellationToken cancellationToken)
+    public async Task<IEnumerable<object>> GetTagsAsync(string? _, CancellationToken cancellationToken)
     {
         var streamingCall = _tagService.SearchTags(
             new SearchTagsRequest { Name = "*", SearchType = SearchTagsRequest.Types.SearchType.Wildcard, ResultsLimit = 50 },
@@ -118,7 +148,9 @@ public partial class TaggableItemsSearchBarViewModel : Document, IDisposable
         var tagQueryParams = QuerySegments.Select(segment
             => new GetItemsByTagsV2Request.Types.TagQueryParam
             {
-                Tag = TagMapper.TagMapper.MapToDto(segment.Tag), Include = segment.Include, MustBePresent = segment.MustBePresent
+                Tag = TagMapper.TagMapper.MapToDto(segment.Tag),
+                Include = segment.State == QuerySegmentState.Include,
+                MustBePresent = segment.State == QuerySegmentState.MustBePresent
             });
 
         // todo: inform other component (which is responsible for displaying found items) that query has changed
@@ -128,7 +160,7 @@ public partial class TaggableItemsSearchBarViewModel : Document, IDisposable
     [RelayCommand]
     private void AddTagToSearchQuery(string tagName)
     {
-        QuerySegments.Add(new QuerySegment(true, false, new TextTag { Name = tagName }));
+        QuerySegments.Add(new QuerySegment { Tag = new TextTag { Name = tagName } });
     }
 
     [RelayCommand]
@@ -137,6 +169,16 @@ public partial class TaggableItemsSearchBarViewModel : Document, IDisposable
         if (querySegment is not QuerySegment segment) return;
 
         QuerySegments.Remove(segment);
+    }
+
+    [RelayCommand]
+    private void UpdateQuerySegmentState(object querySegment)
+    {
+        if (SelectedItem is not QuerySegment || querySegment is not QuerySegmentState newState) return;
+
+        var indexOf = QuerySegments.IndexOf(SelectedItem);
+
+        QuerySegments[indexOf] = new QuerySegment { Tag = QuerySegments[indexOf].Tag, State = newState };
     }
 
     public bool IsActive => _bassAudioCaptureService?.IsActive() ?? false;
@@ -170,7 +212,7 @@ public partial class TaggableItemsSearchBarViewModel : Document, IDisposable
 
             foreach (var tag in searchTags)
             {
-                QuerySegments.Add(new QuerySegment(true, false, tag));
+                QuerySegments.Add(new QuerySegment { Tag = tag });
             }
         }
     }

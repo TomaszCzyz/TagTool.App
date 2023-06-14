@@ -23,6 +23,8 @@
             InputMin="0.5"
             OutputMax="1.0"
             OutputMin="0.0" />
+
+        <converters:TextDecorationsConverter x:Key="TextDecorationsConverter" />
     </UserControl.Resources>
     <UserControl.Styles>
         <Style Selector="Border.SearchBox">
@@ -143,17 +145,37 @@
                     ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                     ScrollViewer.VerticalScrollBarVisibility="Hidden"
                     Margin="2"
-                    Focusable="True"
                     Padding="4"
                     HorizontalAlignment="Left"
                     VerticalAlignment="Center"
+                    Focusable="True"
                     ItemsSource="{Binding DisplayedSearchBarElements}"
+                    SelectedItem="{Binding SelectedItem}"
                     SelectionMode="Single"
                     KeyDown="TagsListBox_OnKeyDown">
                     <ListBox.DataTemplates>
                         <DataTemplate x:CompileBindings="False" DataType="userControls:QuerySegment">
                             <Grid ColumnDefinitions="Auto,Auto, Auto" RowDefinitions="Auto">
                                 <ContentControl Grid.Column="0" Content="{Binding Tag}">
+                                    <ContentControl.ContextFlyout>
+                                        <MenuFlyout>
+                                            <MenuItem
+                                                Command="{ReflectionBinding #UserControlRoot.DataContext.UpdateQuerySegmentStateCommand, FallbackValue=null}"
+                                                CommandParameter="{x:Static userControls:QuerySegmentState.Include}"
+                                                Header="Include" />
+
+                                            <MenuItem
+                                                Command="{ReflectionBinding #UserControlRoot.DataContext.UpdateQuerySegmentStateCommand, FallbackValue=null}"
+                                                CommandParameter="{x:Static userControls:QuerySegmentState.Exclude}"
+                                                Header="Exclude" />
+
+                                            <MenuItem
+                                                Command="{ReflectionBinding #UserControlRoot.DataContext.UpdateQuerySegmentStateCommand, FallbackValue=null}"
+                                                CommandParameter="{x:Static userControls:QuerySegmentState.MustBePresent}"
+                                                Header="MustBePresent" />
+
+                                        </MenuFlyout>
+                                    </ContentControl.ContextFlyout>
                                     <ContentControl.DataTemplates>
                                         <dataTemplates:TagsTemplateSelector>
                                             <DataTemplate x:Key="TagTool.App.Models.TextTag" DataType="models:ITag">
@@ -164,7 +186,13 @@
                                                     FontSize="18"
                                                     Foreground="{StaticResource MyLightSecondary500}"
                                                     IsTabStop="False"
-                                                    Text="{Binding DisplayText}" />
+                                                    Text="{Binding DisplayText}">
+                                                    <TextBlock.TextDecorations>
+                                                        <MultiBinding Converter="{StaticResource TextDecorationsConverter}">
+                                                            <Binding Path="$parent[Grid].DataContext.State" />
+                                                        </MultiBinding>
+                                                    </TextBlock.TextDecorations>
+                                                </TextBlock>
 
                                             </DataTemplate>
                                             <DataTemplate x:Key="TagTool.App.Models.DayTag" DataType="models:ITag">
@@ -317,4 +345,3 @@
         </Grid>
     </Border>
 </UserControl>
-
