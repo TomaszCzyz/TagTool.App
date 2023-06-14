@@ -2,7 +2,6 @@
 using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.LogicalTree;
-using Avalonia.Markup.Xaml;
 using Avalonia.VisualTree;
 using TagTool.App.ViewModels.UserControls;
 
@@ -10,7 +9,8 @@ namespace TagTool.App.Views.UserControls;
 
 public partial class TaggableItemsSearchBarView : UserControl
 {
-    private AutoCompleteBox? _newTagControl;
+    private AutoCompleteBox _autoCompleteBox = null!;
+    private TextBox _textBox = null!;
 
     private TaggableItemsSearchBarViewModel ViewModel => (TaggableItemsSearchBarViewModel)DataContext!;
 
@@ -19,23 +19,23 @@ public partial class TaggableItemsSearchBarView : UserControl
         InitializeComponent();
     }
 
-    private void InitializeComponent()
+    private void SearchBarBorder_OnPointerPressed(object? sender, PointerPressedEventArgs e) => _autoCompleteBox.Focus();
+
+    private void AutoCompleteBox_OnAttachedToVisualTree(object? sender, LogicalTreeAttachmentEventArgs e)
     {
-        AvaloniaXamlLoader.Load(this);
+        _autoCompleteBox = (AutoCompleteBox)sender!;
+
+        _autoCompleteBox.AsyncPopulator = ViewModel.GetTagsAsync;
+        _autoCompleteBox.ItemFilter = ViewModel.FilterAlreadyUsedTags;
+        _autoCompleteBox.AddHandler(KeyDownEvent, AutoCompleteBoxOnKeyDown, RoutingStrategies.Tunnel);
     }
 
-    private void AutoCompleteBox_OnAttachedToLogicalTree(object? sender, LogicalTreeAttachmentEventArgs e)
+    private void AutoCompleteBox_OnLoaded(object? sender, RoutedEventArgs e)
     {
-        var autoCompleteBox = (AutoCompleteBox)sender!;
-        autoCompleteBox.AsyncPopulator = ViewModel.GetTagsAsync;
+        _textBox = _autoCompleteBox.FindDescendantOfType<TextBox>()!;
 
-        _newTagControl = autoCompleteBox;
-        autoCompleteBox.AddHandler(KeyDownEvent, AutoCompleteBoxOnKeyDown, RoutingStrategies.Tunnel);
-    }
-
-    private void SearchBarBorder_OnPointerPressed(object? sender, PointerPressedEventArgs e)
-    {
-        _newTagControl?.Focus();
+        var listBoxItem = _autoCompleteBox.FindAncestorOfType<ListBoxItem>()!;
+        listBoxItem.GotFocus += (_, _) => _textBox.Focus();
     }
 
     private void AutoCompleteBoxOnKeyDown(object? sender, KeyEventArgs e)
@@ -51,6 +51,35 @@ public partial class TaggableItemsSearchBarView : UserControl
 
                 // workaround for clearing Text in AutoCompleteBox when IsTextCompletionEnabled is true
                 autoCompleteBox.FindDescendantOfType<TextBox>()!.Text = "";
+                break;
+            case Key.Left when _textBox.CaretIndex == 0 && ViewModel.QuerySegments.Count != 0:
+                TagsListBox.SelectedItem = ViewModel.QuerySegments.Last();
+                TagsListBox.Focus();
+                break;
+            default:
+                e.Handled = false;
+                break;
+        }
+    }
+
+    private void TagsListBox_OnKeyDown(object? sender, KeyEventArgs e)
+    {
+        if (TagsListBox.SelectedItem is null) return;
+
+        e.Handled = true;
+
+        switch (e.Key)
+        {
+            case Key.Delete when ViewModel.QuerySegments.Count != 0:
+                var selectedIndex = TagsListBox.SelectedIndex;
+
+                ViewModel.RemoveTagCommand.Execute(TagsListBox.SelectedItem);
+
+                TagsListBox.SelectedItem = selectedIndex == ViewModel.QuerySegments.Count
+                    ? ViewModel.QuerySegments.LastOrDefault()
+                    : ViewModel.QuerySegments[selectedIndex];
+
+                TagsListBox.Focus();
                 break;
             default:
                 e.Handled = false;

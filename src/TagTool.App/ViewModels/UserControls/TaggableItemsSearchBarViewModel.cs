@@ -6,6 +6,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Dock.Model.Mvvm.Controls;
 using DynamicData;
+using Google.Protobuf.WellKnownTypes;
 using Grpc.Core;
 using JetBrains.Annotations;
 using Microsoft.Extensions.DependencyInjection;
@@ -13,6 +14,9 @@ using Microsoft.Extensions.Logging;
 using TagTool.App.Models;
 using TagTool.App.Services;
 using TagTool.Backend;
+using TagTool.Backend.DomainTypes;
+using DayRangeTag = TagTool.App.Models.DayRangeTag;
+using DayTag = TagTool.App.Models.DayTag;
 
 namespace TagTool.App.ViewModels.UserControls;
 
@@ -87,6 +91,11 @@ public partial class TaggableItemsSearchBarViewModel : Document, IDisposable
         QuerySegments.Add(new QuerySegment(true, false, new DayRangeTag { Begin = DayOfWeek.Monday, End = DayOfWeek.Thursday }));
     }
 
+    public bool FilterAlreadyUsedTags(string? _, object? item)
+        => item is string tagNameFromDropDown
+           && tagNameFromDropDown != "Unknown TagType"
+           && !QuerySegments.Select(segment => segment.Tag.DisplayText).Contains(tagNameFromDropDown);
+
     public async Task<IEnumerable<object>> GetTagsAsync(string? searchText, CancellationToken cancellationToken)
     {
         var streamingCall = _tagService.SearchTags(
@@ -144,22 +153,25 @@ public partial class TaggableItemsSearchBarViewModel : Document, IDisposable
             StopRecord();
             var words = await _speechToTagSearchService.GetTranscriptionWords(_bassAudioCaptureService?.OutputFilePath);
 
-            // var searchTags = words
-            //     .Where(tagName => _tagService.DoesTagExists(new DoesTagExistsRequest { Tag = Any.Pack(new NormalTag { Name = tagName }) }).Exists)
-            //     .Select(tagName => new Tag(tagName))
-            //     .Where(tag => !EnteredTags.Contains(tag))
-            //     .ToArray();
-            //
-            // if (searchTags.Length == 0) return;
-            //
-            // EnteredTags.Clear();
-            // EnteredTags.Add("");
-            //
-            // foreach (var tag in searchTags)
-            // {
-            //     EnteredTags.Insert(EnteredTags.Count - 1, tag);
-            //     EnteredTags.Insert(EnteredTags.Count - 1, new LogicalOperator());
-            // }
+            var searchTags = words
+                .Select(tagName =>
+                {
+                    var tag = new NormalTag { Name = tagName };
+
+                    var reply = _tagService.DoesTagExists(new DoesTagExistsRequest { Tag = Any.Pack(new NormalTag { Name = tagName }) });
+
+                    return reply.Exists ? tag : null;
+                })
+                .Where(tag => tag is not null && !QuerySegments.Select(segment => segment.Tag.DisplayText).Contains(tag.Name))
+                .Select(tag => TagMapper.TagMapper.MapToDomain(Any.Pack(tag)))
+                .ToArray();
+
+            if (searchTags.Length == 0) return;
+
+            foreach (var tag in searchTags)
+            {
+                QuerySegments.Add(new QuerySegment(true, false, tag));
+            }
         }
     }
 

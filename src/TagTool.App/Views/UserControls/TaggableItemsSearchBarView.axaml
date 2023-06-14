@@ -10,6 +10,7 @@
     xmlns:models="clr-namespace:TagTool.App.Models"
     xmlns:userControls="clr-namespace:TagTool.App.ViewModels.UserControls"
     x:Class="TagTool.App.Views.UserControls.TaggableItemsSearchBarView"
+    x:CompileBindings="True"
     x:DataType="userControls:TaggableItemsSearchBarViewModel"
     x:Name="UserControlRoot"
     d:DesignWidth="800"
@@ -88,6 +89,10 @@
                         <Setter Property="Opacity" Value="1" />
                     </Style>
 
+                    <Style Selector="^:selected">
+                        <Setter Property="Opacity" Value="1" />
+                    </Style>
+
                     <Style Selector="^:pointerover /template/ ContentPresenter#PART_ContentPresenter, ^:selected /template/ ContentPresenter#PART_ContentPresenter">
                         <Setter Property="Background" Value="Transparent" />
                     </Style>
@@ -138,11 +143,13 @@
                     ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                     ScrollViewer.VerticalScrollBarVisibility="Hidden"
                     Margin="2"
+                    Focusable="True"
                     Padding="4"
                     HorizontalAlignment="Left"
                     VerticalAlignment="Center"
                     ItemsSource="{Binding DisplayedSearchBarElements}"
-                    SelectionMode="Single">
+                    SelectionMode="Single"
+                    KeyDown="TagsListBox_OnKeyDown">
                     <ListBox.DataTemplates>
                         <DataTemplate x:CompileBindings="False" DataType="userControls:QuerySegment">
                             <Grid ColumnDefinitions="Auto,Auto, Auto" RowDefinitions="Auto">
@@ -213,10 +220,38 @@
 
                         <DataTemplate x:CompileBindings="False" DataType="userControls:TextBoxMarker">
                             <AutoCompleteBox
+                                Background="Transparent"
+                                BorderThickness="0"
                                 FilterMode="None"
                                 IsTextCompletionEnabled="True"
                                 Watermark="Next Tag..."
-                                AttachedToLogicalTree="AutoCompleteBox_OnAttachedToLogicalTree" />
+                                AttachedToLogicalTree="AutoCompleteBox_OnAttachedToVisualTree"
+                                Loaded="AutoCompleteBox_OnLoaded">
+                                <AutoCompleteBox.Styles>
+                                    <Style Selector="ListBox">
+                                        <Setter Property="ItemsPanel">
+                                            <ItemsPanelTemplate>
+                                                <StackPanel Orientation="Vertical" />
+                                            </ItemsPanelTemplate>
+                                        </Setter>
+                                    </Style>
+                                    <Style Selector="TextBox">
+                                        <Setter Property="BorderThickness" Value="0" />
+                                        <Setter Property="Background" Value="Transparent" />
+
+                                        <!-- pointerover -->
+                                        <Style Selector="^:pointerover, ^:focus-within, ^:focus">
+                                            <Style Selector="^ /template/ Border#PART_BorderElement">
+                                                <Setter Property="Background" Value="Transparent" />
+                                                <Setter Property="BorderThickness" Value="0" />
+                                            </Style>
+                                        </Style>
+                                    </Style>
+                                    <Style Selector="Popup">
+                                        <Setter Property="Placement" Value="BottomEdgeAlignedLeft" />
+                                    </Style>
+                                </AutoCompleteBox.Styles>
+                            </AutoCompleteBox>
 
                         </DataTemplate>
                     </ListBox.DataTemplates>
