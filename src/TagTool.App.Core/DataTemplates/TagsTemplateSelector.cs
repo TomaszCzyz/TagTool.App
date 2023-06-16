@@ -1,11 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using Avalonia.Controls;
+﻿using Avalonia.Controls;
 using Avalonia.Controls.Templates;
 using Avalonia.Metadata;
-using TagTool.App.Lite.Models;
+using TagTool.App.Core.Models;
 
-namespace TagTool.App.Lite.DataTemplates;
+namespace TagTool.App.Core.DataTemplates;
 
 public class TagsTemplateSelector : IDataTemplate
 {

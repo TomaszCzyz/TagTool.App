@@ -1,9 +1,8 @@
-using System;
 using System.Diagnostics;
 using System.Globalization;
 using Avalonia.Controls.Documents;
 
-namespace TagTool.App.Lite.Models;
+namespace TagTool.App.Core.Models;
 
 public record Tag(string? Name, InlineCollection? Inlines = null);
 

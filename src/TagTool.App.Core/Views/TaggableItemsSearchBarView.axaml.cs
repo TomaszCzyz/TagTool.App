@@ -1,13 +1,11 @@
-﻿using System.Linq;
-using Avalonia.Controls;
+﻿using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.LogicalTree;
 using Avalonia.VisualTree;
 using TagTool.App.Core.ViewModels;
-using TagTool.App.Lite.ViewModels;
 
-namespace TagTool.App.Lite.Views;
+namespace TagTool.App.Core.Views;
 
 public partial class TaggableItemsSearchBarView : UserControl
 {

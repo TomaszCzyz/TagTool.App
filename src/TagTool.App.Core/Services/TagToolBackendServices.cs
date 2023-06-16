@@ -1,6 +1,6 @@
 ﻿using Grpc.Net.Client;
 
-namespace TagTool.App.Lite.Services;
+namespace TagTool.App.Core.Services;
 
 public interface ITagToolBackendConnectionFactory
 {

@@ -1,7 +1,7 @@
 ﻿using System.Drawing;
 using System.Runtime.InteropServices;
 
-namespace TagTool.App.Lite.Services;
+namespace TagTool.App.Core.Services;
 
 public interface IFileIconProvider
 {

@@ -1,6 +1,6 @@
 using TagTool.Backend;
 
-namespace TagTool.App.Lite.Services;
+namespace TagTool.App.Core.Services;
 
 public interface ITagToolBackend
 {

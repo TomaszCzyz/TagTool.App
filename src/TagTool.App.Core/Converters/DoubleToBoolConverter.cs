@@ -1,8 +1,7 @@
-﻿using System;
-using System.Globalization;
+﻿using System.Globalization;
 using Avalonia.Data.Converters;
 
-namespace TagTool.App.Lite.Converters;
+namespace TagTool.App.Core.Converters;
 
 public class DoubleToBoolConverter : IValueConverter
 {

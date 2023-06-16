@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using System.Globalization;
 using Avalonia.Data.Converters;
 using Avalonia.Media;
-using TagTool.App.Lite.ViewModels;
+using TagTool.App.Core.ViewModels;
 
-namespace TagTool.App.Lite.Converters;
+namespace TagTool.App.Core.Converters;
 
 public class TextDecorationsConverter : IMultiValueConverter
 {

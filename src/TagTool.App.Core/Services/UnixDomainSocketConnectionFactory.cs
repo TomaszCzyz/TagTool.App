@@ -1,12 +1,8 @@
-﻿using System.IO;
-using System.Net;
-using System.Net.Http;
+﻿using System.Net;
 using System.Net.Sockets;
-using System.Threading;
-using System.Threading.Tasks;
 using Grpc.Net.Client;
 
-namespace TagTool.App.Lite.Services;
+namespace TagTool.App.Core.Services;
 
 public class UnixDomainSocketConnectionFactory
 {

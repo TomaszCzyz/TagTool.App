@@ -14,7 +14,9 @@ using OpenAI.GPT3.Managers;
 using Serilog;
 using Serilog.Core.Enrichers;
 using Serilog.Events;
-using TagTool.App.Lite.Services;
+using TagTool.App.Core.Extensions;
+using TagTool.App.Core.Services;
+using TagTool.App.Core.ViewModels;
 using TagTool.App.Lite.ViewModels;
 using TagTool.App.Lite.Views;
 
@@ -75,22 +77,9 @@ public class App : Application
         });
         services.AddHttpClient<IOpenAIService, OpenAIService>();
 
-        // add ViewModels
-        var viewModelsBases = typeof(ViewModelBase).Assembly.ExportedTypes
-            .Where(x => typeof(ViewModelBase).IsAssignableFrom(x) && x is { IsInterface: false, IsAbstract: false });
-
-        foreach (var type in viewModelsBases)
-        {
-            services.AddTransient(type);
-        }
-
-        // var sb = new StringBuilder();
-        // foreach (var typ in viewModelsBases.Select(type => type.ToString()))
-        // {
-        //     sb.AppendLine(typ);
-        // }
-        // File.WriteAllText(@"C:\Users\tczyz\Documents\TagToolApp\text2.txt", sb.ToString());
-
+        services.AddViewModels(typeof(ViewModelBase));
+        services.AddViewModels(typeof(Program));
+        
         return services.BuildServiceProvider();
     }
 

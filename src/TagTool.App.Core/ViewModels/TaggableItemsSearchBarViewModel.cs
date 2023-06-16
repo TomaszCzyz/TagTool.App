@@ -1,11 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using System.Diagnostics;
-using System.IO;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
 using Avalonia.Controls;
 using Avalonia.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
@@ -14,16 +8,15 @@ using DynamicData;
 using Google.Protobuf.WellKnownTypes;
 using Grpc.Core;
 using JetBrains.Annotations;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using TagTool.App.Lite.Models;
-using TagTool.App.Lite.Services;
+using TagTool.App.Core.Models;
+using TagTool.App.Core.Services;
 using TagTool.Backend;
 using TagTool.Backend.DomainTypes;
-using DayRangeTag = TagTool.App.Lite.Models.DayRangeTag;
-using DayTag = TagTool.App.Lite.Models.DayTag;
+using DayRangeTag = TagTool.App.Core.Models.DayRangeTag;
+using DayTag = TagTool.App.Core.Models.DayTag;
 
-namespace TagTool.App.Lite.ViewModels;
+namespace TagTool.App.Core.ViewModels;
 
 public sealed class TextBoxMarker
 {
@@ -66,25 +59,22 @@ public partial class TaggableItemsSearchBarViewModel : ViewModelBase, IDisposabl
     [ObservableProperty]
     private string _searchText = "";
 
-    /// <summary>
-    ///     ctor for XAML previewer
-    /// </summary>
-    public TaggableItemsSearchBarViewModel()
-    {
-        File.WriteAllText(@"C:\Users\tczyz\Documents\TagToolApp\FromBarInParamLessCtor.txt", "");
-   
-
-        if (!Design.IsDesignMode)
-        {
-            Debug.Fail("ctor for XAML Previewer should not be invoke during standard execution");
-        }
-
-        _logger = App.Current.Services.GetRequiredService<ILogger<TaggableItemsSearchBarViewModel>>();
-        _tagService = App.Current.Services.GetRequiredService<ITagToolBackend>().GetTagService();
-        _speechToTagSearchService = null!;
-
-        Initialize();
-    }
+    // /// <summary>
+    // ///     ctor for XAML previewer
+    // /// </summary>
+    // public TaggableItemsSearchBarViewModel()
+    // {
+    //     if (!Design.IsDesignMode)
+    //     {
+    //         Debug.Fail("ctor for XAML Previewer should not be invoke during standard execution");
+    //     }
+    //
+    //     // _logger = App.Current.Services.GetRequiredService<ILogger<TaggableItemsSearchBarViewModel>>();
+    //     // _tagService = App.Current.Services.GetRequiredService<ITagToolBackend>().GetTagService();
+    //     // _speechToTagSearchService = null!;
+    //
+    //     Initialize();
+    // }
 
     [UsedImplicitly]
     public TaggableItemsSearchBarViewModel(
@@ -185,7 +175,7 @@ public partial class TaggableItemsSearchBarViewModel : ViewModelBase, IDisposabl
     {
         if (SelectedItem is not QuerySegment || querySegment is not QuerySegmentState newState) return;
 
-        var indexOf = QuerySegments.IndexOf(SelectedItem);
+        var indexOf = QuerySegments.IndexOf<object>(SelectedItem);
 
         QuerySegments[indexOf] = new QuerySegment { Tag = QuerySegments[indexOf].Tag, State = newState };
     }

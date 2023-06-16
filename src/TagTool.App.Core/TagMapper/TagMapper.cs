@@ -1,12 +1,11 @@
-﻿using System;
-using Google.Protobuf;
+﻿using Google.Protobuf;
 using Google.Protobuf.WellKnownTypes;
-using TagTool.App.Lite.Models;
+using TagTool.App.Core.Models;
 using TagTool.Backend.DomainTypes;
 using DayRangeTag = TagTool.Backend.DomainTypes.DayRangeTag;
 using DayTag = TagTool.Backend.DomainTypes.DayTag;
 
-namespace TagTool.App.Lite.TagMapper;
+namespace TagTool.App.Core.TagMapper;
 
 /// <summary>
 ///     Mapper for tag types between grpc contracts and domain types.

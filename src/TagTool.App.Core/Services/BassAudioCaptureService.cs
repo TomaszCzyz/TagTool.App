@@ -1,12 +1,10 @@
-﻿using System;
-using System.Globalization;
-using System.IO;
+﻿using System.Globalization;
 using System.Runtime.InteropServices;
 using ManagedBass;
 using NWaves.Signals;
 using NWaves.Utils;
 
-namespace TagTool.App.Lite.Services;
+namespace TagTool.App.Core.Services;
 
 public class BassAudioCaptureService : IDisposable
 {

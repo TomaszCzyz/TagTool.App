@@ -56,58 +56,38 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Protobuf Include="Protos\DomainTypes.proto" GrpcServices="Client"/>
-    <Protobuf Include="Protos\FileActionsService.proto" GrpcServices="Client"/>
-    <Protobuf Include="Protos\FileSystemSearcher.proto" GrpcServices="Client"/>
-    <Protobuf Include="Protos\FolderActionsService.proto" GrpcServices="Client"/>
-    <Protobuf Include="Protos\TagService.proto" GrpcServices="Client"/>
+    <Protobuf Include="Protos\DomainTypes.proto" GrpcServices="Client" />
+    <Protobuf Include="Protos\FileActionsService.proto" GrpcServices="Client" />
+    <Protobuf Include="Protos\FileSystemSearcher.proto" GrpcServices="Client" />
+    <Protobuf Include="Protos\FolderActionsService.proto" GrpcServices="Client" />
+    <Protobuf Include="Protos\TagService.proto" GrpcServices="Client" />
   </ItemGroup>
 
   <ItemGroup>
     <None Update="bass.dll" CopyToOutputDirectory="PreserveNewest" />
+    <None Update="bass.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
-  <ItemGroup>
-    <Protobuf Include="Protos\DomainTypes.proto">
-      <GrpcServices>Both</GrpcServices>
-      <Access>Public</Access>
-      <ProtoCompile>True</ProtoCompile>
-      <CompileOutputs>True</CompileOutputs>
-      <OutputDir>obj\Debug\net7.0\</OutputDir>
-      <Generator>MSBuild:Compile</Generator>
-    </Protobuf>
-    <Protobuf Include="Protos\FileActionsService.proto">
-      <GrpcServices>Both</GrpcServices>
-      <Access>Public</Access>
-      <ProtoCompile>True</ProtoCompile>
-      <CompileOutputs>True</CompileOutputs>
-      <OutputDir>obj\Debug\net7.0\</OutputDir>
-      <Generator>MSBuild:Compile</Generator>
-    </Protobuf>
-    <Protobuf Include="Protos\FileSystemSearcher.proto">
-      <GrpcServices>Both</GrpcServices>
-      <Access>Public</Access>
-      <ProtoCompile>True</ProtoCompile>
-      <CompileOutputs>True</CompileOutputs>
-      <OutputDir>obj\Debug\net7.0\</OutputDir>
-      <Generator>MSBuild:Compile</Generator>
-    </Protobuf>
-    <Protobuf Include="Protos\FolderActionsService.proto">
-      <GrpcServices>Both</GrpcServices>
-      <Access>Public</Access>
-      <ProtoCompile>True</ProtoCompile>
-      <CompileOutputs>True</CompileOutputs>
-      <OutputDir>obj\Debug\net7.0\</OutputDir>
-      <Generator>MSBuild:Compile</Generator>
-    </Protobuf>
-    <Protobuf Include="Protos\TagService.proto">
-      <GrpcServices>Both</GrpcServices>
-      <Access>Public</Access>
-      <ProtoCompile>True</ProtoCompile>
-      <CompileOutputs>True</CompileOutputs>
-      <OutputDir>obj\Debug\net7.0\</OutputDir>
-      <Generator>MSBuild:Compile</Generator>
-    </Protobuf>
-  </ItemGroup>
+<!--  <ItemGroup>-->
+<!--    <Compile Update="Views\TaggableItemsSearchBarView.axaml.cs">-->
+<!--      <DependentUpon>TaggableItemsSearchBarView.axaml</DependentUpon>-->
+<!--      <SubType>Code</SubType>-->
+<!--    </Compile>-->
+<!--    <Compile Update="Views\MainWindowView.axaml.cs">-->
+<!--      <DependentUpon>MainWindowView.axaml</DependentUpon>-->
+<!--      <SubType>Code</SubType>-->
+<!--    </Compile>-->
+<!--    <Compile Update="Views\TaggableItemsSearchBarView.axaml.cs">-->
+<!--      <DependentUpon>TaggableItemsSearchBarView.axaml</DependentUpon>-->
+<!--      <SubType>Code</SubType>-->
+<!--    </Compile>-->
+<!--  </ItemGroup>-->
+
+<!--  <ItemGroup>-->
+<!--    <AdditionalFiles Include="Views\MainWindowView.axaml" />-->
+<!--    <AdditionalFiles Include="Views\TaggableItemsSearchBarView.axaml" />-->
+<!--  </ItemGroup>-->
 
 </Project>
