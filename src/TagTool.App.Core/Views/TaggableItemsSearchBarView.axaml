@@ -187,7 +187,7 @@
                                     </ContentControl.ContextFlyout>
                                     <ContentControl.DataTemplates>
                                         <dataTemplates:TagsTemplateSelector>
-                                            <DataTemplate x:Key="TagTool.App.Lite.Models.TextTag" DataType="models:ITag">
+                                            <DataTemplate x:Key="TagTool.App.Core.Models.TextTag" DataType="models:ITag">
                                                 <TextBlock
                                                     Classes="Transparent"
                                                     Margin="4 1"
@@ -204,7 +204,7 @@
                                                 </TextBlock>
 
                                             </DataTemplate>
-                                            <DataTemplate x:Key="TagTool.App.Models.DayTag" DataType="models:ITag">
+                                            <DataTemplate x:Key="TagTool.App.Core.Models.DayTag" DataType="models:ITag">
                                                 <TextBlock
                                                     Classes="Transparent"
                                                     Margin="4 1"
@@ -215,7 +215,7 @@
                                                     Text="{Binding DisplayText}" />
 
                                             </DataTemplate>
-                                            <DataTemplate x:Key="TagTool.App.Models.DayRangeTag" DataType="models:ITag">
+                                            <DataTemplate x:Key="TagTool.App.Core.Models.DayRangeTag" DataType="models:ITag">
                                                 <TextBlock
                                                     Classes="Transparent"
                                                     Margin="4 1"

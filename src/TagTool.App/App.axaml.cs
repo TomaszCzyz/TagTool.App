@@ -84,7 +84,8 @@ public class App : Application
             .AddOptions<GeneralOptions>()
             .Configure(options => configuration.GetSection(GeneralOptions.General).Bind(options));
 
-        services.AddViewModels(typeof(ViewModelBase));
+        services.AddViewModelsFromAssembly(typeof(ViewModelBase));
+        services.AddViewModelsFromAssembly(typeof(Program));
 
         // Add dockables
         var dockables = typeof(Program).Assembly.ExportedTypes

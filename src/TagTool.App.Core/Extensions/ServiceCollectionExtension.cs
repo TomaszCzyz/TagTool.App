@@ -8,7 +8,7 @@ public static class ServiceCollectionExtension
     private static Func<Type, bool> ViewModelBasePredicate
         => x => typeof(ViewModelBase).IsAssignableFrom(x) && x is { IsInterface: false, IsAbstract: false };
 
-    public static void AddViewModels(this IServiceCollection services, Type scanMarker)
+    public static void AddViewModelsFromAssembly(this IServiceCollection services, Type scanMarker)
     {
         var viewModelsBases = scanMarker.Assembly.ExportedTypes.Where(ViewModelBasePredicate);
 

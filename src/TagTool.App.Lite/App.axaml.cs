@@ -73,8 +73,8 @@ public class App : Application
         });
         services.AddHttpClient<IOpenAIService, OpenAIService>();
 
-        services.AddViewModels(typeof(ViewModelBase));
-        services.AddViewModels(typeof(Program));
+        services.AddViewModelsFromAssembly(typeof(ViewModelBase));
+        services.AddViewModelsFromAssembly(typeof(Program));
         
         return services.BuildServiceProvider();
     }
