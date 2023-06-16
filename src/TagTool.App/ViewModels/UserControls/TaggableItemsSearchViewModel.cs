@@ -11,6 +11,9 @@ using Grpc.Core;
 using JetBrains.Annotations;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using TagTool.App.Core.Models;
+using TagTool.App.Core.Services;
+using TagTool.App.Core.TagMapper;
 using TagTool.App.Models;
 using TagTool.App.Services;
 using TagTool.Backend;
@@ -377,7 +380,7 @@ public partial class TaggableItemsSearchViewModel : Document, IDisposable
                     .Select(match => new HighlightInfo(match.StartIndex, match.Length))
                     .ToArray();
 
-                var inlines = _wordHighlighter.CreateInlines(TagMapper.TagMapper.MapToDomain(reply.Tag).DisplayText, highlightInfos);
+                var inlines = _wordHighlighter.CreateInlines(TagMapper.MapToDomain(reply.Tag).DisplayText, highlightInfos);
 
                 // SearchResults.Add(new Tag(reply.TagName, inlines));
             }

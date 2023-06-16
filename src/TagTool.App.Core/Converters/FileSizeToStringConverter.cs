@@ -1,8 +1,8 @@
 ﻿using System.Globalization;
 using Avalonia.Data.Converters;
-using TagTool.App.Extensions;
+using TagTool.App.Core.Extensions;
 
-namespace TagTool.App.Converters;
+namespace TagTool.App.Core.Converters;
 
 public class FileSizeToStringConverter : IValueConverter
 {

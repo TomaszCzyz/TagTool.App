@@ -3,7 +3,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
     xmlns:controls="using:TagTool.App.Views.TemplatedControls"
-    xmlns:converters="clr-namespace:TagTool.App.Converters">
+    xmlns:converters="clr-namespace:TagTool.App.Core.Converters;assembly=TagTool.App.Core">
     <Styles.Resources>
         <converters:FontSizeConverter x:Key="FontSizeConverter" Ratio="0.6" />
         <converters:MovePointXConverter x:Key="MovePointXConverter" />

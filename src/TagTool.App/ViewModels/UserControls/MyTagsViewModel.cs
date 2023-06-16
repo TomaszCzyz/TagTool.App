@@ -12,8 +12,9 @@ using Grpc.Core;
 using JetBrains.Annotations;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using TagTool.App.Core.Services;
+using TagTool.App.Core.TagMapper;
 using TagTool.App.Models.Messages;
-using TagTool.App.Services;
 using TagTool.Backend;
 using TagTool.Backend.DomainTypes;
 
@@ -67,7 +68,7 @@ public partial class MyTagsViewModel : Document
             var streamingCall = _tagService.SearchTags(searchTagsRequest);
             await streamingCall.ResponseStream
                 .ReadAllAsync()
-                .ForEachAsync(reply => Items.Add(TagMapper.TagMapper.MapToDomain(reply.Tag).DisplayText));
+                .ForEachAsync(reply => Items.Add(TagMapper.MapToDomain(reply.Tag).DisplayText));
         });
     }
 

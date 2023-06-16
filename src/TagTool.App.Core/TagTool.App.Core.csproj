@@ -70,24 +70,4 @@
     </None>
   </ItemGroup>
 
-<!--  <ItemGroup>-->
-<!--    <Compile Update="Views\TaggableItemsSearchBarView.axaml.cs">-->
-<!--      <DependentUpon>TaggableItemsSearchBarView.axaml</DependentUpon>-->
-<!--      <SubType>Code</SubType>-->
-<!--    </Compile>-->
-<!--    <Compile Update="Views\MainWindowView.axaml.cs">-->
-<!--      <DependentUpon>MainWindowView.axaml</DependentUpon>-->
-<!--      <SubType>Code</SubType>-->
-<!--    </Compile>-->
-<!--    <Compile Update="Views\TaggableItemsSearchBarView.axaml.cs">-->
-<!--      <DependentUpon>TaggableItemsSearchBarView.axaml</DependentUpon>-->
-<!--      <SubType>Code</SubType>-->
-<!--    </Compile>-->
-<!--  </ItemGroup>-->
-
-<!--  <ItemGroup>-->
-<!--    <AdditionalFiles Include="Views\MainWindowView.axaml" />-->
-<!--    <AdditionalFiles Include="Views\TaggableItemsSearchBarView.axaml" />-->
-<!--  </ItemGroup>-->
-
 </Project>

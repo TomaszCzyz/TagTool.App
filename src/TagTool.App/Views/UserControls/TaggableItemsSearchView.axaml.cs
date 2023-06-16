@@ -4,7 +4,7 @@ using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.LogicalTree;
 using Avalonia.Platform.Storage;
-using TagTool.App.Extensions;
+using TagTool.App.Core.Extensions;
 using TagTool.App.Models;
 using TagTool.App.ViewModels.UserControls;
 using TagTool.App.Views.Dialogs;

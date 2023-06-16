@@ -1,6 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.Input;
 using Dock.Model.Mvvm.Controls;
 using Microsoft.Extensions.DependencyInjection;
+using TagTool.App.Core.ViewModels;
 using TagTool.App.ViewModels.UserControls;
 
 namespace TagTool.App.Models.Docks;

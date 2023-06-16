@@ -1,13 +1,11 @@
 ﻿using System.Drawing.Imaging;
 using System.Globalization;
-using Avalonia;
 using Avalonia.Data.Converters;
 using Avalonia.Media.Imaging;
 using Avalonia.Platform;
-using Microsoft.Extensions.DependencyInjection;
-using TagTool.App.Services;
+using TagTool.App.Core.Services;
 
-namespace TagTool.App.Converters;
+namespace TagTool.App.Core.Converters;
 
 public class IconPathToBitmapConverter : IValueConverter
 {
@@ -17,7 +15,7 @@ public class IconPathToBitmapConverter : IValueConverter
     private static readonly Stream _defaultFileIcon = AssetLoader.Open(new Uri(DefaultFileIconAssetUri));
     private static readonly Stream _defaultFolderIcon = AssetLoader.Open(new Uri(DefaultFolderIconAssetUri));
 
-    private readonly IFileIconProvider _defaultFileIconProvider = App.Current.Services.GetRequiredService<IFileIconProvider>();
+    private readonly IFileIconProvider _defaultFileIconProvider = new DefaultFileIconProvider();
 
     public object? Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
     {

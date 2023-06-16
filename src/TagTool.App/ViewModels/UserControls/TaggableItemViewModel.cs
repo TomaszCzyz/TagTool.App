@@ -9,10 +9,12 @@ using CommunityToolkit.Mvvm.Input;
 using DynamicData;
 using Google.Protobuf.WellKnownTypes;
 using Microsoft.Extensions.DependencyInjection;
-using TagTool.App.Models;
-using TagTool.App.Services;
+using TagTool.App.Core.Models;
+using TagTool.App.Core.Services;
+using TagTool.App.Core.ViewModels;
 using TagTool.Backend;
 using TagTool.Backend.DomainTypes;
+
 
 namespace TagTool.App.ViewModels.UserControls;
 

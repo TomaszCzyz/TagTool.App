@@ -3,15 +3,15 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
     xmlns:avaloniaProgressRing="clr-namespace:AvaloniaProgressRing;assembly=AvaloniaProgressRing"
-    xmlns:converters="clr-namespace:TagTool.App.Converters"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:models="clr-namespace:TagTool.App.Models"
     xmlns:models1="clr-namespace:TagTool.App.Models"
     xmlns:system="clr-namespace:System;assembly=System.Runtime"
     xmlns:templatedControls="clr-namespace:TagTool.App.Views.TemplatedControls"
     xmlns:userControls="clr-namespace:TagTool.App.ViewModels.UserControls"
     xmlns:userControls1="clr-namespace:TagTool.App.Views.UserControls"
+    xmlns:converters="clr-namespace:TagTool.App.Core.Converters;assembly=TagTool.App.Core"
+    xmlns:models2="clr-namespace:TagTool.App.Core.Models;assembly=TagTool.App.Core"
     x:Class="TagTool.App.Views.UserControls.TaggableItemsSearchView"
     x:CompileBindings="True"
     x:DataType="userControls:TaggableItemsSearchViewModel"
@@ -200,7 +200,7 @@
                                 </Style>
                             </ListBox.Styles>
                             <ListBox.DataTemplates>
-                                <DataTemplate x:CompileBindings="False" DataType="models:Tag">
+                                <DataTemplate x:CompileBindings="False" DataType="models2:Tag">
                                     <!-- <templatedControls:TagChip -->
                                     <!-- Margin="0 2" -->
                                     <!-- BorderThickness="1 1 1 2" -->
@@ -409,7 +409,7 @@
                                     SelectedItem="{Binding SelectedItemFromSearched}"
                                     SelectionMode="Single">
                                     <ListBox.DataTemplates>
-                                        <DataTemplate DataType="models:Tag">
+                                        <DataTemplate DataType="models2:Tag">
                                             <Border
                                                 Margin="1"
                                                 HorizontalAlignment="Left"
@@ -447,7 +447,7 @@
                                     SelectedItem="{Binding SelectedItemFromPopular}"
                                     SelectionMode="Single">
                                     <ListBox.DataTemplates>
-                                        <DataTemplate DataType="models:Tag">
+                                        <DataTemplate DataType="models2:Tag">
                                             <Border
                                                 Margin="1"
                                                 HorizontalAlignment="Left"

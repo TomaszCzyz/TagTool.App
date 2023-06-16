@@ -1,5 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using TagTool.App.Core.ViewModels;
 
 namespace TagTool.App.ViewModels.UserControls;
 

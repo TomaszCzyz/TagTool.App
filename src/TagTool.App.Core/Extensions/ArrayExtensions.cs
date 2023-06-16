@@ -1,4 +1,4 @@
-namespace TagTool.App.Extensions;
+namespace TagTool.App.Core.Extensions;
 
 public static class ArrayExtensions
 {

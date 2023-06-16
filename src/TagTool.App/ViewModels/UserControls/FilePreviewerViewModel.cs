@@ -1,6 +1,7 @@
 ﻿using Avalonia.Media.Imaging;
 using Avalonia.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
+using TagTool.App.Core.ViewModels;
 
 namespace TagTool.App.ViewModels.UserControls;
 

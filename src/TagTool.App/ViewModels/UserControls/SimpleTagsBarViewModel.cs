@@ -5,7 +5,8 @@ using CommunityToolkit.Mvvm.Input;
 using DynamicData;
 using JetBrains.Annotations;
 using Microsoft.Extensions.DependencyInjection;
-using TagTool.App.Models;
+using TagTool.App.Core.Models;
+using TagTool.App.Core.ViewModels;
 
 namespace TagTool.App.ViewModels.UserControls;
 

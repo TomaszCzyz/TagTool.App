@@ -2,6 +2,7 @@ using System.Globalization;
 using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
+using Dock.Model.Core;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -11,7 +12,9 @@ using OpenAI.GPT3.Managers;
 using Serilog;
 using Serilog.Core.Enrichers;
 using Serilog.Events;
-using TagTool.App.Extensions;
+using TagTool.App.Core.Extensions;
+using TagTool.App.Core.Services;
+using TagTool.App.Core.ViewModels;
 using TagTool.App.Models;
 using TagTool.App.Models.Docks;
 using TagTool.App.Options;
@@ -84,6 +87,15 @@ public class App : Application
             .Configure(options => configuration.GetSection(GeneralOptions.General).Bind(options));
 
         services.AddViewModels(typeof(ViewModelBase));
+
+        // Add dockables
+        var dockables = typeof(Program).Assembly.ExportedTypes
+            .Where(x => typeof(IDockable).IsAssignableFrom(x) && x is { IsInterface: false, IsAbstract: false });
+
+        foreach (var type in dockables)
+        {
+            services.AddTransient(type);
+        }
 
         return services.BuildServiceProvider();
     }

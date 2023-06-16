@@ -3,7 +3,7 @@ using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.LogicalTree;
 using Avalonia.Media;
-using TagTool.App.Models;
+using TagTool.App.Core.Models;
 using TagTool.App.ViewModels.UserControls;
 using TagTool.App.Views.Dialogs;
 

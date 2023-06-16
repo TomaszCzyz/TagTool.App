@@ -1,7 +1,7 @@
 ﻿using Avalonia.Controls;
 using Avalonia.Controls.Templates;
 using Avalonia.Metadata;
-using TagTool.App.Models;
+using TagTool.App.Core.Models;
 
 namespace TagTool.App.DataTemplates;
 

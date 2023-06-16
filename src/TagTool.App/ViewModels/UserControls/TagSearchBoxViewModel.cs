@@ -6,8 +6,11 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Grpc.Core;
 using JetBrains.Annotations;
+using TagTool.App.Core.Models;
+using TagTool.App.Core.Services;
+using TagTool.App.Core.TagMapper;
+using TagTool.App.Core.ViewModels;
 using TagTool.App.Models;
-using TagTool.App.Services;
 using TagTool.Backend;
 
 namespace TagTool.App.ViewModels.UserControls;
@@ -97,7 +100,7 @@ public partial class TagSearchBoxViewModel : ViewModelBase, IDisposable
                     .ToArray();
 
                 var viewListItem
-                    = new HighlightedMatch { Inlines = FindSpans(TagMapper.TagMapper.MapToDomain(reply.Tag).DisplayText, highlightInfos) };
+                    = new HighlightedMatch { Inlines = FindSpans(TagMapper.MapToDomain(reply.Tag).DisplayText, highlightInfos) };
 
                 TagsSearchResults.Add(viewListItem);
             }

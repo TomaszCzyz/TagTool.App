@@ -1,7 +1,7 @@
 using Avalonia.Controls;
 using Avalonia.Controls.Templates;
 using Dock.Model.Core;
-using TagTool.App.ViewModels;
+using TagTool.App.Core.ViewModels;
 
 namespace TagTool.App;
 

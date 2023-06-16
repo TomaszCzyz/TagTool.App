@@ -1,7 +1,7 @@
 ﻿using System.Globalization;
 using Avalonia.Data.Converters;
 
-namespace TagTool.App.Converters;
+namespace TagTool.App.Core.Converters;
 
 public class ArraySizeToBooleanConverter : IValueConverter
 {

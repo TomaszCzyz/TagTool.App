@@ -2,7 +2,7 @@
 using Avalonia.Data.Converters;
 using Avalonia.Media.Imaging;
 
-namespace TagTool.App.Converters;
+namespace TagTool.App.Core.Converters;
 
 public class LocationAndWidthToIconMultiConverter : IMultiValueConverter
 {

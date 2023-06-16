@@ -5,7 +5,6 @@ using Avalonia.Interactivity;
 using Avalonia.LogicalTree;
 using Avalonia.VisualTree;
 using TagTool.App.Core.ViewModels;
-using TagTool.App.Lite.ViewModels;
 
 namespace TagTool.App.Lite.Views;
 
