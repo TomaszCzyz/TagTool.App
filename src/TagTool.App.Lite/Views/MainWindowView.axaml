@@ -1,0 +1,44 @@
+<Window
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:views="clr-namespace:TagTool.App.Lite.Views"
+    xmlns:vm="using:TagTool.App.Lite.ViewModels"
+    x:Class="TagTool.App.Lite.Views.MainWindowView"
+    x:CompileBindings="True"
+    x:DataType="vm:MainWindowViewModel"
+    d:DesignWidth="850"
+    d:DesignHeight="450"
+    mc:Ignorable="d"
+    Background="{x:Null}"
+    CornerRadius="10"
+    ExtendClientAreaChromeHints="NoChrome"
+    ExtendClientAreaTitleBarHeightHint="-1"
+    ExtendClientAreaToDecorationsHint="True"
+    ShowInTaskbar="False"
+    SizeToContent="WidthAndHeight"
+    Title="TagTool.App.Lite"
+    TransparencyLevelHint="AcrylicBlur"
+    PointerMoved="InputElement_OnPointerMoved"
+    PointerPressed="InputElement_OnPointerPressed"
+    PointerReleased="InputElement_OnPointerReleased">
+
+    <Design.DataContext>
+        <vm:MainWindowViewModel />
+    </Design.DataContext>
+
+    <DockPanel>
+        <views:TaggableItemsSearchBarView DockPanel.Dock="Top" DataContext="{Binding SearchBarViewModel, Mode=TwoWay}" />
+        
+        <ListBox>
+            <ListBoxItem>result1</ListBoxItem>
+            <ListBoxItem>result2</ListBoxItem>
+            <ListBoxItem>result3</ListBoxItem>
+            <ListBoxItem>result4</ListBoxItem>
+            <ListBoxItem>result5</ListBoxItem>
+            <ListBoxItem>result6</ListBoxItem>
+        </ListBox>
+    </DockPanel>
+
+</Window>
