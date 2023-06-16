@@ -65,6 +65,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <AvaloniaResource Include="Assets\**" />
     <None Update="bass.dll" CopyToOutputDirectory="PreserveNewest"/>
   </ItemGroup>
 

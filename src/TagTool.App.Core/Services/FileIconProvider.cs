@@ -11,9 +11,7 @@ public interface IFileIconProvider
 public class DefaultFileIconProvider : IFileIconProvider
 {
     public Icon? GetFileIcon(string filePath)
-    {
-        return !RuntimeInformation.IsOSPlatform(OSPlatform.Windows)
-            ? null
-            : Icon.ExtractAssociatedIcon(filePath);
-    }
+        => Path.Exists(filePath) && RuntimeInformation.IsOSPlatform(OSPlatform.Windows)
+            ? Icon.ExtractAssociatedIcon(filePath)
+            : null;
 }

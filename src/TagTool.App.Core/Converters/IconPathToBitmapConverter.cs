@@ -1,5 +1,6 @@
 ﻿using System.Drawing.Imaging;
 using System.Globalization;
+using Avalonia;
 using Avalonia.Data.Converters;
 using Avalonia.Media.Imaging;
 using Avalonia.Platform;
@@ -9,8 +10,8 @@ namespace TagTool.App.Core.Converters;
 
 public class IconPathToBitmapConverter : IValueConverter
 {
-    private const string DefaultFileIconAssetUri = "avares://TagTool.App/Assets/Images/round_description_black_36dp.png";
-    private const string DefaultFolderIconAssetUri = "avares://TagTool.App/Assets/Images/windows_folder_icon.png";
+    private const string DefaultFileIconAssetUri = "avares://TagTool.App.Core/Assets/Images/round_description_black_36dp.png";
+    private const string DefaultFolderIconAssetUri = "avares://TagTool.App.Core/Assets/Images/windows_folder_icon.png";
 
     private static readonly Stream _defaultFileIcon = AssetLoader.Open(new Uri(DefaultFileIconAssetUri));
     private static readonly Stream _defaultFolderIcon = AssetLoader.Open(new Uri(DefaultFolderIconAssetUri));
