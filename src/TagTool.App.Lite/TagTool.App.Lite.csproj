@@ -15,10 +15,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="System.Text.Json" Version="7.0.3" />
-  </ItemGroup>
-
-  <ItemGroup>
     <AvaloniaResource Include="Assets\**" />
     <None Remove=".gitignore" />
   </ItemGroup>

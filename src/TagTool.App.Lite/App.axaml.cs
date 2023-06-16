@@ -39,8 +39,6 @@ public class App : Application
     {
         if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktopLifetime)
         {
-            File.WriteAllText(@"C:\Users\tczyz\Documents\TagToolApp\here.txt", "JsonSerializer.Serialize(SearchBarViewModel)");
-
             var mainWindow = new MainWindowView { DataContext = Services.GetRequiredService<MainWindowViewModel>() };
 
             desktopLifetime.MainWindow = mainWindow;

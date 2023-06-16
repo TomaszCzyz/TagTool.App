@@ -82,7 +82,6 @@ public partial class TaggableItemsSearchBarViewModel : ViewModelBase, IDisposabl
         ITagToolBackend tagToolBackend,
         ISpeechToTagSearchService speechToTagSearchService)
     {
-        File.WriteAllText(@"C:\Users\tczyz\Documents\TagToolApp\FromBarInParamCtor.txt", "");
         _logger = logger;
         _tagService = tagToolBackend.GetTagService();
         _speechToTagSearchService = speechToTagSearchService;

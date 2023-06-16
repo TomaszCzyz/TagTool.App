@@ -21,8 +21,6 @@ public class ViewLocator : IDataTemplate
 
         if (type != null)
         {
-            File.WriteAllText(@"C:\Users\tczyz\Documents\TagToolApp\fromViewLocator.txt", "");
-
             return (Control)Activator.CreateInstance(type)!;
         }
 
