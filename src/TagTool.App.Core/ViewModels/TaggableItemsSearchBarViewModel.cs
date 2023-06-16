@@ -1,5 +1,6 @@
 ﻿using System.Collections.ObjectModel;
 using System.Diagnostics;
+using Avalonia.Controls;
 using Avalonia.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
@@ -58,22 +59,24 @@ public partial class TaggableItemsSearchBarViewModel : ViewModelBase, IDisposabl
     [ObservableProperty]
     private string _searchText = "";
 
-    // /// <summary>
-    // ///     ctor for XAML previewer
-    // /// </summary>
-    // public TaggableItemsSearchBarViewModel()
-    // {
-    //     if (!Design.IsDesignMode)
-    //     {
-    //         Debug.Fail("ctor for XAML Previewer should not be invoke during standard execution");
-    //     }
-    //
-    //     // _logger = App.Current.Services.GetRequiredService<ILogger<TaggableItemsSearchBarViewModel>>();
-    //     // _tagService = App.Current.Services.GetRequiredService<ITagToolBackend>().GetTagService();
-    //     // _speechToTagSearchService = null!;
-    //
-    //     Initialize();
-    // }
+    /// <summary>
+    ///     ctor for XAML previewer
+    /// </summary>
+    public TaggableItemsSearchBarViewModel()
+    {
+        if (!Design.IsDesignMode)
+        {
+            Debug.Fail("ctor for XAML Previewer should not be invoke during standard execution");
+        }
+
+        // _logger = App.Current.Services.GetRequiredService<ILogger<TaggableItemsSearchBarViewModel>>();
+        // _tagService = App.Current.Services.GetRequiredService<ITagToolBackend>().GetTagService();
+        _logger = null!;
+        _tagService = null!;
+        _speechToTagSearchService = null!;
+
+        Initialize();
+    }
 
     [UsedImplicitly]
     public TaggableItemsSearchBarViewModel(

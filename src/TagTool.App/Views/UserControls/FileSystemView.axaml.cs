@@ -3,6 +3,7 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Interactivity;
+using Avalonia.LogicalTree;
 using Avalonia.VisualTree;
 using TagTool.App.Core.Extensions;
 using TagTool.App.ViewModels.UserControls;
@@ -99,6 +100,7 @@ public partial class FileSystemView : UserControl
 
         listBoxItem.FocusAdorner = null;
         listBoxItem.AddHandler(DoubleTappedEvent, Handler);
+        return;
 
         void Handler(object? _, TappedEventArgs args)
         {

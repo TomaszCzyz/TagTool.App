@@ -235,7 +235,7 @@ public partial class TaggableItemsSearchViewModel : Document, IDisposable
         {
             case FileInfo:
                 var request = new MoveFileRequest { Item = item, Destination = "CommonStorage" };
-                var reply = await _fileActionsService.MoveFileAsync(request);
+                var _ = await _fileActionsService.MoveFileAsync(request);
                 break;
         }
     }
@@ -379,7 +379,7 @@ public partial class TaggableItemsSearchViewModel : Document, IDisposable
                     .Select(match => new HighlightInfo(match.StartIndex, match.Length))
                     .ToArray();
 
-                var inlines = _wordHighlighter.CreateInlines(TagMapper.MapToDomain(reply.Tag).DisplayText, highlightInfos);
+                var _ = _wordHighlighter.CreateInlines(TagMapper.MapToDomain(reply.Tag).DisplayText, highlightInfos);
 
                 // SearchResults.Add(new Tag(reply.TagName, inlines));
             }

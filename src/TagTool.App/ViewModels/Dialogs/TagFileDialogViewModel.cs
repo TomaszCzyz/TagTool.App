@@ -52,7 +52,7 @@ public partial class TagFileDialogViewModel : ViewModelBase
             Debug.Fail("ctor for XAML Previewer should not be invoke during standard execution");
         }
 
-        _options = null!; // to suppress warning
+        _options = null!;
     }
 
     [UsedImplicitly]

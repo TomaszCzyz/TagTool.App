@@ -81,7 +81,7 @@ public partial class MyTagsViewModel : Document
 
         _logger.LogInformation("Requesting tag creation {Request}", createTagsRequest);
 
-        var createTagsReply = _tagService.CreateTag(createTagsRequest);
+        var _ = _tagService.CreateTag(createTagsRequest);
         // todo: check is success
 
         // todo: make extension method 'AddIfNotExists(..)'

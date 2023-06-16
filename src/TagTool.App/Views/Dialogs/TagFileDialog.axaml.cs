@@ -35,7 +35,7 @@ public partial class TagFileDialog : Window
         if (result.Count == 0) return;
 
         var filePath = result[0].Path;
-        var folderPath = Directory.GetParent(filePath.LocalPath)?.FullName;
+        var _ = Directory.GetParent(filePath.LocalPath)?.FullName;
         // ViewModel.FilePickerSuggestedStartLocation = folderPath is null ? null : new BclStorageFolder(folderPath);
         SelectFileTextBox.Text = filePath.LocalPath;
     }

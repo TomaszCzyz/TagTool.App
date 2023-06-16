@@ -45,7 +45,7 @@ public partial class TaggableItemsSearchView : UserControl
             .ToArray();
 
         var dialog = new YesNoDialog { Question = "Use internal storage?" };
-        var (answer, remember) = await dialog.ShowDialog<(bool Answer, bool Remember)>((Window)VisualRoot!);
+        var (answer, _) = await dialog.ShowDialog<(bool Answer, bool Remember)>((Window)VisualRoot!);
 
         var alreadyTaggedItems = await ViewModel.VerifyItemsToAdd(fileSystemInfos);
         var addTagToExisting = false;
