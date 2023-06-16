@@ -15,7 +15,6 @@ using TagTool.App.Core.Models;
 using TagTool.App.Core.Services;
 using TagTool.App.Core.TagMapper;
 using TagTool.App.Models;
-using TagTool.App.Services;
 using TagTool.Backend;
 using TagTool.Backend.DomainTypes;
 

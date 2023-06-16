@@ -1,8 +1,8 @@
 ﻿using Avalonia.Controls.Documents;
 using Avalonia.Media;
-using TagTool.App.Models;
+using TagTool.App.Core.Models;
 
-namespace TagTool.App.Services;
+namespace TagTool.App.Core.Services;
 
 public interface IWordHighlighter
 {

@@ -173,7 +173,7 @@ public partial class TaggableItemsSearchBarViewModel : ViewModelBase, IDisposabl
     {
         if (SelectedItem is not QuerySegment || querySegment is not QuerySegmentState newState) return;
 
-        var indexOf = QuerySegments.IndexOf<object>(SelectedItem);
+        var indexOf = QuerySegments.IndexOf(SelectedItem);
 
         QuerySegments[indexOf] = new QuerySegment { Tag = QuerySegments[indexOf].Tag, State = newState };
     }

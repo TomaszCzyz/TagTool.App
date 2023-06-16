@@ -15,10 +15,8 @@ using Serilog.Events;
 using TagTool.App.Core.Extensions;
 using TagTool.App.Core.Services;
 using TagTool.App.Core.ViewModels;
-using TagTool.App.Models;
-using TagTool.App.Models.Docks;
+using TagTool.App.Docks;
 using TagTool.App.Options;
-using TagTool.App.Services;
 using TagTool.App.ViewModels;
 using TagTool.App.Views;
 

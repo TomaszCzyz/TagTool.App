@@ -3,9 +3,8 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Interactivity;
-using Avalonia.LogicalTree;
 using Avalonia.VisualTree;
-using TagTool.App.Helpers;
+using TagTool.App.Core.Extensions;
 using TagTool.App.ViewModels.UserControls;
 
 namespace TagTool.App.Views.UserControls;
@@ -45,7 +44,7 @@ public partial class FileSystemView : UserControl
 
     private void DataGrid_OnKeyDown(object? sender, KeyEventArgs e)
     {
-        if (KeyHelpers.IsDigitOrLetter(e.Key))
+        if (e.Key.IsDigitOrLetter())
         {
             ViewModel.QuickSearchText += e.Key.ToString().ToLower(CultureInfo.CurrentCulture);
             e.Handled = true;

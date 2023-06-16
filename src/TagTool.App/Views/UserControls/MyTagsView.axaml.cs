@@ -22,16 +22,16 @@ public partial class MyTagsView : UserControl
         var listBoxItem = e.Parent.FindAncestorOfType<ListBoxItem>()!;
 
         listBoxItem.AddHandler(PointerPressedEvent, HandleDrag, handledEventsToo: true);
+    }
 
-        async void HandleDrag(object? sender, PointerPressedEventArgs e)
-        {
-            if (ViewModel.SelectedTag is null || e.GetCurrentPoint(null).Properties.PointerUpdateKind != PointerUpdateKind.LeftButtonPressed) return;
+    private async void HandleDrag(object? sender, PointerPressedEventArgs e)
+    {
+        if (ViewModel.SelectedTag is null || e.GetCurrentPoint(null).Properties.PointerUpdateKind != PointerUpdateKind.LeftButtonPressed) return;
 
-            var dragData = new DataObject();
-            dragData.Set("draggedTag", ViewModel.SelectedTag!);
+        var dragData = new DataObject();
+        dragData.Set("draggedTag", ViewModel.SelectedTag!);
 
-            // maybe remove await?
-            var _ = await DragDrop.DoDragDrop(e, dragData, DragDropEffects.Link);
-        }
+        // maybe remove await?
+        var _ = await DragDrop.DoDragDrop(e, dragData, DragDropEffects.Link);
     }
 }

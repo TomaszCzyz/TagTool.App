@@ -12,8 +12,8 @@ using JetBrains.Annotations;
 using Microsoft.Extensions.DependencyInjection;
 using TagTool.App.Core.Extensions;
 using TagTool.App.Core.ViewModels;
+using TagTool.App.Docks;
 using TagTool.App.Models;
-using TagTool.App.Models.Messages;
 using TagTool.App.ViewModels.UserControls;
 using TagTool.App.Views.UserControls;
 
@@ -21,8 +21,6 @@ namespace TagTool.App.ViewModels;
 
 public partial class MainWindowViewModel : ViewModelBase, IRecipient<NewNotificationMessage>
 {
-    private readonly IFocusManager _focusManager;
-
     public WindowNotificationManager? NotificationManager { get; set; }
 
     [ObservableProperty]
@@ -50,7 +48,6 @@ public partial class MainWindowViewModel : ViewModelBase, IRecipient<NewNotifica
             Debug.Fail("ctor for XAML Previewer should not be invoke during standard execution");
         }
 
-        _focusManager = null!;
         _dockFactory = App.Current.Services.GetRequiredService<MyDockFactory>();
 
         Initialize();
@@ -59,7 +56,6 @@ public partial class MainWindowViewModel : ViewModelBase, IRecipient<NewNotifica
     [UsedImplicitly]
     public MainWindowViewModel(MyDockFactory factory)
     {
-        _focusManager = null!;
         _dockFactory = factory;
 
         Initialize();

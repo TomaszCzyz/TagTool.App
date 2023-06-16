@@ -3,10 +3,9 @@ using Dock.Model.Core;
 using Dock.Model.Mvvm;
 using Dock.Model.Mvvm.Controls;
 using Microsoft.Extensions.DependencyInjection;
-using TagTool.App.Models.Docks;
 using TagTool.App.ViewModels.UserControls;
 
-namespace TagTool.App.Models;
+namespace TagTool.App.Docks;
 
 public class MyDockFactory : Factory
 {

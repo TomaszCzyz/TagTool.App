@@ -1,6 +1,6 @@
 ﻿using Avalonia.Controls.Documents;
 
-namespace TagTool.App.Models;
+namespace TagTool.App.Core.Models;
 
 public record HighlightInfo(int StartIndex, int Length);
 

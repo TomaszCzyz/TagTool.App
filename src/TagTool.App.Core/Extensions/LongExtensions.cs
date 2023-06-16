@@ -46,7 +46,7 @@ public static class LongExtensions
                 return i.ToString("0 B", CultureInfo.CurrentCulture); // Byte
         }
 
-        readable = (readable / 1024);
+        readable /= 1024;
         return $"{readable.ToString(format, CultureInfo.CurrentCulture)} {suffix}";
     }
 }

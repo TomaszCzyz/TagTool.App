@@ -14,7 +14,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using TagTool.App.Core.Services;
 using TagTool.App.Core.TagMapper;
-using TagTool.App.Models.Messages;
+using TagTool.App.Models;
 using TagTool.Backend;
 using TagTool.Backend.DomainTypes;
 
