@@ -9,6 +9,7 @@ public partial class MainWindowView : Window
     public MainWindowView()
     {
         InitializeComponent();
+        ClientSize = new Size(850, 600);
     }
     
     private bool _mouseDownForWindowMoving;

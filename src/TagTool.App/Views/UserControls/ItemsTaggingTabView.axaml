@@ -4,7 +4,8 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:userControls="clr-namespace:TagTool.App.ViewModels.UserControls"
-    xmlns:userControls1="clr-namespace:TagTool.App.Views.UserControls"
+    xmlns:views="clr-namespace:TagTool.App.Core.Views;assembly=TagTool.App.Core"
+    xmlns:viewModels="clr-namespace:TagTool.App.Core.ViewModels;assembly=TagTool.App.Core"
     x:Class="TagTool.App.Views.UserControls.ItemsTaggingTabView"
     d:DesignWidth="800"
     d:DesignHeight="450"
@@ -57,8 +58,8 @@
 
             <ListBox Name="ItemsListBox" ItemsSource="{Binding ItemsToTag}">
                 <ListBox.DataTemplates>
-                    <DataTemplate x:CompileBindings="False" DataType="userControls:TaggableItemViewModel">
-                        <userControls1:TaggableItemView FontSize="14" />
+                    <DataTemplate x:CompileBindings="False" DataType="viewModels:TaggableItemViewModel">
+                        <views:TaggableItemView FontSize="14" />
                     </DataTemplate>
                 </ListBox.DataTemplates>
             </ListBox>

@@ -4,12 +4,12 @@
     xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:userControls="clr-namespace:TagTool.App.ViewModels.UserControls"
     xmlns:converters="clr-namespace:TagTool.App.Core.Converters;assembly=TagTool.App.Core"
     xmlns:models1="clr-namespace:TagTool.App.Core.Models;assembly=TagTool.App.Core"
-    x:Class="TagTool.App.Views.UserControls.TaggableItemView"
+    xmlns:viewModels="clr-namespace:TagTool.App.Core.ViewModels"
+    x:Class="TagTool.App.Core.Views.TaggableItemView"
     x:CompileBindings="True"
-    x:DataType="userControls:TaggableItemViewModel"
+    x:DataType="viewModels:TaggableItemViewModel"
     Name="UserControlRoot"
     d:DesignWidth="450"
     d:DesignHeight="150"
@@ -24,7 +24,7 @@
     </UserControl.Resources>
 
     <Design.DataContext>
-        <userControls:TaggableItemViewModel />
+        <viewModels:TaggableItemViewModel />
     </Design.DataContext>
 
     <Border

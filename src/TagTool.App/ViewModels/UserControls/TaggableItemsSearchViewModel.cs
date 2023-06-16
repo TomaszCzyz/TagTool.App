@@ -14,6 +14,7 @@ using Microsoft.Extensions.Logging;
 using TagTool.App.Core.Models;
 using TagTool.App.Core.Services;
 using TagTool.App.Core.TagMapper;
+using TagTool.App.Core.ViewModels;
 using TagTool.App.Models;
 using TagTool.Backend;
 using TagTool.Backend.DomainTypes;

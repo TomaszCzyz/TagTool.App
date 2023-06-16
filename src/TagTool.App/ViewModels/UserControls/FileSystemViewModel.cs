@@ -13,6 +13,7 @@ using JetBrains.Annotations;
 using Microsoft.Extensions.DependencyInjection;
 using TagTool.App.Core.Extensions;
 using TagTool.App.Core.Services;
+using TagTool.App.Core.ViewModels;
 using TagTool.Backend;
 
 namespace TagTool.App.ViewModels.UserControls;

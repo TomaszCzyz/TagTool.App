@@ -20,6 +20,7 @@ public partial class MainWindow : Window
         this.AttachDevTools();
 #endif
         AddHandler(KeyDownEvent, EscapePressedHandler);
+        return;
 
         void EscapePressedHandler(object? sender, KeyEventArgs args)
         {

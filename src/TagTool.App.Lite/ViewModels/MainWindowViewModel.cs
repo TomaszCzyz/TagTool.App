@@ -11,6 +11,8 @@ public partial class MainWindowViewModel : ViewModelBase
 {
     [ObservableProperty]
     private TaggableItemsSearchBarViewModel _searchBarViewModel;
+    
+    // public ObservableCollection<>
 
     /// <summary>
     ///     ctor for XAML previewer

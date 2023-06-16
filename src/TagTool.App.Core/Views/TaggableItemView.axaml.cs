@@ -3,11 +3,9 @@ using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.LogicalTree;
 using Avalonia.Media;
-using TagTool.App.Core.Models;
-using TagTool.App.ViewModels.UserControls;
-using TagTool.App.Views.Dialogs;
+using TagTool.App.Core.ViewModels;
 
-namespace TagTool.App.Views.UserControls;
+namespace TagTool.App.Core.Views;
 
 public partial class TaggableItemView : UserControl
 {
@@ -43,8 +41,8 @@ public partial class TaggableItemView : UserControl
 
     private async void TagItMenuItem_OnClick(object? sender, RoutedEventArgs e)
     {
-        var dialog = new TagFileDialog(ViewModel.Location);
-        var _ = await dialog.ShowDialog<(string FileName, Tag[] Tags)>((Window)VisualRoot!);
+        // var dialog = new TagFileDialog(ViewModel.Location);
+        // var _ = await dialog.ShowDialog<(string FileName, Tag[] Tags)>((Window)VisualRoot!);
     }
 
     private void UntagMenuItem_OnClick(object? sender, RoutedEventArgs e)
