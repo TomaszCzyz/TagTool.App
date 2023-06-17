@@ -35,8 +35,11 @@
     </Design.DataContext>
 
     <DockPanel>
-        <views:TaggableItemsSearchBarView DockPanel.Dock="Top" DataContext="{Binding SearchBarViewModel, Mode=TwoWay}" />
-        
+        <views:TaggableItemsSearchBarView
+            DockPanel.Dock="Top"
+            DataContext="{Binding SearchBarViewModel, Mode=TwoWay}"
+            Loaded="TagsSearchBar_OnLoaded" />
+
         <ListBox ItemsSource="{Binding SearchResults}">
             <ListBox.ItemTemplate>
                 <DataTemplate x:DataType="viewModels:TaggableItemViewModel">
@@ -54,6 +57,7 @@
                             VerticalAlignment="Center"
                             Text="{Binding Size, Converter={StaticResource FileSizeToStringConverter}}"
                             TextAlignment="Right" />
+
                     </Grid>
                 </DataTemplate>
             </ListBox.ItemTemplate>
