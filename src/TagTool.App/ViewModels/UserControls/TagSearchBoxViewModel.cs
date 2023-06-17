@@ -83,7 +83,7 @@ public partial class TagSearchBoxViewModel : ViewModelBase, IDisposable
 
         TagsSearchResults.Clear(); // todo: it breaks without throttle
 
-        var searchTagsRequest = new SearchTagsRequest { SearchType = SearchTagsRequest.Types.SearchType.Partial, Name = value, ResultsLimit = 50 };
+        var searchTagsRequest = new SearchTagsRequest { SearchType = SearchTagsRequest.Types.SearchType.Fuzzy, SearchText = value, ResultsLimit = 50 };
         var callOptions = new CallOptions().WithCancellationToken(ct);
 
         using var streamingCall = _tagService.SearchTags(searchTagsRequest, callOptions);

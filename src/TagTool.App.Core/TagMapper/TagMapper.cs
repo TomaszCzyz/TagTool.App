@@ -4,6 +4,8 @@ using TagTool.App.Core.Models;
 using TagTool.Backend.DomainTypes;
 using DayRangeTag = TagTool.Backend.DomainTypes.DayRangeTag;
 using DayTag = TagTool.Backend.DomainTypes.DayTag;
+using MonthRangeTag = TagTool.Backend.DomainTypes.MonthRangeTag;
+using MonthTag = TagTool.Backend.DomainTypes.MonthTag;
 
 namespace TagTool.App.Core.TagMapper;
 
@@ -34,10 +36,20 @@ public static class TagMapper
         else if (anyTag.Is(DayRangeTag.Descriptor))
         {
             var dayRangeTag = anyTag.Unpack<DayRangeTag>();
-            tag = new Models.DayRangeTag { Begin = (DayOfWeek)dayRangeTag.BeginDay, End = (DayOfWeek)dayRangeTag.EndDay };
+            tag = new Models.DayRangeTag { Begin = (DayOfWeek)dayRangeTag.Begin, End = (DayOfWeek)dayRangeTag.End };
+        }
+        else if (anyTag.Is(MonthTag.Descriptor))
+        {
+            var monthTag = anyTag.Unpack<MonthTag>();
+            tag = new Models.MonthTag { Month = monthTag.Month };
+        }
+        else if (anyTag.Is(MonthRangeTag.Descriptor))
+        {
+            var monthRangeTag = anyTag.Unpack<MonthRangeTag>();
+            tag = new Models.MonthRangeTag { Begin = monthRangeTag.Begin, End = monthRangeTag.End };
         }
 
-        return tag ?? new TextTag{Name = "UnknownTagType"};
+        return tag ?? new TextTag { Name = "UnknownTagType" };
         // return tag ?? throw new ArgumentException("Unable to match tag type");
     }
 
@@ -47,7 +59,9 @@ public static class TagMapper
         {
             TextTag normalTag => new NormalTag { Name = normalTag.Name },
             Models.DayTag dayTag => new DayTag { Day = (int)dayTag.DayOfWeek },
-            Models.DayRangeTag dayRangeTag => new DayRangeTag { BeginDay = (int)dayRangeTag.Begin, EndDay = (int)dayRangeTag.End },
+            Models.DayRangeTag dayRangeTag => new DayRangeTag { Begin = (int)dayRangeTag.Begin, End = (int)dayRangeTag.End },
+            Models.MonthTag monthTag => new MonthTag { Month = monthTag.Month },
+            Models.MonthRangeTag monthRangeTag => new MonthRangeTag { Begin = monthRangeTag.Begin, End = monthRangeTag.End },
             _ => throw new ArgumentOutOfRangeException(nameof(tag), tag, null)
         };
 

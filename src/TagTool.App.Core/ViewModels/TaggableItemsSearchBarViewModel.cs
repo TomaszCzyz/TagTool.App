@@ -126,20 +126,21 @@ public partial class TaggableItemsSearchBarViewModel : ViewModelBase, IDisposabl
            && tagNameFromDropDown != "Unknown TagType"
            && !QuerySegments.Select(segment => segment.Tag.DisplayText).Contains(tagNameFromDropDown);
 
+    private IList<ITag> _tagsInDropDown;
+
     public async Task<IEnumerable<object>> GetTagsAsync(string? _, CancellationToken cancellationToken)
     {
         var streamingCall = _tagService.SearchTags(
-            new SearchTagsRequest { Name = "*", SearchType = SearchTagsRequest.Types.SearchType.Wildcard, ResultsLimit = 50 },
+            new SearchTagsRequest { SearchText = "*", SearchType = SearchTagsRequest.Types.SearchType.Wildcard, ResultsLimit = 50 },
             cancellationToken: cancellationToken);
 
-        var results = await streamingCall.ResponseStream
+        _tagsInDropDown = await streamingCall.ResponseStream
             .ReadAllAsync(cancellationToken)
             .Select(reply => TagMapper.TagMapper.MapToDomain(reply.Tag))
             .Where(tag => !QuerySegments.Select(segment => segment.Tag).Contains(tag))
-            .Select(tag => (object)tag.DisplayText)
             .ToListAsync(cancellationToken);
 
-        return results;
+        return _tagsInDropDown.Select(tag => (object)tag.DisplayText);
     }
 
     [RelayCommand]
@@ -160,7 +161,8 @@ public partial class TaggableItemsSearchBarViewModel : ViewModelBase, IDisposabl
     [RelayCommand]
     private void AddTagToSearchQuery(string tagName)
     {
-        QuerySegments.Add(new QuerySegment { Tag = new TextTag { Name = tagName } });
+        var first = _tagsInDropDown.First(tag => tag.DisplayText == tagName);
+        QuerySegments.Add(new QuerySegment { Tag = first });
     }
 
     [RelayCommand]

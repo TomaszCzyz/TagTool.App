@@ -226,6 +226,28 @@
                                                     Text="{Binding DisplayText}" />
 
                                             </DataTemplate>
+                                            <DataTemplate x:Key="TagTool.App.Core.Models.MonthTag" DataType="models:ITag">
+                                                <TextBlock
+                                                    Classes="Transparent"
+                                                    Margin="4 1"
+                                                    VerticalAlignment="Center"
+                                                    FontSize="18"
+                                                    Foreground="DeepPink"
+                                                    IsTabStop="False"
+                                                    Text="{Binding DisplayText}" />
+
+                                            </DataTemplate>
+                                            <DataTemplate x:Key="TagTool.App.Core.Models.MonthRangeTag" DataType="models:ITag">
+                                                <TextBlock
+                                                    Classes="Transparent"
+                                                    Margin="4 1"
+                                                    VerticalAlignment="Center"
+                                                    FontSize="18"
+                                                    Foreground="HotPink"
+                                                    IsTabStop="False"
+                                                    Text="{Binding DisplayText}" />
+
+                                            </DataTemplate>
                                         </dataTemplates:TagsTemplateSelector>
                                     </ContentControl.DataTemplates>
                                 </ContentControl>

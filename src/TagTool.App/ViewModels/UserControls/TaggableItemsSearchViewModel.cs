@@ -367,7 +367,7 @@ public partial class TaggableItemsSearchViewModel : Document, IDisposable
         var callOptions = new CallOptions().WithCancellationToken(ct);
 
         using var streamingCall = _tagService.SearchTags(
-            new SearchTagsRequest { Name = value, SearchType = SearchTagsRequest.Types.SearchType.Partial, ResultsLimit = 15 },
+            new SearchTagsRequest { SearchText = value, SearchType = SearchTagsRequest.Types.SearchType.Fuzzy, ResultsLimit = 15 },
             callOptions);
 
         try

@@ -4,7 +4,7 @@ using Grpc.Net.Client;
 
 namespace TagTool.App.Core.Services;
 
-public class UnixDomainSocketConnectionFactory
+public sealed class UnixDomainSocketConnectionFactory
 {
     private static readonly string _socketPath = Path.Combine(Path.GetTempPath(), "socket.tmp");
 

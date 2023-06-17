@@ -64,7 +64,7 @@ public partial class MyTagsViewModel : Document
     {
         Dispatcher.UIThread.InvokeAsync(async () =>
         {
-            var searchTagsRequest = new SearchTagsRequest { Name = "*", SearchType = SearchTagsRequest.Types.SearchType.Wildcard, ResultsLimit = 20 };
+            var searchTagsRequest = new SearchTagsRequest { SearchText = "*", SearchType = SearchTagsRequest.Types.SearchType.Wildcard, ResultsLimit = 20 };
             var streamingCall = _tagService.SearchTags(searchTagsRequest);
             await streamingCall.ResponseStream
                 .ReadAllAsync()
