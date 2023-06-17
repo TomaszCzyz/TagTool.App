@@ -86,4 +86,23 @@ public partial class TaggableItemsSearchBarView : UserControl
                 break;
         }
     }
+
+    private void TagDisplayText_OnAttachedToLogicalTree(object? sender, RoutedEventArgs routedEventArgs)
+    {
+        var control = (sender as Control)!;
+        var listBoxItem = control.FindAncestorOfType<ListBoxItem>()!;
+
+        listBoxItem.AddHandler(
+            KeyDownEvent,
+            (o, args) =>
+            {
+                if (args.Key == Key.Apps)
+                {
+                    control.ContextFlyout?.ShowAt(listBoxItem);
+                }
+            },
+            RoutingStrategies.Bubble);
+    }
+
+    private void PopupFlyoutBase_OnClosing(object? sender, EventArgs eventArgs) => _textBox.Focus();
 }
