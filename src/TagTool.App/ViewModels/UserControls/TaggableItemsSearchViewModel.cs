@@ -119,7 +119,8 @@ public partial class TaggableItemsSearchViewModel : Document, IDisposable
     {
         var query = Tags
             .Select(tag => Any.Pack(new NormalTag { Name = tag.Name }))
-            .Select(any => new GetItemsByTagsV2Request.Types.TagQueryParam { Tag = any, Include = true });
+            .Select(any
+                => new GetItemsByTagsV2Request.Types.TagQueryParam { Tag = any, State = GetItemsByTagsV2Request.Types.QuerySegmentState.Include });
 
         var reply = await _tagService
             .GetItemsByTagsV2Async(new GetItemsByTagsV2Request { QueryParams = { query } });
@@ -128,10 +129,10 @@ public partial class TaggableItemsSearchViewModel : Document, IDisposable
 
         foreach (var taggedItem in reply.TaggedItems)
         {
-            var (info, type) = taggedItem.Item.ItemType switch
+            var (info, type) = taggedItem.ItemCase switch
             {
-                "file" => ((FileSystemInfo)new FileInfo(taggedItem.Item.Identifier), TaggedItemType.File),
-                "folder" => (new DirectoryInfo(taggedItem.Item.Identifier), TaggedItemType.Folder),
+                TaggedItem.ItemOneofCase.File => ((FileSystemInfo)new FileInfo(taggedItem.File.Path), TaggedItemType.File),
+                TaggedItem.ItemOneofCase.Folder => (new DirectoryInfo(taggedItem.Folder.Path), TaggedItemType.Folder),
                 _ => throw new ArgumentOutOfRangeException()
             };
 
@@ -181,8 +182,8 @@ public partial class TaggableItemsSearchViewModel : Document, IDisposable
         {
             var request = info switch
             {
-                DirectoryInfo dirInfo => new GetItemRequest { Item = new Item { ItemType = "folder", Identifier = dirInfo.FullName } },
-                FileInfo fileInfo => new GetItemRequest { Item = new Item { ItemType = "file", Identifier = fileInfo.FullName } },
+                DirectoryInfo dirInfo => new GetItemRequest { File = new FileDto { Path = dirInfo.FullName } },
+                FileInfo fileInfo => new GetItemRequest { Folder = new FolderDto { Path = fileInfo.FullName } },
                 _ => throw new ArgumentOutOfRangeException(nameof(infos))
             };
 
@@ -204,15 +205,21 @@ public partial class TaggableItemsSearchViewModel : Document, IDisposable
         {
             const string tagName = "JustAdded";
 
-            var itemType = info is FileInfo ? "file" : "folder";
-            var item = new Item { ItemType = itemType, Identifier = info.FullName };
-            var tagRequest = new TagItemRequest { Item = item, Tag = Any.Pack(new NormalTag { Name = tagName }) };
+            var any = Any.Pack(new NormalTag { Name = tagName });
+            var tagRequest = info switch
+            {
+                DirectoryInfo dirInfo
+                    => new TagItemRequest { Folder = new FolderDto { Path = dirInfo.FullName }, Tag = any },
+                FileInfo fileInfo
+                    => new TagItemRequest { File = new FileDto { Path = fileInfo.FullName }, Tag = any },
+                _ => throw new UnreachableException()
+            };
 
             var reply = await _tagService.TagItemAsync(tagRequest);
 
-            if (input.MoveToInternalStorage)
+            if (input.MoveToInternalStorage && tagRequest.ItemCase is TagItemRequest.ItemOneofCase.File)
             {
-                await MoveToInternalStorage(info, item);
+                await MoveToInternalStorage(info, tagRequest.File);
             }
 
             switch (reply.ResultCase)
@@ -220,7 +227,7 @@ public partial class TaggableItemsSearchViewModel : Document, IDisposable
                 case TagItemReply.ResultOneofCase.TaggedItem:
                     break;
                 case TagItemReply.ResultOneofCase.ErrorMessage:
-                    _logger.LogWarning("Unable to add tag item {Item} with a tag {TagName} to", tagRequest.Item, tagName);
+                    _logger.LogWarning("Unable to add tag item {Item} with a tag {TagName} to", tagRequest.ItemCase, tagName);
                     continue;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(input));
@@ -230,12 +237,12 @@ public partial class TaggableItemsSearchViewModel : Document, IDisposable
         await CommitSearch();
     }
 
-    private async Task MoveToInternalStorage(FileSystemInfo info, Item item)
+    private async Task MoveToInternalStorage(FileSystemInfo info, FileDto item)
     {
         switch (info)
         {
             case FileInfo:
-                var request = new MoveFileRequest { Item = item, Destination = "CommonStorage" };
+                var request = new MoveFileRequest { File = item, Destination = "CommonStorage" };
                 var _ = await _fileActionsService.MoveFileAsync(request);
                 break;
         }

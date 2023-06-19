@@ -87,7 +87,10 @@ message TagItemRequest {
   // The Tag to be added to the item.
   google.protobuf.Any tag = 1;
   // The Item to tag.
-  Item item = 2;
+  oneof item {
+    FileDto file = 2;
+    FolderDto folder = 3;
+  };
 }
 
 // The reply indicating whether tagging was successful or not.
@@ -105,7 +108,10 @@ message UntagItemRequest {
   // The Tag to be removed from the item.
   google.protobuf.Any tag = 1;
   // The item to untag
-  Item item = 2;
+  oneof item {
+    FileDto file = 2;
+    FolderDto folder = 3;
+  };
 }
 
 // The reply indicating whether untagging was successful or not.
@@ -121,7 +127,10 @@ message UntagItemReply {
 // The request to get information about an specified Item
 message GetItemRequest {
   // The item for which we want to retrieve information.
-  Item item = 1;
+  oneof item {
+    FileDto file = 2;
+    FolderDto folder = 3;
+  };
 }
 
 // The reply with information about an item or error message 
@@ -152,14 +161,19 @@ message GetItemsByTagsV2Request {
 
   // Defines single segment of a tag search query.
   message TagQueryParam {
-    // The flag indicating if searched item can contain given tag.
-    // If flag is false, then returned items cannot by tagged if the tag.
-    // Defaults to true.
-    bool include = 1;
-    // When true, then all returned items must contain given tag.
-    bool mustBePresent = 2;
+    // The segment's state.
+    QuerySegmentState state = 1;
     // The tag, e.g. normal, date range, size range, e.t.c.
     google.protobuf.Any tag = 3;
+  }
+  
+  enum QuerySegmentState {
+    // The option indicating that results of search should not contain the tag.
+    Exclude = 0;
+    // The option indicating that searched item can contain given tag.
+    Include = 1;
+    // The option indicating that all returned items must contain given tag.
+    MustBePresent = 2;
   }
 }
 
@@ -171,7 +185,10 @@ message GetItemsByTagsV2Reply {
 // The request to check if given Item exists.
 message DoesItemExistsRequest {
   // The item to check.
-  Item item = 1;
+  oneof item {
+    FileDto file = 1;
+    FolderDto folder = 2;
+  };
 }
 
 // The reply indicating if item exists.

@@ -1,6 +1,5 @@
 ﻿using System.Collections.ObjectModel;
 using System.Diagnostics;
-using System.Globalization;
 using Avalonia.Controls;
 using Avalonia.Controls.Documents;
 using Avalonia.Threading;
@@ -74,10 +73,12 @@ public partial class TaggableItemViewModel : ViewModelBase
     [RelayCommand]
     private async Task TagIt(string tagName)
     {
-        var tagRequest = new TagItemRequest
+        var tag = Any.Pack(new NormalTag { Name = tagName });
+        var tagRequest = TaggedItemType switch
         {
-            Tag = Any.Pack(new NormalTag { Name = tagName }),
-            Item = new Item { ItemType = TaggedItemType == TaggedItemType.Folder ? "folder" : "file", Identifier = Location }
+            TaggedItemType.File => new TagItemRequest { Tag = tag, File = new FileDto { Path = Location } },
+            TaggedItemType.Folder => new TagItemRequest { Tag = tag, Folder = new FolderDto { Path = Location } },
+            _ => throw new UnreachableException()
         };
 
         var tagReply = await _tagService.TagItemAsync(tagRequest);
@@ -91,17 +92,19 @@ public partial class TaggableItemViewModel : ViewModelBase
                 Debug.WriteLine($"Unable to tag item {tagRequest}");
                 break;
             default:
-                throw new ArgumentOutOfRangeException();
+                throw new UnreachableException();
         }
     }
 
     [RelayCommand]
     private async Task UntagItem(string tagName)
     {
-        var untagItemRequest = new UntagItemRequest
+        var tag = Any.Pack(new NormalTag { Name = tagName });
+        var untagItemRequest = TaggedItemType switch
         {
-            Tag = Any.Pack(new NormalTag { Name = tagName }),
-            Item = new Item { Identifier = Location, ItemType = TaggedItemType == TaggedItemType.Folder ? "folder" : "file" }
+            TaggedItemType.File => new UntagItemRequest { Tag = tag, File = new FileDto { Path = Location } },
+            TaggedItemType.Folder => new UntagItemRequest { Tag = tag, Folder = new FolderDto { Path = Location } },
+            _ => throw new UnreachableException()
         };
 
         var reply = await _tagService.UntagItemAsync(untagItemRequest);
@@ -115,15 +118,17 @@ public partial class TaggableItemViewModel : ViewModelBase
                 Debug.WriteLine($"Unable to tag item {untagItemRequest}");
                 break;
             default:
-                throw new ArgumentOutOfRangeException();
+                throw new UnreachableException();
         }
     }
 
     private async Task UpdateTags()
     {
-        var getItemInfoRequest = new GetItemRequest
+        var getItemInfoRequest = TaggedItemType switch
         {
-            Item = new Item { ItemType = TaggedItemType.ToString().ToLower(CultureInfo.InvariantCulture), Identifier = Location }
+            TaggedItemType.File => new GetItemRequest { File = new FileDto { Path = Location } },
+            TaggedItemType.Folder => new GetItemRequest { Folder = new FolderDto { Path = Location } },
+            _ => throw new UnreachableException()
         };
 
         var getItemReply = await _tagService.GetItemAsync(getItemInfoRequest);

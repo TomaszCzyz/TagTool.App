@@ -1,19 +1,27 @@
-﻿using System;
+﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
+using System.IO;
+using System.Linq;
+using System.Threading.Tasks;
 using Avalonia.Controls;
+using Avalonia.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
+using DynamicData;
 using JetBrains.Annotations;
 using Microsoft.Extensions.DependencyInjection;
+using TagTool.App.Core.Models;
 using TagTool.App.Core.Services;
+using TagTool.App.Core.TagMapper;
 using TagTool.App.Core.ViewModels;
 using TagTool.Backend;
+using TagTool.Backend.DomainTypes;
 
 namespace TagTool.App.Lite.ViewModels;
 
 public partial class MainWindowViewModel : ViewModelBase
 {
-    private readonly TagService.TagServiceClient _tagToolBackend;
+    private readonly TagService.TagServiceClient _tagService;
 
     [ObservableProperty]
     private TaggableItemsSearchBarViewModel _searchBarViewModel;
@@ -30,7 +38,7 @@ public partial class MainWindowViewModel : ViewModelBase
             Debug.Fail("ctor for XAML Previewer should not be invoke during standard execution");
         }
 
-        _tagToolBackend = App.Current.Services.GetRequiredService<ITagToolBackend>().GetTagService();
+        _tagService = App.Current.Services.GetRequiredService<ITagToolBackend>().GetTagService();
         SearchBarViewModel = App.Current.Services.GetRequiredService<TaggableItemsSearchBarViewModel>();
 
         Initialize();
@@ -39,7 +47,7 @@ public partial class MainWindowViewModel : ViewModelBase
     [UsedImplicitly]
     public MainWindowViewModel(TaggableItemsSearchBarViewModel taggableItemsSearchBarViewModel, ITagToolBackend tagToolBackend)
     {
-        _tagToolBackend = tagToolBackend.GetTagService();
+        _tagService = tagToolBackend.GetTagService();
         SearchBarViewModel = taggableItemsSearchBarViewModel;
 
         Initialize();
@@ -47,43 +55,38 @@ public partial class MainWindowViewModel : ViewModelBase
 
     private void Initialize()
     {
-        // SearchBarViewModel.QuerySegments.CollectionChanged += (sender, args) => 
-        SearchBarViewModel.CommitSearchQueryEvent += (sender, args) =>
-        {
-            SearchResults.Add(new TaggableItemViewModel(_tagToolBackend)
-            {
-                TaggedItemType = TaggedItemType.File,
-                DisplayName = "test",
-                Location = "test",
-                DateCreated = DateTime.Now,
-                AreTagsVisible = true,
-                Size = 123123
-            });
-        };
-        
-        SearchResults.Add(new TaggableItemViewModel(_tagToolBackend)
-        {
-            TaggedItemType = TaggedItemType.File,
-            DisplayName = "test2",
-            Location = "test",
-            DateCreated = DateTime.Now,
-            AreTagsVisible = true,
-            Size = 123123
-        });
+        SearchBarViewModel.CommitSearchQueryEvent += (_, args) => Dispatcher.UIThread.InvokeAsync(() => SearchForTaggableItems(args.QuerySegments));
     }
-    //
-    // [RelayCommand]
-    // private async Task CommitSearch()
-    // {
-    //     var tagQueryParams = SearchBarViewModel.QuerySegments.Select(segment
-    //         => new GetItemsByTagsV2Request.Types.TagQueryParam
-    //         {
-    //             Tag = TagMapper.MapToDto(segment.Tag),
-    //             Include = segment.State == QuerySegmentState.Include,
-    //             MustBePresent = segment.State == QuerySegmentState.MustBePresent
-    //         });
-    //
-    //     // todo: inform other component (which is responsible for displaying found items) that query has changed
-    //     // var _ = await _tagService.GetItemsByTagsV2Async(new GetItemsByTagsV2Request { QueryParams = { tagQueryParams } });
-    // }
+
+    private async Task SearchForTaggableItems(ICollection<QuerySegment> argsQuerySegments)
+    {
+        var tagQueryParams = argsQuerySegments.Select(segment
+            => new GetItemsByTagsV2Request.Types.TagQueryParam
+            {
+                Tag = TagMapper.MapToDto(segment.Tag),
+                State = segment.State switch {
+                    QuerySegmentState.Exclude => GetItemsByTagsV2Request.Types.QuerySegmentState.Exclude,
+                    QuerySegmentState.Include => GetItemsByTagsV2Request.Types.QuerySegmentState.Include,
+                    QuerySegmentState.MustBePresent => GetItemsByTagsV2Request.Types.QuerySegmentState.MustBePresent,
+                    _ => throw new UnreachableException()
+                }
+            });
+
+        var reply = await _tagService.GetItemsByTagsV2Async(new GetItemsByTagsV2Request { QueryParams = { tagQueryParams } });
+
+        SearchResults.Clear();
+        SearchResults.AddRange(reply.TaggedItems.Select(item
+            => new TaggableItemViewModel(_tagService)
+            {
+                TaggedItemType = item.ItemCase switch
+                {
+                    TaggedItem.ItemOneofCase.File => TaggedItemType.File,
+                    TaggedItem.ItemOneofCase.Folder => TaggedItemType.Folder,
+                    _ => throw new UnreachableException()
+                },
+                DisplayName = Path.GetFileNameWithoutExtension(item.File.Path),
+                AreTagsVisible = true
+                // AssociatedTags = { item.Tags.Select(any => TagMapper.MapToDomain(any)) }
+            }));
+    }
 }
