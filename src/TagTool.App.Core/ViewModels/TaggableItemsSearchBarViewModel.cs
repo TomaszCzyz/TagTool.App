@@ -33,6 +33,23 @@ public sealed partial class TaggableItemsSearchBarViewModel : ViewModelBase, IDi
 
     private IList<ITag>? _tagsInDropDown;
 
+    /// <summary>
+    ///     The event raised when:
+    ///     <list type="bullet">
+    ///         <item>
+    ///             <description>
+    ///                 <see cref="TagTool.App.Core.ViewModels.TaggableItemsSearchBarViewModel.QuerySegments" />
+    ///                 collection is updated
+    ///             </description>
+    ///         </item>
+    ///         <item>
+    ///             <description>search icon is clicked</description>
+    ///         </item>
+    ///         <item>
+    ///             <description>commit search shortcut is used</description>
+    ///         </item>
+    ///     </list>
+    /// </summary>
     public event EventHandler<CommitSearchQueryEventArgs>? CommitSearchQueryEvent;
 
     public ObservableCollection<object> DisplayedSearchBarElements { get; } = new() { new TextBoxMarker() };
