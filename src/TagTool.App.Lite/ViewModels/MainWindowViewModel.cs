@@ -47,7 +47,8 @@ public partial class MainWindowViewModel : ViewModelBase
 
     private void Initialize()
     {
-        SearchBarViewModel.QuerySegments.CollectionChanged += (sender, args) =>
+        // SearchBarViewModel.QuerySegments.CollectionChanged += (sender, args) => 
+        SearchBarViewModel.CommitSearchQueryEvent += (sender, args) =>
         {
             SearchResults.Add(new TaggableItemViewModel(_tagToolBackend)
             {
@@ -70,4 +71,19 @@ public partial class MainWindowViewModel : ViewModelBase
             Size = 123123
         });
     }
+    //
+    // [RelayCommand]
+    // private async Task CommitSearch()
+    // {
+    //     var tagQueryParams = SearchBarViewModel.QuerySegments.Select(segment
+    //         => new GetItemsByTagsV2Request.Types.TagQueryParam
+    //         {
+    //             Tag = TagMapper.MapToDto(segment.Tag),
+    //             Include = segment.State == QuerySegmentState.Include,
+    //             MustBePresent = segment.State == QuerySegmentState.MustBePresent
+    //         });
+    //
+    //     // todo: inform other component (which is responsible for displaying found items) that query has changed
+    //     // var _ = await _tagService.GetItemsByTagsV2Async(new GetItemsByTagsV2Request { QueryParams = { tagQueryParams } });
+    // }
 }

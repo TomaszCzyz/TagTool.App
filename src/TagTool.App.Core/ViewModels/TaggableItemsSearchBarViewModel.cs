@@ -1,5 +1,7 @@
-﻿using System.Collections.ObjectModel;
+﻿using System.Collections;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using Avalonia.Controls;
 using Avalonia.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
@@ -13,41 +15,25 @@ using TagTool.App.Core.Models;
 using TagTool.App.Core.Services;
 using TagTool.Backend;
 using TagTool.Backend.DomainTypes;
-using DayRangeTag = TagTool.App.Core.Models.DayRangeTag;
-using DayTag = TagTool.App.Core.Models.DayTag;
 
 namespace TagTool.App.Core.ViewModels;
 
-public sealed class TextBoxMarker
+public class CommitSearchQueryEventArgs : EventArgs
 {
+    public ICollection<QuerySegment> QuerySegments { get; init; }
+
+    public CommitSearchQueryEventArgs(ICollection<QuerySegment> querySegments) => QuerySegments = querySegments;
 }
 
-public enum QuerySegmentState
-{
-    Exclude = 0,
-    Include = 1,
-    MustBePresent = 2
-}
-
-[DebuggerDisplay("State: {State}, Tag: {Tag}")]
-public sealed class QuerySegment
-{
-    public QuerySegmentState State { get; set; } = QuerySegmentState.Include;
-
-    public required ITag Tag { get; init; }
-
-    private bool Equals(QuerySegment other) => Tag.Equals(other.Tag);
-
-    public override bool Equals(object? obj) => ReferenceEquals(this, obj) || obj is QuerySegment other && Equals(other);
-
-    public override int GetHashCode() => Tag.GetHashCode();
-}
-
-public partial class TaggableItemsSearchBarViewModel : ViewModelBase, IDisposable
+public sealed partial class TaggableItemsSearchBarViewModel : ViewModelBase, IDisposable
 {
     private readonly ILogger<TaggableItemsSearchBarViewModel> _logger;
     private readonly TagService.TagServiceClient _tagService;
     private readonly ISpeechToTagSearchService _speechToTagSearchService;
+
+    private IList<ITag>? _tagsInDropDown;
+
+    public event EventHandler<CommitSearchQueryEventArgs>? CommitSearchQueryEvent;
 
     public ObservableCollection<object> DisplayedSearchBarElements { get; } = new() { new TextBoxMarker() };
 
@@ -96,12 +82,11 @@ public partial class TaggableItemsSearchBarViewModel : ViewModelBase, IDisposabl
         QuerySegments.CollectionChanged
             += (_, args) =>
             {
-                if (args.OldItems?.Count == 1
-                    && args.NewItems?.Count == 1
-                    && (args.OldItems[0] as QuerySegment)!.Equals(args.NewItems[0] as QuerySegment))
+                if (IsOneElementUpdated(args.OldItems, args.NewItems))
                 {
                     DisplayedSearchBarElements!.Replace(args.OldItems[0], args.NewItems[0]);
-                    return;
+                    args.OldItems.RemoveAt(0);
+                    args.NewItems.RemoveAt(0);
                 }
 
                 if (args.OldItems is not null)
@@ -113,20 +98,23 @@ public partial class TaggableItemsSearchBarViewModel : ViewModelBase, IDisposabl
                 {
                     DisplayedSearchBarElements.AddOrInsertRange(args.NewItems.OfType<object>(), DisplayedSearchBarElements.Count - 1);
                 }
-            };
 
-        QuerySegments.Add(new QuerySegment { Tag = new TextTag { Name = "Default" } });
-        QuerySegments.Add(new QuerySegment { State = QuerySegmentState.Exclude, Tag = new TextTag { Name = "Tag2" } });
-        QuerySegments.Add(new QuerySegment { State = QuerySegmentState.MustBePresent, Tag = new DayTag { DayOfWeek = DayOfWeek.Sunday } });
-        QuerySegments.Add(new QuerySegment { Tag = new DayRangeTag { Begin = DayOfWeek.Monday, End = DayOfWeek.Thursday } });
+                OnCommitSearchQueryEvent(new CommitSearchQueryEventArgs(QuerySegments));
+            };
     }
+
+    /// <summary>
+    ///     Checks if the change refers to the same query segment (only its state has changed),
+    ///     because then we should replace element to retain order.
+    /// </summary>
+    /// <returns>True, when lists contains only one element with the same tag</returns>
+    private static bool IsOneElementUpdated([NotNullWhen(true)] IList? argsOldItems, [NotNullWhen(true)] IList? argsNewItems)
+        => argsOldItems?.Count == 1 && argsNewItems?.Count == 1 && (argsOldItems[0] as QuerySegment)!.Equals(argsNewItems[0] as QuerySegment);
 
     public bool FilterAlreadyUsedTags(string? _, object? item)
         => item is string tagNameFromDropDown
            && tagNameFromDropDown != "Unknown TagType"
            && !QuerySegments.Select(segment => segment.Tag.DisplayText).Contains(tagNameFromDropDown);
-
-    private IList<ITag> _tagsInDropDown;
 
     public async Task<IEnumerable<object>> GetTagsAsync(string? searchText, CancellationToken cancellationToken)
     {
@@ -144,29 +132,14 @@ public partial class TaggableItemsSearchBarViewModel : ViewModelBase, IDisposabl
     }
 
     [RelayCommand]
-    private async Task CommitSearch()
-    {
-        var tagQueryParams = QuerySegments.Select(segment
-            => new GetItemsByTagsV2Request.Types.TagQueryParam
-            {
-                Tag = TagMapper.TagMapper.MapToDto(segment.Tag),
-                Include = segment.State == QuerySegmentState.Include,
-                MustBePresent = segment.State == QuerySegmentState.MustBePresent
-            });
-
-        // todo: inform other component (which is responsible for displaying found items) that query has changed
-        var _ = await _tagService.GetItemsByTagsV2Async(new GetItemsByTagsV2Request { QueryParams = { tagQueryParams } });
-    }
-
-    [RelayCommand]
     private void AddTagToSearchQuery(string tagName)
     {
-        var first = _tagsInDropDown.First(tag => tag.DisplayText == tagName);
+        var first = _tagsInDropDown?.First(tag => tag.DisplayText == tagName)!;
         QuerySegments.Add(new QuerySegment { Tag = first });
     }
 
     [RelayCommand]
-    private void RemoveTag(object querySegment)
+    private void RemoveTagFromSearchQuery(object querySegment)
     {
         if (querySegment is not QuerySegment segment) return;
 
@@ -181,6 +154,12 @@ public partial class TaggableItemsSearchBarViewModel : ViewModelBase, IDisposabl
         var indexOf = QuerySegments.IndexOf(SelectedItem);
 
         QuerySegments[indexOf] = new QuerySegment { Tag = QuerySegments[indexOf].Tag, State = newState };
+    }
+
+    [RelayCommand]
+    private void CommitSearch()
+    {
+        OnCommitSearchQueryEvent(new CommitSearchQueryEventArgs(QuerySegments));
     }
 
     public bool IsActive => _bassAudioCaptureService?.IsActive() ?? false;
@@ -251,9 +230,14 @@ public partial class TaggableItemsSearchBarViewModel : ViewModelBase, IDisposabl
         OnPropertyChanged(nameof(IsActive));
     }
 
+    private void OnCommitSearchQueryEvent(CommitSearchQueryEventArgs e)
+    {
+        Debug.WriteLine($"CommitSearchQueryEvent invoked with {string.Join(", ", e.QuerySegments.Select(segment => segment.Tag.DisplayText))}");
+        CommitSearchQueryEvent?.Invoke(this, e);
+    }
+
     public void Dispose()
     {
         _bassAudioCaptureService?.Dispose();
-        GC.SuppressFinalize(this);
     }
 }

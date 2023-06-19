@@ -163,24 +163,24 @@
                     SelectionMode="Single"
                     KeyDown="TagsListBox_OnKeyDown">
                     <ListBox.DataTemplates>
-                        <DataTemplate x:CompileBindings="False" DataType="viewModels:QuerySegment">
+                        <DataTemplate x:CompileBindings="False" DataType="models:QuerySegment">
                             <Grid ColumnDefinitions="Auto,Auto, Auto" RowDefinitions="Auto">
                                 <ContentControl Grid.Column="0" Content="{Binding Tag}" Loaded="TagDisplayText_OnAttachedToLogicalTree">
                                     <ContentControl.ContextFlyout>
                                         <MenuFlyout Closed="PopupFlyoutBase_OnClosing">
                                             <MenuItem
                                                 Command="{ReflectionBinding #UserControlRoot.DataContext.UpdateQuerySegmentStateCommand, FallbackValue=null}"
-                                                CommandParameter="{x:Static viewModels:QuerySegmentState.Include}"
+                                                CommandParameter="{x:Static models:QuerySegmentState.Include}"
                                                 Header="Include" />
 
                                             <MenuItem
                                                 Command="{ReflectionBinding #UserControlRoot.DataContext.UpdateQuerySegmentStateCommand, FallbackValue=null}"
-                                                CommandParameter="{x:Static viewModels:QuerySegmentState.Exclude}"
+                                                CommandParameter="{x:Static models:QuerySegmentState.Exclude}"
                                                 Header="Exclude" />
 
                                             <MenuItem
                                                 Command="{ReflectionBinding #UserControlRoot.DataContext.UpdateQuerySegmentStateCommand, FallbackValue=null}"
-                                                CommandParameter="{x:Static viewModels:QuerySegmentState.MustBePresent}"
+                                                CommandParameter="{x:Static models:QuerySegmentState.MustBePresent}"
                                                 Header="MustBePresent" />
 
                                         </MenuFlyout>
@@ -277,7 +277,7 @@
                             </Grid>
                         </DataTemplate>
 
-                        <DataTemplate x:CompileBindings="False" DataType="viewModels:TextBoxMarker">
+                        <DataTemplate x:CompileBindings="False" DataType="models:TextBoxMarker">
                             <AutoCompleteBox
                                 Background="Transparent"
                                 BorderThickness="0"

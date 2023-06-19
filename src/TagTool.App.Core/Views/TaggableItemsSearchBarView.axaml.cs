@@ -73,7 +73,7 @@ public partial class TaggableItemsSearchBarView : UserControl
             case Key.Delete when ViewModel.QuerySegments.Count != 0:
                 var selectedIndex = TagsListBox.SelectedIndex;
 
-                ViewModel.RemoveTagCommand.Execute(TagsListBox.SelectedItem);
+                ViewModel.RemoveTagFromSearchQueryCommand.Execute(TagsListBox.SelectedItem);
 
                 TagsListBox.SelectedItem = selectedIndex == ViewModel.QuerySegments.Count
                     ? ViewModel.QuerySegments.LastOrDefault()
