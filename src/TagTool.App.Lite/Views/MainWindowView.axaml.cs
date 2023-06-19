@@ -25,11 +25,7 @@ public partial class MainWindowView : Window
                 WindowState = WindowState.Minimized;
                 break;
             case { Key: Key.F4, KeyModifiers: KeyModifiers.Alt }:
-                if (App.Current.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime applicationLifetime)
-                {
-                    applicationLifetime.Shutdown();
-                }
-
+                ShutdownApplication();
                 break;
         }
     }
@@ -61,4 +57,14 @@ public partial class MainWindowView : Window
     }
 
     private void TagsSearchBar_OnLoaded(object? sender, RoutedEventArgs e) => (sender as Control)?.FindDescendantOfType<TextBox>()?.Focus();
+
+    private void CloseButton_OnClick(object? sender, RoutedEventArgs e) => ShutdownApplication();
+
+    private static void ShutdownApplication()
+    {
+        if (App.Current.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime applicationLifetime)
+        {
+            applicationLifetime.Shutdown();
+        }
+    }
 }

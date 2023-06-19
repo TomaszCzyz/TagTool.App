@@ -7,6 +7,7 @@
     xmlns:views="clr-namespace:TagTool.App.Core.Views;assembly=TagTool.App.Core"
     xmlns:viewModels="clr-namespace:TagTool.App.Core.ViewModels;assembly=TagTool.App.Core"
     xmlns:converters="clr-namespace:TagTool.App.Core.Converters;assembly=TagTool.App.Core"
+    xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
     x:Class="TagTool.App.Lite.Views.MainWindowView"
     x:CompileBindings="True"
     x:DataType="vm:MainWindowViewModel"
@@ -15,6 +16,7 @@
     mc:Ignorable="d"
     Background="{x:Null}"
     CornerRadius="10"
+    ClipToBounds="True"
     SizeToContent="Height"
     ExtendClientAreaChromeHints="NoChrome"
     ExtendClientAreaTitleBarHeightHint="-1"
@@ -35,10 +37,30 @@
     </Design.DataContext>
 
     <DockPanel>
-        <views:TaggableItemsSearchBarView
-            DockPanel.Dock="Top"
-            DataContext="{Binding SearchBarViewModel, Mode=TwoWay}"
-            Loaded="TagsSearchBar_OnLoaded" />
+        <Grid DockPanel.Dock="Top" ColumnDefinitions="*, Auto">
+            <views:TaggableItemsSearchBarView
+                Name="SearchBarView"
+                DataContext="{Binding SearchBarViewModel, Mode=TwoWay}"
+                Loaded="TagsSearchBar_OnLoaded" />
+
+            <Grid Grid.Column="1" RowDefinitions="*, *">
+                <Button Background="Transparent" Margin="3 0" Padding="0" Click="CloseButton_OnClick">
+                    <avalonia:MaterialIcon
+                        Height="20"
+                        Foreground="#999999"
+                        Kind="Close" />
+
+                </Button>
+                <Button Grid.Row="1" Background="Transparent" Margin="3 0" Padding="0">
+                    <avalonia:MaterialIcon
+                        Height="20"
+                        Foreground="#999999"
+                        Kind="Settings" />
+
+                </Button>
+            </Grid>
+
+        </Grid>
 
         <ListBox ItemsSource="{Binding SearchResults}">
             <ListBox.ItemTemplate>

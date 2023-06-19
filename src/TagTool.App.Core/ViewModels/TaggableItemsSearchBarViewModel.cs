@@ -128,10 +128,10 @@ public partial class TaggableItemsSearchBarViewModel : ViewModelBase, IDisposabl
 
     private IList<ITag> _tagsInDropDown;
 
-    public async Task<IEnumerable<object>> GetTagsAsync(string? _, CancellationToken cancellationToken)
+    public async Task<IEnumerable<object>> GetTagsAsync(string? searchText, CancellationToken cancellationToken)
     {
         var streamingCall = _tagService.SearchTags(
-            new SearchTagsRequest { SearchText = "*", SearchType = SearchTagsRequest.Types.SearchType.Wildcard, ResultsLimit = 50 },
+            new SearchTagsRequest { SearchText = searchText, SearchType = SearchTagsRequest.Types.SearchType.Fuzzy, ResultsLimit = 30 },
             cancellationToken: cancellationToken);
 
         _tagsInDropDown = await streamingCall.ResponseStream
