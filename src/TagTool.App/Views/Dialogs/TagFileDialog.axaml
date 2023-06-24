@@ -6,7 +6,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:templatedControls="clr-namespace:TagTool.App.Views.TemplatedControls"
     xmlns:userControls="clr-namespace:TagTool.App.Views.UserControls"
-    xmlns:models1="clr-namespace:TagTool.App.Core.Models;assembly=TagTool.App.Core"
+    xmlns:models="clr-namespace:TagTool.App.Models"
     x:Class="TagTool.App.Views.Dialogs.TagFileDialog"
     d:DesignWidth="600"
     d:DesignHeight="350"
@@ -102,7 +102,7 @@
                     </Style>
                 </ListBox.Styles>
                 <ListBox.ItemTemplate>
-                    <DataTemplate DataType="models1:Tag">
+                    <DataTemplate DataType="models:Tag">
                         <templatedControls:TagChip Classes="Implicit" Text="{Binding Name}" />
                     </DataTemplate>
                 </ListBox.ItemTemplate>

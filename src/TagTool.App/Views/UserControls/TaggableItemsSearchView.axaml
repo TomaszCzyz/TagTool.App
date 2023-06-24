@@ -10,7 +10,6 @@
     xmlns:templatedControls="clr-namespace:TagTool.App.Views.TemplatedControls"
     xmlns:userControls="clr-namespace:TagTool.App.ViewModels.UserControls"
     xmlns:converters="clr-namespace:TagTool.App.Core.Converters;assembly=TagTool.App.Core"
-    xmlns:models2="clr-namespace:TagTool.App.Core.Models;assembly=TagTool.App.Core"
     xmlns:views="clr-namespace:TagTool.App.Core.Views;assembly=TagTool.App.Core"
     xmlns:viewModels="clr-namespace:TagTool.App.Core.ViewModels;assembly=TagTool.App.Core"
     x:Class="TagTool.App.Views.UserControls.TaggableItemsSearchView"
@@ -201,7 +200,7 @@
                                 </Style>
                             </ListBox.Styles>
                             <ListBox.DataTemplates>
-                                <DataTemplate x:CompileBindings="False" DataType="models2:Tag">
+                                <DataTemplate x:CompileBindings="False" DataType="models1:Tag">
                                     <!-- <templatedControls:TagChip -->
                                     <!-- Margin="0 2" -->
                                     <!-- BorderThickness="1 1 1 2" -->
@@ -410,7 +409,7 @@
                                     SelectedItem="{Binding SelectedItemFromSearched}"
                                     SelectionMode="Single">
                                     <ListBox.DataTemplates>
-                                        <DataTemplate DataType="models2:Tag">
+                                        <DataTemplate DataType="models1:Tag">
                                             <Border
                                                 Margin="1"
                                                 HorizontalAlignment="Left"
@@ -448,7 +447,7 @@
                                     SelectedItem="{Binding SelectedItemFromPopular}"
                                     SelectionMode="Single">
                                     <ListBox.DataTemplates>
-                                        <DataTemplate DataType="models2:Tag">
+                                        <DataTemplate DataType="models1:Tag">
                                             <Border
                                                 Margin="1"
                                                 HorizontalAlignment="Left"

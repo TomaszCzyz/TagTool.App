@@ -1,4 +1,8 @@
-﻿namespace TagTool.App.Models;
+﻿using Avalonia.Controls.Documents;
+
+namespace TagTool.App.Models;
+
+public record Tag(string? Name, InlineCollection? Inlines = null);
 
 public interface ISpecialTag
 {

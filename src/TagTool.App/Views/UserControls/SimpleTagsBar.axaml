@@ -6,7 +6,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:templatedControls="clr-namespace:TagTool.App.Views.TemplatedControls"
     xmlns:userControls="clr-namespace:TagTool.App.ViewModels.UserControls"
-    xmlns:models1="clr-namespace:TagTool.App.Core.Models;assembly=TagTool.App.Core"
+    xmlns:models="clr-namespace:TagTool.App.Models"
     x:Class="TagTool.App.Views.UserControls.SimpleTagsBar"
     x:CompileBindings="True"
     x:DataType="userControls:SimpleTagsBarViewModel"
@@ -65,7 +65,7 @@
                     </ItemsPanelTemplate>
                 </ListBox.ItemsPanel>
                 <ListBox.DataTemplates>
-                    <DataTemplate x:CompileBindings="False" DataType="models1:Tag">
+                    <DataTemplate x:CompileBindings="False" DataType="models:Tag">
                         <templatedControls:TagChip
                             Margin="4 2"
                             DeleteCommand="{Binding #UserControlRoot.DataContext.RemoveTagCommand, FallbackValue=null}"

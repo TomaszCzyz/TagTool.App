@@ -144,7 +144,7 @@ public partial class TaggableItemsSearchViewModel : Document, IDisposable
                 Location = info.FullName,
                 DateCreated = info.CreationTime,
                 AreTagsVisible = true,
-                AssociatedTags = { taggedItem.Tags.Select(s => new Tag(s.Unpack<NormalTag>().Name)).ToArray() }
+                AssociatedTags = { taggedItem.Tags.Select(TagMapper.MapToDomain).ToArray() }
             };
 
             results.Add(taggableItemViewModel);

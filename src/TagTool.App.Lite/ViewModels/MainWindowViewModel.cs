@@ -64,7 +64,8 @@ public partial class MainWindowViewModel : ViewModelBase
             => new GetItemsByTagsV2Request.Types.TagQueryParam
             {
                 Tag = TagMapper.MapToDto(segment.Tag),
-                State = segment.State switch {
+                State = segment.State switch
+                {
                     QuerySegmentState.Exclude => GetItemsByTagsV2Request.Types.QuerySegmentState.Exclude,
                     QuerySegmentState.Include => GetItemsByTagsV2Request.Types.QuerySegmentState.Include,
                     QuerySegmentState.MustBePresent => GetItemsByTagsV2Request.Types.QuerySegmentState.MustBePresent,
@@ -78,15 +79,13 @@ public partial class MainWindowViewModel : ViewModelBase
         SearchResults.AddRange(reply.TaggedItems.Select(item
             => new TaggableItemViewModel(_tagService)
             {
-                TaggedItemType = item.ItemCase switch
+                TaggableItem = item.ItemCase switch
                 {
-                    TaggedItem.ItemOneofCase.File => TaggedItemType.File,
-                    TaggedItem.ItemOneofCase.Folder => TaggedItemType.Folder,
+                    TaggedItem.ItemOneofCase.File => new TaggableFile { Path = item.File.Path },
+                    TaggedItem.ItemOneofCase.Folder => new TaggableFolder { Path = item.Folder.Path },
                     _ => throw new UnreachableException()
                 },
-                DisplayName = Path.GetFileNameWithoutExtension(item.File.Path),
                 AreTagsVisible = true
-                // AssociatedTags = { item.Tags.Select(any => TagMapper.MapToDomain(any)) }
             }));
     }
 }

@@ -4,8 +4,8 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using DynamicData;
 using TagTool.App.Core.Comparers;
-using TagTool.App.Core.Models;
 using TagTool.App.Core.ViewModels;
+using TagTool.App.Models;
 
 namespace TagTool.App.ViewModels.Dialogs;
 

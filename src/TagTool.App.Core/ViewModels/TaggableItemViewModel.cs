@@ -7,6 +7,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using DynamicData;
 using Google.Protobuf.WellKnownTypes;
+using HarfBuzzSharp;
 using TagTool.App.Core.Models;
 using TagTool.Backend;
 using TagTool.Backend.DomainTypes;
@@ -19,32 +20,24 @@ public enum TaggedItemType
     Folder = 1
 }
 
-[DebuggerDisplay("{DisplayName}")]
+[DebuggerDisplay("{NewDisplayName}")]
 public partial class TaggableItemViewModel : ViewModelBase
 {
     private readonly TagService.TagServiceClient _tagService;
 
-    public TaggedItemType TaggedItemType { get; init; }
+    public required ITaggableItem TaggableItem { get; init; }
 
-    [ObservableProperty]
-    private string _displayName = "";
+    public string Location { get; }
+
+    public string NewDisplayName => TaggableItem.DisplayName;
 
     [ObservableProperty]
     private InlineCollection _inlines = new();
 
     [ObservableProperty]
-    private string _location = "";
-
-    [ObservableProperty]
-    private DateTime _dateCreated;
-
-    [ObservableProperty]
-    private long? _size;
-
-    [ObservableProperty]
     private bool _areTagsVisible = true;
 
-    public ObservableCollection<Tag> AssociatedTags { get; } = new();
+    public ObservableCollection<ITag> AssociatedTags { get; } = new();
 
     /// <summary>
     ///     ctor for XAML previewer
@@ -56,11 +49,11 @@ public partial class TaggableItemViewModel : ViewModelBase
             Debug.Fail("ctor for XAML Previewer should not be invoke during standard execution");
         }
 
-        _tagService = null!; // App.Current.Services.GetRequiredService<ITagToolBackend>().GetTagService();
+        _tagService = null!;
         var _ = Dispatcher.UIThread.InvokeAsync(UpdateTags, DispatcherPriority.Background);
 
-        DisplayName = "TestDisplayName";
-        AssociatedTags.AddRange(new[] { new Tag("Tag1"), new Tag("Tag2"), new Tag("Tag3") });
+        // DisplayName = "TestDisplayName";
+        AssociatedTags.AddRange(new[] { new TextTag { Name = "Tag1" }, new TextTag { Name = "Tag2" }, new TextTag { Name = "Tag3" } });
     }
 
     public TaggableItemViewModel(TagService.TagServiceClient tagServiceClient)
@@ -74,10 +67,10 @@ public partial class TaggableItemViewModel : ViewModelBase
     private async Task TagIt(string tagName)
     {
         var tag = Any.Pack(new NormalTag { Name = tagName });
-        var tagRequest = TaggedItemType switch
+        var tagRequest = TaggableItem switch
         {
-            TaggedItemType.File => new TagItemRequest { Tag = tag, File = new FileDto { Path = Location } },
-            TaggedItemType.Folder => new TagItemRequest { Tag = tag, Folder = new FolderDto { Path = Location } },
+            TaggableFile file => new TagItemRequest { Tag = tag, File = new FileDto { Path = file.Path } },
+            TaggableFolder folder => new TagItemRequest { Tag = tag, Folder = new FolderDto { Path = folder.Path } },
             _ => throw new UnreachableException()
         };
 
@@ -86,7 +79,7 @@ public partial class TaggableItemViewModel : ViewModelBase
         switch (tagReply.ResultCase)
         {
             case TagItemReply.ResultOneofCase.TaggedItem:
-                AssociatedTags.Add(new Tag(tagName));
+                AssociatedTags.Add(new TextTag { Name = tagName });
                 break;
             case TagItemReply.ResultOneofCase.ErrorMessage:
                 Debug.WriteLine($"Unable to tag item {tagRequest}");
@@ -100,10 +93,10 @@ public partial class TaggableItemViewModel : ViewModelBase
     private async Task UntagItem(string tagName)
     {
         var tag = Any.Pack(new NormalTag { Name = tagName });
-        var untagItemRequest = TaggedItemType switch
+        var untagItemRequest = TaggableItem switch
         {
-            TaggedItemType.File => new UntagItemRequest { Tag = tag, File = new FileDto { Path = Location } },
-            TaggedItemType.Folder => new UntagItemRequest { Tag = tag, Folder = new FolderDto { Path = Location } },
+            TaggableFile file => new UntagItemRequest { Tag = tag, File = new FileDto { Path = file.Path } },
+            TaggableFolder folder => new UntagItemRequest { Tag = tag, Folder = new FolderDto { Path = folder.Path } },
             _ => throw new UnreachableException()
         };
 
@@ -112,7 +105,7 @@ public partial class TaggableItemViewModel : ViewModelBase
         switch (reply.ResultCase)
         {
             case UntagItemReply.ResultOneofCase.TaggedItem:
-                AssociatedTags.Remove(new Tag(tagName));
+                AssociatedTags.Remove(new TextTag { Name = tagName });
                 break;
             case UntagItemReply.ResultOneofCase.ErrorMessage:
                 Debug.WriteLine($"Unable to tag item {untagItemRequest}");
@@ -124,10 +117,10 @@ public partial class TaggableItemViewModel : ViewModelBase
 
     private async Task UpdateTags()
     {
-        var getItemInfoRequest = TaggedItemType switch
+        var getItemInfoRequest = TaggableItem switch
         {
-            TaggedItemType.File => new GetItemRequest { File = new FileDto { Path = Location } },
-            TaggedItemType.Folder => new GetItemRequest { Folder = new FolderDto { Path = Location } },
+            TaggableFile file => new GetItemRequest { File = new FileDto { Path = file.Path } },
+            TaggableFolder folder => new GetItemRequest { Folder = new FolderDto { Path = folder.Path } },
             _ => throw new UnreachableException()
         };
 
@@ -137,7 +130,7 @@ public partial class TaggableItemViewModel : ViewModelBase
         {
             case GetItemReply.ResultOneofCase.TaggedItem:
                 AssociatedTags.Clear();
-                AssociatedTags.AddRange(getItemReply.TaggedItem.Tags.Select(s => new Tag(s.Unpack<NormalTag>().Name)));
+                AssociatedTags.AddRange(getItemReply.TaggedItem.Tags.Select(TagMapper.TagMapper.MapToDomain));
                 break;
             case GetItemReply.ResultOneofCase.ErrorMessage:
                 Debug.WriteLine("Update tags failed");

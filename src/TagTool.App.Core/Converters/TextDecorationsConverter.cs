@@ -3,7 +3,6 @@ using System.Globalization;
 using Avalonia.Data.Converters;
 using Avalonia.Media;
 using TagTool.App.Core.Models;
-using TagTool.App.Core.ViewModels;
 
 namespace TagTool.App.Core.Converters;
 

@@ -1,6 +1,5 @@
 ﻿using System.Drawing.Imaging;
 using System.Globalization;
-using Avalonia;
 using Avalonia.Data.Converters;
 using Avalonia.Media.Imaging;
 using Avalonia.Platform;

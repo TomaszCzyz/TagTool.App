@@ -15,13 +15,11 @@
     d:DesignHeight="450"
     mc:Ignorable="d"
     Background="{x:Null}"
-    CornerRadius="10"
-    ClipToBounds="True"
     SizeToContent="Height"
     ExtendClientAreaChromeHints="NoChrome"
     ExtendClientAreaTitleBarHeightHint="-1"
     ExtendClientAreaToDecorationsHint="True"
-    ShowInTaskbar="False"
+    ShowInTaskbar="True"
     Title="TagTool.App.Lite"
     TransparencyLevelHint="AcrylicBlur"
     PointerMoved="InputElement_OnPointerMoved"
@@ -68,17 +66,17 @@
                     <Grid ColumnDefinitions="*,Auto,75">
                         <views:TaggableItemView FontSize="14" />
 
-                        <TextBlock
-                            Grid.Column="1"
-                            VerticalAlignment="Center"
-                            Text="{Binding DateCreated, StringFormat=\{0:yyyy/MM/dd hh:mm:ss\}}"
-                            TextAlignment="Left" />
-
-                        <TextBlock
-                            Grid.Column="2"
-                            VerticalAlignment="Center"
-                            Text="{Binding Size, Converter={StaticResource FileSizeToStringConverter}}"
-                            TextAlignment="Right" />
+                        <!-- <TextBlock -->
+                        <!--     Grid.Column="1" -->
+                        <!--     VerticalAlignment="Center" -->
+                        <!--     Text="{Binding DateCreated, StringFormat=\{0:yyyy/MM/dd hh:mm:ss\}}" -->
+                        <!--     TextAlignment="Left" /> -->
+                        <!-- -->
+                        <!-- <TextBlock -->
+                        <!--     Grid.Column="2" -->
+                        <!--     VerticalAlignment="Center" -->
+                        <!--     Text="{Binding Size, Converter={StaticResource FileSizeToStringConverter}}" -->
+                        <!--     TextAlignment="Right" /> -->
 
                     </Grid>
                 </DataTemplate>
