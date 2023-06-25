@@ -14,12 +14,12 @@ public partial class FileSystemView : UserControl
 {
     private FileSystemViewModel ViewModel => (FileSystemViewModel)DataContext!;
 
-    public FileSystemView()
+    public FileSystemView() 
     {
         InitializeComponent();
 
         // todo: split this logic to two handlers (one for quick search scenario, one for navigation scenario)
-        DataGrid.AddHandler(KeyDownEvent, DataGrid_OnKeyDown, handledEventsToo: true);
+        FilesAndFoldersListBox.AddHandler(KeyDownEvent, DataGrid_OnKeyDown, handledEventsToo: true);
     }
 
     private void AddressTextBox_OnLostFocus(object? sender, RoutedEventArgs e)
@@ -40,7 +40,7 @@ public partial class FileSystemView : UserControl
 
     private void DataGrid_OnSelectionChanged(object? sender, SelectionChangedEventArgs e)
     {
-        TextBlockSelectedItems.Text = $"{DataGrid.SelectedItems?.Count ?? 0} selected |";
+        TextBlockSelectedItems.Text = $"{FilesAndFoldersListBox.SelectedItems?.Count ?? 0} selected |";
     }
 
     private void DataGrid_OnKeyDown(object? sender, KeyEventArgs e)
@@ -74,14 +74,14 @@ public partial class FileSystemView : UserControl
                 break;
             case Key.Back when string.IsNullOrEmpty(ViewModel.QuickSearchText):
                 ViewModel.NavigateUpCommand.Execute(null);
-                DataGrid.FindLogicalDescendantOfType<ListBoxItem>()?.Focus();
+                FilesAndFoldersListBox.FindLogicalDescendantOfType<ListBoxItem>()?.Focus();
                 break;
             case Key.Back:
                 ViewModel.QuickSearchText = ViewModel.QuickSearchText[..^1];
                 break;
             case Key.Enter:
                 ViewModel.NavigateCommand.Execute(null);
-                DataGrid.FindLogicalDescendantOfType<ListBoxItem>()?.Focus();
+                FilesAndFoldersListBox.FindLogicalDescendantOfType<ListBoxItem>()?.Focus();
                 break;
         }
 
@@ -90,7 +90,7 @@ public partial class FileSystemView : UserControl
 
     private void DataGrid_OnLostFocus(object? sender, RoutedEventArgs e)
     {
-        if (DataGrid.IsKeyboardFocusWithin) return;
+        if (FilesAndFoldersListBox.IsKeyboardFocusWithin) return;
         ViewModel.QuickSearchText = "";
     }
 
@@ -107,7 +107,7 @@ public partial class FileSystemView : UserControl
             ViewModel.NavigateCommand.Execute(null);
             args.Handled = true;
 
-            DataGrid.FindLogicalDescendantOfType<ListBoxItem>()?.Focus();
+            FilesAndFoldersListBox.FindLogicalDescendantOfType<ListBoxItem>()?.Focus();
         }
     }
 }

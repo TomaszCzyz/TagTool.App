@@ -8,6 +8,7 @@ using Avalonia.Controls;
 using Avalonia.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
 using DynamicData;
+using Google.Protobuf.WellKnownTypes;
 using JetBrains.Annotations;
 using Microsoft.Extensions.DependencyInjection;
 using TagTool.App.Core.Models;
@@ -61,7 +62,7 @@ public partial class MainWindowViewModel : ViewModelBase
     private async Task SearchForTaggableItems(ICollection<QuerySegment> argsQuerySegments)
     {
         var tagQueryParams = argsQuerySegments.Select(segment
-            => new GetItemsByTagsV2Request.Types.TagQueryParam { Tag = TagMapper.MapToDto(segment.Tag), State = MapQuerySegmentState(segment) });
+            => new GetItemsByTagsV2Request.Types.TagQueryParam { Tag = Any.Pack(TagMapper.MapToDto(segment.Tag)), State = MapQuerySegmentState(segment) });
 
         var reply = await _tagService.GetItemsByTagsV2Async(new GetItemsByTagsV2Request { QueryParams = { tagQueryParams } });
 

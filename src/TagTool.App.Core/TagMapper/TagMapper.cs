@@ -53,9 +53,8 @@ public static class TagMapper
         // return tag ?? throw new ArgumentException("Unable to match tag type");
     }
 
-    public static Any MapToDto(ITag tag)
-    {
-        IMessage tagDto = tag switch
+    public static IMessage MapToDto(ITag tag)
+        => tag switch
         {
             TextTag normalTag => new NormalTag { Name = normalTag.Name },
             Models.DayTag dayTag => new DayTag { Day = (int)dayTag.DayOfWeek },
@@ -64,7 +63,4 @@ public static class TagMapper
             Models.MonthRangeTag monthRangeTag => new MonthRangeTag { Begin = monthRangeTag.Begin, End = monthRangeTag.End },
             _ => throw new ArgumentOutOfRangeException(nameof(tag), tag, null)
         };
-
-        return Any.Pack(tagDto);
-    }
 }

@@ -17,9 +17,9 @@ public partial class TaggableItemView : UserControl
 
         AddHandler(DragDrop.DragOverEvent, DragOver);
         AddHandler(DragDrop.DropEvent, Drop);
-        // AddHandler(DragDrop.DragEnterEvent, (_, _) => DragDropInfoAreaBorder.BorderBrush = Brushes.Gray);
-        // AddHandler(DragDrop.DragLeaveEvent, (_, _) => DragDropInfoAreaBorder.BorderBrush = Brushes.Transparent);
-        // AddHandler(DragDrop.DropEvent, (_, _) => DragDropInfoAreaBorder.BorderBrush = Brushes.Transparent);
+        AddHandler(DragDrop.DragEnterEvent, (_, _) => DragDropInfoAreaBorder.BorderBrush = Brushes.Gray);
+        AddHandler(DragDrop.DragLeaveEvent, (_, _) => DragDropInfoAreaBorder.BorderBrush = Brushes.Transparent);
+        AddHandler(DragDrop.DropEvent, (_, _) => DragDropInfoAreaBorder.BorderBrush = Brushes.Transparent);
     }
 
     private void DragOver(object? sender, DragEventArgs e)
@@ -36,21 +36,14 @@ public partial class TaggableItemView : UserControl
     {
         var tagName = (string)e.Data.Get("draggedTag")!;
 
-        // ViewModel.TagItCommand.Execute(tagName);
-    }
-
-    private async void TagItMenuItem_OnClick(object? sender, RoutedEventArgs e)
-    {
-        // var dialog = new TagFileDialog(ViewModel.Location);
-        // var _ = await dialog.ShowDialog<(string FileName, Tag[] Tags)>((Window)VisualRoot!);
+        ViewModel.TagItCommand.Execute(tagName);
     }
 
     private void UntagMenuItem_OnClick(object? sender, RoutedEventArgs e)
     {
         var menuItem = (MenuItem)sender!;
         var textBlock = menuItem.FindLogicalAncestorOfType<TextBlock>()!;
-        var tagName = textBlock.Text!;
 
-        ViewModel.UntagItemCommand.Execute(tagName);
+        ViewModel.UntagItemCommand.Execute(textBlock.DataContext);
     }
 }

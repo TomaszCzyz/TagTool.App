@@ -201,7 +201,7 @@
 
         <!-- File system data grid -->
         <ListBox
-            Name="DataGrid"
+            Name="FilesAndFoldersListBox"
             Grid.Row="1"
             Focusable="True"
             FontSize="{DynamicResource AppContentFontSize}"
@@ -217,21 +217,7 @@
             </ListBox.Styles>
             <ListBox.DataTemplates>
                 <DataTemplate x:CompileBindings="False" DataType="viewModels:TaggableItemViewModel">
-                    <Grid ColumnDefinitions="*,Auto,75">
-                        <views:TaggableItemView FontSize="14" AttachedToVisualTree="Visual_OnAttachedToVisualTree" />
-
-                        <!-- <TextBlock -->
-                        <!--     Grid.Column="1" -->
-                        <!--     VerticalAlignment="Center" -->
-                        <!--     Text="{Binding DateCreated, StringFormat=\{0:yyyy/MM/dd hh:mm:ss\}}" -->
-                        <!--     TextAlignment="Left" /> -->
-                        <!-- -->
-                        <!-- <TextBlock -->
-                        <!--     Grid.Column="2" -->
-                        <!--     VerticalAlignment="Center" -->
-                        <!--     Text="{Binding Size, Converter={StaticResource FileSizeToStringConverter}}" -->
-                        <!--     TextAlignment="Right" /> -->
-                    </Grid>
+                    <views:TaggableItemView FontSize="14" AttachedToVisualTree="Visual_OnAttachedToVisualTree" />
                 </DataTemplate>
             </ListBox.DataTemplates>
         </ListBox>

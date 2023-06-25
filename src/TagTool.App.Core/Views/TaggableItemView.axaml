@@ -7,6 +7,7 @@
     xmlns:models="clr-namespace:TagTool.App.Core.Models;assembly=TagTool.App.Core"
     xmlns:viewModels="clr-namespace:TagTool.App.Core.ViewModels"
     xmlns:dataTemplates="clr-namespace:TagTool.App.Core.DataTemplates"
+    xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
     x:Class="TagTool.App.Core.Views.TaggableItemView"
     x:CompileBindings="True"
     x:DataType="viewModels:TaggableItemViewModel"
@@ -26,167 +27,140 @@
         <viewModels:TaggableItemViewModel />
     </Design.DataContext>
 
-    <!-- <Border -->
-    <!--     Name="DragDropInfoAreaBorder" -->
-    <!--     Padding="6" -->
-    <!--     Background="#00FFFFFF" -->
-    <!--     BorderBrush="Transparent" -->
-    <!--     BorderThickness="2"> -->
-    <Grid
-        Name="TopMostGrid"
-        HorizontalAlignment="Left"
-        VerticalAlignment="Center"
-        ColumnDefinitions="30,Auto,*"
-        RowDefinitions="Auto">
-
-        <Image
-            Name="IconImage"
-            Grid.Column="0"
-            Margin="0 0 2 0">
-            <Image.Source>
-                <MultiBinding Converter="{StaticResource TaggableItemToToIconConverter}">
-                    <Binding Path="TaggableItem" />
-                    <Binding Path="#DisplayNameTextBlock.FontSize" />
-                </MultiBinding>
-            </Image.Source>
-        </Image>
-
-        <TextBlock
-            Name="DisplayNameTextBlock"
-            Grid.Column="1"
-            HorizontalAlignment="Stretch"
+    <Border
+        Name="DragDropInfoAreaBorder"
+        Padding="6"
+        Background="#00FFFFFF"
+        BorderBrush="Transparent"
+        BorderThickness="2">
+        <Grid
+            Name="TopMostGrid"
+            HorizontalAlignment="Left"
             VerticalAlignment="Center"
-            Foreground="Black"
-            Inlines="{Binding Inlines}"
-            Text="{Binding DisplayName}">
-            <TextBlock.ContextFlyout>
-                <MenuFlyout>
-                    <MenuItem Header="Tag it" Click="TagItMenuItem_OnClick" />
-                    <Separator />
-                    <MenuItem Header="Show in Explorer" />
-                    <Separator />
-                    <MenuItem Header="Rename" />
-                    <MenuItem Header="Copy" />
-                </MenuFlyout>
-            </TextBlock.ContextFlyout>
-        </TextBlock>
+            ColumnDefinitions="30,Auto,*"
+            RowDefinitions="Auto">
 
-        <!-- Associated tags -->
-        <Border
-            Grid.Column="2"
-            BorderBrush="Green"
-            BorderThickness="0"
-            IsVisible="{Binding AreTagsVisible}">
-            <ItemsControl
-                Margin="0"
-                Padding="5 0"
-                HorizontalAlignment="Left"
+            <Image
+                Name="IconImage"
+                Grid.Column="0"
+                Margin="0 0 2 0">
+                <Image.Source>
+                    <MultiBinding Converter="{StaticResource TaggableItemToToIconConverter}">
+                        <Binding Path="TaggableItem" />
+                        <Binding Path="#DisplayNameTextBlock.FontSize" />
+                    </MultiBinding>
+                </Image.Source>
+            </Image>
+
+            <TextBlock
+                Name="DisplayNameTextBlock"
+                Grid.Column="1"
+                HorizontalAlignment="Stretch"
                 VerticalAlignment="Center"
-                ItemsSource="{Binding AssociatedTags}">
-                <ItemsControl.ItemsPanel>
-                    <ItemsPanelTemplate>
-                        <VirtualizingStackPanel Orientation="Horizontal" />
-                    </ItemsPanelTemplate>
-                </ItemsControl.ItemsPanel>
-                <ItemsControl.DataTemplates>
-                    <dataTemplates:TagsTemplateSelector>
-                        <DataTemplate x:Key="TagTool.App.Core.Models.TextTag" DataType="models:ITag">
-                            <TextBlock
-                                Classes="Transparent"
-                                Margin="4 1"
-                                VerticalAlignment="Center"
-                                FontSize="18"
-                                Foreground="{StaticResource MyLightSecondary500}"
-                                IsTabStop="False"
-                                Text="{Binding DisplayText}" />
+                Foreground="Black"
+                Inlines="{Binding Inlines}"
+                Text="{Binding DisplayName}">
+                <TextBlock.ContextFlyout>
+                    <MenuFlyout>
+                        <MenuItem Header="Show in Explorer" />
+                        <Separator />
+                        <MenuItem Header="Rename" />
+                        <MenuItem Header="Copy" />
+                    </MenuFlyout>
+                </TextBlock.ContextFlyout>
+            </TextBlock>
 
-                        </DataTemplate>
-                        <DataTemplate x:Key="TagTool.App.Core.Models.DayTag" DataType="models:ITag">
-                            <TextBlock
-                                Classes="Transparent"
-                                Margin="4 1"
-                                VerticalAlignment="Center"
-                                FontSize="18"
-                                Foreground="{StaticResource MyLightPrimary400}"
-                                IsTabStop="False"
-                                Text="{Binding DisplayText}" />
+            <!-- Associated tags -->
+            <Border
+                Grid.Column="2"
+                BorderBrush="Green"
+                BorderThickness="0"
+                IsVisible="{Binding AreTagsVisible}">
+                <ItemsControl
+                    Margin="0"
+                    Padding="5 0"
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Center"
+                    ItemsSource="{Binding AssociatedTags}">
+                    <ItemsControl.Styles>
+                        <Style Selector="TextBlock">
+                            <Setter Property="ContextFlyout">
+                                <MenuFlyout>
+                                    <MenuItem Header="Remove" Click="UntagMenuItem_OnClick">
+                                        <MenuItem.Icon>
+                                            <avalonia:MaterialIcon Kind="DeleteOutline" />
+                                        </MenuItem.Icon>
+                                    </MenuItem>
+                                </MenuFlyout>
+                            </Setter>
+                        </Style>
+                    </ItemsControl.Styles>
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <VirtualizingStackPanel Orientation="Horizontal" />
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.DataTemplates>
+                        <dataTemplates:TagsTemplateSelector>
+                            <DataTemplate x:Key="TagTool.App.Core.Models.TextTag" DataType="models:ITag">
+                                <TextBlock
+                                    Classes="Transparent"
+                                    Margin="4 1"
+                                    VerticalAlignment="Center"
+                                    FontSize="18"
+                                    Foreground="{StaticResource MyLightSecondary500}"
+                                    IsTabStop="False"
+                                    Text="{Binding DisplayText}" />
 
-                        </DataTemplate>
-                        <DataTemplate x:Key="TagTool.App.Core.Models.DayRangeTag" DataType="models:ITag">
-                            <TextBlock
-                                Classes="Transparent"
-                                Margin="4 1"
-                                VerticalAlignment="Center"
-                                FontSize="18"
-                                Foreground="DarkGreen"
-                                IsTabStop="False"
-                                Text="{Binding DisplayText}" />
+                            </DataTemplate>
+                            <DataTemplate x:Key="TagTool.App.Core.Models.DayTag" DataType="models:ITag">
+                                <TextBlock
+                                    Classes="Transparent"
+                                    Margin="4 1"
+                                    VerticalAlignment="Center"
+                                    FontSize="18"
+                                    Foreground="{StaticResource MyLightPrimary400}"
+                                    IsTabStop="False"
+                                    Text="{Binding DisplayText}" />
 
-                        </DataTemplate>
-                        <DataTemplate x:Key="TagTool.App.Core.Models.MonthTag" DataType="models:ITag">
-                            <TextBlock
-                                Classes="Transparent"
-                                Margin="4 1"
-                                VerticalAlignment="Center"
-                                FontSize="18"
-                                Foreground="DeepPink"
-                                IsTabStop="False"
-                                Text="{Binding DisplayText}" />
+                            </DataTemplate>
+                            <DataTemplate x:Key="TagTool.App.Core.Models.DayRangeTag" DataType="models:ITag">
+                                <TextBlock
+                                    Classes="Transparent"
+                                    Margin="4 1"
+                                    VerticalAlignment="Center"
+                                    FontSize="18"
+                                    Foreground="DarkGreen"
+                                    IsTabStop="False"
+                                    Text="{Binding DisplayText}" />
 
-                        </DataTemplate>
-                        <DataTemplate x:Key="TagTool.App.Core.Models.MonthRangeTag" DataType="models:ITag">
-                            <TextBlock
-                                Classes="Transparent"
-                                Margin="4 1"
-                                VerticalAlignment="Center"
-                                FontSize="18"
-                                Foreground="HotPink"
-                                IsTabStop="False"
-                                Text="{Binding DisplayText}" />
+                            </DataTemplate>
+                            <DataTemplate x:Key="TagTool.App.Core.Models.MonthTag" DataType="models:ITag">
+                                <TextBlock
+                                    Classes="Transparent"
+                                    Margin="4 1"
+                                    VerticalAlignment="Center"
+                                    FontSize="18"
+                                    Foreground="DeepPink"
+                                    IsTabStop="False"
+                                    Text="{Binding DisplayText}" />
 
-                        </DataTemplate>
-                    </dataTemplates:TagsTemplateSelector>
-                    <!-- <Border -->
-                    <!--     HorizontalAlignment="Center" -->
-                    <!--     VerticalAlignment="Center" -->
-                    <!--     BorderBrush="{StaticResource MyLightSecondary500}" -->
-                    <!--     BorderThickness="0" -->
-                    <!--     ClipToBounds="True" -->
-                    <!--     CornerRadius="4" -->
-                    <!--     Opacity="0.6"> -->
-                    <!-- -->
-                    <!--     <DockPanel> -->
-                    <!--         <TextBlock -->
-                    <!--             DockPanel.Dock="Left" -->
-                    <!--             Margin="0 0 2 0" -->
-                    <!--             VerticalAlignment="Center" -->
-                    <!--             FontSize="{Binding #DisplayNameTextBlock.FontSize, Converter={StaticResource FontSizeConverter}}" -->
-                    <!--             Foreground="{StaticResource MyLightSecondary500}" -->
-                    <!--             IsTabStop="False" -->
-                    <!--             Text="{Binding DisplayText}"> -->
-                    <!--             <TextBlock.ContextFlyout> -->
-                    <!--                 <MenuFlyout> -->
-                    <!--                     <MenuItem Header="Remove" Click="UntagMenuItem_OnClick"> -->
-                    <!--                         <MenuItem.Icon> -->
-                    <!--                             <avalonia:MaterialIcon Kind="DeleteOutline" /> -->
-                    <!--                         </MenuItem.Icon> -->
-                    <!--                     </MenuItem> -->
-                    <!--                 </MenuFlyout> -->
-                    <!--             </TextBlock.ContextFlyout> -->
-                    <!--         </TextBlock> -->
-                    <!-- -->
-                    <!--         <TextBlock -->
-                    <!--             DockPanel.Dock="Right" -->
-                    <!--             FontSize="{Binding #DisplayNameTextBlock.FontSize, Converter={StaticResource FontSizeConverter}}" -->
-                    <!--             Foreground="{StaticResource MyLightSecondary500}" -->
-                    <!--             Text="|" /> -->
-                    <!-- -->
-                    <!--     </DockPanel> -->
-                    <!-- -->
-                    <!-- </Border> -->
-                </ItemsControl.DataTemplates>
-            </ItemsControl>
-        </Border>
-    </Grid>
-    <!-- </Border> -->
+                            </DataTemplate>
+                            <DataTemplate x:Key="TagTool.App.Core.Models.MonthRangeTag" DataType="models:ITag">
+                                <TextBlock
+                                    Classes="Transparent"
+                                    Margin="4 1"
+                                    VerticalAlignment="Center"
+                                    FontSize="18"
+                                    Foreground="HotPink"
+                                    IsTabStop="False"
+                                    Text="{Binding DisplayText}" />
+
+                            </DataTemplate>
+                        </dataTemplates:TagsTemplateSelector>
+                    </ItemsControl.DataTemplates>
+                </ItemsControl>
+            </Border>
+        </Grid>
+    </Border>
 </UserControl>
