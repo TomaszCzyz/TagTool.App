@@ -25,6 +25,7 @@ public partial class FileSystemViewModel : Document
     private readonly FileActionsService.FileActionsServiceClient _fileActionsService;
     private readonly Stack<DirectoryInfo> _navigationHistoryBack = new();
     private readonly Stack<DirectoryInfo> _navigationHistoryForward = new();
+    private readonly List<TaggableItemViewModel> _highlightedItems = new();
 
     [ObservableProperty]
     private ObservableCollection<TaggableItemViewModel> _items = new();
@@ -61,7 +62,6 @@ public partial class FileSystemViewModel : Document
 
     public bool CanNavigateForward => _navigationHistoryForward.Count > 0;
 
-    private readonly List<TaggableItemViewModel> _highlightedItems = new();
 
     /// <summary>
     ///     Because DataGrid handles KeyDownEvent first, it is inconvenient to use SelectedItem property,
@@ -117,14 +117,14 @@ public partial class FileSystemViewModel : Document
     {
         foreach (var entry in Items)
         {
-            var index = entry.NewDisplayName.IndexOf(value, StringComparison.CurrentCultureIgnoreCase);
+            var index = entry.DisplayName.IndexOf(value, StringComparison.CurrentCultureIgnoreCase);
 
             if (index < 0)
             {
                 if (_highlightedItems.Contains(entry))
                 {
                     entry.Inlines.Clear();
-                    entry.Inlines.Add(new Run { Text = entry.NewDisplayName });
+                    entry.Inlines.Add(new Run { Text = entry.DisplayName });
 
                     _highlightedItems.Remove(entry);
                 }
@@ -133,7 +133,7 @@ public partial class FileSystemViewModel : Document
             }
 
             entry.Inlines.Clear();
-            entry.Inlines.AddRange(CreateHighlightedText(index, index + value.Length, entry.NewDisplayName));
+            entry.Inlines.AddRange(CreateHighlightedText(index, index + value.Length, entry.DisplayName));
 
             if (_highlightedItems.Contains(entry)) continue;
             _highlightedItems.Add(entry);
@@ -342,10 +342,10 @@ public partial class FileSystemViewModel : Document
                     TaggableItem = new TaggableFolder { Path = info.FullName }, AreTagsVisible = AreTagsVisible
                 });
 
-        var folderContent = folders
-            .Concat(files)
-            .OrderByDescending(static entry => entry.TaggableItem.GetType())
-            .ThenBy(static entry => entry.NewDisplayName);
+        var folderContent = files
+            .Concat(folders);
+            // .OrderByDescending(static entry => entry.TaggableItem.GetType())
+            // .ThenBy(static entry => entry.DisplayName);
 
         Items.Clear();
         Items.AddRange(folderContent);

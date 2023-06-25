@@ -1,11 +1,12 @@
-﻿using System.Collections.ObjectModel;
+﻿using System.ComponentModel;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using Avalonia.Controls;
 using Avalonia.Controls.Documents;
+using Avalonia.Media.Imaging;
 using Avalonia.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using DynamicData;
 using Google.Protobuf.WellKnownTypes;
 using TagTool.App.Core.Extensions;
 using TagTool.App.Core.Models;
@@ -15,16 +16,35 @@ using MonthTag = TagTool.App.Core.Models.MonthTag;
 
 namespace TagTool.App.Core.ViewModels;
 
-[DebuggerDisplay("{NewDisplayName}")]
+/// <summary>
+///     Basic representation of item that might be tagged, that should be use to display only.
+///     This class will react ot updates of underlining <see cref="TaggableItem"/>
+///     Contains only information how to display item DisplayName and its tags, if exist.
+///     Additional functionalities, like drop-to-tag, should be implemented in parent components.
+/// </summary>
+[DebuggerDisplay("{DisplayName}")]
 public partial class TaggableItemViewModel : ViewModelBase
 {
     private readonly TagService.TagServiceClient _tagService;
 
-    public required TaggableItem TaggableItem { get; init; }
+    public required TaggableItem TaggableItem
+    {
+        get => _taggableItem;
+        [MemberNotNull(nameof(_taggableItem))]
+        set
+        {
+            if (Equals(value, _taggableItem)) return;
+            _taggableItem = value;
 
-    public string NewDisplayName => TaggableItem.DisplayName;
+            OnPropertyChanged();
+            OnPropertyChanged(nameof(DisplayName));
+            OnPropertyChanged(nameof(AssociatedTags));
+        }
+    }
 
-    public ISet<ITag>? NewAssociatedTags => TaggableItem.Tags;
+    public string DisplayName => TaggableItem.DisplayName;
+
+    public IReadOnlySet<ITag>? AssociatedTags => TaggableItem.Tags;
 
     [ObservableProperty]
     private InlineCollection _inlines = new();
@@ -32,7 +52,7 @@ public partial class TaggableItemViewModel : ViewModelBase
     [ObservableProperty]
     private bool _areTagsVisible = true;
 
-    public ObservableCollection<ITag> AssociatedTags { get; } = new();
+    private TaggableItem _taggableItem;
 
     /// <summary>
     ///     ctor for XAML previewer
@@ -47,8 +67,11 @@ public partial class TaggableItemViewModel : ViewModelBase
         _tagService = null!;
         var _ = Dispatcher.UIThread.InvokeAsync(UpdateTags, DispatcherPriority.Background);
 
-        TaggableItem = new TaggableFile { Path = @"C:\Users\tczyz\MyFiles\FromOec\DigitalSign.gif" };
-        AssociatedTags.AddRange(new ITag[] { new TextTag { Name = "Tag1" }, new MonthTag { Month = 3 }, new TextTag { Name = "Tag3" } });
+        TaggableItem = new TaggableFile
+        {
+            Path = @"C:\Users\tczyz\MyFiles\FromOec\DigitalSign.gif",
+            Tags = new HashSet<ITag>(new ITag[] { new TextTag { Name = "Tag1" }, new MonthTag { Month = 3 }, new TextTag { Name = "Tag3" } })
+        };
     }
 
     public TaggableItemViewModel(TagService.TagServiceClient tagServiceClient)
@@ -66,31 +89,36 @@ public partial class TaggableItemViewModel : ViewModelBase
         }
     }
 
-    [RelayCommand]
-    private async Task TagIt(string tagName)
-    {
-        var tag = Any.Pack(new NormalTag { Name = tagName });
-        var tagRequest = TaggableItem switch
-        {
-            TaggableFile file => new TagItemRequest { Tag = tag, File = new FileDto { Path = file.Path } },
-            TaggableFolder folder => new TagItemRequest { Tag = tag, Folder = new FolderDto { Path = folder.Path } },
-            _ => throw new UnreachableException()
-        };
-
-        var tagReply = await _tagService.TagItemAsync(tagRequest);
-
-        switch (tagReply.ResultCase)
-        {
-            case TagItemReply.ResultOneofCase.TaggedItem:
-                AssociatedTags.Add(new TextTag { Name = tagName });
-                break;
-            case TagItemReply.ResultOneofCase.ErrorMessage:
-                Debug.WriteLine($"Unable to tag item {tagRequest}");
-                break;
-            default:
-                throw new UnreachableException();
-        }
-    }
+    // [RelayCommand]
+    // private async Task TagIt(string tagName)
+    // {
+    //     var tag = Any.Pack(new NormalTag { Name = tagName });
+    //     var tagRequest = TaggableItem switch
+    //     {
+    //         TaggableFile file => new TagItemRequest { Tag = tag, File = new FileDto { Path = file.Path } },
+    //         TaggableFolder folder => new TagItemRequest { Tag = tag, Folder = new FolderDto { Path = folder.Path } },
+    //         _ => throw new UnreachableException()
+    //     };
+    //
+    //     var tagReply = await _tagService.TagItemAsync(tagRequest);
+    //
+    //     switch (tagReply.ResultCase)
+    //     {
+    //         case TagItemReply.ResultOneofCase.TaggedItem:
+    //             TaggableItem = TaggableItem switch
+    //             {
+    //                 TaggableFile file => new TaggableFile { Path = file.Path, Tags = tagReply.TaggedItem.Tags.MapToDomain().ToHashSet() },
+    //                 TaggableFolder folder => new TaggableFolder { Path = folder.Path, Tags = tagReply.TaggedItem.Tags.MapToDomain().ToHashSet() },
+    //                 _ => throw new UnreachableException()
+    //             };
+    //             break;
+    //         case TagItemReply.ResultOneofCase.ErrorMessage:
+    //             Debug.WriteLine($"Unable to tag item {tagRequest}");
+    //             break;
+    //         default:
+    //             throw new UnreachableException();
+    //     }
+    // }
 
     [RelayCommand]
     private async Task UntagItem(string tagName)
@@ -108,7 +136,12 @@ public partial class TaggableItemViewModel : ViewModelBase
         switch (reply.ResultCase)
         {
             case UntagItemReply.ResultOneofCase.TaggedItem:
-                AssociatedTags.Remove(new TextTag { Name = tagName });
+                TaggableItem = TaggableItem switch
+                {
+                    TaggableFile file => new TaggableFile { Path = file.Path, Tags = reply.TaggedItem.Tags.MapToDomain().ToHashSet() },
+                    TaggableFolder folder => new TaggableFolder { Path = folder.Path, Tags = reply.TaggedItem.Tags.MapToDomain().ToHashSet() },
+                    _ => throw new UnreachableException()
+                };
                 break;
             case UntagItemReply.ResultOneofCase.ErrorMessage:
                 Debug.WriteLine($"Unable to tag item {untagItemRequest}");
@@ -127,16 +160,18 @@ public partial class TaggableItemViewModel : ViewModelBase
             _ => throw new UnreachableException()
         };
 
-        var getItemReply = await _tagService.GetItemAsync(getItemInfoRequest);
+        var reply = await _tagService.GetItemAsync(getItemInfoRequest);
 
-        switch (getItemReply.ResultCase)
+        switch (reply.ResultCase)
         {
             case GetItemReply.ResultOneofCase.TaggedItem:
-                TaggableItem.Tags?.AddRange(getItemReply.TaggedItem.Tags.Select(TagMapper.TagMapper.MapToDomain));
-                OnPropertyChanged(nameof(NewAssociatedTags));
-
-                // AssociatedTags.Clear();
-                // AssociatedTags.AddRange(getItemReply.TaggedItem.Tags.Select(TagMapper.TagMapper.MapToDomain));
+                TaggableItem = TaggableItem switch
+                {
+                    TaggableFile file => new TaggableFile { Path = file.Path, Tags = reply.TaggedItem.Tags.MapToDomain().ToHashSet() },
+                    TaggableFolder folder => new TaggableFolder { Path = folder.Path, Tags = reply.TaggedItem.Tags.MapToDomain().ToHashSet() },
+                    _ => throw new UnreachableException()
+                };
+                OnPropertyChanged(nameof(AssociatedTags));
                 break;
             case GetItemReply.ResultOneofCase.ErrorMessage:
                 Debug.WriteLine("Update tags failed");

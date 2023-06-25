@@ -59,12 +59,13 @@ public class IconPathToBitmapConverter : IValueConverter
 
     private static Bitmap CreateBitmap(Stream stream, int length)
     {
+        stream.Seek(0, SeekOrigin.Begin);
         if (length == default)
         {
             return new Bitmap(stream);
         }
 
-        var decodeToWidth = Bitmap.DecodeToWidth(stream, length);
+        var decodeToWidth = Bitmap.DecodeToHeight(stream, length);
         stream.Seek(0, SeekOrigin.Begin);
 
         return decodeToWidth;

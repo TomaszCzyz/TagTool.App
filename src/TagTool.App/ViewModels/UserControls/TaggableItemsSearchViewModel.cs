@@ -11,6 +11,7 @@ using Grpc.Core;
 using JetBrains.Annotations;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using TagTool.App.Core.Extensions;
 using TagTool.App.Core.Models;
 using TagTool.App.Core.Services;
 using TagTool.App.Core.TagMapper;
@@ -122,27 +123,20 @@ public partial class TaggableItemsSearchViewModel : Document, IDisposable
             .Select(any
                 => new GetItemsByTagsV2Request.Types.TagQueryParam { Tag = any, State = GetItemsByTagsV2Request.Types.QuerySegmentState.Include });
 
-        var reply = await _tagService
-            .GetItemsByTagsV2Async(new GetItemsByTagsV2Request { QueryParams = { query } });
+        var reply = await _tagService.GetItemsByTagsV2Async(new GetItemsByTagsV2Request { QueryParams = { query } });
 
-        var results = new List<TaggableItemViewModel>();
-
-        foreach (var taggedItem in reply.TaggedItems)
-        {
-            TaggableItem taggableItem = taggedItem.ItemCase switch
-            {
-                TaggedItem.ItemOneofCase.File => new TaggableFile { Path = taggedItem.File.Path },
-                TaggedItem.ItemOneofCase.Folder => new TaggableFolder { Path = taggedItem.File.Path },
-                _ => throw new ArgumentOutOfRangeException()
-            };
-
-            var taggableItemViewModel = new TaggableItemViewModel(_tagService)
-            {
-                TaggableItem = taggableItem, AreTagsVisible = true, AssociatedTags = { taggedItem.Tags.Select(TagMapper.MapToDomain).ToArray() }
-            };
-
-            results.Add(taggableItemViewModel);
-        }
+        var results = reply.TaggedItems
+            .Select(taggedItem
+                => (TaggableItem)(taggedItem.ItemCase switch
+                {
+                    TaggedItem.ItemOneofCase.File
+                        => new TaggableFile { Path = taggedItem.File.Path, Tags = taggedItem.Tags.MapToDomain().ToHashSet() },
+                    TaggedItem.ItemOneofCase.Folder
+                        => new TaggableFolder { Path = taggedItem.File.Path, Tags = taggedItem.Tags.MapToDomain().ToHashSet() },
+                    _ => throw new ArgumentOutOfRangeException()
+                }))
+            .Select(taggableItem => new TaggableItemViewModel(_tagService) { TaggableItem = taggableItem, AreTagsVisible = true })
+            .ToList();
 
         Files.Clear();
         Files.AddRange(results);

@@ -220,17 +220,17 @@
                     <Grid ColumnDefinitions="*,Auto,75">
                         <views:TaggableItemView FontSize="14" AttachedToVisualTree="Visual_OnAttachedToVisualTree" />
 
-                        <TextBlock
-                            Grid.Column="1"
-                            VerticalAlignment="Center"
-                            Text="{Binding DateCreated, StringFormat=\{0:yyyy/MM/dd hh:mm:ss\}}"
-                            TextAlignment="Left" />
-
-                        <TextBlock
-                            Grid.Column="2"
-                            VerticalAlignment="Center"
-                            Text="{Binding Size, Converter={StaticResource FileSizeToStringConverter}}"
-                            TextAlignment="Right" />
+                        <!-- <TextBlock -->
+                        <!--     Grid.Column="1" -->
+                        <!--     VerticalAlignment="Center" -->
+                        <!--     Text="{Binding DateCreated, StringFormat=\{0:yyyy/MM/dd hh:mm:ss\}}" -->
+                        <!--     TextAlignment="Left" /> -->
+                        <!-- -->
+                        <!-- <TextBlock -->
+                        <!--     Grid.Column="2" -->
+                        <!--     VerticalAlignment="Center" -->
+                        <!--     Text="{Binding Size, Converter={StaticResource FileSizeToStringConverter}}" -->
+                        <!--     TextAlignment="Right" /> -->
                     </Grid>
                 </DataTemplate>
             </ListBox.DataTemplates>
