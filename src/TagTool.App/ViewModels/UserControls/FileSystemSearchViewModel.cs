@@ -8,6 +8,7 @@ using Dock.Model.Mvvm.Controls;
 using Grpc.Core;
 using JetBrains.Annotations;
 using Microsoft.Extensions.DependencyInjection;
+using TagTool.App.Core.Models;
 using TagTool.App.Core.Services;
 using TagTool.App.Core.ViewModels;
 using TagTool.Backend;
@@ -94,19 +95,12 @@ public partial class FileSystemSearchViewModel : Document, IDisposable
             switch (reply.ContentCase)
             {
                 case SearchReply.ContentOneofCase.FullName:
-                    var (info, type) = Directory.Exists(reply.FullName)
-                        ? ((FileSystemInfo)new DirectoryInfo(reply.FullName), TaggedItemType.Folder)
-                        : (new FileInfo(reply.FullName), TaggedItemType.File);
 
-                    var taggableItemViewModel = new TaggableItemViewModel(_tagService)
-                    {
-                        TaggedItemType = type,
-                        Size = info is FileInfo fileInfo ? fileInfo.Length : null,
-                        DisplayName = info.Name,
-                        Location = info.FullName,
-                        DateCreated = info.CreationTime,
-                        AreTagsVisible = true,
-                    };
+                    TaggableItem taggableItem = Directory.Exists(reply.FullName)
+                        ? new TaggableFolder { Path = reply.FullName }
+                        : new TaggableFile { Path = reply.FullName };
+
+                    var taggableItemViewModel = new TaggableItemViewModel(_tagService) { TaggableItem = taggableItem, AreTagsVisible = true };
                     SearchResults.Add(taggableItemViewModel);
                     break;
                 case SearchReply.ContentOneofCase.CurrentlySearchDir:

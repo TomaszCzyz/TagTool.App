@@ -26,7 +26,7 @@ public class TaggableItemToToIconConverter : IValueConverter
 
     public object? Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
     {
-        if (value is not ITaggableItem taggableItem) return null;
+        if (value is not TaggableItem taggableItem) return null;
 
         return taggableItem switch
         {

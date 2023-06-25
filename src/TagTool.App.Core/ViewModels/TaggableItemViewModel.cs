@@ -7,29 +7,24 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using DynamicData;
 using Google.Protobuf.WellKnownTypes;
-using HarfBuzzSharp;
+using TagTool.App.Core.Extensions;
 using TagTool.App.Core.Models;
 using TagTool.Backend;
 using TagTool.Backend.DomainTypes;
+using MonthTag = TagTool.App.Core.Models.MonthTag;
 
 namespace TagTool.App.Core.ViewModels;
-
-public enum TaggedItemType
-{
-    File = 0,
-    Folder = 1
-}
 
 [DebuggerDisplay("{NewDisplayName}")]
 public partial class TaggableItemViewModel : ViewModelBase
 {
     private readonly TagService.TagServiceClient _tagService;
 
-    public required ITaggableItem TaggableItem { get; init; }
-
-    public string Location { get; }
+    public required TaggableItem TaggableItem { get; init; }
 
     public string NewDisplayName => TaggableItem.DisplayName;
+
+    public ISet<ITag>? NewAssociatedTags => TaggableItem.Tags;
 
     [ObservableProperty]
     private InlineCollection _inlines = new();
@@ -52,15 +47,23 @@ public partial class TaggableItemViewModel : ViewModelBase
         _tagService = null!;
         var _ = Dispatcher.UIThread.InvokeAsync(UpdateTags, DispatcherPriority.Background);
 
-        // DisplayName = "TestDisplayName";
-        AssociatedTags.AddRange(new[] { new TextTag { Name = "Tag1" }, new TextTag { Name = "Tag2" }, new TextTag { Name = "Tag3" } });
+        TaggableItem = new TaggableFile { Path = @"C:\Users\tczyz\MyFiles\FromOec\DigitalSign.gif" };
+        AssociatedTags.AddRange(new ITag[] { new TextTag { Name = "Tag1" }, new MonthTag { Month = 3 }, new TextTag { Name = "Tag3" } });
     }
 
     public TaggableItemViewModel(TagService.TagServiceClient tagServiceClient)
     {
-        _tagService = tagServiceClient;
         // todo: add cancellation token support (tags should not be loaded for example when folder has been exited or tags are not visible)
-        var _ = Dispatcher.UIThread.InvokeAsync(UpdateTags, DispatcherPriority.Background);
+        _tagService = tagServiceClient;
+        Initialize();
+    }
+
+    private void Initialize()
+    {
+        if (AreTagsVisible)
+        {
+            Dispatcher.UIThread.InvokeAsync(UpdateTags, DispatcherPriority.Background);
+        }
     }
 
     [RelayCommand]
@@ -129,8 +132,11 @@ public partial class TaggableItemViewModel : ViewModelBase
         switch (getItemReply.ResultCase)
         {
             case GetItemReply.ResultOneofCase.TaggedItem:
-                AssociatedTags.Clear();
-                AssociatedTags.AddRange(getItemReply.TaggedItem.Tags.Select(TagMapper.TagMapper.MapToDomain));
+                TaggableItem.Tags?.AddRange(getItemReply.TaggedItem.Tags.Select(TagMapper.TagMapper.MapToDomain));
+                OnPropertyChanged(nameof(NewAssociatedTags));
+
+                // AssociatedTags.Clear();
+                // AssociatedTags.AddRange(getItemReply.TaggedItem.Tags.Select(TagMapper.TagMapper.MapToDomain));
                 break;
             case GetItemReply.ResultOneofCase.ErrorMessage:
                 Debug.WriteLine("Update tags failed");

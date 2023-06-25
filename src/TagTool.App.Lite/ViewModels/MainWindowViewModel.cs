@@ -61,17 +61,7 @@ public partial class MainWindowViewModel : ViewModelBase
     private async Task SearchForTaggableItems(ICollection<QuerySegment> argsQuerySegments)
     {
         var tagQueryParams = argsQuerySegments.Select(segment
-            => new GetItemsByTagsV2Request.Types.TagQueryParam
-            {
-                Tag = TagMapper.MapToDto(segment.Tag),
-                State = segment.State switch
-                {
-                    QuerySegmentState.Exclude => GetItemsByTagsV2Request.Types.QuerySegmentState.Exclude,
-                    QuerySegmentState.Include => GetItemsByTagsV2Request.Types.QuerySegmentState.Include,
-                    QuerySegmentState.MustBePresent => GetItemsByTagsV2Request.Types.QuerySegmentState.MustBePresent,
-                    _ => throw new UnreachableException()
-                }
-            });
+            => new GetItemsByTagsV2Request.Types.TagQueryParam { Tag = TagMapper.MapToDto(segment.Tag), State = MapQuerySegmentState(segment) });
 
         var reply = await _tagService.GetItemsByTagsV2Async(new GetItemsByTagsV2Request { QueryParams = { tagQueryParams } });
 
@@ -88,4 +78,12 @@ public partial class MainWindowViewModel : ViewModelBase
                 AreTagsVisible = true
             }));
     }
+
+    private static GetItemsByTagsV2Request.Types.QuerySegmentState MapQuerySegmentState(QuerySegment segment) => segment.State switch
+    {
+        QuerySegmentState.Exclude => GetItemsByTagsV2Request.Types.QuerySegmentState.Exclude,
+        QuerySegmentState.Include => GetItemsByTagsV2Request.Types.QuerySegmentState.Include,
+        QuerySegmentState.MustBePresent => GetItemsByTagsV2Request.Types.QuerySegmentState.MustBePresent,
+        _ => throw new UnreachableException()
+    };
 }

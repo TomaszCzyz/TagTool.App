@@ -12,6 +12,7 @@ using DynamicData;
 using JetBrains.Annotations;
 using Microsoft.Extensions.DependencyInjection;
 using TagTool.App.Core.Extensions;
+using TagTool.App.Core.Models;
 using TagTool.App.Core.Services;
 using TagTool.App.Core.ViewModels;
 using TagTool.Backend;
@@ -116,14 +117,14 @@ public partial class FileSystemViewModel : Document
     {
         foreach (var entry in Items)
         {
-            var index = entry.DisplayName.IndexOf(value, StringComparison.CurrentCultureIgnoreCase);
+            var index = entry.NewDisplayName.IndexOf(value, StringComparison.CurrentCultureIgnoreCase);
 
             if (index < 0)
             {
                 if (_highlightedItems.Contains(entry))
                 {
                     entry.Inlines.Clear();
-                    entry.Inlines.Add(new Run { Text = entry.DisplayName });
+                    entry.Inlines.Add(new Run { Text = entry.NewDisplayName });
 
                     _highlightedItems.Remove(entry);
                 }
@@ -132,7 +133,7 @@ public partial class FileSystemViewModel : Document
             }
 
             entry.Inlines.Clear();
-            entry.Inlines.AddRange(CreateHighlightedText(index, index + value.Length, entry.DisplayName));
+            entry.Inlines.AddRange(CreateHighlightedText(index, index + value.Length, entry.NewDisplayName));
 
             if (_highlightedItems.Contains(entry)) continue;
             _highlightedItems.Add(entry);
@@ -269,11 +270,14 @@ public partial class FileSystemViewModel : Document
     [RelayCommand]
     private void Navigate(FileSystemInfo? info = null)
     {
-        var destination = info ?? (FileSystemInfo?)(Directory.Exists(SelectedItem!.Location)
-            ? new DirectoryInfo(SelectedItem.Location)
-            : new FileInfo(SelectedItem.Location));
+        info ??= SelectedItem?.TaggableItem switch
+        {
+            TaggableFile taggableFile => new FileInfo(taggableFile.Path),
+            TaggableFolder taggableFolder => new DirectoryInfo(taggableFolder.Path),
+            _ => throw new UnreachableException()
+        };
 
-        switch (destination)
+        switch (info)
         {
             case null:
                 return;
@@ -322,31 +326,26 @@ public partial class FileSystemViewModel : Document
         QuickSearchText = "";
         AddressTextBox = CurrentFolder.FullName;
 
-        var folders = value.EnumerateFiles("*", new EnumerationOptions { IgnoreInaccessible = true })
+        var folders = value
+            .EnumerateFiles("*", new EnumerationOptions { IgnoreInaccessible = true })
             .Select(info
                 => new TaggableItemViewModel(_tagService)
                 {
-                    TaggedItemType = TaggedItemType.File,
-                    DisplayName = info.Name,
-                    Location = info.FullName,
-                    DateCreated = info.CreationTime,
-                    AreTagsVisible = AreTagsVisible,
-                    Size = info.Length
+                    TaggableItem = new TaggableFile { Path = info.FullName }, AreTagsVisible = AreTagsVisible
                 });
 
-        var files = value.EnumerateDirectories("*", new EnumerationOptions { IgnoreInaccessible = true })
+        var files = value
+            .EnumerateDirectories("*", new EnumerationOptions { IgnoreInaccessible = true })
             .Select(info
                 => new TaggableItemViewModel(_tagService)
                 {
-                    TaggedItemType = TaggedItemType.Folder,
-                    DisplayName = info.Name,
-                    Location = info.FullName,
-                    DateCreated = info.CreationTime,
-                    AreTagsVisible = AreTagsVisible,
-                    Size = null
+                    TaggableItem = new TaggableFolder { Path = info.FullName }, AreTagsVisible = AreTagsVisible
                 });
 
-        var folderContent = folders.Concat(files).OrderByDescending(static entry => entry.TaggedItemType).ThenBy(static entry => entry.DisplayName);
+        var folderContent = folders
+            .Concat(files)
+            .OrderByDescending(static entry => entry.TaggableItem.GetType())
+            .ThenBy(static entry => entry.NewDisplayName);
 
         Items.Clear();
         Items.AddRange(folderContent);

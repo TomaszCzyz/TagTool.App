@@ -6,6 +6,7 @@ using Dock.Model.Mvvm.Controls;
 using DynamicData;
 using JetBrains.Annotations;
 using Microsoft.Extensions.DependencyInjection;
+using TagTool.App.Core.Models;
 using TagTool.App.Core.Services;
 using TagTool.App.Core.ViewModels;
 using TagTool.Backend;
@@ -30,17 +31,10 @@ public partial class ItemsTaggingTabViewModel : Document
         _tagService = App.Current.Services.GetRequiredService<ITagToolBackend>().GetTagService();
 
         var dir = new DirectoryInfo(@"C:\Users\tczyz\MyFiles");
-        var files = dir.EnumerateFiles("*", new EnumerationOptions { IgnoreInaccessible = true })
+        var files = dir
+            .EnumerateFiles("*", new EnumerationOptions { IgnoreInaccessible = true })
             .Select(info
-                => new TaggableItemViewModel(_tagService)
-                {
-                    TaggedItemType = TaggedItemType.File,
-                    DisplayName = info.Name,
-                    Location = info.FullName,
-                    DateCreated = info.CreationTime,
-                    AreTagsVisible = true,
-                    Size = info.Length
-                })
+                => new TaggableItemViewModel(_tagService) { TaggableItem = new TaggableFile { Path = info.FullName }, AreTagsVisible = true })
             .ToArray();
 
         ItemsToTag.AddRange(files);
@@ -53,30 +47,16 @@ public partial class ItemsTaggingTabViewModel : Document
     }
 
     [RelayCommand]
-    public void AddItemsToList(IEnumerable<FileSystemInfo> infos)
+    private void AddItemsToList(IEnumerable<FileSystemInfo> infos)
     {
         foreach (var info in infos)
         {
             var taggableItemViewModel = info switch
             {
-                DirectoryInfo dirInfo => new TaggableItemViewModel(_tagService)
-                {
-                    TaggedItemType = TaggedItemType.Folder,
-                    DisplayName = dirInfo.Name,
-                    Location = dirInfo.FullName,
-                    DateCreated = dirInfo.CreationTime,
-                    AreTagsVisible = true,
-                    Size = null
-                },
-                FileInfo fileInfo => new TaggableItemViewModel(_tagService)
-                {
-                    TaggedItemType = TaggedItemType.File,
-                    DisplayName = fileInfo.Name,
-                    Location = fileInfo.FullName,
-                    DateCreated = fileInfo.CreationTime,
-                    AreTagsVisible = true,
-                    Size = fileInfo.Length
-                },
+                DirectoryInfo
+                    => new TaggableItemViewModel(_tagService) { TaggableItem = new TaggableFolder { Path = info.FullName }, AreTagsVisible = true },
+                FileInfo
+                    => new TaggableItemViewModel(_tagService) { TaggableItem = new TaggableFile { Path = info.FullName }, AreTagsVisible = true },
                 _ => throw new ArgumentOutOfRangeException(nameof(infos))
             };
 

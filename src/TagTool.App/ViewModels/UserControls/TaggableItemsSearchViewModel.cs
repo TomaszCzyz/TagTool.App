@@ -129,22 +129,16 @@ public partial class TaggableItemsSearchViewModel : Document, IDisposable
 
         foreach (var taggedItem in reply.TaggedItems)
         {
-            var (info, type) = taggedItem.ItemCase switch
+            TaggableItem taggableItem = taggedItem.ItemCase switch
             {
-                TaggedItem.ItemOneofCase.File => ((FileSystemInfo)new FileInfo(taggedItem.File.Path), TaggedItemType.File),
-                TaggedItem.ItemOneofCase.Folder => (new DirectoryInfo(taggedItem.Folder.Path), TaggedItemType.Folder),
+                TaggedItem.ItemOneofCase.File => new TaggableFile { Path = taggedItem.File.Path },
+                TaggedItem.ItemOneofCase.Folder => new TaggableFolder { Path = taggedItem.File.Path },
                 _ => throw new ArgumentOutOfRangeException()
             };
 
             var taggableItemViewModel = new TaggableItemViewModel(_tagService)
             {
-                TaggedItemType = type,
-                Size = info is FileInfo fileInfo ? fileInfo.Length : null,
-                DisplayName = info.Name,
-                Location = info.FullName,
-                DateCreated = info.CreationTime,
-                AreTagsVisible = true,
-                AssociatedTags = { taggedItem.Tags.Select(TagMapper.MapToDomain).ToArray() }
+                TaggableItem = taggableItem, AreTagsVisible = true, AssociatedTags = { taggedItem.Tags.Select(TagMapper.MapToDomain).ToArray() }
             };
 
             results.Add(taggableItemViewModel);
