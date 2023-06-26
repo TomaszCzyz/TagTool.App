@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
-using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Avalonia.Controls;
@@ -62,9 +61,9 @@ public partial class MainWindowViewModel : ViewModelBase
     private async Task SearchForTaggableItems(ICollection<QuerySegment> argsQuerySegments)
     {
         var tagQueryParams = argsQuerySegments.Select(segment
-            => new GetItemsByTagsV2Request.Types.TagQueryParam { Tag = Any.Pack(TagMapper.MapToDto(segment.Tag)), State = MapQuerySegmentState(segment) });
+            => new GetItemsByTagsRequest.Types.TagQueryParam { Tag = Any.Pack(TagMapper.MapToDto(segment.Tag)), State = MapQuerySegmentState(segment) });
 
-        var reply = await _tagService.GetItemsByTagsV2Async(new GetItemsByTagsV2Request { QueryParams = { tagQueryParams } });
+        var reply = await _tagService.GetItemsByTagsAsync(new GetItemsByTagsRequest { QueryParams = { tagQueryParams } });
 
         SearchResults.Clear();
         SearchResults.AddRange(reply.TaggedItems.Select(item
@@ -80,11 +79,11 @@ public partial class MainWindowViewModel : ViewModelBase
             }));
     }
 
-    private static GetItemsByTagsV2Request.Types.QuerySegmentState MapQuerySegmentState(QuerySegment segment) => segment.State switch
+    private static GetItemsByTagsRequest.Types.QuerySegmentState MapQuerySegmentState(QuerySegment segment) => segment.State switch
     {
-        QuerySegmentState.Exclude => GetItemsByTagsV2Request.Types.QuerySegmentState.Exclude,
-        QuerySegmentState.Include => GetItemsByTagsV2Request.Types.QuerySegmentState.Include,
-        QuerySegmentState.MustBePresent => GetItemsByTagsV2Request.Types.QuerySegmentState.MustBePresent,
+        QuerySegmentState.Exclude => GetItemsByTagsRequest.Types.QuerySegmentState.Exclude,
+        QuerySegmentState.Include => GetItemsByTagsRequest.Types.QuerySegmentState.Include,
+        QuerySegmentState.MustBePresent => GetItemsByTagsRequest.Types.QuerySegmentState.MustBePresent,
         _ => throw new UnreachableException()
     };
 }

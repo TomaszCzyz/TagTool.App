@@ -121,9 +121,9 @@ public partial class TaggableItemsSearchViewModel : Document, IDisposable
         var query = Tags
             .Select(tag => Any.Pack(new NormalTag { Name = tag.Name }))
             .Select(any
-                => new GetItemsByTagsV2Request.Types.TagQueryParam { Tag = any, State = GetItemsByTagsV2Request.Types.QuerySegmentState.Include });
+                => new GetItemsByTagsRequest.Types.TagQueryParam { Tag = any, State = GetItemsByTagsRequest.Types.QuerySegmentState.Include });
 
-        var reply = await _tagService.GetItemsByTagsV2Async(new GetItemsByTagsV2Request { QueryParams = { query } });
+        var reply = await _tagService.GetItemsByTagsAsync(new GetItemsByTagsRequest { QueryParams = { query } });
 
         var results = reply.TaggedItems
             .Select(taggedItem
