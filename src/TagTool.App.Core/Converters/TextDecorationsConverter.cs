@@ -6,19 +6,19 @@ using TagTool.App.Core.Models;
 
 namespace TagTool.App.Core.Converters;
 
-public class TextDecorationsConverter : IMultiValueConverter
+public class TextDecorationsConverter : IValueConverter
 {
-    public object Convert(IList<object?> values, Type targetType, object? parameter, CultureInfo culture)
+    public object Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
     {
-        if (values is not [QuerySegmentState state]) return new TextDecorationCollection();
+        if (value is not QuerySegmentState state) return new TextDecorationCollection();
 
         return state switch
         {
+            QuerySegmentState.Include => new TextDecorationCollection(),
             QuerySegmentState.Exclude => new TextDecorationCollection
             {
                 new() { Location = TextDecorationLocation.Strikethrough, StrokeThickness = 3, StrokeThicknessUnit = TextDecorationUnit.Pixel }
             },
-            QuerySegmentState.Include => new TextDecorationCollection(),
             QuerySegmentState.MustBePresent => new TextDecorationCollection
             {
                 new() { Location = TextDecorationLocation.Underline, StrokeThickness = 2, StrokeThicknessUnit = TextDecorationUnit.Pixel }
@@ -27,8 +27,5 @@ public class TextDecorationsConverter : IMultiValueConverter
         };
     }
 
-    public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
-    {
-        throw new NotSupportedException();
-    }
+    public object ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture) => throw new NotSupportedException();
 }

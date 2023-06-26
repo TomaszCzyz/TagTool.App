@@ -100,65 +100,23 @@
                             <VirtualizingStackPanel Orientation="Horizontal" />
                         </ItemsPanelTemplate>
                     </ItemsControl.ItemsPanel>
-                    <ItemsControl.DataTemplates>
-                        <dataTemplates:TagsTemplateSelector>
-                            <DataTemplate x:Key="TagTool.App.Core.Models.TextTag" DataType="models:ITag">
-                                <TextBlock
-                                    Classes="Transparent"
-                                    Margin="4 1"
-                                    VerticalAlignment="Center"
-                                    FontSize="18"
-                                    Foreground="{StaticResource MyLightSecondary500}"
-                                    IsTabStop="False"
-                                    Text="{Binding DisplayText}" />
-
-                            </DataTemplate>
-                            <DataTemplate x:Key="TagTool.App.Core.Models.DayTag" DataType="models:ITag">
-                                <TextBlock
-                                    Classes="Transparent"
-                                    Margin="4 1"
-                                    VerticalAlignment="Center"
-                                    FontSize="18"
-                                    Foreground="{StaticResource MyLightPrimary400}"
-                                    IsTabStop="False"
-                                    Text="{Binding DisplayText}" />
-
-                            </DataTemplate>
-                            <DataTemplate x:Key="TagTool.App.Core.Models.DayRangeTag" DataType="models:ITag">
-                                <TextBlock
-                                    Classes="Transparent"
-                                    Margin="4 1"
-                                    VerticalAlignment="Center"
-                                    FontSize="18"
-                                    Foreground="DarkGreen"
-                                    IsTabStop="False"
-                                    Text="{Binding DisplayText}" />
-
-                            </DataTemplate>
-                            <DataTemplate x:Key="TagTool.App.Core.Models.MonthTag" DataType="models:ITag">
-                                <TextBlock
-                                    Classes="Transparent"
-                                    Margin="4 1"
-                                    VerticalAlignment="Center"
-                                    FontSize="18"
-                                    Foreground="DeepPink"
-                                    IsTabStop="False"
-                                    Text="{Binding DisplayText}" />
-
-                            </DataTemplate>
-                            <DataTemplate x:Key="TagTool.App.Core.Models.MonthRangeTag" DataType="models:ITag">
-                                <TextBlock
-                                    Classes="Transparent"
-                                    Margin="4 1"
-                                    VerticalAlignment="Center"
-                                    FontSize="18"
-                                    Foreground="HotPink"
-                                    IsTabStop="False"
-                                    Text="{Binding DisplayText}" />
-
-                            </DataTemplate>
-                        </dataTemplates:TagsTemplateSelector>
-                    </ItemsControl.DataTemplates>
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate DataType="models:ITag">
+                            <ContentControl Content="{Binding $self.DataContext}" ContentTemplate="{x:Static dataTemplates:TagsTemplateProvider.TagDataTemplate}" >
+                                <ContentControl.Styles>
+                                    <Style Selector="TextBlock">
+                                        <Setter Property="Text">
+                                            <Binding Path="DisplayText"></Binding>
+                                        </Setter>
+                                        <Setter Property="Margin" Value="4 1" />
+                                        <Setter Property="VerticalAlignment" Value="Center" />
+                                        <Setter Property="IsTabStop" Value="False" />
+                                        <Setter Property="FontSize" Value="18" />
+                                    </Style>
+                                </ContentControl.Styles>
+                            </ContentControl>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
                 </ItemsControl>
             </Border>
         </Grid>

@@ -165,7 +165,11 @@
                     <ListBox.DataTemplates>
                         <DataTemplate x:CompileBindings="False" DataType="models:QuerySegment">
                             <Grid ColumnDefinitions="Auto,Auto, Auto" RowDefinitions="Auto">
-                                <ContentControl Grid.Column="0" Content="{Binding Tag}" Loaded="TagDisplayText_OnAttachedToLogicalTree">
+                                <ContentControl 
+                                    Grid.Column="0"
+                                    Content="{Binding Tag}"
+                                    ContentTemplate="{x:Static dataTemplates:TagsTemplateProvider.TagDataTemplate}"
+                                    Loaded="TagDisplayText_OnAttachedToLogicalTree">
                                     <ContentControl.ContextFlyout>
                                         <MenuFlyout Closed="PopupFlyoutBase_OnClosing">
                                             <MenuItem
@@ -185,71 +189,20 @@
 
                                         </MenuFlyout>
                                     </ContentControl.ContextFlyout>
-                                    <ContentControl.DataTemplates>
-                                        <dataTemplates:TagsTemplateSelector>
-                                            <DataTemplate x:Key="TagTool.App.Core.Models.TextTag" DataType="models:ITag">
-                                                <TextBlock
-                                                    Classes="Transparent"
-                                                    Margin="4 1"
-                                                    VerticalAlignment="Center"
-                                                    FontSize="18"
-                                                    Foreground="{StaticResource MyLightSecondary500}"
-                                                    IsTabStop="False"
-                                                    Text="{Binding DisplayText}">
-                                                    <TextBlock.TextDecorations>
-                                                        <MultiBinding Converter="{StaticResource TextDecorationsConverter}">
-                                                            <Binding Path="$parent[Grid].DataContext.State" FallbackValue="null"/>
-                                                        </MultiBinding>
-                                                    </TextBlock.TextDecorations>
-                                                </TextBlock>
-
-                                            </DataTemplate>
-                                            <DataTemplate x:Key="TagTool.App.Core.Models.DayTag" DataType="models:ITag">
-                                                <TextBlock
-                                                    Classes="Transparent"
-                                                    Margin="4 1"
-                                                    VerticalAlignment="Center"
-                                                    FontSize="18"
-                                                    Foreground="{StaticResource MyLightPrimary400}"
-                                                    IsTabStop="False"
-                                                    Text="{Binding DisplayText}" />
-
-                                            </DataTemplate>
-                                            <DataTemplate x:Key="TagTool.App.Core.Models.DayRangeTag" DataType="models:ITag">
-                                                <TextBlock
-                                                    Classes="Transparent"
-                                                    Margin="4 1"
-                                                    VerticalAlignment="Center"
-                                                    FontSize="18"
-                                                    Foreground="DarkGreen"
-                                                    IsTabStop="False"
-                                                    Text="{Binding DisplayText}" />
-
-                                            </DataTemplate>
-                                            <DataTemplate x:Key="TagTool.App.Core.Models.MonthTag" DataType="models:ITag">
-                                                <TextBlock
-                                                    Classes="Transparent"
-                                                    Margin="4 1"
-                                                    VerticalAlignment="Center"
-                                                    FontSize="18"
-                                                    Foreground="DeepPink"
-                                                    IsTabStop="False"
-                                                    Text="{Binding DisplayText}" />
-
-                                            </DataTemplate>
-                                            <DataTemplate x:Key="TagTool.App.Core.Models.MonthRangeTag" DataType="models:ITag">
-                                                <TextBlock
-                                                    Classes="Transparent"
-                                                    Margin="4 1"
-                                                    VerticalAlignment="Center"
-                                                    FontSize="18"
-                                                    Foreground="HotPink"
-                                                    IsTabStop="False"
-                                                    Text="{Binding DisplayText}" />
-
-                                            </DataTemplate>
-                                        </dataTemplates:TagsTemplateSelector>
-                                    </ContentControl.DataTemplates>
+                                    <ContentControl.Styles>
+                                        <Style Selector="TextBlock">
+                                            <Setter Property="Text">
+                                                <Binding Path="DisplayText"></Binding>
+                                            </Setter>
+                                            <Setter Property="TextDecorations">
+                                                <Binding Path="$parent[Grid].DataContext.State" FallbackValue="null" Converter="{StaticResource TextDecorationsConverter}"/>
+                                            </Setter>
+                                            <Setter Property="Margin" Value="4 1" />
+                                            <Setter Property="VerticalAlignment" Value="Center" />
+                                            <Setter Property="IsTabStop" Value="False" />
+                                            <Setter Property="FontSize" Value="18" />
+                                        </Style>
+                                    </ContentControl.Styles>
                                 </ContentControl>
 
                                 <Button
@@ -260,7 +213,7 @@
                                     Margin="-4 2 0 2"
                                     Padding="0"
                                     VerticalAlignment="Top"
-                                    Command="{ReflectionBinding #UserControlRoot.DataContext.RemoveTagCommand, FallbackValue=null}"
+                                    Command="{ReflectionBinding #UserControlRoot.DataContext.RemoveTagFromSearchQueryCommand, FallbackValue=null}"
                                     CommandParameter="{Binding .}"
                                     CornerRadius="100"
                                     Opacity="{Binding $parent[ListBoxItem].Opacity, Converter={StaticResource DoubleRangeConverter}}">
@@ -311,7 +264,6 @@
                                     </Style>
                                 </AutoCompleteBox.Styles>
                             </AutoCompleteBox>
-
                         </DataTemplate>
                     </ListBox.DataTemplates>
                 </ListBox>

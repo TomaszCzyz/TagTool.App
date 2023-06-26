@@ -11,11 +11,19 @@
     </Application.DataTemplates>
 
     <Application.Resources>
-        <ResourceDictionary>
+        <ResourceDictionary x:Key="DoINeedItDictionary">
             <ResourceDictionary.MergedDictionaries>
                 <ResourceInclude Source="/Views/Styles/MyDocumentTabStripItem.axaml" />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
+        <Color x:Key="DefaultTagColor">#656769</Color>
+        <Color x:Key="TextTagColor">#53A7FF</Color>
+        <Color x:Key="DayTagColor">#9CFF5E</Color>
+        <Color x:Key="DayRangeTagColor">#337C00</Color>
+        <Color x:Key="MonthTagColor">#FF6AB2</Color>
+        <Color x:Key="MonthRangeTagColor">#9F5057</Color>
+        <Color x:Key="TypeTagColor">#00FFFD</Color>
+        
         <Color x:Key="MyLightPrimary900">#04272F</Color>
         <Color x:Key="MyLightPrimary800">#073F5F</Color>
         <Color x:Key="MyLightPrimary700">#0B5E8E</Color>
@@ -44,7 +52,6 @@
         <SolidColorBrush x:Key="DockApplicationAccentBrushHigh">#52B0EF</SolidColorBrush>
         <SolidColorBrush x:Key="DockApplicationAccentForegroundBrush">#F0F0F0</SolidColorBrush>
         <SolidColorBrush x:Key="DockApplicationAccentBrushIndicator">#007ACC</SolidColorBrush>
-        
     </Application.Resources>
     <Application.Styles>
         <FluentTheme />

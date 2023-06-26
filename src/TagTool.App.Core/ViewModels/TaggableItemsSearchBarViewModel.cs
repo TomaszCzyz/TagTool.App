@@ -102,8 +102,8 @@ public sealed partial class TaggableItemsSearchBarViewModel : ViewModelBase, IDi
                 if (IsOneElementUpdated(args.OldItems, args.NewItems))
                 {
                     DisplayedSearchBarElements!.Replace(args.OldItems[0], args.NewItems[0]);
-                    args.OldItems.RemoveAt(0);
-                    args.NewItems.RemoveAt(0);
+                    OnCommitSearchQueryEvent(new CommitSearchQueryEventArgs(QuerySegments));
+                    return;
                 }
 
                 if (args.OldItems is not null)

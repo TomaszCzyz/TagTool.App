@@ -8,6 +8,14 @@
         <local:ViewLocator />
     </Application.DataTemplates>
     <Application.Resources>
+        <Color x:Key="DefaultTagColor">#656769</Color>
+        <Color x:Key="TextTagColor">#53A7FF</Color>
+        <Color x:Key="DayTagColor">#9CFF5E</Color>
+        <Color x:Key="DayRangeTagColor">#337C00</Color>
+        <Color x:Key="MonthTagColor">#FF6AB2</Color>
+        <Color x:Key="MonthRangeTagColor">#9F5057</Color>
+        <Color x:Key="TypeTagColor">#00FFFD</Color>
+
         <Color x:Key="MyLightPrimary900">#04272F</Color>
         <Color x:Key="MyLightPrimary800">#073F5F</Color>
         <Color x:Key="MyLightPrimary700">#0B5E8E</Color>
@@ -29,7 +37,6 @@
         <x:Double x:Key="ControlContentThemeFontSize">14</x:Double>
         <x:Double x:Key="AppContentFontSize">16</x:Double>
         <Color x:Key="AppFontColor">#333</Color>
-
     </Application.Resources>
     <Application.Styles>
         <FluentTheme />
