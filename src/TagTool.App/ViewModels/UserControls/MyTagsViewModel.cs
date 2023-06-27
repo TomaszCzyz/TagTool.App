@@ -12,6 +12,7 @@ using Grpc.Core;
 using JetBrains.Annotations;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using TagTool.App.Core.Models;
 using TagTool.App.Core.Services;
 using TagTool.App.Core.TagMapper;
 using TagTool.App.Models;
@@ -25,15 +26,13 @@ public partial class MyTagsViewModel : Document
     private readonly ILogger<MyTagsViewModel> _logger;
     private readonly TagService.TagServiceClient _tagService;
 
-    public double Width { get; set; } = 200;
-
     [ObservableProperty]
     private string? _createTagText;
 
     [ObservableProperty]
     private string? _selectedTag;
 
-    public ObservableCollection<string> Items { get; } = new();
+    public ObservableCollection<ITag> AllTags { get; } = new();
 
     /// <summary>
     ///     ctor for XAML previewer
@@ -68,7 +67,7 @@ public partial class MyTagsViewModel : Document
             var streamingCall = _tagService.SearchTags(searchTagsRequest);
             await streamingCall.ResponseStream
                 .ReadAllAsync()
-                .ForEachAsync(reply => Items.Add(TagMapper.MapToDomain(reply.Tag).DisplayText));
+                .ForEachAsync(reply => AllTags.Add(TagMapper.MapToDomain(reply.Tag)));
         });
     }
 
@@ -81,13 +80,19 @@ public partial class MyTagsViewModel : Document
 
         _logger.LogInformation("Requesting tag creation {Request}", createTagsRequest);
 
-        var _ = _tagService.CreateTag(createTagsRequest);
+        var reply = _tagService.CreateTag(createTagsRequest);
         // todo: check is success
 
-        // todo: make extension method 'AddIfNotExists(..)'
-        if (!Items.Contains(CreateTagText))
+        switch (reply.ResultCase)
         {
-            Items.Add(CreateTagText);
+            case CreateTagReply.ResultOneofCase.ErrorMessage:
+                break;
+        }
+
+        // todo: make extension method 'AddIfNotExists(..)'
+        if (!AllTags.Select(tag => tag.DisplayText).Contains(CreateTagText))
+        {
+            AllTags.Add(new TextTag { Name = CreateTagText });
         }
 
         CreateTagText = "";
@@ -105,7 +110,8 @@ public partial class MyTagsViewModel : Document
         switch (deleteTagsReply.ResultCase)
         {
             case DeleteTagReply.ResultOneofCase.DeletedTagName:
-                Items.Remove(tagName);
+                var first = AllTags.First(tag => tag.DisplayText == deleteTagsReply.DeletedTagName);
+                AllTags.Remove(first);
                 break;
             case DeleteTagReply.ResultOneofCase.ErrorMessage:
                 var notification = new Notification(

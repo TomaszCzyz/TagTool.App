@@ -5,12 +5,16 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:userControls="clr-namespace:TagTool.App.ViewModels.UserControls"
+    xmlns:dd="clr-namespace:TagTool.App"
+    xmlns:models="clr-namespace:TagTool.App.Core.Models;assembly=TagTool.App.Core"
+    xmlns:dataTemplates="clr-namespace:TagTool.App.Core.DataTemplates;assembly=TagTool.App.Core"
     x:Class="TagTool.App.Views.UserControls.MyTagsView"
     x:CompileBindings="True"
     x:DataType="userControls:MyTagsViewModel"
     x:Name="RootUserControl"
     d:DesignWidth="800"
     d:DesignHeight="450"
+    d:DataContext="{x:Static dd:DesignData.MyTagsViewModel}"
     mc:Ignorable="d">
 
     <StackPanel HorizontalAlignment="Stretch" Orientation="Vertical">
@@ -31,7 +35,7 @@
                 </Expander.Styles>
                 <ListBox
                     Name="TagsListBox"
-                    ItemsSource="{Binding Items}"
+                    ItemsSource="{Binding AllTags}"
                     SelectedItem="{Binding SelectedTag}">
                     <ListBox.ItemsPanel>
                         <ItemsPanelTemplate>
@@ -51,26 +55,23 @@
                         </MenuFlyout>
                     </ListBox.ContextFlyout>
                     <ListBox.ItemTemplate>
-                        <DataTemplate>
-                            <Border
-                                Margin="1"
-                                HorizontalAlignment="Left"
-                                VerticalAlignment="Center"
-                                BorderBrush="{StaticResource MyLightSecondary500}"
-                                BorderThickness="0 0 1 1"
-                                ClipToBounds="True"
-                                CornerRadius="2">
-
-                                <TextBlock
-                                    Margin="0"
-                                    VerticalAlignment="Center"
-                                    FontSize="{DynamicResource AppContentFontSize}"
-                                    Foreground="{StaticResource MyLightSecondary500}"
-                                    IsTabStop="False"
-                                    Text="{Binding ., StringFormat='{}{0} '}"
-                                    AttachedToVisualTree="Visual_OnAttachedToVisualTree" />
-
-                            </Border>
+                        <DataTemplate DataType="models:ITag">
+                            <ContentControl 
+                                Content="{Binding $self.DataContext}"
+                                ContentTemplate="{x:Static dataTemplates:TagsTemplateProvider.TagDataTemplate}" 
+                                AttachedToVisualTree="Visual_OnAttachedToVisualTree">
+                                <ContentControl.Styles>
+                                    <Style Selector="TextBlock">
+                                        <Setter Property="Text">
+                                            <Binding Path="DisplayText"></Binding>
+                                        </Setter>
+                                        <Setter Property="Margin" Value="4 1" />
+                                        <Setter Property="VerticalAlignment" Value="Center" />
+                                        <Setter Property="IsTabStop" Value="False" />
+                                        <Setter Property="FontSize" Value="18" />
+                                    </Style>
+                                </ContentControl.Styles>
+                            </ContentControl>
                         </DataTemplate>
                     </ListBox.ItemTemplate>
                 </ListBox>

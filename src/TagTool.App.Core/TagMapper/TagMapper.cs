@@ -21,36 +21,36 @@ public static class TagMapper
 {
     public static ITag MapToDomain(Any anyTag)
     {
-        ITag? tag = null;
-
         if (anyTag.Is(NormalTag.Descriptor))
         {
             var normalTag = anyTag.Unpack<NormalTag>();
-            tag = new TextTag { Name = normalTag.Name };
-        }
-        else if (anyTag.Is(DayTag.Descriptor))
-        {
-            var dayTag = anyTag.Unpack<DayTag>();
-            tag = new Models.DayTag { DayOfWeek = (DayOfWeek)dayTag.Day };
-        }
-        else if (anyTag.Is(DayRangeTag.Descriptor))
-        {
-            var dayRangeTag = anyTag.Unpack<DayRangeTag>();
-            tag = new Models.DayRangeTag { Begin = (DayOfWeek)dayRangeTag.Begin, End = (DayOfWeek)dayRangeTag.End };
-        }
-        else if (anyTag.Is(MonthTag.Descriptor))
-        {
-            var monthTag = anyTag.Unpack<MonthTag>();
-            tag = new Models.MonthTag { Month = monthTag.Month };
-        }
-        else if (anyTag.Is(MonthRangeTag.Descriptor))
-        {
-            var monthRangeTag = anyTag.Unpack<MonthRangeTag>();
-            tag = new Models.MonthRangeTag { Begin = monthRangeTag.Begin, End = monthRangeTag.End };
+            return  new TextTag { Name = normalTag.Name };
         }
 
-        return tag ?? new TextTag { Name = "UnknownTagType" };
-        // return tag ?? throw new ArgumentException("Unable to match tag type");
+        if (anyTag.Is(DayTag.Descriptor))
+        {
+            var dayTag = anyTag.Unpack<DayTag>();
+            return new Models.DayTag { DayOfWeek = (DayOfWeek)dayTag.Day };
+        }
+        if (anyTag.Is(DayRangeTag.Descriptor))
+        {
+            var dayRangeTag = anyTag.Unpack<DayRangeTag>();
+            return new Models.DayRangeTag { Begin = (DayOfWeek)dayRangeTag.Begin, End = (DayOfWeek)dayRangeTag.End };
+        }
+        if (anyTag.Is(MonthTag.Descriptor))
+        {
+            var monthTag = anyTag.Unpack<MonthTag>();
+            return new Models.MonthTag { Month = monthTag.Month };
+        }
+
+        if (anyTag.Is(MonthRangeTag.Descriptor))
+        {
+            var monthRangeTag = anyTag.Unpack<MonthRangeTag>();
+            return new Models.MonthRangeTag { Begin = monthRangeTag.Begin, End = monthRangeTag.End };
+        }
+
+        throw new ArgumentException("Unable to match tag type");
+        // return  new TextTag { Name = "UnknownTagType" };
     }
 
     public static IMessage MapToDto(ITag tag)

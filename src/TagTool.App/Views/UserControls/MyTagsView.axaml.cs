@@ -3,6 +3,7 @@ using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.VisualTree;
 using JetBrains.Annotations;
+using TagTool.App.Core.Models;
 using TagTool.App.ViewModels.UserControls;
 
 namespace TagTool.App.Views.UserControls;
@@ -24,12 +25,16 @@ public partial class MyTagsView : UserControl
         listBoxItem.AddHandler(PointerPressedEvent, HandleDrag, handledEventsToo: true);
     }
 
-    private async void HandleDrag(object? sender, PointerPressedEventArgs e)
+    private static async void HandleDrag(object? sender, PointerPressedEventArgs e)
     {
-        if (ViewModel.SelectedTag is null || e.GetCurrentPoint(null).Properties.PointerUpdateKind != PointerUpdateKind.LeftButtonPressed) return;
+        if (sender is not ListBoxItem { DataContext: ITag tag }
+            || e.GetCurrentPoint(null).Properties.PointerUpdateKind != PointerUpdateKind.LeftButtonPressed)
+        {
+            return;
+        }
 
         var dragData = new DataObject();
-        dragData.Set("draggedTag", ViewModel.SelectedTag!);
+        dragData.Set("draggedTag", tag);
 
         // maybe remove await?
         var _ = await DragDrop.DoDragDrop(e, dragData, DragDropEffects.Link);

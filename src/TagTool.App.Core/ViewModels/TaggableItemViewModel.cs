@@ -81,13 +81,13 @@ public partial class TaggableItemViewModel : ViewModelBase
     }
 
     [RelayCommand]
-    private async Task TagIt(string tagName)
+    private async Task TagIt(ITag tag)
     {
-        var tag = Any.Pack(new NormalTag { Name = tagName });
+        var anyTag = Any.Pack(TagMapper.TagMapper.MapToDto(tag));
         var tagRequest = TaggableItem switch
         {
-            TaggableFile file => new TagItemRequest { Tag = tag, File = new FileDto { Path = file.Path } },
-            TaggableFolder folder => new TagItemRequest { Tag = tag, Folder = new FolderDto { Path = folder.Path } },
+            TaggableFile file => new TagItemRequest { Tag = anyTag, File = new FileDto { Path = file.Path } },
+            TaggableFolder folder => new TagItemRequest { Tag = anyTag, Folder = new FolderDto { Path = folder.Path } },
             _ => throw new UnreachableException()
         };
 

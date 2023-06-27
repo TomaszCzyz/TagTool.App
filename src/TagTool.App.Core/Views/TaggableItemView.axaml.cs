@@ -3,6 +3,7 @@ using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.LogicalTree;
 using Avalonia.Media;
+using TagTool.App.Core.Models;
 using TagTool.App.Core.ViewModels;
 
 namespace TagTool.App.Core.Views;
@@ -34,9 +35,9 @@ public partial class TaggableItemView : UserControl
 
     private void Drop(object? sender, DragEventArgs e)
     {
-        var tagName = (string)e.Data.Get("draggedTag")!;
+        var tag = (ITag)e.Data.Get("draggedTag")!;
 
-        ViewModel.TagItCommand.Execute(tagName);
+        ViewModel.TagItCommand.Execute(tag);
     }
 
     private void UntagMenuItem_OnClick(object? sender, RoutedEventArgs e)
