@@ -5,7 +5,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using Avalonia.Controls;
 using Avalonia.Threading;
-using CommunityToolkit.Mvvm.ComponentModel;
 using DynamicData;
 using Google.Protobuf.WellKnownTypes;
 using JetBrains.Annotations;
@@ -19,12 +18,11 @@ using TagTool.Backend.DomainTypes;
 
 namespace TagTool.App.Lite.ViewModels;
 
-public partial class MainWindowViewModel : ViewModelBase
+public class MainWindowViewModel : ViewModelBase
 {
     private readonly TagService.TagServiceClient _tagService;
 
-    [ObservableProperty]
-    private TaggableItemsSearchBarViewModel _searchBarViewModel;
+    public TaggableItemsSearchBarViewModel SearchBarViewModel { get; }
 
     public ObservableCollection<TaggableItemViewModel> SearchResults { get; } = new();
 

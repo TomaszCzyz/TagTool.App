@@ -1,86 +1,50 @@
 ﻿<UserControl
     xmlns="https://github.com/avaloniaui"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
-    xmlns:avaloniaProgressRing="clr-namespace:AvaloniaProgressRing;assembly=AvaloniaProgressRing"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:models1="clr-namespace:TagTool.App.Models"
-    xmlns:system="clr-namespace:System;assembly=System.Runtime"
-    xmlns:templatedControls="clr-namespace:TagTool.App.Views.TemplatedControls"
     xmlns:userControls="clr-namespace:TagTool.App.ViewModels.UserControls"
-    xmlns:converters="clr-namespace:TagTool.App.Core.Converters;assembly=TagTool.App.Core"
     xmlns:views="clr-namespace:TagTool.App.Core.Views;assembly=TagTool.App.Core"
     xmlns:viewModels="clr-namespace:TagTool.App.Core.ViewModels;assembly=TagTool.App.Core"
+    xmlns:dd="clr-namespace:TagTool.App"
     x:Class="TagTool.App.Views.UserControls.TaggableItemsSearchView"
     x:CompileBindings="True"
     x:DataType="userControls:TaggableItemsSearchViewModel"
     x:Name="UserControlRoot"
     d:DesignWidth="700"
     d:DesignHeight="700"
-    mc:Ignorable="d"
-    Background="{StaticResource MyLightPrimary200}">
-    <UserControl.Resources>
-        <converters:FileSizeToStringConverter x:Key="FileSizeToStringConverter" />
-        <converters:DoubleRangeConverter
-            x:Key="DoubleRangeConverter"
-            InputMax="1.0"
-            InputMin="0.5"
-            OutputMax="1.0"
-            OutputMin="0.0" />
-    </UserControl.Resources>
-    <UserControl.Styles>
-        <Style Selector="ToggleButton.TransparentBackgroundWhenChecked:checked">
-            <Style Selector="^ /template/ ContentPresenter#PART_ContentPresenter">
-                <Setter Property="Background" Value="Transparent" />
-            </Style>
+    d:DataContext="{x:Static dd:DesignData.TaggableItemsSearchViewModel}"
+    mc:Ignorable="d">
 
-            <Style Selector="^:pointerover /template/ ContentPresenter#PART_ContentPresenter">
-                <Setter Property="Background" Value="{DynamicResource ToggleButtonBackgroundCheckedPointerOver}" />
-            </Style>
-        </Style>
-        <Style Selector="Border.SearchBox">
-            <Setter Property="BorderThickness" Value="1 1 1 2" />
-            <Setter Property="ClipToBounds" Value="True" />
-            <Setter Property="CornerRadius" Value="4" />
-            <Setter Property="BorderBrush">
-                <SolidColorBrush Opacity="0.5" Color="{StaticResource MyLightSecondary500}" />
-            </Setter>
-        </Style>
-        <Style Selector="Border.SearchBox:pointerover">
-            <Setter Property="BorderBrush">
-                <SolidColorBrush Opacity="1" Color="{StaticResource MyLightSecondary500}" />
-            </Setter>
-        </Style>
-        <Style Selector="Border.SearchBox:focus-within">
-            <Setter Property="BorderBrush">
-                <SolidColorBrush Opacity="1" Color="{StaticResource MyLightSecondary500}" />
-            </Setter>
-        </Style>
-    </UserControl.Styles>
+    <DockPanel Margin="2">
+        <!-- Search Bar -->
+        <views:TaggableItemsSearchBarView
+            DockPanel.Dock="Top"
+            Name="SearchBarView"
+            DataContext="{Binding SearchBarViewModel, Mode=TwoWay}" />
 
-    <Design.DataContext>
-        <userControls:TaggableItemsSearchViewModel />
-    </Design.DataContext>
-
-    <Panel>
-        <Grid
-            Name="TopMostGrid"
-            DragDrop.AllowDrop="True"
-            Margin="4"
-            Background="#00bbbbbb"
-            ColumnDefinitions="*"
-            RowDefinitions="Auto,Auto,*">
-
+        <!-- SearchResults -->
+        <Panel>
+            <ListBox
+                Name="SearchResultsDataGrid"
+                Background="Transparent"
+                Focusable="True"
+                FontSize="{DynamicResource AppContentFontSize}"
+                ItemsSource="{Binding FoundTaggedItems}"
+                SelectionMode="Multiple">
+                <ListBox.DataTemplates>
+                    <DataTemplate x:CompileBindings="False" DataType="viewModels:TaggableItemViewModel">
+                        <views:TaggableItemView FontSize="14" />
+                    </DataTemplate>
+                </ListBox.DataTemplates>
+            </ListBox>
             <Border
                 Name="DragDropInfoAreaBorder"
-                Grid.RowSpan="3"
-                Grid.Column="0"
                 DragDrop.AllowDrop="True"
                 Background="#aaa"
                 BorderBrush="#888"
                 BorderThickness="8"
-                CornerRadius="10"
+                CornerRadius="8"
                 IsVisible="False"
                 Opacity="0.6">
 
@@ -91,427 +55,6 @@
                     Text="Drop file(s) or folder(s) here" />
 
             </Border>
-
-            <!-- Search Bar -->
-            <Border
-                Name="SearchBarBorder"
-                Grid.Row="0"
-                Grid.Column="0"
-                Classes="SearchBox">
-                <Border.Transitions>
-                    <Transitions>
-                        <BrushTransition Property="BorderBrush" Duration="0:0:0.2" />
-                    </Transitions>
-                </Border.Transitions>
-                <Grid
-                    Name="SearchBarGrid"
-                    VerticalAlignment="Top"
-                    ColumnDefinitions="Auto,*,Auto,Auto"
-                    RowDefinitions="Auto">
-                    <Grid.KeyBindings>
-                        <KeyBinding Command="{ReflectionBinding CommitSearchCommand}" Gesture="Ctrl+Enter" />
-                    </Grid.KeyBindings>
-                    <Grid.Styles>
-                        <Style Selector="ListBox">
-                            <Setter Property="Background" Value="Transparent" />
-                            <Setter Property="ItemsPanel">
-                                <ItemsPanelTemplate>
-                                    <WrapPanel />
-                                </ItemsPanelTemplate>
-                            </Setter>
-                        </Style>
-                        <Style Selector="ListBoxItem">
-                            <Setter Property="Transitions">
-                                <Transitions>
-                                    <DoubleTransition Property="Opacity" Duration="0:0:0.2" />
-                                </Transitions>
-                            </Setter>
-                            <Setter Property="Padding" Value="2 4 0 0" />
-                            <Setter Property="Margin" Value="2" />
-                            <Setter Property="Opacity" Value="0.5" />
-                            <Setter Property="MaxHeight" Value="30" />
-
-                            <Style Selector="^:pointerover">
-                                <Setter Property="Opacity" Value="1" />
-                            </Style>
-
-                            <Style Selector="^:pointerover /template/ ContentPresenter#PART_ContentPresenter, ^:selected /template/ ContentPresenter#PART_ContentPresenter">
-                                <Setter Property="Background" Value="Transparent" />
-                            </Style>
-                        </Style>
-                        <Style Selector="TextBox.Transparent">
-                            <Setter Property="BorderThickness" Value="0" />
-                            <Setter Property="Background" Value="Transparent" />
-
-                            <!-- pointerover -->
-                            <Style Selector="^:pointerover, ^:focus-within, ^:focus">
-                                <Style Selector="^ /template/ Border#PART_BorderElement">
-                                    <Setter Property="Background" Value="Transparent" />
-                                    <Setter Property="BorderThickness" Value="0" />
-                                </Style>
-                            </Style>
-                        </Style>
-                        <Style Selector="Button.Transparent">
-                            <Setter Property="Background" Value="Transparent" />
-                            <!-- <Style Selector="^:pointerover, ^:focus-within, ^:focus"> -->
-                            <!--     <Style Selector="^ /template/ ContentPresenter#PART_ContentPresenter"> -->
-                            <!--         <Setter Property="Background" Value="{StaticResource MyLightSecondary300}" /> -->
-                            <!--     </Style> -->
-                            <!-- </Style> -->
-                        </Style>
-                    </Grid.Styles>
-
-                    <Button
-                        Grid.Column="0"
-                        Margin="10 0 -2 0"
-                        Padding="0"
-                        Background="Transparent"
-                        Command="{ReflectionBinding CommitSearchCommand}">
-
-                        <avalonia:MaterialIcon
-                            Width="20"
-                            Height="20"
-                            HorizontalAlignment="Center"
-                            VerticalAlignment="Center"
-                            Foreground="{StaticResource MyLightSecondary500}"
-                            Kind="Magnify" />
-
-                    </Button>
-
-                    <ScrollViewer
-                        Grid.Column="1"
-                        HorizontalAlignment="Stretch"
-                        VerticalAlignment="Top"
-                        VerticalScrollBarVisibility="Visible"
-                        PointerPressed="SearchBarInputElement_OnPointerPressed">
-
-                        <!-- entered tags box -->
-                        <ListBox
-                            Name="TagsListBox"
-                            Margin="2"
-                            Padding="4"
-                            HorizontalAlignment="Left"
-                            VerticalAlignment="Center"
-                            ItemsSource="{Binding EnteredTags}"
-                            ScrollViewer.HorizontalScrollBarVisibility="Disabled">
-                            <ListBox.Styles>
-                                <Style Selector="Button.LogicalOperatorButton:pointerover /template/ ContentPresenter#PART_ContentPresenter">
-                                    <Setter Property="Foreground" Value="{StaticResource MyLightSecondary500}" />
-                                </Style>
-                            </ListBox.Styles>
-                            <ListBox.DataTemplates>
-                                <DataTemplate x:CompileBindings="False" DataType="models1:Tag">
-                                    <!-- <templatedControls:TagChip -->
-                                    <!-- Margin="0 2" -->
-                                    <!-- BorderThickness="1 1 1 2" -->
-                                    <!-- DeleteCommand="{Binding #UserControlRoot.DataContext.RemoveTagCommand, FallbackValue=null}" -->
-                                    <!-- DeleteCommandParameter="{Binding .}" -->
-                                    <!-- Text="{Binding Name}" /> -->
-                                    <Grid ColumnDefinitions="Auto,Auto, Auto" RowDefinitions="Auto">
-                                        <TextBlock
-                                            Grid.Column="0"
-                                            Classes="Transparent"
-                                            Margin="4 1"
-                                            VerticalAlignment="Center"
-                                            FontSize="18"
-                                            Foreground="{StaticResource MyLightSecondary500}"
-                                            Inlines="{Binding Inlines}"
-                                            IsTabStop="False"
-                                            Text="{Binding Name}" />
-
-                                        <Button
-                                            Grid.Column="1"
-                                            Classes="Transparent"
-                                            Width="14"
-                                            Height="14"
-                                            Margin="-4 2 0 2"
-                                            Padding="0"
-                                            VerticalAlignment="Top"
-                                            Command="{ReflectionBinding #UserControlRoot.DataContext.RemoveTagCommand, FallbackValue=null}"
-                                            CommandParameter="{Binding .}"
-                                            CornerRadius="100"
-                                            Opacity="{Binding $parent[ListBoxItem].Opacity, Converter={StaticResource DoubleRangeConverter}}">
-
-                                            <avalonia:MaterialIcon
-                                                Width="{Binding $parent.Width}"
-                                                Height="{Binding $parent.Height}"
-                                                HorizontalAlignment="Center"
-                                                VerticalAlignment="Center"
-                                                Foreground="{StaticResource MyLightSecondary500}"
-                                                Kind="Close" />
-
-                                        </Button>
-                                    </Grid>
-                                </DataTemplate>
-
-                                <DataTemplate x:CompileBindings="False" DataType="userControls:LogicalOperator">
-                                    <Button
-                                        Name="LogicalOperatorToggleButton"
-                                        Classes="LogicalOperatorButton"
-                                        Padding="1 0"
-                                        Background="Transparent"
-                                        Content="{Binding Op, Mode=TwoWay}"
-                                        FontSize="18"
-                                        Foreground="{StaticResource MyLightSecondary500}"
-                                        Click="LogicalOperatorToggleButton_OnClick" />
-
-                                </DataTemplate>
-
-                                <DataTemplate x:CompileBindings="False" DataType="models1:NameSpecialTag">
-                                    <templatedControls:SpecialTag
-                                        Classes="LargeSpecialTag"
-                                        Margin="0 -5 0 0"
-                                        BorderThickness="1 1 1 2"
-                                        ClipRectangleFill="{StaticResource MyLightPrimary200}"
-                                        DeleteCommand="{Binding #UserControlRoot.DataContext.RemoveTagCommand, FallbackValue=null}"
-                                        DeleteCommandParameter="{Binding .}"
-                                        SpecialTagName="Name"
-                                        Text="{Binding FileName}" />
-
-                                </DataTemplate>
-
-                                <DataTemplate x:CompileBindings="False" DataType="system:String">
-                                    <TextBox
-                                        Classes="Transparent"
-                                        Text="{Binding #UserControlRoot.DataContext.SearchText, FallbackValue=null}"
-                                        Watermark="Next tag..."
-                                        AttachedToLogicalTree="StyledElement_OnAttachedToLogicalTree"
-                                        GotFocus="InputElement_OnGotFocus" />
-
-                                </DataTemplate>
-                            </ListBox.DataTemplates>
-                        </ListBox>
-                    </ScrollViewer>
-
-                    <!-- Record button -->
-                    <ToggleButton
-                        Grid.Column="2"
-                        Classes="TransparentBackgroundWhenChecked"
-                        Padding="0 5"
-                        HorizontalAlignment="Right"
-                        VerticalAlignment="Center"
-                        Background="Transparent"
-                        Command="{ReflectionBinding RecordAudioCommand}"
-                        CommandParameter="{Binding $self.IsChecked}"
-                        Foreground="{StaticResource MyLightSecondary500}">
-
-                        <Panel MaxHeight="20">
-                            <avalonia:MaterialIcon Kind="Microphone">
-                                <avalonia:MaterialIcon.IsVisible>
-                                    <MultiBinding Converter="{x:Static BoolConverters.And}">
-                                        <Binding Path="!RecordAudioCommand.IsRunning" />
-                                        <Binding Path="!IsActive" />
-                                    </MultiBinding>
-                                </avalonia:MaterialIcon.IsVisible>
-                            </avalonia:MaterialIcon>
-
-                            <ProgressBar
-                                Width="10"
-                                MinWidth="10"
-                                MinHeight="{Binding $parent.Bounds.Height}"
-                                Foreground="{StaticResource MyLightSecondary500}"
-                                IsVisible="{Binding IsActive}"
-                                Maximum="{Binding MaxVoiceIntensity}"
-                                Minimum="{Binding MinVoiceIntensity}"
-                                Orientation="Vertical"
-                                Value="{Binding VoiceIntensity}" />
-
-                            <avaloniaProgressRing:ProgressRing
-                                Width="20"
-                                Height="20"
-                                Margin="0"
-                                HorizontalAlignment="Left"
-                                VerticalAlignment="Top"
-                                Foreground="{StaticResource MyLightSecondary500}"
-                                IsActive="{Binding RecordAudioCommand.IsRunning}" />
-
-                        </Panel>
-                    </ToggleButton>
-
-                    <Button
-                        Grid.Column="3"
-                        Padding="0 5"
-                        HorizontalAlignment="Right"
-                        VerticalAlignment="Center"
-                        Background="Transparent"
-                        Foreground="{StaticResource MyLightSecondary500}"
-                        Click="Button_OnClick">
-
-                        <avalonia:MaterialIcon Kind="MoreVert" />
-                    </Button>
-
-                    <!-- Popup - search helper -->
-                    <Popup
-                        Name="SearchHelperPopup"
-                        Grid.Column="0"
-                        Width="{Binding #SearchBarGrid.Bounds.Width}"
-                        IsLightDismissEnabled="True"
-                        IsOpen="False"
-                        PlacementGravity="Bottom"
-                        PlacementTarget="{Binding #SearchBarBorder}"
-                        WindowManagerAddShadowHint="True">
-
-                        <Border
-                            Margin="0 -1 0 0"
-                            Padding="10"
-                            Background="{StaticResource MyLightPrimary200}"
-                            BorderBrush="{StaticResource MyLightPrimary600}"
-                            BorderThickness="1"
-                            ClipToBounds="True"
-                            CornerRadius="4">
-
-                            <Grid ColumnDefinitions="*" RowDefinitions="Auto, *, Auto,*,Auto,*,*">
-                                <!-- Special tags -->
-                                <TextBlock
-                                    Grid.Row="0"
-                                    FontSize="12"
-                                    IsVisible="{Binding AreSpecialTagsVisible}"
-                                    Text="Special tags:" />
-
-                                <ListBox
-                                    Grid.Row="1"
-                                    IsVisible="{Binding AreSpecialTagsVisible}"
-                                    ItemsSource="{Binding AvailableSpacialTags}">
-                                    <ListBox.DataTemplates>
-                                        <DataTemplate DataType="system:String">
-                                            <Border
-                                                Margin="1"
-                                                Background="{StaticResource MyLightSecondary300}"
-                                                BorderBrush="{StaticResource MyLightSecondary500}"
-                                                BorderThickness="1"
-                                                ClipToBounds="True"
-                                                CornerRadius="4"
-                                                DoubleTapped="SpecialTagInputElement_OnDoubleTapped">
-
-                                                <TextBlock
-                                                    Margin="2 0"
-                                                    VerticalAlignment="Center"
-                                                    FontSize="18"
-                                                    IsTabStop="False"
-                                                    Text="{Binding .}" />
-
-                                            </Border>
-                                        </DataTemplate>
-                                    </ListBox.DataTemplates>
-                                </ListBox>
-
-                                <!-- Search results -->
-                                <TextBlock
-                                    Grid.Row="2"
-                                    FontSize="12"
-                                    Text="Search results:" />
-
-                                <ListBox
-                                    Name="SearchResultsListBox"
-                                    Grid.Row="3"
-                                    HorizontalAlignment="Left"
-                                    ItemsSource="{Binding SearchResults}"
-                                    SelectedItem="{Binding SelectedItemFromSearched}"
-                                    SelectionMode="Single">
-                                    <ListBox.DataTemplates>
-                                        <DataTemplate DataType="models1:Tag">
-                                            <Border
-                                                Margin="1"
-                                                HorizontalAlignment="Left"
-                                                VerticalAlignment="Center"
-                                                BorderBrush="#0097A7"
-                                                BorderThickness="1"
-                                                ClipToBounds="True"
-                                                CornerRadius="4"
-                                                DoubleTapped="InputElement_OnDoubleTapped">
-
-                                                <TextBlock
-                                                    Margin="2 0"
-                                                    VerticalAlignment="Center"
-                                                    FontSize="18"
-                                                    Inlines="{Binding Inlines}"
-                                                    IsTabStop="False"
-                                                    Text="{Binding Name}" />
-
-                                            </Border>
-                                        </DataTemplate>
-                                    </ListBox.DataTemplates>
-                                </ListBox>
-
-                                <!-- Popular tags -->
-                                <TextBlock
-                                    Grid.Row="4"
-                                    Margin="0 5 0 0"
-                                    FontSize="12"
-                                    Text="Popular tags:" />
-
-                                <ListBox
-                                    Name="PopularTagsListBox"
-                                    Grid.Row="5"
-                                    ItemsSource="{Binding PopularTags}"
-                                    SelectedItem="{Binding SelectedItemFromPopular}"
-                                    SelectionMode="Single">
-                                    <ListBox.DataTemplates>
-                                        <DataTemplate DataType="models1:Tag">
-                                            <Border
-                                                Margin="1"
-                                                HorizontalAlignment="Left"
-                                                VerticalAlignment="Center"
-                                                BorderBrush="#0097A7"
-                                                BorderThickness="1"
-                                                ClipToBounds="True"
-                                                CornerRadius="4"
-                                                DoubleTapped="InputElement_OnDoubleTapped">
-
-                                                <TextBlock
-                                                    Margin="2 0"
-                                                    VerticalAlignment="Center"
-                                                    FontSize="12"
-                                                    Inlines="{Binding Inlines}"
-                                                    IsTabStop="False"
-                                                    Text="{Binding Name}" />
-                                            </Border>
-                                        </DataTemplate>
-                                    </ListBox.DataTemplates>
-                                </ListBox>
-
-                                <StackPanel
-                                    Grid.Row="4"
-                                    Margin="0 10 0 0"
-                                    Orientation="Horizontal"
-                                    ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-                                    Spacing="5" />
-
-                            </Grid>
-                        </Border>
-                    </Popup>
-                </Grid>
-            </Border>
-
-            <!-- SearchResults -->
-            <ListBox
-                Name="SearchResultsDataGrid"
-                Grid.Row="1"
-                Background="Transparent"
-                Focusable="True"
-                FontSize="{DynamicResource AppContentFontSize}"
-                ItemsSource="{Binding Files}"
-                SelectionMode="Multiple">
-                <ListBox.DataTemplates>
-                    <DataTemplate x:CompileBindings="False" DataType="viewModels:TaggableItemViewModel">
-                        <Grid DragDrop.AllowDrop="True" ColumnDefinitions="*,Auto,75">
-                            <views:TaggableItemView FontSize="14" />
-
-                            <TextBlock
-                                Grid.Column="1"
-                                VerticalAlignment="Center"
-                                Text="{Binding DateCreated, StringFormat=\{0:yyyy/MM/dd hh:mm:ss\}}"
-                                TextAlignment="Left" />
-
-                            <TextBlock
-                                Grid.Column="2"
-                                VerticalAlignment="Center"
-                                Text="{Binding Size, Converter={StaticResource FileSizeToStringConverter}}"
-                                TextAlignment="Right" />
-                        </Grid>
-                    </DataTemplate>
-                </ListBox.DataTemplates>
-            </ListBox>
-        </Grid>
-    </Panel>
+        </Panel>
+    </DockPanel>
 </UserControl>

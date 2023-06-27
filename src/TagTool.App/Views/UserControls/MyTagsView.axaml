@@ -13,10 +13,6 @@
     d:DesignHeight="450"
     mc:Ignorable="d">
 
-    <Design.DataContext>
-        <userControls:MyTagsViewModel />
-    </Design.DataContext>
-
     <StackPanel HorizontalAlignment="Stretch" Orientation="Vertical">
         <StackPanel Margin="0 8 0 0" Orientation="Vertical">
             <Expander

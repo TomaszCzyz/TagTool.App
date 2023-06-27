@@ -6,7 +6,6 @@
     xmlns:vm="using:TagTool.App.Lite.ViewModels"
     xmlns:views="clr-namespace:TagTool.App.Core.Views;assembly=TagTool.App.Core"
     xmlns:viewModels="clr-namespace:TagTool.App.Core.ViewModels;assembly=TagTool.App.Core"
-    xmlns:converters="clr-namespace:TagTool.App.Core.Converters;assembly=TagTool.App.Core"
     xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
     x:Class="TagTool.App.Lite.Views.MainWindowView"
     x:CompileBindings="True"
@@ -25,10 +24,6 @@
     PointerMoved="InputElement_OnPointerMoved"
     PointerPressed="InputElement_OnPointerPressed"
     PointerReleased="InputElement_OnPointerReleased">
-
-    <Window.Resources>
-        <converters:FileSizeToStringConverter x:Key="FileSizeToStringConverter" />
-    </Window.Resources>
 
     <Design.DataContext>
         <vm:MainWindowViewModel />
