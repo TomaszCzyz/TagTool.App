@@ -32,8 +32,7 @@
         Padding="6"
         Background="#00FFFFFF"
         BorderBrush="Transparent"
-        BorderThickness="2"
-        DoubleTapped="DragDropInfoAreaBorder_OnDoubleTapped">
+        BorderThickness="2">
         <Grid
             Name="TopMostGrid"
             HorizontalAlignment="Left"

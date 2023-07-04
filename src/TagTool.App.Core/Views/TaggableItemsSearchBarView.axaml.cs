@@ -1,4 +1,5 @@
-﻿using Avalonia.Controls;
+﻿using System.Diagnostics;
+using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.LogicalTree;
@@ -10,7 +11,7 @@ namespace TagTool.App.Core.Views;
 public partial class TaggableItemsSearchBarView : UserControl
 {
     private AutoCompleteBox? _autoCompleteBox;
-    private TextBox _textBox = null!;
+    private TextBox? _textBox;
 
     private TaggableItemsSearchBarViewModel ViewModel => (TaggableItemsSearchBarViewModel)DataContext!;
 
@@ -27,7 +28,7 @@ public partial class TaggableItemsSearchBarView : UserControl
 
         _autoCompleteBox.AsyncPopulator = ViewModel.GetTagsAsync;
         _autoCompleteBox.ItemFilter = ViewModel.FilterAlreadyUsedTags;
-        _autoCompleteBox.AddHandler(KeyDownEvent, AutoCompleteBoxOnKeyDown, RoutingStrategies.Tunnel);
+        _autoCompleteBox.AddHandler(KeyDownEvent, AutoCompleteBoxOnKeyDown, RoutingStrategies.Tunnel | RoutingStrategies.Bubble);
     }
 
     private void AutoCompleteBox_OnLoaded(object? sender, RoutedEventArgs e)
@@ -52,9 +53,9 @@ public partial class TaggableItemsSearchBarView : UserControl
                 // workaround for clearing Text in AutoCompleteBox when IsTextCompletionEnabled is true
                 autoCompleteBox.FindDescendantOfType<TextBox>()!.Text = "";
                 break;
-            case Key.Left when _textBox.CaretIndex == 0 && ViewModel.QuerySegments.Count != 0:
-                TagsListBox.SelectedItem = ViewModel.QuerySegments.Last();
+            case Key.Left when _textBox?.CaretIndex == 0 && ViewModel.QuerySegments.Count != 0:
                 TagsListBox.Focus();
+                TagsListBox.Selection.SelectedItem = ViewModel.QuerySegments.Last();
                 break;
             default:
                 e.Handled = false;
@@ -64,22 +65,24 @@ public partial class TaggableItemsSearchBarView : UserControl
 
     private void TagsListBox_OnKeyDown(object? sender, KeyEventArgs e)
     {
-        if (TagsListBox.SelectedItem is null) return;
-
-        e.Handled = true;
-
         switch (e.Key)
         {
             case Key.Delete when ViewModel.QuerySegments.Count != 0:
+                if (TagsListBox.SelectedItem is null) return;
+
                 var selectedIndex = TagsListBox.SelectedIndex;
 
                 ViewModel.RemoveTagFromSearchQueryCommand.Execute(TagsListBox.SelectedItem);
 
-                TagsListBox.SelectedItem = selectedIndex == ViewModel.QuerySegments.Count
-                    ? ViewModel.QuerySegments.LastOrDefault()
-                    : ViewModel.QuerySegments[selectedIndex];
+                if (selectedIndex >= ViewModel.QuerySegments.Count)
+                {
+                    selectedIndex = ViewModel.QuerySegments.Count;
+                }
 
-                TagsListBox.Focus();
+                TagsListBox.Selection.Select(selectedIndex);
+                TagsListBox.ContainerFromIndex(selectedIndex)?.Focus(NavigationMethod.Directional);
+
+                e.Handled = true;
                 break;
             default:
                 e.Handled = false;
@@ -104,5 +107,19 @@ public partial class TaggableItemsSearchBarView : UserControl
             RoutingStrategies.Bubble);
     }
 
-    private void PopupFlyoutBase_OnClosing(object? sender, EventArgs eventArgs) => _textBox.Focus();
+    private void PopupFlyoutBase_OnClosing(object? sender, EventArgs eventArgs) => _textBox?.Focus();
+
+    private void InputElement_OnGotFocus(object? sender, GotFocusEventArgs e)
+    {
+        
+        // Debug.WriteLine(sender);
+        // if (TagsListBox.Selection.SelectedItem is not null)
+        // {
+        //     TagsListBox.ContainerFromItem(TagsListBox.Selection.SelectedItem)?.Focus();
+        // }
+        // // if (TagsListBox.SelectedItem is null)
+        // // {
+        //     _textBox?.Focus();
+        // // }
+    }
 }
