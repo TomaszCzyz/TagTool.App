@@ -10,7 +10,7 @@ namespace TagTool.App.Core.Views;
 public partial class TaggableItemsSearchBarView : UserControl
 {
     private AutoCompleteBox? _autoCompleteBox;
-    private TextBox _textBox = null!;
+    private TextBox? _textBox;
 
     private TaggableItemsSearchBarViewModel ViewModel => (TaggableItemsSearchBarViewModel)DataContext!;
 
@@ -52,7 +52,7 @@ public partial class TaggableItemsSearchBarView : UserControl
                 // workaround for clearing Text in AutoCompleteBox when IsTextCompletionEnabled is true
                 autoCompleteBox.FindDescendantOfType<TextBox>()!.Text = "";
                 break;
-            case Key.Left when _textBox.CaretIndex == 0 && ViewModel.QuerySegments.Count != 0:
+            case Key.Left when _textBox?.CaretIndex == 0 && ViewModel.QuerySegments.Count != 0:
                 TagsListBox.SelectedItem = ViewModel.QuerySegments.Last();
                 TagsListBox.Focus();
                 break;
@@ -64,13 +64,11 @@ public partial class TaggableItemsSearchBarView : UserControl
 
     private void TagsListBox_OnKeyDown(object? sender, KeyEventArgs e)
     {
-        if (TagsListBox.SelectedItem is null) return;
-
-        e.Handled = true;
-
         switch (e.Key)
         {
             case Key.Delete when ViewModel.QuerySegments.Count != 0:
+                if (TagsListBox.SelectedItem is null) return;
+
                 var selectedIndex = TagsListBox.SelectedIndex;
 
                 ViewModel.RemoveTagFromSearchQueryCommand.Execute(TagsListBox.SelectedItem);
@@ -80,6 +78,7 @@ public partial class TaggableItemsSearchBarView : UserControl
                     : ViewModel.QuerySegments[selectedIndex];
 
                 TagsListBox.Focus();
+                e.Handled = true;
                 break;
             default:
                 e.Handled = false;
@@ -104,5 +103,7 @@ public partial class TaggableItemsSearchBarView : UserControl
             RoutingStrategies.Bubble);
     }
 
-    private void PopupFlyoutBase_OnClosing(object? sender, EventArgs eventArgs) => _textBox.Focus();
+    private void PopupFlyoutBase_OnClosing(object? sender, EventArgs eventArgs) => _textBox?.Focus();
+
+    private void InputElement_OnGotFocus(object? sender, GotFocusEventArgs e) => _textBox?.Focus();
 }

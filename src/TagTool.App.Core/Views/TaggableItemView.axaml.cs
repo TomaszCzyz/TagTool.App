@@ -21,6 +21,9 @@ public partial class TaggableItemView : UserControl
         AddHandler(DragDrop.DragEnterEvent, (_, _) => DragDropInfoAreaBorder.BorderBrush = Brushes.Gray);
         AddHandler(DragDrop.DragLeaveEvent, (_, _) => DragDropInfoAreaBorder.BorderBrush = Brushes.Transparent);
         AddHandler(DragDrop.DropEvent, (_, _) => DragDropInfoAreaBorder.BorderBrush = Brushes.Transparent);
+
+        AddHandler(DoubleTappedEvent, (_, _) => ViewModel.ExecuteLinkedActionCommand.Execute(null));
+        // todo: I cannot add AddHandler(OnKeyDown,...), because routed event does not go inside ListBoxItem... why? 
     }
 
     private void DragOver(object? sender, DragEventArgs e)
@@ -46,10 +49,5 @@ public partial class TaggableItemView : UserControl
         var textBlock = menuItem.FindLogicalAncestorOfType<TextBlock>()!;
 
         ViewModel.UntagItemCommand.Execute(textBlock.DataContext);
-    }
-
-    private void DragDropInfoAreaBorder_OnDoubleTapped(object? sender, TappedEventArgs e)
-    {
-        ViewModel.ExecuteLinkedActionCommand.Execute(null);
     }
 }

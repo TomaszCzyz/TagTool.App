@@ -4,6 +4,7 @@ using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.VisualTree;
+using TagTool.App.Core.ViewModels;
 
 namespace TagTool.App.Lite.Views;
 
@@ -15,6 +16,39 @@ public partial class MainWindowView : Window
         ClientSize = new Size(850, 600);
 
         AddHandler(KeyDownEvent, Window_OnKeyDown, handledEventsToo: true);
+        SearchBarView.AddHandler(
+            KeyDownEvent,
+            (_, args) =>
+            {
+                if (args.Key == Key.Down && TaggableItemsListBox.ItemCount != 0)
+                {
+                    TaggableItemsListBox.ContainerFromIndex(0)?.Focus();
+                    TaggableItemsListBox.Selection.Select(0);
+                }
+            },
+            handledEventsToo: true);
+
+        TaggableItemsListBox.AddHandler(
+            KeyDownEvent,
+            (sender, args) =>
+            {
+                if (args.Key != Key.Enter) return;
+                if (sender is ListBox { SelectedItem: TaggableItemViewModel vm })
+                {
+                    vm.ExecuteLinkedActionCommand.Execute(null);
+                }
+            },
+            handledEventsToo: true);
+        
+        TaggableItemsListBox.AddHandler(
+            KeyDownEvent,
+            (_, args) =>
+            {
+                if (args.Key == Key.Up)
+                {
+                    SearchBarView.Focus();
+                };
+            });
     }
 
     private void Window_OnKeyDown(object? sender, KeyEventArgs e)

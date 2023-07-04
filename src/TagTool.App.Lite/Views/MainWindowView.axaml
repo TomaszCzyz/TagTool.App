@@ -31,9 +31,11 @@
 
     <DockPanel>
         <Grid DockPanel.Dock="Top" ColumnDefinitions="*, Auto">
+            <!-- Search Bar -->
             <views:TaggableItemsSearchBarView
                 Name="SearchBarView"
                 DataContext="{Binding SearchBarViewModel, Mode=TwoWay}"
+                Focusable="True"
                 Loaded="TagsSearchBar_OnLoaded" />
 
             <Grid Grid.Column="1" RowDefinitions="*, *">
@@ -55,25 +57,10 @@
 
         </Grid>
 
-        <ListBox ItemsSource="{Binding SearchResults}">
+        <ListBox Name="TaggableItemsListBox" ItemsSource="{Binding SearchResults}">
             <ListBox.ItemTemplate>
                 <DataTemplate x:DataType="viewModels:TaggableItemViewModel">
-                    <Grid ColumnDefinitions="*,Auto,75">
-                        <views:TaggableItemView FontSize="14" />
-
-                        <!-- <TextBlock -->
-                        <!--     Grid.Column="1" -->
-                        <!--     VerticalAlignment="Center" -->
-                        <!--     Text="{Binding DateCreated, StringFormat=\{0:yyyy/MM/dd hh:mm:ss\}}" -->
-                        <!--     TextAlignment="Left" /> -->
-                        <!-- -->
-                        <!-- <TextBlock -->
-                        <!--     Grid.Column="2" -->
-                        <!--     VerticalAlignment="Center" -->
-                        <!--     Text="{Binding Size, Converter={StaticResource FileSizeToStringConverter}}" -->
-                        <!--     TextAlignment="Right" /> -->
-
-                    </Grid>
+                    <views:TaggableItemView FontSize="14" />
                 </DataTemplate>
             </ListBox.ItemTemplate>
         </ListBox>
