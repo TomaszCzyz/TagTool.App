@@ -200,7 +200,12 @@ public sealed partial class TaggableItemsSearchBarViewModel : ViewModelBase, IDi
 
                     var reply = _tagService.DoesTagExists(new DoesTagExistsRequest { Tag = Any.Pack(new NormalTag { Name = tagName }) });
 
-                    return reply.Exists ? tag : null;
+                    return reply.ResultCase switch
+                    {
+                        DoesTagExistsReply.ResultOneofCase.None => null,
+                        DoesTagExistsReply.ResultOneofCase.Tag => reply.Tag.Unpack<NormalTag>(),
+                        _ => throw new UnreachableException()
+                    };
                 })
                 .Where(tag => tag is not null && !QuerySegments.Select(segment => segment.Tag.DisplayText).Contains(tag.Name))
                 .Select(tag => TagMapper.TagMapper.MapToDomain(Any.Pack(tag)))

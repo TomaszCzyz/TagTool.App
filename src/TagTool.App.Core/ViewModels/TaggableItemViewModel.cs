@@ -2,9 +2,11 @@
 using System.Diagnostics.CodeAnalysis;
 using Avalonia.Controls;
 using Avalonia.Controls.Documents;
+using Avalonia.Controls.Notifications;
 using Avalonia.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using CommunityToolkit.Mvvm.Messaging;
 using Google.Protobuf.WellKnownTypes;
 using TagTool.App.Core.Extensions;
 using TagTool.App.Core.Models;
@@ -77,6 +79,24 @@ public partial class TaggableItemViewModel : ViewModelBase
         if (AreTagsVisible)
         {
             Dispatcher.UIThread.InvokeAsync(UpdateTaggableItem, DispatcherPriority.Background);
+        }
+    }
+
+    [RelayCommand]
+    private async Task ExecuteLinkedAction()
+    {
+        var request = TaggableItem switch
+        {
+            TaggableFile file => new ExecuteLinkedActionRequest { File = new FileDto { Path = file.Path } },
+            TaggableFolder folder => new ExecuteLinkedActionRequest { Folder = new FolderDto { Path = folder.Path } },
+            _ => throw new UnreachableException()
+        };
+
+        var reply = await _tagService.ExecuteLinkedActionAsync(request);
+
+        if (reply.ResultCase == ExecuteLinkedActionReply.ResultOneofCase.Error)
+        {
+            WeakReferenceMessenger.Default.Send(new Notification("Error occured", "Unable to execute action", NotificationType.Error));
         }
     }
 

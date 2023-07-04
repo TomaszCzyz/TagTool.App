@@ -47,4 +47,9 @@ public partial class TaggableItemView : UserControl
 
         ViewModel.UntagItemCommand.Execute(textBlock.DataContext);
     }
+
+    private void DragDropInfoAreaBorder_OnDoubleTapped(object? sender, TappedEventArgs e)
+    {
+        ViewModel.ExecuteLinkedActionCommand.Execute(null);
+    }
 }

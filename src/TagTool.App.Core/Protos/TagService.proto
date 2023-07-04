@@ -16,6 +16,9 @@ service TagService {
   // Updates a tag
   //  rpc UpdateTag(UpdateTagRequest) returns (UpdateTagReply);
 
+  // Inserts new or updates existing tag association, which describes additional relation between tags.
+  rpc UpsertTagsAssociation (UpsertTagsAssociationRequest) returns (UpsertTagsAssociationReply);
+
   // Tags an item.
   rpc TagItem(TagItemRequest) returns (TagItemReply);
   // Untags an item if one exists.
@@ -43,6 +46,8 @@ service TagService {
   // Sets convention of tag names. The convention is applied when tag is created 
   // and tag name is stored in given format.
   rpc SetTagNamingConvention(SetTagNamingConventionRequest) returns (SetTagNamingConventionReply);
+
+  rpc ExecuteLinkedAction(ExecuteLinkedActionRequest) returns (ExecuteLinkedActionReply);
 }
 
 // The request to create a new tag.
@@ -78,6 +83,25 @@ message DeleteTagReply {
     // The Error message in case of a failure.
     string errorMessage = 2;
   };
+}
+
+message UpsertTagsAssociationRequest {
+  google.protobuf.Any firstTag = 1;
+  google.protobuf.Any secondTag = 2;
+  AssociationType associationType = 3;
+
+  enum AssociationType {
+    None = 0;
+    Synonyms = 1;
+    IsSubtype = 2;
+  }
+}
+
+message UpsertTagsAssociationReply {
+  oneof result {
+    string successMessage = 1;
+    Error error = 2;
+  }
 }
 
 // The request to tag a given item.
@@ -192,8 +216,10 @@ message DoesTagExistsRequest {
 
 // The reply indicating if given tag exists.
 message DoesTagExistsReply {
-  // The Tag's name.
-  bool exists = 1;
+  oneof result {
+    // The tag.
+    google.protobuf.Any tag = 1;
+  }
 }
 
 // The request to find tags, which match or partially match 'searchText'.
@@ -278,6 +304,19 @@ message SetTagNamingConventionRequest {
 message SetTagNamingConventionReply {
   // The result indicating opening was successful.
   // None if operation was successful. 
+  oneof result {
+    Error error = 1;
+  }
+}
+
+message ExecuteLinkedActionRequest {
+  oneof item {
+    FileDto file = 1;
+    FolderDto folder = 2;
+  };
+}
+
+message ExecuteLinkedActionReply {
   oneof result {
     Error error = 1;
   }
