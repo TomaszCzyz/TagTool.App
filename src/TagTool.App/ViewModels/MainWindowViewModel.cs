@@ -138,7 +138,7 @@ public partial class MainWindowViewModel : ViewModelBase, IRecipient<NewNotifica
     private static AutoCompleteBox?[] FindAllVisibleSearchBars(Window rootWindow)
         => rootWindow
             .GetVisualDescendants()
-            .Where(logical => logical.GetType() == typeof(SimpleTagsBar) && logical.IsVisible)
+            .Where(logical => logical.GetType() == typeof(TaggableItemsSearchView) && logical.IsVisible)
             .Select(visual => visual.FindDescendantOfType<AutoCompleteBox>())
             .ToArray();
 

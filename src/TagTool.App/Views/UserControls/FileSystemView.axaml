@@ -17,7 +17,6 @@
     mc:Ignorable="d">
 
     <UserControl.Resources>
-        <converters:FileSizeToStringConverter x:Key="FileSizeToStringConverter" />
         <converters:BoolToBrushConverter x:Key="BoolToBrushConverter" />
     </UserControl.Resources>
 

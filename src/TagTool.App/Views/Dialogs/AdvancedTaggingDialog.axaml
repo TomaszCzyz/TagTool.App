@@ -306,10 +306,6 @@
                 <StackPanel>
                     <TextBlock Text="New Tags:" />
 
-                    <userControls:SimpleTagsBar
-                        Name="TagsToApplySimpleTagsBar"
-                        MaxHeight="150"
-                        VerticalAlignment="Top" />
                 </StackPanel>
             </Border>
         </Grid>
