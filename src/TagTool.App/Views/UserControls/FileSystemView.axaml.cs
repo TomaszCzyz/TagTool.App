@@ -1,11 +1,9 @@
-﻿using System.Globalization;
-using Avalonia;
+﻿using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.LogicalTree;
 using Avalonia.VisualTree;
-using TagTool.App.Core.Extensions;
 using TagTool.App.ViewModels.UserControls;
 
 namespace TagTool.App.Views.UserControls;
@@ -14,12 +12,12 @@ public partial class FileSystemView : UserControl
 {
     private FileSystemViewModel ViewModel => (FileSystemViewModel)DataContext!;
 
-    public FileSystemView() 
+    public FileSystemView()
     {
         InitializeComponent();
 
         // todo: split this logic to two handlers (one for quick search scenario, one for navigation scenario)
-        FilesAndFoldersListBox.AddHandler(KeyDownEvent, DataGrid_OnKeyDown, handledEventsToo: true);
+        FolderContentListBox.AddHandler(KeyDownEvent, FolderContent_OnKeyDown, handledEventsToo: true);
     }
 
     private void AddressTextBox_OnLostFocus(object? sender, RoutedEventArgs e)
@@ -40,58 +38,24 @@ public partial class FileSystemView : UserControl
 
     private void DataGrid_OnSelectionChanged(object? sender, SelectionChangedEventArgs e)
     {
-        TextBlockSelectedItems.Text = $"{FilesAndFoldersListBox.SelectedItems?.Count ?? 0} selected |";
+        TextBlockSelectedItems.Text = $"{FolderContentListBox.SelectedItems?.Count ?? 0} selected |";
     }
 
-    private void DataGrid_OnKeyDown(object? sender, KeyEventArgs e)
+    private void FolderContent_OnKeyDown(object? sender, KeyEventArgs e)
     {
-        if (e.Key.IsDigitOrLetter())
-        {
-            ViewModel.QuickSearchText += e.Key.ToString().ToLower(CultureInfo.CurrentCulture);
-            e.Handled = true;
-
-            return;
-        }
-
         switch (e.Key)
         {
-            case Key.Escape when !string.IsNullOrEmpty(ViewModel.QuickSearchText):
-                ViewModel.QuickSearchText = "";
-                break;
-            case Key.Down when !string.IsNullOrEmpty(ViewModel.QuickSearchText):
-                if (ViewModel.GoToNextMatchedItemCommand.CanExecute(null))
-                {
-                    ViewModel.GoToNextMatchedItemCommand.Execute(null);
-                }
-
-                break;
-            case Key.Up when !string.IsNullOrEmpty(ViewModel.QuickSearchText):
-                if (ViewModel.GoToPreviousMatchedItemCommand.CanExecute(null))
-                {
-                    ViewModel.GoToPreviousMatchedItemCommand.Execute(null);
-                }
-
-                break;
-            case Key.Back when string.IsNullOrEmpty(ViewModel.QuickSearchText):
+            case Key.Back when string.IsNullOrEmpty(FuzzySearchTextBlock.Text):
                 ViewModel.NavigateUpCommand.Execute(null);
-                FilesAndFoldersListBox.FindLogicalDescendantOfType<ListBoxItem>()?.Focus();
-                break;
-            case Key.Back:
-                ViewModel.QuickSearchText = ViewModel.QuickSearchText[..^1];
+                FolderContentListBox.FindLogicalDescendantOfType<ListBoxItem>()?.Focus();
+                e.Handled = true;
                 break;
             case Key.Enter:
                 ViewModel.NavigateCommand.Execute(null);
-                FilesAndFoldersListBox.FindLogicalDescendantOfType<ListBoxItem>()?.Focus();
+                FolderContentListBox.FindLogicalDescendantOfType<ListBoxItem>()?.Focus();
+                e.Handled = true;
                 break;
         }
-
-        e.Handled = true;
-    }
-
-    private void DataGrid_OnLostFocus(object? sender, RoutedEventArgs e)
-    {
-        if (FilesAndFoldersListBox.IsKeyboardFocusWithin) return;
-        ViewModel.QuickSearchText = "";
     }
 
     private void Visual_OnAttachedToVisualTree(object? sender, VisualTreeAttachmentEventArgs e)
@@ -107,7 +71,7 @@ public partial class FileSystemView : UserControl
             ViewModel.NavigateCommand.Execute(null);
             args.Handled = true;
 
-            FilesAndFoldersListBox.FindLogicalDescendantOfType<ListBoxItem>()?.Focus();
+            FolderContentListBox.FindLogicalDescendantOfType<ListBoxItem>()?.Focus();
         }
     }
 }

@@ -2,9 +2,6 @@
 using System.ComponentModel;
 using System.Diagnostics;
 using Avalonia.Controls;
-using Avalonia.Controls.Documents;
-using Avalonia.Media;
-using Avalonia.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Dock.Model.Mvvm.Controls;
@@ -25,7 +22,6 @@ public partial class FileSystemViewModel : Document
     private readonly FileActionsService.FileActionsServiceClient _fileActionsService;
     private readonly Stack<DirectoryInfo> _navigationHistoryBack = new();
     private readonly Stack<DirectoryInfo> _navigationHistoryForward = new();
-    private readonly List<TaggableItemViewModel> _highlightedItems = new();
 
     [ObservableProperty]
     private ObservableCollection<TaggableItemViewModel> _items = new();
@@ -47,28 +43,11 @@ public partial class FileSystemViewModel : Document
     private TaggableItemViewModel? _selectedItem;
 
     [ObservableProperty]
-    private bool _isQuickSearching;
-
-    [ObservableProperty]
-    private string _quickSearchText = "";
-
-    [ObservableProperty]
     private bool _areTagsVisible = true;
-
-    [ObservableProperty]
-    private bool _hasQuickSearchResults;
 
     public bool CanNavigateBack => _navigationHistoryBack.Count > 0;
 
     public bool CanNavigateForward => _navigationHistoryForward.Count > 0;
-
-
-    /// <summary>
-    ///     Because DataGrid handles KeyDownEvent first, it is inconvenient to use SelectedItem property,
-    ///     as it points to the next item, when quick search navigation is performed.
-    ///     Also, the SelectedItem is not updated if event occurs on the last item.
-    /// </summary>
-    private TaggableItemViewModel? _quickSearchSelectedItem;
 
     /// <summary>
     ///     ctor for XAML previewer
@@ -97,116 +76,12 @@ public partial class FileSystemViewModel : Document
 
     private void Initialize() => CurrentFolder = new DirectoryInfo(@"C:\Users\tczyz\MyFiles");
 
-    partial void OnQuickSearchTextChanged(string value)
-    {
-        if (value == "")
-        {
-            _highlightedItems.Clear();
-        }
-
-        // todo: add cancellation support in a case of large folders
-        Dispatcher.UIThread.Post(() => OnQuickSearchTextChangedInner(value));
-    }
-
-    /// <summary>
-    ///     Highlights substring that matches <paramref name="value" />
-    /// </summary>
-    /// <remarks>Invoke on UI thread</remarks>
-    /// <param name="value">string we search for</param>
-    private void OnQuickSearchTextChangedInner(string value)
-    {
-        foreach (var entry in Items)
-        {
-            var index = entry.DisplayName.IndexOf(value, StringComparison.CurrentCultureIgnoreCase);
-
-            if (index < 0)
-            {
-                if (_highlightedItems.Contains(entry))
-                {
-                    entry.Inlines.Clear();
-                    entry.Inlines.Add(new Run { Text = entry.DisplayName });
-
-                    _highlightedItems.Remove(entry);
-                }
-
-                continue;
-            }
-
-            entry.Inlines.Clear();
-            entry.Inlines.AddRange(CreateHighlightedText(index, index + value.Length, entry.DisplayName));
-
-            if (_highlightedItems.Contains(entry)) continue;
-            _highlightedItems.Add(entry);
-        }
-
-        UpdateSelectedItem();
-    }
-
-    private static IEnumerable<Run> CreateHighlightedText(int begin, int end, string name)
-    {
-        var solidColorBrush = new SolidColorBrush(Color.FromRgb(177, 127, 55), 0.6);
-
-        yield return new Run { Text = name[..begin] };
-        yield return new Run { Text = name[begin..end], FontWeight = FontWeight.Bold, Background = solidColorBrush };
-        yield return new Run { Text = name[end..] };
-    }
-
-    private void UpdateSelectedItem()
-    {
-        HasQuickSearchResults = _highlightedItems.Count != 0;
-
-        if (!HasQuickSearchResults) return;
-
-        FocusNextOrCurrentHighlightItem();
-
-        void FocusNextOrCurrentHighlightItem()
-        {
-            var selectedItemIndex = SelectedItem is not null ? Items.IndexOf(SelectedItem) : 0;
-
-            foreach (var highlightedItem in _highlightedItems.Where(item => Items.IndexOf(item) >= selectedItemIndex))
-            {
-                _quickSearchSelectedItem = SelectedItem = highlightedItem;
-                return;
-            }
-
-            _quickSearchSelectedItem = SelectedItem = _highlightedItems.FirstOrDefault();
-        }
-    }
-
     partial void OnAreTagsVisibleChanged(bool value)
     {
         foreach (var taggableItemViewModel in Items)
         {
             taggableItemViewModel.AreTagsVisible = value;
         }
-    }
-
-    [RelayCommand(CanExecute = nameof(HasQuickSearchResults))]
-    private void GoToNextMatchedItem()
-    {
-        var currentIndex = Items.IndexOf(_quickSearchSelectedItem!);
-
-        foreach (var highlightedItem in _highlightedItems.Where(item => Items.IndexOf(item) > currentIndex))
-        {
-            _quickSearchSelectedItem = SelectedItem = highlightedItem;
-            return;
-        }
-
-        _quickSearchSelectedItem = SelectedItem = _highlightedItems.FirstOrDefault();
-    }
-
-    [RelayCommand(CanExecute = nameof(HasQuickSearchResults))]
-    private void GoToPreviousMatchedItem()
-    {
-        var currentIndex = Items.IndexOf(_quickSearchSelectedItem!);
-
-        foreach (var highlightedItem in Enumerable.Reverse(_highlightedItems).Where(item => Items.IndexOf(item) < currentIndex))
-        {
-            _quickSearchSelectedItem = SelectedItem = highlightedItem;
-            return;
-        }
-
-        _quickSearchSelectedItem = SelectedItem = _highlightedItems.LastOrDefault();
     }
 
     [RelayCommand]
@@ -323,7 +198,6 @@ public partial class FileSystemViewModel : Document
 
     partial void OnCurrentFolderChanged(DirectoryInfo value)
     {
-        QuickSearchText = "";
         AddressTextBox = CurrentFolder.FullName;
 
         var folders = value

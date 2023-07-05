@@ -29,9 +29,6 @@ public partial class TaggableItemViewModel : ViewModelBase
     private TaggableItem _taggableItem;
 
     [ObservableProperty]
-    private InlineCollection _inlines = new();
-
-    [ObservableProperty]
     private bool _areTagsVisible = true;
 
     public required TaggableItem TaggableItem

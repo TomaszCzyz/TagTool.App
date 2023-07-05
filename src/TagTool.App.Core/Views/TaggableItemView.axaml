@@ -58,7 +58,6 @@
                 HorizontalAlignment="Stretch"
                 VerticalAlignment="Center"
                 Foreground="Black"
-                Inlines="{Binding Inlines}"
                 Text="{Binding DisplayName}">
                 <TextBlock.ContextFlyout>
                     <MenuFlyout>

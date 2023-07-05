@@ -5,7 +5,6 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:userControls="clr-namespace:TagTool.App.ViewModels.UserControls"
-    xmlns:converters="clr-namespace:TagTool.App.Core.Converters;assembly=TagTool.App.Core"
     xmlns:views="clr-namespace:TagTool.App.Core.Views;assembly=TagTool.App.Core"
     xmlns:viewModels="clr-namespace:TagTool.App.Core.ViewModels;assembly=TagTool.App.Core"
     x:Class="TagTool.App.Views.UserControls.FileSystemView"
@@ -15,10 +14,6 @@
     d:DesignWidth="800"
     d:DesignHeight="700"
     mc:Ignorable="d">
-
-    <UserControl.Resources>
-        <converters:BoolToBrushConverter x:Key="BoolToBrushConverter" />
-    </UserControl.Resources>
 
     <UserControl.Styles>
         <Style Selector="Button.Transparent">
@@ -198,16 +193,16 @@
             </Border>
         </Grid>
 
-        <!-- File system data grid -->
+        <!-- Folder content grid -->
         <ListBox
-            Name="FilesAndFoldersListBox"
+            Name="FolderContentListBox"
             Grid.Row="1"
             Focusable="True"
+            IsTextSearchEnabled="True"
             FontSize="{DynamicResource AppContentFontSize}"
             ItemsSource="{Binding Items}"
             SelectedItem="{Binding SelectedItem}"
             SelectionMode="Multiple"
-            LostFocus="DataGrid_OnLostFocus"
             SelectionChanged="DataGrid_OnSelectionChanged">
             <ListBox.Styles>
                 <Style Selector="ListBoxItem">
@@ -223,13 +218,12 @@
 
         <!-- QuickSearch text field -->
         <Border
-            Name="QuickSearchBorder"
             Grid.Row="1"
             HorizontalAlignment="Left"
             VerticalAlignment="Top"
             Background="Orange"
             CornerRadius="4"
-            IsVisible="{Binding QuickSearchText, Converter={x:Static StringConverters.IsNotNullOrEmpty}}"
+            IsVisible="{Binding #FuzzySearchTextBlock.Text, Converter={x:Static StringConverters.IsNotNullOrEmpty}}"
             Opacity="0.7">
 
             <DockPanel>
@@ -239,10 +233,8 @@
                     Kind="Search" />
 
                 <TextBlock
-                    Name="QuickSearchTextBlock"
-                    Padding="4"
-                    Foreground="{Binding HasQuickSearchResults, Mode=OneWay, Converter={StaticResource BoolToBrushConverter}}"
-                    Text="{Binding QuickSearchText, Mode=TwoWay}" />
+                    Name="FuzzySearchTextBlock"
+                    Padding="4" />
 
             </DockPanel>
         </Border>
