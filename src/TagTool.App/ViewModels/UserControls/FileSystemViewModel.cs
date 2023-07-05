@@ -169,7 +169,7 @@ public partial class FileSystemViewModel : Document
     {
         if (!file.Exists) return;
 
-        var _ = _fileActionsService.OpenFile(new OpenFileRequest { FullFileName = file.FullName });
+        _ = _fileActionsService.OpenFile(new OpenFileRequest { FullFileName = file.FullName });
 
         if (file.Directory is not null && file.Directory.FullName != CurrentFolder.FullName)
         {

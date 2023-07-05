@@ -36,7 +36,7 @@ public partial class FileSystemView : UserControl
         AddressTextBox?.SelectAll();
     }
 
-    private void DataGrid_OnSelectionChanged(object? sender, SelectionChangedEventArgs e)
+    private void FolderContent_OnSelectionChanged(object? sender, SelectionChangedEventArgs e)
     {
         TextBlockSelectedItems.Text = $"{FolderContentListBox.SelectedItems?.Count ?? 0} selected |";
     }

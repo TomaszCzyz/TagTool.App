@@ -203,7 +203,7 @@
             ItemsSource="{Binding Items}"
             SelectedItem="{Binding SelectedItem}"
             SelectionMode="Multiple"
-            SelectionChanged="DataGrid_OnSelectionChanged">
+            SelectionChanged="FolderContent_OnSelectionChanged">
             <ListBox.Styles>
                 <Style Selector="ListBoxItem">
                     <Setter Property="Padding" Value="2" />

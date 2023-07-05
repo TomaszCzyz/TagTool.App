@@ -22,7 +22,8 @@ public partial class TaggableItemView : UserControl
         AddHandler(DragDrop.DragLeaveEvent, (_, _) => DragDropInfoAreaBorder.BorderBrush = Brushes.Transparent);
         AddHandler(DragDrop.DropEvent, (_, _) => DragDropInfoAreaBorder.BorderBrush = Brushes.Transparent);
 
-        AddHandler(DoubleTappedEvent, (_, _) => ViewModel.ExecuteLinkedActionCommand.Execute(null));
+        // Tunnel strategy allows elements higher in hierarchy to handle this event differently, e.g. FileSystemView -> navigate to folder
+        AddHandler(DoubleTappedEvent, (_, _) => ViewModel.ExecuteLinkedActionCommand.Execute(null), RoutingStrategies.Tunnel);
         // todo: I cannot add AddHandler(OnKeyDown,...), because routed event does not go inside ListBoxItem... why? 
     }
 
