@@ -10,6 +10,7 @@
     xmlns:converters="clr-namespace:TagTool.App.Core.Converters;assembly=TagTool.App.Core"
     xmlns:models="clr-namespace:TagTool.App.Models"
     x:Class="TagTool.App.Views.Dialogs.AdvancedTaggingDialog"
+    x:DataType="dialogs:AdvancedTaggingDialogViewModel"
     d:DesignWidth="1600"
     d:DesignHeight="900"
     mc:Ignorable="d"
@@ -79,10 +80,10 @@
                     <Button Click="Button_OnClick">
                         <avalonia:MaterialIcon Kind="Add" />
                     </Button>
-                    <Button Command="{Binding RemoveItemCommand}" IsEnabled="{Binding SelectedItems.Count}">
+                    <Button Command="{ReflectionBinding RemoveItemCommand}" IsEnabled="{ReflectionBinding SelectedItems.Count}">
                         <avalonia:MaterialIcon Kind="Minus" />
                     </Button>
-                    <Button Command="{Binding CancelAllTagsLoadingCommand}">
+                    <Button Command="{ReflectionBinding CancelAllTagsLoadingCommand}">
                         <avalonia:MaterialIcon Kind="UnfoldLessHorizontal" />
                     </Button>
                     <Button>
@@ -91,7 +92,7 @@
                     <ToggleButton Name="PreviewToggleButton">
                         <avalonia:MaterialIcon Kind="RemoveRedEye" />
                     </ToggleButton>
-                    <TextBlock Text="{Binding TagsLoadingCounter}" />
+                    <TextBlock Text="{ReflectionBinding TagsLoadingCounter}" />
                 </StackPanel>
 
                 <TreeView

@@ -9,7 +9,6 @@
     xmlns:dataTemplates="clr-namespace:TagTool.App.Core.DataTemplates"
     xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
     x:Class="TagTool.App.Core.Views.TaggableItemView"
-    x:CompileBindings="True"
     x:DataType="viewModels:TaggableItemViewModel"
     Name="UserControlRoot"
     d:DesignWidth="450"

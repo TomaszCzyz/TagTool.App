@@ -7,6 +7,7 @@
     xmlns:views="clr-namespace:TagTool.App.Core.Views;assembly=TagTool.App.Core"
     xmlns:viewModels="clr-namespace:TagTool.App.Core.ViewModels;assembly=TagTool.App.Core"
     x:Class="TagTool.App.Views.UserControls.ItemsTaggingTabView"
+    x:DataType="userControls:ItemsTaggingTabViewModel"
     d:DesignWidth="800"
     d:DesignHeight="450"
     mc:Ignorable="d">

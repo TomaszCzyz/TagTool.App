@@ -5,6 +5,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:userControls="clr-namespace:TagTool.App.ViewModels.UserControls"
     x:Class="TagTool.App.Views.UserControls.FilePreviewer"
+    x:DataType="userControls:FilePreviewerViewModel"
     d:DesignWidth="500"
     d:DesignHeight="250"
     mc:Ignorable="d">

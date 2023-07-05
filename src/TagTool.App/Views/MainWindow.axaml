@@ -7,7 +7,6 @@
     xmlns:viewModels="clr-namespace:TagTool.App.ViewModels.UserControls"
     xmlns:vm="using:TagTool.App.ViewModels"
     x:Class="TagTool.App.Views.MainWindow"
-    x:CompileBindings="True"
     x:Name="RootWindow"
     d:DesignWidth="1400"
     d:DesignHeight="700"

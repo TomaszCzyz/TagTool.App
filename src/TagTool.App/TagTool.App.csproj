@@ -6,6 +6,7 @@
     <Nullable>enable</Nullable>
     <TrimMode>copyused</TrimMode>
     <BuiltInComInteropSupport>true</BuiltInComInteropSupport>
+    <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
     <NoWarn>CA1848</NoWarn>
   </PropertyGroup>
 

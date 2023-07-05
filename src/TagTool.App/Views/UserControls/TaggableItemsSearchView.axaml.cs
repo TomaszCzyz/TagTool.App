@@ -9,7 +9,6 @@ namespace TagTool.App.Views.UserControls;
 
 public partial class TaggableItemsSearchView : UserControl
 {
-    private TextBox? _textBox;
     private TaggableItemsSearchViewModel ViewModel => (TaggableItemsSearchViewModel)DataContext!;
 
     public TaggableItemsSearchView()

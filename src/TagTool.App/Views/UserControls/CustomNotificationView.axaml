@@ -4,7 +4,6 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:userControls="clr-namespace:TagTool.App.ViewModels.UserControls"
     x:Class="TagTool.App.Views.UserControls.CustomNotificationView"
-    x:CompileBindings="True"
     x:DataType="userControls:NotificationViewModel"
     x:Name="RootWindow"
     d:DesignWidth="400"

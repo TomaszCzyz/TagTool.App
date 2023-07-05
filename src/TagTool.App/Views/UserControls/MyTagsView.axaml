@@ -9,7 +9,6 @@
     xmlns:models="clr-namespace:TagTool.App.Core.Models;assembly=TagTool.App.Core"
     xmlns:dataTemplates="clr-namespace:TagTool.App.Core.DataTemplates;assembly=TagTool.App.Core"
     x:Class="TagTool.App.Views.UserControls.MyTagsView"
-    x:CompileBindings="True"
     x:DataType="userControls:MyTagsViewModel"
     x:Name="RootUserControl"
     d:DesignWidth="800"
@@ -90,8 +89,8 @@
                     Grid.Column="1"
                     Command="{Binding CreateTagCommand}"
                     Content="CreateTag" />
+
             </Grid>
-            <Button Command="{Binding NewNotCommand}" Content="Click" />
         </StackPanel>
     </StackPanel>
 </UserControl>

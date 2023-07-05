@@ -127,10 +127,4 @@ public partial class MyTagsViewModel : Document
                 throw new ArgumentOutOfRangeException(deleteTagsReply.ResultCase.ToString());
         }
     }
-
-    [RelayCommand]
-    private void NewNot()
-    {
-        WeakReferenceMessenger.Default.Send(new NewNotificationMessage(new Notification("title", "message from MyTagsViewModel")));
-    }
 }

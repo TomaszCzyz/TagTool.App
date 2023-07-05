@@ -10,7 +10,6 @@
     xmlns:dataTemplates="clr-namespace:TagTool.App.Core.DataTemplates"
     xmlns:models="clr-namespace:TagTool.App.Core.Models"
     x:Class="TagTool.App.Core.Views.TaggableItemsSearchBarView"
-    x:CompileBindings="True"
     x:DataType="viewModels:TaggableItemsSearchBarViewModel"
     x:Name="UserControlRoot"
     d:DesignWidth="800"

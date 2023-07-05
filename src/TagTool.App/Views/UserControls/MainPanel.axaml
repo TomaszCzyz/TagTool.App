@@ -6,7 +6,6 @@
     xmlns:userControls="clr-namespace:TagTool.App.Views.UserControls"
     xmlns:viewModels="clr-namespace:TagTool.App.ViewModels"
     x:Class="TagTool.App.Views.UserControls.MainPanel"
-    x:CompileBindings="True"
     d:DesignWidth="1400"
     d:DesignHeight="800"
     mc:Ignorable="d">

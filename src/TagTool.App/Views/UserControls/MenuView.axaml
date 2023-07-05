@@ -6,7 +6,6 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:userControls="clr-namespace:TagTool.App.ViewModels.UserControls"
     x:Class="TagTool.App.Views.UserControls.MenuView"
-    x:CompileBindings="True"
     x:DataType="userControls:MenuViewModel"
     d:DesignWidth="200"
     d:DesignHeight="75"
