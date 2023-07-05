@@ -165,7 +165,7 @@
                     <ListBox.DataTemplates>
                         <DataTemplate x:CompileBindings="False" DataType="models:QuerySegment">
                             <Grid ColumnDefinitions="Auto,Auto, Auto" RowDefinitions="Auto">
-                                <ContentControl 
+                                <ContentControl
                                     Grid.Column="0"
                                     Content="{Binding Tag}"
                                     ContentTemplate="{x:Static dataTemplates:TagsTemplateProvider.TagDataTemplate}"
@@ -173,17 +173,17 @@
                                     <ContentControl.ContextFlyout>
                                         <MenuFlyout Closed="PopupFlyoutBase_OnClosing">
                                             <MenuItem
-                                                Command="{ReflectionBinding #UserControlRoot.DataContext.UpdateQuerySegmentStateCommand, FallbackValue=null}"
+                                                Command="{ReflectionBinding #UserControlRoot.((viewModels:TaggableItemsSearchBarViewModel)DataContext).UpdateQuerySegmentStateCommand, FallbackValue=null}"
                                                 CommandParameter="{x:Static models:QuerySegmentState.Include}"
                                                 Header="Include" />
 
                                             <MenuItem
-                                                Command="{ReflectionBinding #UserControlRoot.DataContext.UpdateQuerySegmentStateCommand, FallbackValue=null}"
+                                                Command="{ReflectionBinding #UserControlRoot.((viewModels:TaggableItemsSearchBarViewModel)DataContext).UpdateQuerySegmentStateCommand, FallbackValue=null}"
                                                 CommandParameter="{x:Static models:QuerySegmentState.Exclude}"
                                                 Header="Exclude" />
 
                                             <MenuItem
-                                                Command="{ReflectionBinding #UserControlRoot.DataContext.UpdateQuerySegmentStateCommand, FallbackValue=null}"
+                                                Command="{ReflectionBinding #UserControlRoot.((viewModels:TaggableItemsSearchBarViewModel)DataContext).UpdateQuerySegmentStateCommand, FallbackValue=null}"
                                                 CommandParameter="{x:Static models:QuerySegmentState.MustBePresent}"
                                                 Header="MustBePresent" />
 
@@ -191,11 +191,12 @@
                                     </ContentControl.ContextFlyout>
                                     <ContentControl.Styles>
                                         <Style Selector="TextBlock">
-                                            <Setter Property="Text">
+                                            <Setter Property="Text" x:DataType="models:ITag">
                                                 <Binding Path="DisplayText"></Binding>
                                             </Setter>
                                             <Setter Property="TextDecorations">
-                                                <Binding Path="$parent[Grid].DataContext.State" FallbackValue="null" Converter="{StaticResource TextDecorationsConverter}"/>
+                                                <Binding Path="$parent[Grid].((models:QuerySegment)DataContext).State" FallbackValue="null"
+                                                         Converter="{StaticResource TextDecorationsConverter}" />
                                             </Setter>
                                             <Setter Property="Margin" Value="4 1" />
                                             <Setter Property="VerticalAlignment" Value="Center" />
@@ -213,7 +214,7 @@
                                     Margin="-4 2 0 2"
                                     Padding="0"
                                     VerticalAlignment="Top"
-                                    Command="{ReflectionBinding #UserControlRoot.DataContext.RemoveTagFromSearchQueryCommand, FallbackValue=null}"
+                                    Command="{ReflectionBinding #UserControlRoot.((viewModels:TaggableItemsSearchBarViewModel)DataContext).RemoveTagFromSearchQueryCommand, FallbackValue=null}"
                                     CommandParameter="{Binding .}"
                                     CornerRadius="100"
                                     Opacity="{Binding $parent[ListBoxItem].Opacity, Converter={StaticResource DoubleRangeConverter}}">

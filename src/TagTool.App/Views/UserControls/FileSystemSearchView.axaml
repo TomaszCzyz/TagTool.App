@@ -5,7 +5,6 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:userControls="clr-namespace:TagTool.App.ViewModels.UserControls"
-    xmlns:converters="clr-namespace:TagTool.App.Core.Converters;assembly=TagTool.App.Core"
     xmlns:views="clr-namespace:TagTool.App.Core.Views;assembly=TagTool.App.Core"
     xmlns:viewModels="clr-namespace:TagTool.App.Core.ViewModels;assembly=TagTool.App.Core"
     x:Class="TagTool.App.Views.UserControls.FileSystemSearchView"
@@ -14,8 +13,6 @@
     d:DesignHeight="450"
     mc:Ignorable="d">
     <UserControl.Resources>
-        <converters:FileSizeToStringConverter x:Key="FileSizeToStringConverter" />
-
         <avalonia:MaterialIcon
             x:Key="NormalSearchIcon"
             Width="20"
@@ -156,22 +153,7 @@
             <ListBox Grid.Row="1" ItemsSource="{Binding SearchResults}">
                 <ListBox.DataTemplates>
                     <DataTemplate x:CompileBindings="False" DataType="viewModels:TaggableItemViewModel">
-                        <Grid ColumnDefinitions="*,Auto,75">
-                            <views:TaggableItemView FontSize="14" />
-
-                            <TextBlock
-                                Grid.Column="1"
-                                VerticalAlignment="Center"
-                                Text="{Binding DateCreated, StringFormat=\{0:yyyy/MM/dd hh:mm:ss\}}"
-                                TextAlignment="Left" />
-
-                            <TextBlock
-                                Grid.Column="2"
-                                VerticalAlignment="Center"
-                                Text="{Binding Size, Converter={StaticResource FileSizeToStringConverter}}"
-                                TextAlignment="Right" />
-
-                        </Grid>
+                        <views:TaggableItemView FontSize="14" />
                     </DataTemplate>
                 </ListBox.DataTemplates>
 

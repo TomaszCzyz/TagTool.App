@@ -5,6 +5,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:userControls="clr-namespace:TagTool.App.ViewModels.UserControls"
+    xmlns:viewModels="clr-namespace:TagTool.App.ViewModels"
     x:Class="TagTool.App.Views.UserControls.MenuView"
     x:DataType="userControls:MenuViewModel"
     d:DesignWidth="200"
@@ -74,7 +75,7 @@
         <ToggleButton
             Name="ShowLeftToolMenuButton"
             Background="Transparent"
-            Command="{ReflectionBinding $parent[Window].DataContext.ChangeLeftToolMenuPanelVisibilityCommand, FallbackValue=null}"
+            Command="{ReflectionBinding $parent[Window].((viewModels:MainWindowViewModel)DataContext).ChangeLeftToolMenuPanelVisibilityCommand, FallbackValue=null}"
             CommandParameter="{Binding $self.IsChecked}"
             IsChecked="False">
             <ToggleButton.Styles>

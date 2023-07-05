@@ -44,7 +44,7 @@
                     <ListBox.ContextFlyout>
                         <MenuFlyout>
                             <MenuItem
-                                Command="{ReflectionBinding #RootUserControl.DataContext.RemoveTagCommand, FallbackValue=null}"
+                                Command="{ReflectionBinding #RootUserControl.((userControls:MyTagsViewModel)DataContext).RemoveTagCommand, FallbackValue=null}"
                                 CommandParameter="{Binding #TagsListBox.SelectedItem}"
                                 Header="Remove">
                                 <MenuItem.Icon>
