@@ -1,6 +1,7 @@
 ﻿using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Input;
+using Avalonia.Interactivity;
 using TagTool.App.Models;
 
 namespace TagTool.App.Views.Dialogs;
@@ -16,11 +17,11 @@ public partial class NameSpecialTagDialog : Window
         AddHandler(KeyDownEvent, OnKeyDown);
     }
 
-    protected override void OnLoaded()
+    protected override void OnLoaded(RoutedEventArgs e)
     {
-        base.OnLoaded();
-
         FileNameTextBox.Focus();
+
+        base.OnLoaded(e);
     }
 
     private void OnKeyDown(object? sender, KeyEventArgs e)

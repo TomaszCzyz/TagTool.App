@@ -18,9 +18,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Avalonia.Svg.Skia" Version="11.0.0-rc1.1" />
-    <PackageReference Include="Dock.Avalonia" Version="11.0.0-rc1.1" />
-    <PackageReference Include="Dock.Model.Mvvm" Version="11.0.0-rc1.1" />
+    <PackageReference Include="Avalonia.Svg.Skia" Version="11.0.0" />
+    <PackageReference Include="Dock.Avalonia" Version="11.0.0" />
+    <PackageReference Include="Dock.Model.Mvvm" Version="11.0.0" />
   </ItemGroup>
 
   <ItemGroup>

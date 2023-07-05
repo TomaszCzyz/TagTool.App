@@ -26,11 +26,11 @@ public partial class YesNoDialog : Window
         QuestionTextBlock.Text = Question;
     }
 
-    protected override void OnLoaded()
+    protected override void OnLoaded(RoutedEventArgs e)
     {
-        base.OnLoaded();
-
         YesButton.Focus();
+
+        base.OnLoaded(e);
     }
 
     private void OnKeyDown(object? sender, KeyEventArgs e)
