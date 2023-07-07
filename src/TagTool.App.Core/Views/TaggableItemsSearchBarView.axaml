@@ -164,7 +164,7 @@
                     KeyDown="TagsListBox_OnKeyDown">
                     <ListBox.DataTemplates>
                         <DataTemplate x:CompileBindings="False" DataType="models:QuerySegment">
-                            <Grid ColumnDefinitions="Auto,Auto, Auto" RowDefinitions="Auto">
+                            <Grid ColumnDefinitions="Auto,Auto" RowDefinitions="Auto">
                                 <ContentControl
                                     Grid.Column="0"
                                     Content="{Binding Tag}"
@@ -195,8 +195,11 @@
                                                 <Binding Path="DisplayText"></Binding>
                                             </Setter>
                                             <Setter Property="TextDecorations">
-                                                <Binding Path="$parent[Grid].((models:QuerySegment)DataContext).State" FallbackValue="null"
-                                                         Converter="{StaticResource TextDecorationsConverter}" />
+                                                <Binding
+                                                    Path="$parent[Grid].((models:QuerySegment)DataContext).State"
+                                                    FallbackValue="null"
+                                                    Converter="{StaticResource TextDecorationsConverter}" />
+
                                             </Setter>
                                             <Setter Property="Margin" Value="4 1" />
                                             <Setter Property="VerticalAlignment" Value="Center" />
