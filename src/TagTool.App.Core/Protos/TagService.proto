@@ -16,8 +16,16 @@ service TagService {
   // Updates a tag
   //  rpc UpdateTag(UpdateTagRequest) returns (UpdateTagReply);
 
-  // Inserts new or updates existing tag association, which describes additional relation between tags.
-  rpc UpsertTagsAssociation (UpsertTagsAssociationRequest) returns (UpsertTagsAssociationReply);
+  // Get tag synonyms groups with every base tag in hierarchy, e.g. (Cat, Pussy) -> Animal, Creature
+  rpc GetAllTagsAssociations (GetAllTagsAssociationsRequest) returns (stream GetAllTagsAssociationsReply);
+  // Add new synonym, which describes additional relation between tags.
+  rpc AddSynonym (AddSynonymRequest) returns (AddSynonymReply);
+  // Removes synonym.
+  rpc RemoveSynonym (RemoveSynonymRequest) returns (RemoveSynonymReply);
+  // Adds a child-parent relation between synonyms groups.
+  rpc AddChild (AddChildRequest) returns (AddChildReply);
+  // Removes a relation between synonyms groups.
+  rpc RemoveChild (RemoveChildRequest) returns (RemoveChildReply);
 
   // Tags an item.
   rpc TagItem(TagItemRequest) returns (TagItemReply);
@@ -85,19 +93,64 @@ message DeleteTagReply {
   };
 }
 
-message UpsertTagsAssociationRequest {
-  google.protobuf.Any firstTag = 1;
-  google.protobuf.Any secondTag = 2;
-  AssociationType associationType = 3;
-
-  enum AssociationType {
-    None = 0;
-    Synonyms = 1;
-    IsSubtype = 2;
+message GetAllTagsAssociationsRequest {
+  // If None will be provided, then all associations will be returned
+  oneof singleTag {
+    google.protobuf.Any tag = 1;
   }
 }
 
-message UpsertTagsAssociationReply {
+message GetAllTagsAssociationsReply {
+  // The name of group described in the current message
+  string groupName = 1;
+  // The group of synonyms (equivalent tags).
+  repeated google.protobuf.Any tagsInGroup = 2;
+  // All parent groups.
+  repeated string parentGroupNames = 3;
+}
+
+message AddSynonymRequest {
+  google.protobuf.Any tag = 1;
+  string groupName = 2;
+}
+
+message AddSynonymReply {
+  oneof result {
+    string successMessage = 1;
+    Error error = 2;
+  }
+}
+
+message RemoveSynonymRequest {
+  google.protobuf.Any tag = 1;
+  string groupName = 2;
+}
+
+message RemoveSynonymReply {
+  oneof result {
+    string successMessage = 1;
+    Error error = 2;
+  }
+}
+
+message AddChildRequest {
+  google.protobuf.Any childTag = 1;
+  google.protobuf.Any parentTag = 2;
+}
+
+message AddChildReply {
+  oneof result {
+    string successMessage = 1;
+    Error error = 2;
+  }
+}
+
+message RemoveChildRequest {
+  google.protobuf.Any childTag = 1;
+  google.protobuf.Any parentTag = 2;
+}
+
+message RemoveChildReply {
   oneof result {
     string successMessage = 1;
     Error error = 2;
