@@ -55,12 +55,10 @@
     </Application.Resources>
     <Application.Styles>
         <FluentTheme />
-        <StyleInclude Source="avares://Dock.Avalonia/Themes/DockFluentTheme.axaml" />
-        <!-- <StyleInclude Source="avares://AvaloniaProgressRing/Styles/ProgressRing.xaml" /> -->
-        
-        <!-- <StyleInclude Source="avares://Material.Icons.Avalonia/App.xaml" /> -->
-        
         <avalonia:MaterialIconStyles />
+        <StyleInclude Source="avares://Dock.Avalonia/Themes/DockFluentTheme.axaml" />
+        <StyleInclude Source="avares://Avalonia.Controls.DataGrid/Themes/Fluent.xaml"/>
+        <!-- <StyleInclude Source="avares://AvaloniaProgressRing/Styles/ProgressRing.xaml" /> -->
         <StyleInclude Source="/Views/TemplatedControls/TagChip.axaml" />
         <StyleInclude Source="/Views/TemplatedControls/SpecialTag.axaml" />
         <StyleInclude Source="/Views/Styles/AutoCompleteBox.axaml" />

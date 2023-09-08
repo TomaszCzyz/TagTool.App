@@ -3,16 +3,12 @@ using System.Diagnostics;
 using Avalonia.Controls;
 using Avalonia.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
-using CommunityToolkit.Mvvm.Input;
-using DynamicData;
-using Google.Protobuf.WellKnownTypes;
 using Grpc.Core;
 using JetBrains.Annotations;
 using Microsoft.Extensions.DependencyInjection;
 using TagTool.App.Core.Extensions;
 using TagTool.App.Core.Models;
 using TagTool.App.Core.Services;
-using TagTool.App.Core.TagMapper;
 using TagTool.App.Core.ViewModels;
 using TagTool.Backend;
 
@@ -53,7 +49,7 @@ public partial class TagsAssociationsViewModel : ViewModelBase
         var cat2Tag = new TextTag { Name = "Cat2" };
         var pussyTag = new TextTag { Name = "Pussy" };
         var dogTag = new TextTag { Name = "Dog" };
-
+        
         GroupNames.Add("Cat Group");
         TagsInGroup.Add(new ITag[] { catTag, cat2Tag, pussyTag });
         Ancestors.Add(new[] { animalTag.DisplayText, animalBaseTag.DisplayText });
@@ -65,7 +61,7 @@ public partial class TagsAssociationsViewModel : ViewModelBase
         AssociationData.Add(new AssociationData("Dog Group", new List<ITag> { dogTag },
             new List<string> { animalTag.DisplayText, animalBaseTag.DisplayText }));
 
-        AssociationData = new ObservableCollection<AssociationData>(AssociationData.OrderBy(data => data.Ancestors.Count).ToArray());
+        // AssociationData = new ObservableCollection<AssociationData>(AssociationData.OrderBy(data => data.Ancestors.Count).ToArray());
     }
 
     [UsedImplicitly]
@@ -78,7 +74,8 @@ public partial class TagsAssociationsViewModel : ViewModelBase
 
     private void Initialize()
     {
-        var request = new GetAllTagsAssociationsRequest { Tag = Any.Pack(TagMapper.MapToDto(new TextTag { Name = "Cat" })) };
+        // Tag = Any.Pack(TagMapper.MapToDto(new TextTag { Name = "Cat" }))
+        var request = new GetAllTagsAssociationsRequest();
         var streamingCall = _tagService.GetAllTagsAssociations(request);
 
         Dispatcher.UIThread.InvokeAsync(async () =>
