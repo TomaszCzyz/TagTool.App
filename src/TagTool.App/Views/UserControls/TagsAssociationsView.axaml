@@ -54,9 +54,14 @@
                     Width="2*"
                     Header="Tags in group"
                     IsReadOnly="True">
-                    <DataTemplate DataType="vm:AssociationData">
+                    <DataTemplate DataType="vm:AssociationData" >
                         <Border BorderBrush="Chartreuse" BorderThickness="0">
-                            <ItemsControl VerticalAlignment="Center" ItemsSource="{ReflectionBinding Synonyms}">
+                            <ItemsControl
+                                DragDrop.AllowDrop="True"
+                                VerticalAlignment="Center"
+                                Background="Transparent"
+                                ItemsSource="{ReflectionBinding Synonyms}"
+                                Loaded="Control_OnLoaded">
                                 <ItemsControl.ItemsPanel>
                                     <ItemsPanelTemplate>
                                         <WrapPanel Orientation="Horizontal" />
@@ -88,12 +93,10 @@
                     IsReadOnly="True">
                     <DataTemplate DataType="vm:AssociationData">
                         <Border BorderBrush="Chartreuse" BorderThickness="0">
-                            <ItemsControl
-                                VerticalAlignment="Center"
-                                ItemsSource="{ReflectionBinding Ancestors}">
+                            <ItemsControl VerticalAlignment="Center" ItemsSource="{ReflectionBinding Ancestors}">
                                 <ItemsControl.ItemsPanel>
                                     <ItemsPanelTemplate>
-                                        <WrapPanel Orientation="Horizontal"/>
+                                        <WrapPanel Orientation="Horizontal" />
                                     </ItemsPanelTemplate>
                                 </ItemsControl.ItemsPanel>
                                 <ItemsControl.ItemTemplate>

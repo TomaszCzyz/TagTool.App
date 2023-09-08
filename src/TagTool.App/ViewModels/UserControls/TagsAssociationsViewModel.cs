@@ -1,15 +1,22 @@
 ﻿using System.Collections.ObjectModel;
 using System.Diagnostics;
+using System.Runtime.InteropServices.JavaScript;
 using Avalonia.Controls;
+using Avalonia.Controls.Notifications;
 using Avalonia.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
+using CommunityToolkit.Mvvm.Messaging;
 using Dock.Model.Mvvm.Controls;
+using Google.Protobuf.WellKnownTypes;
 using Grpc.Core;
 using JetBrains.Annotations;
 using Microsoft.Extensions.DependencyInjection;
 using TagTool.App.Core.Extensions;
 using TagTool.App.Core.Models;
 using TagTool.App.Core.Services;
+using TagTool.App.Core.TagMapper;
+using TagTool.App.Models;
 using TagTool.Backend;
 
 namespace TagTool.App.ViewModels.UserControls;
@@ -34,29 +41,53 @@ public partial class TagsAssociationsViewModel : Document
         }
 
         _tagService = App.Current.Services.GetRequiredService<ITagToolBackend>().GetTagService();
-        Initialize();
+        ReloadAllRelations();
     }
 
     [UsedImplicitly]
     public TagsAssociationsViewModel(ITagToolBackend toolBackend)
     {
         _tagService = toolBackend.GetTagService();
-        Initialize();
+        ReloadAllRelations();
     }
 
-    private void Initialize()
+    private void ReloadAllRelations()
     {
-        // Tag = Any.Pack(TagMapper.MapToDto(new TextTag { Name = "Cat" }))
         var request = new GetAllTagsAssociationsRequest();
         var streamingCall = _tagService.GetAllTagsAssociations(request);
 
         Dispatcher.UIThread.InvokeAsync(async () =>
         {
+            AssociationData.Clear();
             await foreach (var reply in streamingCall.ResponseStream.ReadAllAsync())
             {
                 AssociationData.Add(new AssociationData(reply.GroupName, reply.TagsInGroup.MapToDomain().ToList(), reply.ParentGroupNames.ToList()));
             }
         });
+    }
+
+    [RelayCommand]
+    private async Task AddTagToSynonymsGroup((ITag Tag, string GroupName) input)
+    {
+        var (tag, groupName) = (input.Tag, input.GroupName);
+        var anyTag = Any.Pack(TagMapper.MapToDto(tag));
+        var reply = await _tagService.AddSynonymAsync(new AddSynonymRequest { Tag = anyTag, GroupName = groupName });
+
+        var notification = reply.ResultCase switch
+        {
+            AddSynonymReply.ResultOneofCase.SuccessMessage
+                => new Notification("Tag added to synonyms group", $"Successfully add tag {tag.DisplayText} to group {groupName}"),
+            AddSynonymReply.ResultOneofCase.Error
+                => new Notification(
+                    "Failed to add tag to a group",
+                    $"Tag {tag.DisplayText} was not added to a group {groupName}.\nBackend service message:\n{reply.Error.Message}",
+                    NotificationType.Warning),
+            _ => throw new ArgumentOutOfRangeException(reply.ResultCase.ToString())
+        };
+
+        ReloadAllRelations();
+
+        WeakReferenceMessenger.Default.Send(new NewNotificationMessage(notification));
     }
 
     // [RelayCommand]
