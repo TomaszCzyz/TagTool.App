@@ -1,11 +1,13 @@
 ﻿using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Interactivity;
+using JetBrains.Annotations;
 using TagTool.App.Core.Models;
 using TagTool.App.ViewModels.UserControls;
 
 namespace TagTool.App.Views.UserControls;
 
+[UsedImplicitly]
 public partial class TagsAssociationsView : UserControl
 {
     private TagsAssociationsViewModel ViewModel => (TagsAssociationsViewModel)DataContext!;
@@ -33,10 +35,17 @@ public partial class TagsAssociationsView : UserControl
         ViewModel.AddTagToSynonymsGroupCommand.Execute((tag, groupName));
     }
 
-    private void Control_OnLoaded(object? sender, RoutedEventArgs e)
+    private void TagsInGroupCell_OnLoaded(object? sender, RoutedEventArgs e)
     {
         var itemsControl = (ItemsControl)sender!;
         itemsControl.AddHandler(DragDrop.DragOverEvent, DragOver);
         itemsControl.AddHandler(DragDrop.DropEvent, Drop);
+    }
+
+    private void RemoveFromGroupMenuItem_OnClick(object? sender, RoutedEventArgs e)
+    {
+        var tag = ((MenuItem)sender!).DataContext;
+
+        ViewModel.RemoveTagFromSynonymsCommand.Execute(tag);
     }
 }

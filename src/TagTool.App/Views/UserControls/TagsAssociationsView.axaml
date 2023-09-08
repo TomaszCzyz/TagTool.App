@@ -23,6 +23,7 @@
             CanUserResizeColumns="True"
             CanUserSortColumns="False"
             ItemsSource="{Binding AssociationData}"
+            SelectedItem="{Binding SelectedItem}"
             SelectionMode="Single">
             <DataGrid.Resources>
                 <!-- ReSharper disable once Xaml.RedundantResource -->
@@ -54,14 +55,14 @@
                     Width="2*"
                     Header="Tags in group"
                     IsReadOnly="True">
-                    <DataTemplate DataType="vm:AssociationData" >
-                        <Border BorderBrush="Chartreuse" BorderThickness="0">
+                    <DataTemplate DataType="vm:AssociationData">
+                        <Border BorderBrush="Chartreuse" BorderThickness="0" >
                             <ItemsControl
                                 DragDrop.AllowDrop="True"
                                 VerticalAlignment="Center"
                                 Background="Transparent"
                                 ItemsSource="{ReflectionBinding Synonyms}"
-                                Loaded="Control_OnLoaded">
+                                Loaded="TagsInGroupCell_OnLoaded">
                                 <ItemsControl.ItemsPanel>
                                     <ItemsPanelTemplate>
                                         <WrapPanel Orientation="Horizontal" />
@@ -79,6 +80,11 @@
                                                     <Setter Property="IsTabStop" Value="False" />
                                                 </Style>
                                             </ContentControl.Styles>
+                                            <ContentControl.ContextFlyout>
+                                                <MenuFlyout>
+                                                    <MenuItem Header="Remove from group" Click="RemoveFromGroupMenuItem_OnClick" />
+                                                </MenuFlyout>
+                                            </ContentControl.ContextFlyout>
                                         </ContentControl>
                                     </DataTemplate>
                                 </ItemsControl.ItemTemplate>

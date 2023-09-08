@@ -30,6 +30,9 @@ public partial class TagsAssociationsViewModel : Document
     [ObservableProperty]
     private ObservableCollection<AssociationData> _associationData = new();
 
+    [ObservableProperty]
+    private AssociationData? _selectedItem;
+
     /// <summary>
     ///     ctor for XAML previewer
     /// </summary>
@@ -80,7 +83,7 @@ public partial class TagsAssociationsViewModel : Document
             AddSynonymReply.ResultOneofCase.Error
                 => new Notification(
                     "Failed to add tag to a group",
-                    $"Tag {tag.DisplayText} was not added to a group {groupName}.\nBackend service message:\n{reply.Error.Message}",
+                    $"Tag {tag.DisplayText} was not added to group {groupName}.\nBackend service message:\n{reply.Error.Message}",
                     NotificationType.Warning),
             _ => throw new ArgumentOutOfRangeException(reply.ResultCase.ToString())
         };
@@ -90,8 +93,29 @@ public partial class TagsAssociationsViewModel : Document
         WeakReferenceMessenger.Default.Send(new NewNotificationMessage(notification));
     }
 
-    // [RelayCommand]
-    // private Task RemoveTagFromSynonyms(ITag tag)
-    // {
-    // }
+    [RelayCommand]
+    private async Task RemoveTagFromSynonyms(ITag? tag)
+    {
+        if (SelectedItem is null || tag is null) return;
+
+        var groupName = SelectedItem.GroupName;
+        var anyTag = Any.Pack(TagMapper.MapToDto(tag));
+        var reply = await _tagService.RemoveSynonymAsync(new RemoveSynonymRequest { Tag = anyTag, GroupName = groupName });
+
+        var notification = reply.ResultCase switch
+        {
+            RemoveSynonymReply.ResultOneofCase.SuccessMessage
+                => new Notification("Tag removed from synonyms group", $"Successfully removed tag {tag.DisplayText} from group {groupName}"),
+            RemoveSynonymReply.ResultOneofCase.Error
+                => new Notification(
+                    "Failed to remove tag from the group",
+                    $"Tag {tag.DisplayText} was not removed from group {groupName}.\nBackend service message:\n{reply.Error.Message}",
+                    NotificationType.Warning),
+            _ => throw new ArgumentOutOfRangeException(reply.ResultCase.ToString())
+        };
+
+        ReloadAllRelations();
+
+        WeakReferenceMessenger.Default.Send(new NewNotificationMessage(notification));
+    }
 }
