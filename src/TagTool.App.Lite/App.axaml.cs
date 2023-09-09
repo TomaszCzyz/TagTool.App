@@ -9,6 +9,7 @@ using Microsoft.Extensions.Logging;
 using OpenAI.GPT3;
 using OpenAI.GPT3.Interfaces;
 using OpenAI.GPT3.Managers;
+using OpenAI.GPT3.ObjectModels;
 using Serilog;
 using Serilog.Core.Enrichers;
 using Serilog.Events;
@@ -58,7 +59,7 @@ public class App : Application
         services.AddLogging(builder =>
         {
             builder.SetMinimumLevel(LogLevel.Trace);
-            builder.AddSerilog(Log.Logger, dispose: true);
+            builder.AddSerilog(Log.Logger, true);
         });
 
         services.AddSingleton(configuration);
@@ -69,19 +70,19 @@ public class App : Application
         services.AddOptions<OpenAiOptions>().Configure(settings =>
         {
             settings.ApiKey = Environment.GetEnvironmentVariable("OPEN_AI_API_KEY") ?? "throw new InvalidOperationException()";
-            settings.DefaultModelId = OpenAI.GPT3.ObjectModels.Models.ChatGpt3_5Turbo;
+            settings.DefaultModelId = Models.ChatGpt3_5Turbo;
         });
         services.AddHttpClient<IOpenAIService, OpenAIService>();
 
         services.AddViewModelsFromAssembly(typeof(ViewModelBase));
         services.AddViewModelsFromAssembly(typeof(Program));
-        
+
         return services.BuildServiceProvider();
     }
 
     private static IConfiguration CreateConfiguration()
         => new ConfigurationBuilder()
-            .AddJsonFile("defaultAppSettings.json", optional: true, reloadOnChange: true)
+            .AddJsonFile("defaultAppSettings.json", true, true)
             .Build();
 
     private static void SetupSerilog()

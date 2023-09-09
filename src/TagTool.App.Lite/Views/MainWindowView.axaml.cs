@@ -10,6 +10,9 @@ namespace TagTool.App.Lite.Views;
 
 public partial class MainWindowView : Window
 {
+    private bool _mouseDownForWindowMoving;
+    private PointerPoint _originalPoint;
+
     public MainWindowView()
     {
         InitializeComponent();
@@ -35,7 +38,11 @@ public partial class MainWindowView : Window
 
     private static void ExecuteLinkedAction(object? sender, KeyEventArgs args)
     {
-        if (args.Key != Key.Enter) return;
+        if (args.Key != Key.Enter)
+        {
+            return;
+        }
+
         if (sender is ListBox { SelectedItem: TaggableItemViewModel vm })
         {
             vm.ExecuteLinkedActionCommand.Execute(null);
@@ -76,12 +83,12 @@ public partial class MainWindowView : Window
         }
     }
 
-    private bool _mouseDownForWindowMoving;
-    private PointerPoint _originalPoint;
-
     private void InputElement_OnPointerMoved(object? sender, PointerEventArgs e)
     {
-        if (!_mouseDownForWindowMoving) return;
+        if (!_mouseDownForWindowMoving)
+        {
+            return;
+        }
 
         var currentPoint = e.GetCurrentPoint(this);
         Position = new PixelPoint(
@@ -91,16 +98,16 @@ public partial class MainWindowView : Window
 
     private void InputElement_OnPointerPressed(object? sender, PointerPressedEventArgs e)
     {
-        if (WindowState is WindowState.Maximized or WindowState.FullScreen) return;
+        if (WindowState is WindowState.Maximized or WindowState.FullScreen)
+        {
+            return;
+        }
 
         _mouseDownForWindowMoving = true;
         _originalPoint = e.GetCurrentPoint(this);
     }
 
-    private void InputElement_OnPointerReleased(object? sender, PointerReleasedEventArgs e)
-    {
-        _mouseDownForWindowMoving = false;
-    }
+    private void InputElement_OnPointerReleased(object? sender, PointerReleasedEventArgs e) => _mouseDownForWindowMoving = false;
 
     private void TagsSearchBar_OnLoaded(object? sender, RoutedEventArgs e) => (sender as Control)?.FindDescendantOfType<TextBox>()?.Focus();
 
