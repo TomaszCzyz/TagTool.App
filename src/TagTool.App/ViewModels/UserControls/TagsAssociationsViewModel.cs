@@ -1,6 +1,5 @@
 ﻿using System.Collections.ObjectModel;
 using System.Diagnostics;
-using System.Runtime.InteropServices.JavaScript;
 using Avalonia.Controls;
 using Avalonia.Controls.Notifications;
 using Avalonia.Threading;
@@ -96,7 +95,10 @@ public partial class TagsAssociationsViewModel : Document
     [RelayCommand]
     private async Task RemoveTagFromSynonyms(ITag? tag)
     {
-        if (SelectedItem is null || tag is null) return;
+        if (SelectedItem is null || tag is null)
+        {
+            return;
+        }
 
         var groupName = SelectedItem.GroupName;
         var anyTag = Any.Pack(TagMapper.MapToDto(tag));

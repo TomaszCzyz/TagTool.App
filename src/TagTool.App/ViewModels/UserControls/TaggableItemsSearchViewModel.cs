@@ -25,10 +25,10 @@ public partial class TaggableItemsSearchViewModel : Document
     private readonly TagService.TagServiceClient _tagService;
     private readonly FileActionsService.FileActionsServiceClient _fileActionsService;
 
-    public TaggableItemsSearchBarViewModel SearchBarViewModel { get; }
-
     [ObservableProperty]
     private Tag? _selectedItemFromSearched;
+
+    public TaggableItemsSearchBarViewModel SearchBarViewModel { get; }
 
     public ObservableCollection<TaggableItemViewModel> FoundTaggedItems { get; set; } = new();
 
@@ -68,9 +68,8 @@ public partial class TaggableItemsSearchViewModel : Document
     }
 
     private void Initialize()
-    {
-        SearchBarViewModel.CommitSearchQueryEvent += (_, args) => Dispatcher.UIThread.InvokeAsync(() => SearchForTaggableItems(args.QuerySegments));
-    }
+        => SearchBarViewModel.CommitSearchQueryEvent +=
+            (_, args) => Dispatcher.UIThread.InvokeAsync(() => SearchForTaggableItems(args.QuerySegments));
 
     private async Task SearchForTaggableItems(ICollection<QuerySegment> querySegments)
     {

@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using Avalonia.Controls;
@@ -22,7 +23,10 @@ public class CommitSearchQueryEventArgs : EventArgs
 {
     public ICollection<QuerySegment> QuerySegments { get; init; }
 
-    public CommitSearchQueryEventArgs(ICollection<QuerySegment> querySegments) => QuerySegments = querySegments;
+    public CommitSearchQueryEventArgs(ICollection<QuerySegment> querySegments)
+    {
+        QuerySegments = querySegments;
+    }
 }
 
 public sealed partial class TaggableItemsSearchBarViewModel : ViewModelBase, IDisposable
@@ -31,36 +35,27 @@ public sealed partial class TaggableItemsSearchBarViewModel : ViewModelBase, IDi
     private readonly TagService.TagServiceClient _tagService;
     private readonly ISpeechToTagSearchService _speechToTagSearchService;
 
+    private BassAudioCaptureService? _bassAudioCaptureService;
     private IList<ITag>? _tagsInDropDown;
-
-    /// <summary>
-    ///     The event raised when:
-    ///     <list type="bullet">
-    ///         <item>
-    ///             <description>
-    ///                 <see cref="TagTool.App.Core.ViewModels.TaggableItemsSearchBarViewModel.QuerySegments" />
-    ///                 collection is updated
-    ///             </description>
-    ///         </item>
-    ///         <item>
-    ///             <description>search icon is clicked</description>
-    ///         </item>
-    ///         <item>
-    ///             <description>commit search shortcut is used</description>
-    ///         </item>
-    ///     </list>
-    /// </summary>
-    public event EventHandler<CommitSearchQueryEventArgs>? CommitSearchQueryEvent;
-
-    public ObservableCollection<object> DisplayedSearchBarElements { get; } = new() { new TextBoxMarker() };
 
     [ObservableProperty]
     private object? _selectedItem;
 
-    public ObservableCollection<QuerySegment> QuerySegments { get; } = new();
-
     [ObservableProperty]
     private string _searchText = "";
+
+    [ObservableProperty]
+    private double _voiceIntensity;
+
+    public ObservableCollection<object> DisplayedSearchBarElements { get; } = new() { new TextBoxMarker() };
+
+    public ObservableCollection<QuerySegment> QuerySegments { get; } = new();
+
+    public bool IsActive => _bassAudioCaptureService?.IsActive() ?? false;
+
+    public double MinVoiceIntensity { get; } = -90;
+
+    public double MaxVoiceIntensity { get; } = -20;
 
     /// <summary>
     ///     ctor for XAML previewer
@@ -94,30 +89,49 @@ public sealed partial class TaggableItemsSearchBarViewModel : ViewModelBase, IDi
         Initialize();
     }
 
-    private void Initialize()
+    public void Dispose() => _bassAudioCaptureService?.Dispose();
+
+    /// <summary>
+    ///     The event raised when:
+    ///     <list type="bullet">
+    ///         <item>
+    ///             <description>
+    ///                 <see cref="TagTool.App.Core.ViewModels.TaggableItemsSearchBarViewModel.QuerySegments" />
+    ///                 collection is updated
+    ///             </description>
+    ///         </item>
+    ///         <item>
+    ///             <description>search icon is clicked</description>
+    ///         </item>
+    ///         <item>
+    ///             <description>commit search shortcut is used</description>
+    ///         </item>
+    ///     </list>
+    /// </summary>
+    public event EventHandler<CommitSearchQueryEventArgs>? CommitSearchQueryEvent;
+
+    private void Initialize() => QuerySegments.CollectionChanged += UpdateDisplayedSearchBarElements;
+
+    private void UpdateDisplayedSearchBarElements(object? sender, NotifyCollectionChangedEventArgs args)
     {
-        QuerySegments.CollectionChanged
-            += (_, args) =>
-            {
-                if (IsOneElementUpdated(args.OldItems, args.NewItems))
-                {
-                    DisplayedSearchBarElements!.Replace(args.OldItems[0], args.NewItems[0]);
-                    OnCommitSearchQueryEvent(new CommitSearchQueryEventArgs(QuerySegments));
-                    return;
-                }
+        if (IsOneElementUpdated(args.OldItems, args.NewItems))
+        {
+            DisplayedSearchBarElements!.Replace(args.OldItems[0], args.NewItems[0]);
+            OnCommitSearchQueryEvent(new CommitSearchQueryEventArgs(QuerySegments));
+            return;
+        }
 
-                if (args.OldItems is not null)
-                {
-                    DisplayedSearchBarElements.RemoveMany(args.OldItems.OfType<object>());
-                }
+        if (args.OldItems is not null)
+        {
+            DisplayedSearchBarElements.RemoveMany(args.OldItems.OfType<object>());
+        }
 
-                if (args.NewItems is not null)
-                {
-                    DisplayedSearchBarElements.AddOrInsertRange(args.NewItems.OfType<object>(), DisplayedSearchBarElements.Count - 1);
-                }
+        if (args.NewItems is not null)
+        {
+            DisplayedSearchBarElements.AddOrInsertRange(args.NewItems.OfType<object>(), DisplayedSearchBarElements.Count - 1);
+        }
 
-                OnCommitSearchQueryEvent(new CommitSearchQueryEventArgs(QuerySegments));
-            };
+        OnCommitSearchQueryEvent(new CommitSearchQueryEventArgs(QuerySegments));
     }
 
     /// <summary>
@@ -135,9 +149,18 @@ public sealed partial class TaggableItemsSearchBarViewModel : ViewModelBase, IDi
 
     public async Task<IEnumerable<object>> GetTagsAsync(string? searchText, CancellationToken cancellationToken)
     {
+        var callOptions = new CallOptions()
+            .WithCancellationToken(cancellationToken)
+            .WithDeadline(DateTime.Now.AddMinutes(1));
+
         var streamingCall = _tagService.SearchTags(
-            new SearchTagsRequest { SearchText = searchText, SearchType = SearchTagsRequest.Types.SearchType.Fuzzy, ResultsLimit = 30 },
-            cancellationToken: cancellationToken);
+            new SearchTagsRequest
+            {
+                SearchText = searchText,
+                SearchType = SearchTagsRequest.Types.SearchType.Fuzzy,
+                ResultsLimit = 30
+            },
+            callOptions);
 
         _tagsInDropDown = await streamingCall.ResponseStream
             .ReadAllAsync(cancellationToken)
@@ -158,7 +181,10 @@ public sealed partial class TaggableItemsSearchBarViewModel : ViewModelBase, IDi
     [RelayCommand]
     private void RemoveTagFromSearchQuery(object querySegment)
     {
-        if (querySegment is not QuerySegment segment) return;
+        if (querySegment is not QuerySegment segment)
+        {
+            return;
+        }
 
         QuerySegments.Remove(segment);
     }
@@ -166,7 +192,10 @@ public sealed partial class TaggableItemsSearchBarViewModel : ViewModelBase, IDi
     [RelayCommand]
     private void UpdateQuerySegmentState(object querySegment)
     {
-        if (SelectedItem is not QuerySegment || querySegment is not QuerySegmentState newState) return;
+        if (SelectedItem is not QuerySegment || querySegment is not QuerySegmentState newState)
+        {
+            return;
+        }
 
         var indexOf = QuerySegments.IndexOf(SelectedItem);
 
@@ -174,12 +203,7 @@ public sealed partial class TaggableItemsSearchBarViewModel : ViewModelBase, IDi
     }
 
     [RelayCommand]
-    private void CommitSearch()
-    {
-        OnCommitSearchQueryEvent(new CommitSearchQueryEventArgs(QuerySegments));
-    }
-
-    public bool IsActive => _bassAudioCaptureService?.IsActive() ?? false;
+    private void CommitSearch() => OnCommitSearchQueryEvent(new CommitSearchQueryEventArgs(QuerySegments));
 
     [RelayCommand]
     private async Task RecordAudio(bool isChecked)
@@ -211,7 +235,10 @@ public sealed partial class TaggableItemsSearchBarViewModel : ViewModelBase, IDi
                 .Select(tag => TagMapper.TagMapper.MapToDomain(Any.Pack(tag)))
                 .ToArray();
 
-            if (searchTags.Length == 0) return;
+            if (searchTags.Length == 0)
+            {
+                return;
+            }
 
             foreach (var tag in searchTags)
             {
@@ -219,14 +246,6 @@ public sealed partial class TaggableItemsSearchBarViewModel : ViewModelBase, IDi
             }
         }
     }
-
-    private BassAudioCaptureService? _bassAudioCaptureService;
-
-    [ObservableProperty]
-    private double _voiceIntensity;
-
-    public double MinVoiceIntensity { get; } = -90;
-    public double MaxVoiceIntensity { get; } = -20;
 
     private void StartRecord()
     {
@@ -256,10 +275,5 @@ public sealed partial class TaggableItemsSearchBarViewModel : ViewModelBase, IDi
     {
         Debug.WriteLine($"CommitSearchQueryEvent invoked with {string.Join(", ", e.QuerySegments.Select(segment => segment.Tag.DisplayText))}");
         CommitSearchQueryEvent?.Invoke(this, e);
-    }
-
-    public void Dispose()
-    {
-        _bassAudioCaptureService?.Dispose();
     }
 }

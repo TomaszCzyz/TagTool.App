@@ -8,7 +8,10 @@ public static class SetExtensions
 
         foreach (var elem in elements)
         {
-            if (set.Add(elem)) continue;
+            if (set.Add(elem))
+            {
+                continue;
+            }
 
             allAdded = false;
         }

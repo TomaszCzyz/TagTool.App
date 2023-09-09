@@ -60,21 +60,27 @@ public partial class MyTagsViewModel : Document
     }
 
     private void Initialize()
-    {
-        Dispatcher.UIThread.InvokeAsync(async () =>
+        => Dispatcher.UIThread.InvokeAsync(async () =>
         {
-            var searchTagsRequest = new SearchTagsRequest { SearchText = "*", SearchType = SearchTagsRequest.Types.SearchType.Wildcard, ResultsLimit = 20 };
+            var searchTagsRequest = new SearchTagsRequest
+            {
+                SearchText = "*",
+                SearchType = SearchTagsRequest.Types.SearchType.Wildcard,
+                ResultsLimit = 20
+            };
             var streamingCall = _tagService.SearchTags(searchTagsRequest);
             await streamingCall.ResponseStream
                 .ReadAllAsync()
                 .ForEachAsync(reply => AllTags.Add(TagMapper.MapToDomain(reply.Tag)));
         });
-    }
 
     [RelayCommand]
     private void CreateTag()
     {
-        if (string.IsNullOrEmpty(CreateTagText)) return;
+        if (string.IsNullOrEmpty(CreateTagText))
+        {
+            return;
+        }
 
         var createTagsRequest = new CreateTagRequest { Tag = Any.Pack(new NormalTag { Name = CreateTagText }) };
 

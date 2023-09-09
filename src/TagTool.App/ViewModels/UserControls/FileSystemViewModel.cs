@@ -119,7 +119,10 @@ public partial class FileSystemViewModel : Document
     [RelayCommand(CanExecute = nameof(CanNavigateBack))]
     private void NavigateBack()
     {
-        if (!_navigationHistoryBack.TryPop(out var directory)) return;
+        if (!_navigationHistoryBack.TryPop(out var directory))
+        {
+            return;
+        }
 
         _navigationHistoryForward.Push(CurrentFolder);
 
@@ -132,7 +135,10 @@ public partial class FileSystemViewModel : Document
     [RelayCommand(CanExecute = nameof(CanNavigateForward))]
     private void NavigateForward()
     {
-        if (!_navigationHistoryForward.TryPop(out var directory)) return;
+        if (!_navigationHistoryForward.TryPop(out var directory))
+        {
+            return;
+        }
 
         _navigationHistoryBack.Push(CurrentFolder);
 
@@ -167,7 +173,10 @@ public partial class FileSystemViewModel : Document
 
     private void NavigateTo(FileInfo file)
     {
-        if (!file.Exists) return;
+        if (!file.Exists)
+        {
+            return;
+        }
 
         _ = _fileActionsService.OpenFile(new OpenFileRequest { FullFileName = file.FullName });
 
@@ -177,10 +186,7 @@ public partial class FileSystemViewModel : Document
         }
     }
 
-    private void NavigateTo(DirectoryInfo folder)
-    {
-        NavigateTo(folder, false);
-    }
+    private void NavigateTo(DirectoryInfo folder) => NavigateTo(folder, false);
 
     private void NavigateTo(DirectoryInfo folder, bool isHistoryNavigation)
     {
@@ -216,10 +222,9 @@ public partial class FileSystemViewModel : Document
                     TaggableItem = new TaggableFolder { Path = info.FullName }, AreTagsVisible = AreTagsVisible
                 });
 
-        var folderContent = files
-            .Concat(folders);
-            // .OrderByDescending(static entry => entry.TaggableItem.GetType())
-            // .ThenBy(static entry => entry.DisplayName);
+        var folderContent = files.Concat(folders);
+        // .OrderByDescending(static entry => entry.TaggableItem.GetType())
+        // .ThenBy(static entry => entry.DisplayName);
 
         Items.Clear();
         Items.AddRange(folderContent);

@@ -36,13 +36,7 @@ public partial class MenuViewModel : ViewModelBase
         _parentWindow = mainWindowViewModel;
     }
 
-    partial void OnIsLeftToolMenuToggleButtonCheckedChanged(bool value)
-    {
-        _parentWindow.ChangeLeftToolMenuPanelVisibilityCommand.Execute(value);
-    }
+    partial void OnIsLeftToolMenuToggleButtonCheckedChanged(bool value) => _parentWindow.ChangeLeftToolMenuPanelVisibilityCommand.Execute(value);
 
-    partial void OnIsRightToolMenuToggleButtonCheckedChanged(bool value)
-    {
-        _parentWindow.ChangeRightToolMenuPanelVisibilityCommand.Execute(value);
-    }
+    partial void OnIsRightToolMenuToggleButtonCheckedChanged(bool value) => _parentWindow.ChangeRightToolMenuPanelVisibilityCommand.Execute(value);
 }

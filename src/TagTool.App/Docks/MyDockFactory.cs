@@ -84,7 +84,7 @@ public class MyDockFactory : Factory
 
     public override void InitLayout(IDockable layout)
     {
-        DockableLocator = new Dictionary<string, Func<IDockable?>> { ["Root"] = () => _rootDock, ["Files"] = () => _documentDock, };
+        DockableLocator = new Dictionary<string, Func<IDockable?>> { ["Root"] = () => _rootDock, ["Files"] = () => _documentDock };
         // HostWindowLocator = new Dictionary<string, Func<IHostWindow>> { [nameof(IDockWindow)] = () => new HostWindow() };
 
         base.InitLayout(layout);

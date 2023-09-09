@@ -52,14 +52,16 @@ public class MainWindowViewModel : ViewModelBase
     }
 
     private void Initialize()
-    {
-        SearchBarViewModel.CommitSearchQueryEvent += (_, args) => Dispatcher.UIThread.InvokeAsync(() => SearchForTaggableItems(args.QuerySegments));
-    }
+        => SearchBarViewModel.CommitSearchQueryEvent +=
+            (_, args) => Dispatcher.UIThread.InvokeAsync(() => SearchForTaggableItems(args.QuerySegments));
 
     private async Task SearchForTaggableItems(ICollection<QuerySegment> argsQuerySegments)
     {
         var tagQueryParams = argsQuerySegments.Select(segment
-            => new GetItemsByTagsRequest.Types.TagQueryParam { Tag = Any.Pack(TagMapper.MapToDto(segment.Tag)), State = MapQuerySegmentState(segment) });
+            => new GetItemsByTagsRequest.Types.TagQueryParam
+            {
+                Tag = Any.Pack(TagMapper.MapToDto(segment.Tag)), State = MapQuerySegmentState(segment)
+            });
 
         var reply = await _tagService.GetItemsByTagsAsync(new GetItemsByTagsRequest { QueryParams = { tagQueryParams } });
 
@@ -77,11 +79,12 @@ public class MainWindowViewModel : ViewModelBase
             }));
     }
 
-    private static GetItemsByTagsRequest.Types.QuerySegmentState MapQuerySegmentState(QuerySegment segment) => segment.State switch
-    {
-        QuerySegmentState.Exclude => GetItemsByTagsRequest.Types.QuerySegmentState.Exclude,
-        QuerySegmentState.Include => GetItemsByTagsRequest.Types.QuerySegmentState.Include,
-        QuerySegmentState.MustBePresent => GetItemsByTagsRequest.Types.QuerySegmentState.MustBePresent,
-        _ => throw new UnreachableException()
-    };
+    private static GetItemsByTagsRequest.Types.QuerySegmentState MapQuerySegmentState(QuerySegment segment)
+        => segment.State switch
+        {
+            QuerySegmentState.Exclude => GetItemsByTagsRequest.Types.QuerySegmentState.Exclude,
+            QuerySegmentState.Include => GetItemsByTagsRequest.Types.QuerySegmentState.Include,
+            QuerySegmentState.MustBePresent => GetItemsByTagsRequest.Types.QuerySegmentState.MustBePresent,
+            _ => throw new UnreachableException()
+        };
 }

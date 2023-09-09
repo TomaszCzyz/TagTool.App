@@ -20,6 +20,10 @@ public partial class FileSystemSearchViewModel : Document, IDisposable
     private readonly SearchService.SearchServiceClient _fileSystemSearchService;
     private readonly TagService.TagServiceClient _tagService;
 
+    private AsyncDuplexStreamingCall<SearchRequest, SearchReply>? _streamingCall;
+    private CancellationTokenSource? _cts;
+    private string? _currentlySearchDirBuffer;
+
     [ObservableProperty]
     private string _searchRoot = @"C:\Users\tczyz\MyFiles\";
 
@@ -58,9 +62,11 @@ public partial class FileSystemSearchViewModel : Document, IDisposable
         _tagService = tagToolBackend.GetTagService();
     }
 
-    private AsyncDuplexStreamingCall<SearchRequest, SearchReply>? _streamingCall;
-    private CancellationTokenSource? _cts;
-    private string? _currentlySearchDirBuffer;
+    public void Dispose()
+    {
+        _cts?.Dispose();
+        GC.SuppressFinalize(this);
+    }
 
     [RelayCommand]
     private async Task StartSearch()
@@ -71,7 +77,12 @@ public partial class FileSystemSearchViewModel : Document, IDisposable
 
         _streamingCall = _fileSystemSearchService.Search();
 
-        var searchRequest = new SearchRequest { Depth = int.MaxValue, Root = SearchRoot, IgnoreCase = IgnoreCase };
+        var searchRequest = new SearchRequest
+        {
+            Depth = int.MaxValue,
+            Root = SearchRoot,
+            IgnoreCase = IgnoreCase
+        };
 
         switch (SearchType)
         {
@@ -129,17 +140,14 @@ public partial class FileSystemSearchViewModel : Document, IDisposable
     [RelayCommand]
     private async Task AddExcludedPath(string fullPath)
     {
-        if (string.IsNullOrEmpty(fullPath)) return;
+        if (string.IsNullOrEmpty(fullPath))
+        {
+            return;
+        }
 
         if (StartSearchCommand.IsRunning) // not necessary as parameter of this command will always be empty string, when search is not running
         {
             await _streamingCall.RequestStream.WriteAsync(new SearchRequest { ExcludedPaths = { fullPath } });
         }
-    }
-
-    public void Dispose()
-    {
-        _cts?.Dispose();
-        GC.SuppressFinalize(this);
     }
 }
