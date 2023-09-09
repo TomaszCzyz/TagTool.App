@@ -5,7 +5,7 @@
     xmlns:local="using:TagTool.App"
     xmlns:system="clr-namespace:System;assembly=System.Runtime"
     x:Class="TagTool.App.App"
-    RequestedThemeVariant="Light">
+    RequestedThemeVariant="Dark">
     <Application.DataTemplates>
         <local:ViewLocator />
     </Application.DataTemplates>
@@ -23,23 +23,8 @@
         <Color x:Key="MonthTagColor">#FF6AB2</Color>
         <Color x:Key="MonthRangeTagColor">#9F5057</Color>
         <Color x:Key="TypeTagColor">#00FFFD</Color>
-        
-        <Color x:Key="MyLightPrimary900">#04272F</Color>
-        <Color x:Key="MyLightPrimary800">#073F5F</Color>
-        <Color x:Key="MyLightPrimary700">#0B5E8E</Color>
-        <Color x:Key="MyLightPrimary600">#0F7EBD</Color>
-        <Color x:Key="MyLightPrimary500">#42B1F0</Color>
-        <Color x:Key="MyLightPrimary400">#A1D8F7</Color>
-        <Color x:Key="MyLightPrimary300">#E7F5FD</Color>
-        <Color x:Key="MyLightPrimary200">#F1F3F3</Color>
 
-        <Color x:Key="MyLightSecondary900">#311902</Color>
-        <Color x:Key="MyLightSecondary800">#623104</Color>
-        <Color x:Key="MyLightSecondary700">#934A06</Color>
-        <Color x:Key="MyLightSecondary600">#C76205</Color>
         <Color x:Key="MyLightSecondary500">#FA9538</Color>
-        <Color x:Key="MyLightSecondary400">#FCCA9C</Color>
-        <Color x:Key="MyLightSecondary300">#FEF2E6</Color>
 
         <!-- global font size -->
         <x:Double x:Key="ControlContentThemeFontSize">14</x:Double>
@@ -57,7 +42,7 @@
         <FluentTheme />
         <avalonia:MaterialIconStyles />
         <StyleInclude Source="avares://Dock.Avalonia/Themes/DockFluentTheme.axaml" />
-        <StyleInclude Source="avares://Avalonia.Controls.DataGrid/Themes/Fluent.xaml"/>
+        <StyleInclude Source="avares://Avalonia.Controls.DataGrid/Themes/Fluent.xaml" />
         <!-- <StyleInclude Source="avares://AvaloniaProgressRing/Styles/ProgressRing.xaml" /> -->
         <StyleInclude Source="/Views/TemplatedControls/TagChip.axaml" />
         <StyleInclude Source="/Views/TemplatedControls/SpecialTag.axaml" />

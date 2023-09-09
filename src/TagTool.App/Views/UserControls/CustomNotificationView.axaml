@@ -16,7 +16,6 @@
     <Border
         MinHeight="20"
         Padding="12"
-        Background="{StaticResource MyLightPrimary200}"
         BorderBrush="{StaticResource MyLightSecondary500}"
         BorderThickness="1"
         CornerRadius="4">

@@ -11,22 +11,19 @@
     </Styles.Resources>
 
     <Design.PreviewWith>
-        <Panel Background="{StaticResource MyLightPrimary200}">
+        <Panel>
             <StackPanel Margin="5" Spacing="1">
                 <controls:SpecialTag
                     Classes="SmallSpecialTag"
-                    Background="{StaticResource MyLightPrimary200}"
                     SpecialTagName="FileName"
                     Text="PartOfName" />
 
                 <controls:SpecialTag
-                    Background="{StaticResource MyLightPrimary200}"
                     SpecialTagName="FileName"
                     Text="PartOfName" />
 
                 <controls:SpecialTag
                     Classes="LargeSpecialTag"
-                    Background="{StaticResource MyLightPrimary200}"
                     SpecialTagName="FileName"
                     Text="Tagname" />
 
