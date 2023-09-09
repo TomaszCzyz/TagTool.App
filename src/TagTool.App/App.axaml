@@ -46,10 +46,6 @@
         <!-- <StyleInclude Source="avares://AvaloniaProgressRing/Styles/ProgressRing.xaml" /> -->
         <StyleInclude Source="/Views/TemplatedControls/TagChip.axaml" />
         <StyleInclude Source="/Views/TemplatedControls/SpecialTag.axaml" />
-        <StyleInclude Source="/Views/Styles/AutoCompleteBox.axaml" />
-        <StyleInclude Source="/Views/Styles/Button.axaml" />
-        <StyleInclude Source="/Views/Styles/TextBox.axaml" />
-        <StyleInclude Source="/Views/Styles/DataGridRow.axaml" />
 
         <Style Selector="DocumentControl /template/ Grid#PART_Grid">
             <Setter Property="Height" Value="0" />

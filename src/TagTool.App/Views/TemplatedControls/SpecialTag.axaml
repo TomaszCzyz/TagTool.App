@@ -72,7 +72,6 @@
                         Name="PART_DeleteButton"
                         Grid.Row="1"
                         Grid.Column="1"
-                        Classes="InCircle"
                         Width="12"
                         Height="12"
                         Margin="-4 2 4 2"
