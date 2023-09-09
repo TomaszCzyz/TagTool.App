@@ -25,7 +25,10 @@ public partial class FilePreviewer : UserControl
         e.Handled = true;
         var delta = e.Delta.Y * 35;
 
-        if (ViewModel.ViewboxWidth + delta < 50 || ViewModel.ViewboxHeight + delta < 50) return;
+        if (ViewModel.ViewboxWidth + delta < 50 || ViewModel.ViewboxHeight + delta < 50)
+        {
+            return;
+        }
 
         ViewModel.ViewboxWidth += delta;
         ViewModel.ViewboxHeight += delta;

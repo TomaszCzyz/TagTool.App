@@ -32,7 +32,10 @@ public partial class TaggableItemsSearchView : UserControl
     private async void Drop(object? sender, DragEventArgs e)
     {
         var fileNames = e.Data.GetFiles()?.ToArray() ?? Array.Empty<IStorageItem>();
-        if (!e.Data.Contains(DataFormats.Files) || fileNames.Length == 0) return;
+        if (!e.Data.Contains(DataFormats.Files) || fileNames.Length == 0)
+        {
+            return;
+        }
 
         var fileSystemInfos = fileNames
             .Select(item => item.Path.AbsolutePath)

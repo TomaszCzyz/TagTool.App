@@ -16,8 +16,6 @@ public sealed class TagChip : TemplatedControl
     [UsedImplicitly]
     public const string DeleteButtonPartName = "PART_DeleteButton";
 
-    private Button? _deleteButton;
-
     public static readonly StyledProperty<InlineCollection?> InlinesProperty
         = AvaloniaProperty.Register<TagChip, InlineCollection?>(nameof(Inlines));
 
@@ -25,7 +23,7 @@ public sealed class TagChip : TemplatedControl
         = AvaloniaProperty.Register<TagChip, string?>(nameof(Text), "DefaultTagText");
 
     /// <summary>
-    /// Indicates if the delete button should be visible.
+    ///     Indicates if the delete button should be visible.
     /// </summary>
     public static readonly StyledProperty<bool> IsDeletableProperty =
         AvaloniaProperty.Register<TagChip, bool>(nameof(IsDeletable), true);
@@ -35,6 +33,11 @@ public sealed class TagChip : TemplatedControl
 
     public static readonly StyledProperty<object?> DeleteCommandParameterProperty = AvaloniaProperty.Register<TagChip, object?>(
         nameof(DeleteCommandParameter));
+
+    public static readonly RoutedEvent<RoutedEventArgs> DeleteClickEvent
+        = RoutedEvent.Register<TagChip, RoutedEventArgs>(nameof(DeleteClick), RoutingStrategies.Bubble);
+
+    private Button? _deleteButton;
 
     public InlineCollection? Inlines
     {
@@ -71,9 +74,6 @@ public sealed class TagChip : TemplatedControl
         add => AddHandler(DeleteClickEvent, value);
         remove => RemoveHandler(DeleteClickEvent, value);
     }
-
-    public static readonly RoutedEvent<RoutedEventArgs> DeleteClickEvent
-        = RoutedEvent.Register<TagChip, RoutedEventArgs>(nameof(DeleteClick), RoutingStrategies.Bubble);
 
     protected override void OnApplyTemplate(TemplateAppliedEventArgs e)
     {

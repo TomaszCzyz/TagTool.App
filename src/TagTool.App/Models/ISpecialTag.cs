@@ -11,11 +11,11 @@ public interface ISpecialTag
 
 public class NameSpecialTag : ISpecialTag
 {
-    public string SpecialTagName { get; } = nameof(NameSpecialTag);
-
     public string FileName { get; init; } = null!;
 
     public bool CaseSensitive { get; init; }
 
     public bool MatchSubstrings { get; init; }
+
+    public string SpecialTagName { get; } = nameof(NameSpecialTag);
 }

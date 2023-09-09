@@ -25,12 +25,6 @@ public class SpecialTag : TemplatedControl
     public static readonly StyledProperty<IBrush> ClipRectangleFillProperty
         = AvaloniaProperty.Register<SpecialTag, IBrush>(nameof(ClipRectangleFill));
 
-    public IBrush ClipRectangleFill
-    {
-        get => GetValue(ClipRectangleFillProperty);
-        set => SetValue(ClipRectangleFillProperty, value);
-    }
-
     public static readonly StyledProperty<bool> IsDeletableProperty
         = AvaloniaProperty.Register<TagChip, bool>(nameof(IsDeletable), true);
 
@@ -39,6 +33,17 @@ public class SpecialTag : TemplatedControl
 
     public static readonly StyledProperty<object?> DeleteCommandParameterProperty
         = AvaloniaProperty.Register<TagChip, object?>(nameof(DeleteCommandParameter));
+
+    public static readonly RoutedEvent<RoutedEventArgs> DeleteClickEvent
+        = RoutedEvent.Register<TagChip, RoutedEventArgs>(nameof(DeleteClick), RoutingStrategies.Bubble);
+
+    private Button? _deleteButton;
+
+    public IBrush ClipRectangleFill
+    {
+        get => GetValue(ClipRectangleFillProperty);
+        set => SetValue(ClipRectangleFillProperty, value);
+    }
 
     public bool IsDeletable
     {
@@ -75,11 +80,6 @@ public class SpecialTag : TemplatedControl
         add => AddHandler(DeleteClickEvent, value);
         remove => RemoveHandler(DeleteClickEvent, value);
     }
-
-    public static readonly RoutedEvent<RoutedEventArgs> DeleteClickEvent
-        = RoutedEvent.Register<TagChip, RoutedEventArgs>(nameof(DeleteClick), RoutingStrategies.Bubble);
-
-    private Button? _deleteButton;
 
     protected override void OnApplyTemplate(TemplateAppliedEventArgs e)
     {

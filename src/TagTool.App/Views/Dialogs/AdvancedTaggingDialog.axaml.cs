@@ -30,7 +30,7 @@ public partial class AdvancedTaggingDialog : Window
     private void DragOver(object? sender, DragEventArgs e)
     {
         // Only allow Copy or Link as Drop Operations.
-        e.DragEffects &= (DragDropEffects.Copy | DragDropEffects.Link);
+        e.DragEffects &= DragDropEffects.Copy | DragDropEffects.Link;
 
         // Only allow if the dragged data contains text or filenames.
         if (!e.Data.Contains(DataFormats.Text) && !e.Data.Contains(DataFormats.Files))
@@ -41,8 +41,10 @@ public partial class AdvancedTaggingDialog : Window
 
     private void Drop(object? sender, DragEventArgs e)
     {
-        if (!e.Data.Contains(DataFormats.Files)) return;
-        if (e.Data.GetFiles() is not { } paths) return;
+        if (!e.Data.Contains(DataFormats.Files) || e.Data.GetFiles() is not { } paths)
+        {
+            return;
+        }
 
         foreach (var path in paths.Select(item => item.Path.AbsolutePath))
         {
@@ -53,13 +55,18 @@ public partial class AdvancedTaggingDialog : Window
 
     private void TreeView_OnSelectionChanged(object? sender, SelectionChangedEventArgs e)
     {
-        if (!PreviewToggleButton.IsChecked ?? false) return;
-        if (TreeView.SelectedItems is not { Count: 1 } selectedItems) return;
+        if (!PreviewToggleButton.IsChecked ?? false)
+        {
+            return;
+        }
 
-        var selectedNode = (AdvancedTaggingDialogViewModel.Node)selectedItems[0]!;
-        var previewerViewModel = (FilePreviewerViewModel)FilePreviewer?.DataContext!;
+        if (TreeView.SelectedItems is { Count: 1 } selectedItems)
+        {
+            var selectedNode = (AdvancedTaggingDialogViewModel.Node)selectedItems[0]!;
+            var previewerViewModel = (FilePreviewerViewModel)FilePreviewer?.DataContext!;
 
-        previewerViewModel.CurrentFilePath = selectedNode.Item.FullName;
+            previewerViewModel.CurrentFilePath = selectedNode.Item.FullName;
+        }
     }
 
     private void CancelButton_OnClick(object? sender, RoutedEventArgs e)
@@ -69,19 +76,23 @@ public partial class AdvancedTaggingDialog : Window
     }
 
     private void Layoutable_OnEffectiveViewportChanged(object? sender, EffectiveViewportChangedEventArgs e)
-    {
-        AligningSeparator.Width = TopMostGrid.Bounds.Width - BottomButtonsStackPanel.Bounds.Width;
-    }
+        => AligningSeparator.Width = TopMostGrid.Bounds.Width - BottomButtonsStackPanel.Bounds.Width;
 
     private async void Button_OnClick(object? sender, RoutedEventArgs e)
     {
-        if (sender is not Button { DataContext: AdvancedTaggingDialogViewModel viewModel }) return;
+        if (sender is not Button { DataContext: AdvancedTaggingDialogViewModel viewModel })
+        {
+            return;
+        }
 
         var options = new FolderPickerOpenOptions { Title = "Select folder", AllowMultiple = true };
 
         var result = await GetStorageProvider().OpenFolderPickerAsync(options);
 
-        if (result.Count == 0) return;
+        if (result.Count == 0)
+        {
+            return;
+        }
 
         foreach (var folder in result)
         {

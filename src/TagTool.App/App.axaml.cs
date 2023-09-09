@@ -60,7 +60,7 @@ public class App : Application
         services.AddLogging(x =>
         {
             x.SetMinimumLevel(LogLevel.Trace);
-            x.AddSerilog(Log.Logger, dispose: true);
+            x.AddSerilog(Log.Logger, true);
         });
 
         services.AddOptions<OpenAiOptions>().Configure(settings =>
@@ -101,7 +101,7 @@ public class App : Application
 
     private static IConfiguration CreateConfiguration()
         => new ConfigurationBuilder()
-            .AddJsonFile("defaultAppSettings.json", optional: false, reloadOnChange: true)
+            .AddJsonFile("defaultAppSettings.json", false, true)
             .Build();
 
     private static void SetupSerilog()

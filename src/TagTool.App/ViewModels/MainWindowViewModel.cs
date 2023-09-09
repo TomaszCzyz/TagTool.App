@@ -21,7 +21,8 @@ namespace TagTool.App.ViewModels;
 
 public partial class MainWindowViewModel : ViewModelBase, IRecipient<NewNotificationMessage>
 {
-    public WindowNotificationManager? NotificationManager { get; set; }
+    private readonly MyDockFactory _dockFactory;
+    private InputElement? _previouslyFocusedElement;
 
     [ObservableProperty]
     private GridLength _activeLeftToolWidth = new(250);
@@ -36,7 +37,7 @@ public partial class MainWindowViewModel : ViewModelBase, IRecipient<NewNotifica
     [ObservableProperty]
     private IRootDock? _layout;
 
-    private readonly MyDockFactory _dockFactory;
+    public WindowNotificationManager? NotificationManager { get; set; }
 
     /// <summary>
     ///     ctor for XAML previewer
@@ -61,12 +62,21 @@ public partial class MainWindowViewModel : ViewModelBase, IRecipient<NewNotifica
         Initialize();
     }
 
+    public void Receive(NewNotificationMessage message)
+        => NotificationManager?.Show(
+            new NotificationViewModel
+            {
+                Title = "Hey There!",
+                Message = message.Value.Message,
+                NotificationManager = NotificationManager
+            });
+
     private void Initialize()
     {
         WeakReferenceMessenger.Default.Register(this);
 
         Layout = _dockFactory.CreateLayout();
-        if (Layout is { })
+        if (Layout is not null)
         {
             _dockFactory.InitLayout(Layout);
         }
@@ -89,12 +99,13 @@ public partial class MainWindowViewModel : ViewModelBase, IRecipient<NewNotifica
         }
     }
 
-    private InputElement? _previouslyFocusedElement;
-
     [RelayCommand]
     private void ChangeLeftToolMenuPanelVisibility(object param)
     {
-        if (param is not bool isVisible) return;
+        if (param is not bool isVisible)
+        {
+            return;
+        }
 
         if (!isVisible)
         {
@@ -104,14 +115,12 @@ public partial class MainWindowViewModel : ViewModelBase, IRecipient<NewNotifica
 
     [RelayCommand]
     private void ChangeRightToolMenuPanelVisibility(bool? isVisible = null)
-    {
-        ActiveLeftToolWidth = isVisible switch
+        => ActiveLeftToolWidth = isVisible switch
         {
             null => ActiveLeftToolWidth == new GridLength(0) ? new GridLength(200) : new GridLength(0),
             true => new GridLength(200),
-            false => new GridLength(0),
+            false => new GridLength(0)
         };
-    }
 
     [RelayCommand]
     private void FocusNextSearchTab(object element)
@@ -141,14 +150,4 @@ public partial class MainWindowViewModel : ViewModelBase, IRecipient<NewNotifica
             .Where(logical => logical.GetType() == typeof(TaggableItemsSearchView) && logical.IsVisible)
             .Select(visual => visual.FindDescendantOfType<AutoCompleteBox>())
             .ToArray();
-
-    public void Receive(NewNotificationMessage message)
-    {
-        // NotificationManager?.Show(new Notification("Welcome", "Avalonia now supports Notifications."));
-        NotificationManager?.Show(
-            new NotificationViewModel
-            {
-                Title = "Hey There!", Message = message.Value.Message, NotificationManager = NotificationManager,
-            });
-    }
 }

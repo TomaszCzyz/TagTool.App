@@ -25,6 +25,12 @@ public partial class FilePreviewerViewModel : ViewModelBase, IDisposable
     [ObservableProperty]
     private double _viewboxHeight; //todo: move this logic to "code behind"
 
+    public void Dispose()
+    {
+        Current?.Dispose();
+        GC.SuppressFinalize(this);
+    }
+
     partial void OnCurrentFilePathChanged(string? value)
     {
         if (!File.Exists(value))
@@ -54,11 +60,5 @@ public partial class FilePreviewerViewModel : ViewModelBase, IDisposable
         ViewboxHeight = Current?.Size.Height ?? 0;
 
         IsLoading = false;
-    }
-
-    public void Dispose()
-    {
-        Current?.Dispose();
-        GC.SuppressFinalize(this);
     }
 }

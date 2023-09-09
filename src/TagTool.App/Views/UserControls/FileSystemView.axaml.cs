@@ -20,16 +20,16 @@ public partial class FileSystemView : UserControl
         FolderContentListBox.AddHandler(KeyDownEvent, FolderContent_OnKeyDown, handledEventsToo: true);
     }
 
-    private void AddressTextBox_OnLostFocus(object? sender, RoutedEventArgs e)
-    {
-        ViewModel.CancelAddressChangeCommand.Execute(e);
-    }
+    private void AddressTextBox_OnLostFocus(object? sender, RoutedEventArgs e) => ViewModel.CancelAddressChangeCommand.Execute(e);
 
     private void Border_OnPointerPressed(object? sender, PointerPressedEventArgs e)
     {
         var border = (Border)sender!;
 
-        if (e.GetCurrentPoint(border).Properties.PointerUpdateKind != PointerUpdateKind.LeftButtonPressed) return;
+        if (e.GetCurrentPoint(border).Properties.PointerUpdateKind != PointerUpdateKind.LeftButtonPressed)
+        {
+            return;
+        }
 
         ViewModel.IsEditing = true;
         AddressTextBox?.Focus();
@@ -37,9 +37,7 @@ public partial class FileSystemView : UserControl
     }
 
     private void FolderContent_OnSelectionChanged(object? sender, SelectionChangedEventArgs e)
-    {
-        TextBlockSelectedItems.Text = $"{FolderContentListBox.SelectedItems?.Count ?? 0} selected |";
-    }
+        => TextBlockSelectedItems.Text = $"{FolderContentListBox.SelectedItems?.Count ?? 0} selected |";
 
     private void FolderContent_OnKeyDown(object? sender, KeyEventArgs e)
     {

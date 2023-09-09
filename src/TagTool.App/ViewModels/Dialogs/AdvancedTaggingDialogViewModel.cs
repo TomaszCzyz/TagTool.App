@@ -11,7 +11,14 @@ namespace TagTool.App.ViewModels.Dialogs;
 
 public partial class AdvancedTaggingDialogViewModel : ViewModelBase, IDisposable
 {
+    private static int _tagsLoadingTaskCounter;
     private readonly Node _root = new();
+
+    [ObservableProperty]
+    private string _rowDescription = "Existing Tags: ";
+
+    [ObservableProperty]
+    private int _tagsLoadingCounter;
 
     public ObservableCollection<Node> Items { get; }
 
@@ -20,12 +27,6 @@ public partial class AdvancedTaggingDialogViewModel : ViewModelBase, IDisposable
     public ObservableCollection<Tag> ExistingTags { get; set; } = new();
 
     public ObservableCollection<Tag> ImplicitTags { get; set; } = new(new Tag[] { new("Audio"), new("Text"), new("Date"), new("Zip") });
-
-    [ObservableProperty]
-    private string _rowDescription = "Existing Tags: ";
-
-    [ObservableProperty]
-    private int _tagsLoadingCounter;
 
     public AdvancedTaggingDialogViewModel()
     {
@@ -75,6 +76,12 @@ public partial class AdvancedTaggingDialogViewModel : ViewModelBase, IDisposable
         });
     }
 
+    public void Dispose()
+    {
+        CancelAllTagsLoading();
+        GC.SuppressFinalize(this);
+    }
+
     [RelayCommand]
     private void AddItem(FileSystemInfo directoryInfo)
     {
@@ -100,26 +107,16 @@ public partial class AdvancedTaggingDialogViewModel : ViewModelBase, IDisposable
     }
 
     [RelayCommand]
-    private void CancelAllTagsLoading()
-    {
-        _root.CancelTagsLoading();
-    }
-
-    public void Dispose()
-    {
-        CancelAllTagsLoading();
-        GC.SuppressFinalize(this);
-    }
-
-    private static int _tagsLoadingTaskCounter;
+    private void CancelAllTagsLoading() => _root.CancelTagsLoading();
 
     public class Node : IDisposable
     {
+        private readonly CancellationTokenSource _cts = new();
+        private ObservableCollection<Node>? _children;
+
         public FileSystemInfo Item { get; init; }
 
         public Node? Parent { get; init; }
-
-        private ObservableCollection<Node>? _children;
 
         public ObservableCollection<Node> Children => _children ??= InitializeChildren();
 
@@ -146,6 +143,12 @@ public partial class AdvancedTaggingDialogViewModel : ViewModelBase, IDisposable
             Parent = parent;
         }
 
+        public void Dispose()
+        {
+            _cts.Dispose();
+            GC.SuppressFinalize(this);
+        }
+
         public void CancelTagsLoading()
         {
             foreach (var child in Children)
@@ -156,11 +159,12 @@ public partial class AdvancedTaggingDialogViewModel : ViewModelBase, IDisposable
             _cts.Cancel();
         }
 
-        private readonly CancellationTokenSource _cts = new();
-
         private ObservableCollection<Node> InitializeChildren()
         {
-            if (Item is not DirectoryInfo directoryInfo) return new ObservableCollection<Node>();
+            if (Item is not DirectoryInfo directoryInfo)
+            {
+                return new ObservableCollection<Node>();
+            }
 
             var array = directoryInfo
                 .EnumerateFileSystemInfos("*", SearchOption.TopDirectoryOnly)
@@ -182,7 +186,10 @@ public partial class AdvancedTaggingDialogViewModel : ViewModelBase, IDisposable
 
         public void AddItem(Node child)
         {
-            if (Children.Contains(child)) return;
+            if (Children.Contains(child))
+            {
+                return;
+            }
 
             Children.Add(child);
             LoadTags(child);
@@ -191,10 +198,9 @@ public partial class AdvancedTaggingDialogViewModel : ViewModelBase, IDisposable
         public void RemoveItem(Node child) => Children.Remove(child);
 
         private void LoadTags(Node node)
-        {
-            // todo: add upper limit for concurrent loadings (especially important for "expand all" functionality; NOTE: the order of expanding matters.. should be like BFS)
-            Dispatcher.UIThread.Post(async () =>
+            => Dispatcher.UIThread.InvokeAsync(async () =>
             {
+                // todo: add upper limit for concurrent loadings (especially important for "expand all" functionality; NOTE: the order of expanding matters.. should be like BFS)
                 Interlocked.Increment(ref _tagsLoadingTaskCounter);
 
                 foreach (var i in Enumerable.Range(1, Random.Shared.Next(1, 6)))
@@ -210,25 +216,26 @@ public partial class AdvancedTaggingDialogViewModel : ViewModelBase, IDisposable
 
                 Interlocked.Decrement(ref _tagsLoadingTaskCounter);
             });
-        }
 
         private bool Equals(Node other) => Item.FullName.Equals(other.Item.FullName, StringComparison.Ordinal);
 
         public override bool Equals(object? obj)
         {
-            if (ReferenceEquals(null, obj)) return false;
-            if (ReferenceEquals(this, obj)) return true;
+            if (ReferenceEquals(null, obj))
+            {
+                return false;
+            }
+
+            if (ReferenceEquals(this, obj))
+            {
+                return true;
+            }
+
             return obj.GetType() == GetType() && Equals((Node)obj);
         }
 
         public override int GetHashCode() => Item.GetHashCode();
 
         public override string ToString() => Header;
-
-        public void Dispose()
-        {
-            _cts.Dispose();
-            GC.SuppressFinalize(this);
-        }
     }
 }

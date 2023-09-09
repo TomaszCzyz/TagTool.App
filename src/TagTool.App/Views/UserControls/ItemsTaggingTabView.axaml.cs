@@ -16,7 +16,10 @@ public partial class ItemsTaggingTabView : UserControl
 
     private void Drop(object? sender, DragEventArgs e)
     {
-        if (!e.Data.Contains(DataFormats.Files) || e.Data.GetFiles() is not { } storageItems) return;
+        if (!e.Data.Contains(DataFormats.Files) || e.Data.GetFiles() is not { } storageItems)
+        {
+            return;
+        }
 
         var fileSystemInfos = storageItems
             .Select(item => item.Path.AbsolutePath)

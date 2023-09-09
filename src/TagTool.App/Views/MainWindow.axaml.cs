@@ -11,6 +11,10 @@ namespace TagTool.App.Views;
 
 public partial class MainWindow : Window
 {
+    private double _appContentFontSizeCache = (double)App.Current.Resources["AppContentFontSize"]!;
+    private bool _mouseDownForWindowMoving;
+    private PointerPoint _originalPoint;
+
     private MainWindowViewModel ViewModel => (MainWindowViewModel)DataContext!;
 
     public MainWindow()
@@ -24,24 +28,28 @@ public partial class MainWindow : Window
 
         void EscapePressedHandler(object? sender, KeyEventArgs args)
         {
-            if (args.Key == Key.Escape) Focus();
+            if (args.Key == Key.Escape)
+            {
+                Focus();
+            }
         }
     }
 
     protected override void OnApplyTemplate(TemplateAppliedEventArgs e)
-    {
-        ViewModel.NotificationManager = new WindowNotificationManager((Window)VisualRoot!)
-        {
-            Position = NotificationPosition.BottomLeft, MaxItems = 3, Margin = new Thickness(0, 0, 15, 40)
-        };
-    }
-
-    private bool _mouseDownForWindowMoving;
-    private PointerPoint _originalPoint;
+        => ViewModel.NotificationManager =
+            new WindowNotificationManager((Window)VisualRoot!)
+            {
+                Position = NotificationPosition.BottomLeft,
+                MaxItems = 3,
+                Margin = new Thickness(0, 0, 15, 40)
+            };
 
     private void InputElement_OnPointerMoved(object? sender, PointerEventArgs e)
     {
-        if (!_mouseDownForWindowMoving) return;
+        if (!_mouseDownForWindowMoving)
+        {
+            return;
+        }
 
         var currentPoint = e.GetCurrentPoint(this);
         Position = new PixelPoint(
@@ -51,16 +59,16 @@ public partial class MainWindow : Window
 
     private void InputElement_OnPointerPressed(object? sender, PointerPressedEventArgs e)
     {
-        if (WindowState is WindowState.Maximized or WindowState.FullScreen) return;
+        if (WindowState is WindowState.Maximized or WindowState.FullScreen)
+        {
+            return;
+        }
 
         _mouseDownForWindowMoving = true;
         _originalPoint = e.GetCurrentPoint(this);
     }
 
-    private void InputElement_OnPointerReleased(object? sender, PointerReleasedEventArgs e)
-    {
-        _mouseDownForWindowMoving = false;
-    }
+    private void InputElement_OnPointerReleased(object? sender, PointerReleasedEventArgs e) => _mouseDownForWindowMoving = false;
 
     private void Button_OnClick(object? sender, RoutedEventArgs e)
     {
@@ -68,8 +76,6 @@ public partial class MainWindow : Window
         var popup = button.FindLogicalAncestorOfType<Popup>()!;
         popup.IsOpen = false;
     }
-
-    private double _appContentFontSizeCache = (double)App.Current.Resources["AppContentFontSize"]!;
 
     private void ChangeFontSize(bool zoomIn)
     {
@@ -79,7 +85,10 @@ public partial class MainWindow : Window
 
     private void InputElement_OnPointerWheelChanged(object? sender, PointerWheelEventArgs e)
     {
-        if (!e.KeyModifiers.Equals(KeyModifiers.Control)) return;
+        if (!e.KeyModifiers.Equals(KeyModifiers.Control))
+        {
+            return;
+        }
 
         ChangeFontSize(e.Delta.Y < 0);
 
@@ -88,7 +97,10 @@ public partial class MainWindow : Window
 
     private void MainContentBorder_OnKeyDown(object? sender, KeyEventArgs e)
     {
-        if (!e.KeyModifiers.Equals(KeyModifiers.Control) || (e.Key != Key.Add && e.Key != Key.Subtract)) return;
+        if (!e.KeyModifiers.Equals(KeyModifiers.Control) || (e.Key != Key.Add && e.Key != Key.Subtract))
+        {
+            return;
+        }
 
         ChangeFontSize(e.Key == Key.Add);
 
