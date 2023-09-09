@@ -22,6 +22,15 @@ public partial class MainWindowView : Window
         TaggableItemsListBox.AddHandler(KeyDownEvent, SwitchFocusToSearchBar);
 
         TaggableItemsListBox.AddHandler(KeyDownEvent, ExecuteLinkedAction, handledEventsToo: true);
+        TaggableItemsListBox.AddHandler(DoubleTappedEvent, OnDoubleTapped_ExecuteLinkedAction, handledEventsToo: true);
+    }
+
+    private static void OnDoubleTapped_ExecuteLinkedAction(object? sender, TappedEventArgs args)
+    {
+        if (sender is ListBox { SelectedItem: TaggableItemViewModel vm })
+        {
+            vm.ExecuteLinkedActionCommand.Execute(null);
+        }
     }
 
     private static void ExecuteLinkedAction(object? sender, KeyEventArgs args)

@@ -1,23 +1,23 @@
 <Window
     xmlns="https://github.com/avaloniaui"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:vm="using:TagTool.App.Lite.ViewModels"
-    xmlns:views="clr-namespace:TagTool.App.Core.Views;assembly=TagTool.App.Core"
     xmlns:viewModels="clr-namespace:TagTool.App.Core.ViewModels;assembly=TagTool.App.Core"
-    xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+    xmlns:views="clr-namespace:TagTool.App.Core.Views;assembly=TagTool.App.Core"
+    xmlns:vm="using:TagTool.App.Lite.ViewModels"
     x:Class="TagTool.App.Lite.Views.MainWindowView"
     x:DataType="vm:MainWindowViewModel"
     d:DesignWidth="850"
     d:DesignHeight="450"
     mc:Ignorable="d"
     Background="{x:Null}"
-    SizeToContent="Height"
     ExtendClientAreaChromeHints="NoChrome"
     ExtendClientAreaTitleBarHeightHint="-1"
     ExtendClientAreaToDecorationsHint="True"
     ShowInTaskbar="True"
+    SizeToContent="Height"
     Title="TagTool.App.Lite"
     TransparencyLevelHint="AcrylicBlur"
     PointerMoved="InputElement_OnPointerMoved"
@@ -28,7 +28,7 @@
         <vm:MainWindowViewModel />
     </Design.DataContext>
 
-    <DockPanel>
+    <DockPanel Name="TopMostDockPanel">
         <Grid DockPanel.Dock="Top" ColumnDefinitions="*, Auto">
             <!-- Search Bar -->
             <views:TaggableItemsSearchBarView
@@ -38,14 +38,22 @@
                 Loaded="TagsSearchBar_OnLoaded" />
 
             <Grid Grid.Column="1" RowDefinitions="*, *">
-                <Button Background="Transparent" Margin="3 0" Padding="0" Click="CloseButton_OnClick">
+                <Button
+                    Margin="3 0"
+                    Padding="0"
+                    Background="Transparent"
+                    Click="CloseButton_OnClick">
                     <avalonia:MaterialIcon
                         Height="20"
                         Foreground="#999999"
                         Kind="Close" />
 
                 </Button>
-                <Button Grid.Row="1" Background="Transparent" Margin="3 0" Padding="0">
+                <Button
+                    Grid.Row="1"
+                    Margin="3 0"
+                    Padding="0"
+                    Background="Transparent">
                     <avalonia:MaterialIcon
                         Height="20"
                         Foreground="#999999"
@@ -53,16 +61,27 @@
 
                 </Button>
             </Grid>
-
         </Grid>
 
-        <ListBox Name="TaggableItemsListBox" ItemsSource="{Binding SearchResults}">
-            <ListBox.ItemTemplate>
-                <DataTemplate x:DataType="viewModels:TaggableItemViewModel">
-                    <views:TaggableItemView FontSize="14" />
-                </DataTemplate>
-            </ListBox.ItemTemplate>
-        </ListBox>
+        <Panel>
+            <ListBox
+                Name="TaggableItemsListBox"
+                Width="{Binding #TopMostDockPanel.Bounds.Width}"
+                ItemsSource="{Binding SearchResults}">
+                <ListBox.ItemTemplate>
+                    <DataTemplate x:DataType="viewModels:TaggableItemViewModel">
+                        <views:TaggableItemView HorizontalAlignment="Stretch" FontSize="14" />
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+            <TextBlock
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                Foreground="Chocolate"
+                IsVisible="{Binding !#TaggableItemsListBox.ItemCount}"
+                Text="No items matching given query" />
+
+        </Panel>
     </DockPanel>
 
 </Window>
