@@ -3,18 +3,18 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:userControls="clr-namespace:TagTool.App.ViewModels.UserControls"
-    xmlns:dd="clr-namespace:TagTool.App"
-    xmlns:models="clr-namespace:TagTool.App.Core.Models;assembly=TagTool.App.Core"
     xmlns:dataTemplates="clr-namespace:TagTool.App.Core.DataTemplates;assembly=TagTool.App.Core"
+    xmlns:dd="clr-namespace:TagTool.App"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:models="clr-namespace:TagTool.App.Core.Models;assembly=TagTool.App.Core"
+    xmlns:userControls="clr-namespace:TagTool.App.ViewModels.UserControls"
     x:Class="TagTool.App.Views.UserControls.MyTagsView"
     x:DataType="userControls:MyTagsViewModel"
     x:Name="RootUserControl"
     d:DesignWidth="800"
     d:DesignHeight="450"
-    d:DataContext="{x:Static dd:DesignData.MyTagsViewModel}"
-    mc:Ignorable="d">
+    mc:Ignorable="d"
+    d:DataContext="{x:Static dd:DesignData.MyTagsViewModel}">
 
     <StackPanel HorizontalAlignment="Stretch" Orientation="Vertical">
         <StackPanel Margin="0 8 0 0" Orientation="Vertical">
@@ -55,14 +55,14 @@
                     </ListBox.ContextFlyout>
                     <ListBox.ItemTemplate>
                         <DataTemplate DataType="models:ITag">
-                            <ContentControl 
+                            <ContentControl
                                 Content="{Binding $self.DataContext}"
-                                ContentTemplate="{x:Static dataTemplates:TagsTemplateProvider.TagDataTemplate}" 
+                                ContentTemplate="{x:Static dataTemplates:TagsTemplateProvider.TagDataTemplate}"
                                 AttachedToVisualTree="Visual_OnAttachedToVisualTree">
                                 <ContentControl.Styles>
                                     <Style Selector="TextBlock">
                                         <Setter Property="Text">
-                                            <Binding Path="DisplayText"></Binding>
+                                            <Binding Path="DisplayText" />
                                         </Setter>
                                         <Setter Property="Margin" Value="4 1" />
                                         <Setter Property="VerticalAlignment" Value="Center" />

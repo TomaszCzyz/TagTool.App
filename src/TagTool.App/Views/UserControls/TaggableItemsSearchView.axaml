@@ -2,24 +2,24 @@
     xmlns="https://github.com/avaloniaui"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:dd="clr-namespace:TagTool.App"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:userControls="clr-namespace:TagTool.App.ViewModels.UserControls"
-    xmlns:views="clr-namespace:TagTool.App.Core.Views;assembly=TagTool.App.Core"
     xmlns:viewModels="clr-namespace:TagTool.App.Core.ViewModels;assembly=TagTool.App.Core"
-    xmlns:dd="clr-namespace:TagTool.App"
+    xmlns:views="clr-namespace:TagTool.App.Core.Views;assembly=TagTool.App.Core"
     x:Class="TagTool.App.Views.UserControls.TaggableItemsSearchView"
     x:DataType="userControls:TaggableItemsSearchViewModel"
     x:Name="UserControlRoot"
     d:DesignWidth="700"
     d:DesignHeight="700"
-    d:DataContext="{x:Static dd:DesignData.TaggableItemsSearchViewModel}"
-    mc:Ignorable="d">
+    mc:Ignorable="d"
+    d:DataContext="{x:Static dd:DesignData.TaggableItemsSearchViewModel}">
 
     <DockPanel Margin="2">
         <!-- Search Bar -->
         <views:TaggableItemsSearchBarView
-            DockPanel.Dock="Top"
             Name="SearchBarView"
+            DockPanel.Dock="Top"
             DataContext="{Binding SearchBarViewModel, Mode=TwoWay}" />
 
         <!-- SearchResults -->

@@ -5,8 +5,8 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:userControls="clr-namespace:TagTool.App.ViewModels.UserControls"
-    xmlns:views="clr-namespace:TagTool.App.Core.Views;assembly=TagTool.App.Core"
     xmlns:viewModels="clr-namespace:TagTool.App.Core.ViewModels;assembly=TagTool.App.Core"
+    xmlns:views="clr-namespace:TagTool.App.Core.Views;assembly=TagTool.App.Core"
     x:Class="TagTool.App.Views.UserControls.FileSystemView"
     x:DataType="userControls:FileSystemViewModel"
     x:Name="UserControlRoot"
@@ -197,8 +197,8 @@
             Name="FolderContentListBox"
             Grid.Row="1"
             Focusable="True"
-            IsTextSearchEnabled="True"
             FontSize="{DynamicResource AppContentFontSize}"
+            IsTextSearchEnabled="True"
             ItemsSource="{Binding Items}"
             SelectedItem="{Binding SelectedItem}"
             SelectionMode="Multiple"
@@ -231,10 +231,7 @@
                     Margin="4 0 0 0"
                     Kind="Search" />
 
-                <TextBlock
-                    Name="FuzzySearchTextBlock"
-                    Padding="4" />
-
+                <TextBlock Name="FuzzySearchTextBlock" Padding="4" />
             </DockPanel>
         </Border>
 

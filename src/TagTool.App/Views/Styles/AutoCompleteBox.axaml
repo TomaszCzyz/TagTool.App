@@ -39,11 +39,11 @@
 
                             <ListBox
                                 Name="PART_SelectingItemsControl"
+                                ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                                ScrollViewer.VerticalScrollBarVisibility="Disabled"
                                 Background="{TemplateBinding Background}"
                                 Foreground="{TemplateBinding Foreground}"
-                                ItemTemplate="{TemplateBinding ItemTemplate}"
-                                ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-                                ScrollViewer.VerticalScrollBarVisibility="Disabled">
+                                ItemTemplate="{TemplateBinding ItemTemplate}">
                                 <ListBox.Styles>
                                     <Style Selector="ListBoxItem">
                                         <Setter Property="Padding" Value="2" />

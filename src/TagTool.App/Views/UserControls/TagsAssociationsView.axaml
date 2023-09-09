@@ -46,9 +46,6 @@
                             Background="Transparent"
                             BorderBrush="Brown"
                             BorderThickness="0">
-                            <Border.ContextFlyout>
-                                
-                            </Border.ContextFlyout>
                             <TextBlock
                                 HorizontalAlignment="Center"
                                 VerticalAlignment="Center"

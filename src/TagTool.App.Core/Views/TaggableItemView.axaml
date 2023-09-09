@@ -1,13 +1,13 @@
 ﻿<UserControl
     xmlns="https://github.com/avaloniaui"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
     xmlns:converters="clr-namespace:TagTool.App.Core.Converters;assembly=TagTool.App.Core"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:dataTemplates="clr-namespace:TagTool.App.Core.DataTemplates"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:models="clr-namespace:TagTool.App.Core.Models;assembly=TagTool.App.Core"
     xmlns:viewModels="clr-namespace:TagTool.App.Core.ViewModels"
-    xmlns:dataTemplates="clr-namespace:TagTool.App.Core.DataTemplates"
-    xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
     x:Class="TagTool.App.Core.Views.TaggableItemView"
     x:DataType="viewModels:TaggableItemViewModel"
     Name="UserControlRoot"
@@ -100,11 +100,11 @@
                     </ItemsControl.ItemsPanel>
                     <ItemsControl.ItemTemplate>
                         <DataTemplate DataType="models:ITag">
-                            <ContentControl Content="{Binding $self.DataContext}" ContentTemplate="{x:Static dataTemplates:TagsTemplateProvider.TagDataTemplate}" >
+                            <ContentControl Content="{Binding $self.DataContext}" ContentTemplate="{x:Static dataTemplates:TagsTemplateProvider.TagDataTemplate}">
                                 <ContentControl.Styles>
                                     <Style Selector="TextBlock">
                                         <Setter Property="Text">
-                                            <Binding Path="DisplayText"></Binding>
+                                            <Binding Path="DisplayText" />
                                         </Setter>
                                         <Setter Property="Margin" Value="4 1" />
                                         <Setter Property="VerticalAlignment" Value="Center" />

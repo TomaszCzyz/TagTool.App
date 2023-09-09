@@ -3,12 +3,12 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
     xmlns:avaloniaProgressRing="clr-namespace:AvaloniaProgressRing;assembly=AvaloniaProgressRing"
-    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:viewModels="clr-namespace:TagTool.App.Core.ViewModels"
     xmlns:converters="clr-namespace:TagTool.App.Core.Converters"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:dataTemplates="clr-namespace:TagTool.App.Core.DataTemplates"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:models="clr-namespace:TagTool.App.Core.Models"
+    xmlns:viewModels="clr-namespace:TagTool.App.Core.ViewModels"
     x:Class="TagTool.App.Core.Views.TaggableItemsSearchBarView"
     x:DataType="viewModels:TaggableItemsSearchBarViewModel"
     x:Name="UserControlRoot"
@@ -191,14 +191,14 @@
                                     </ContentControl.ContextFlyout>
                                     <ContentControl.Styles>
                                         <Style Selector="TextBlock">
-                                            <Setter Property="Text" x:DataType="models:ITag">
-                                                <Binding Path="DisplayText"></Binding>
+                                            <Setter x:DataType="models:ITag" Property="Text">
+                                                <Binding Path="DisplayText" />
                                             </Setter>
                                             <Setter Property="TextDecorations">
                                                 <Binding
-                                                    Path="$parent[Grid].((models:QuerySegment)DataContext).State"
+                                                    Converter="{StaticResource TextDecorationsConverter}"
                                                     FallbackValue="null"
-                                                    Converter="{StaticResource TextDecorationsConverter}" />
+                                                    Path="$parent[Grid].((models:QuerySegment)DataContext).State" />
 
                                             </Setter>
                                             <Setter Property="Margin" Value="4 1" />

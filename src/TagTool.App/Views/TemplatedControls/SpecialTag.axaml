@@ -18,9 +18,7 @@
                     SpecialTagName="FileName"
                     Text="PartOfName" />
 
-                <controls:SpecialTag
-                    SpecialTagName="FileName"
-                    Text="PartOfName" />
+                <controls:SpecialTag SpecialTagName="FileName" Text="PartOfName" />
 
                 <controls:SpecialTag
                     Classes="LargeSpecialTag"
