@@ -67,7 +67,10 @@ public partial class TaggableItemsSearchBarView : UserControl
         switch (e.Key)
         {
             case Key.Delete when ViewModel.QuerySegments.Count != 0:
-                if (TagsListBox.SelectedItem is null) return;
+                if (TagsListBox.SelectedItem is null)
+                {
+                    return;
+                }
 
                 var selectedIndex = TagsListBox.SelectedIndex;
 
@@ -110,7 +113,6 @@ public partial class TaggableItemsSearchBarView : UserControl
 
     private void InputElement_OnGotFocus(object? sender, GotFocusEventArgs e)
     {
-        
         // Debug.WriteLine(sender);
         // if (TagsListBox.Selection.SelectedItem is not null)
         // {

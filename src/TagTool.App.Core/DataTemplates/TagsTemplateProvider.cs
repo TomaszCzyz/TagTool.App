@@ -21,7 +21,7 @@ public static class TagsTemplateProvider
 
         var textBlock = new TextBlock
         {
-            Foreground = new SolidColorBrush(color),
+            Foreground = new SolidColorBrush(color)
             // [!TextBlock.TextProperty] = new Binding("DisplayText"),
             // [!TextBlock.TextDecorationsProperty] = new Binding("$parent[Grid].DataContext.State") { Converter = new TextDecorationsConverter() }, // todo: get it from resources
         };

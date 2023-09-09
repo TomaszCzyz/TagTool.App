@@ -15,15 +15,15 @@ public class DoubleRangeConverter : IValueConverter
 
     public object? Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
     {
-        if (value is not double d) return null;
+        if (value is not double d)
+        {
+            return null;
+        }
 
         var p = (InputMin - InputMax + d) / InputMin;
 
         return (OutputMax - OutputMin) * p;
     }
 
-    public object ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)
-    {
-        throw new NotSupportedException();
-    }
+    public object ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture) => throw new NotSupportedException();
 }

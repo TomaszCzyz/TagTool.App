@@ -19,7 +19,10 @@ public class IconPathToBitmapConverter : IValueConverter
 
     public object? Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
     {
-        if (value is not string path) return null;
+        if (value is not string path)
+        {
+            return null;
+        }
 
         var length = parameter switch
         {
@@ -52,10 +55,7 @@ public class IconPathToBitmapConverter : IValueConverter
 #pragma warning restore CA1416
     }
 
-    public object ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)
-    {
-        throw new NotImplementedException();
-    }
+    public object ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture) => throw new NotImplementedException();
 
     private static Bitmap CreateBitmap(Stream stream, int length)
     {

@@ -10,18 +10,31 @@ public class TextDecorationsConverter : IValueConverter
 {
     public object Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
     {
-        if (value is not QuerySegmentState state) return new TextDecorationCollection();
+        if (value is not QuerySegmentState state)
+        {
+            return new TextDecorationCollection();
+        }
 
         return state switch
         {
             QuerySegmentState.Include => new TextDecorationCollection(),
             QuerySegmentState.Exclude => new TextDecorationCollection
             {
-                new() { Location = TextDecorationLocation.Strikethrough, StrokeThickness = 3, StrokeThicknessUnit = TextDecorationUnit.Pixel }
+                new()
+                {
+                    Location = TextDecorationLocation.Strikethrough,
+                    StrokeThickness = 3,
+                    StrokeThicknessUnit = TextDecorationUnit.Pixel
+                }
             },
             QuerySegmentState.MustBePresent => new TextDecorationCollection
             {
-                new() { Location = TextDecorationLocation.Underline, StrokeThickness = 2, StrokeThicknessUnit = TextDecorationUnit.Pixel }
+                new()
+                {
+                    Location = TextDecorationLocation.Underline,
+                    StrokeThickness = 2,
+                    StrokeThicknessUnit = TextDecorationUnit.Pixel
+                }
             },
             _ => throw new UnreachableException()
         };

@@ -17,7 +17,7 @@ namespace TagTool.App.Core.ViewModels;
 
 /// <summary>
 ///     Basic representation of item that might be tagged, that should be use to display only.
-///     This class will react ot updates of underlining <see cref="TaggableItem"/>
+///     This class will react ot updates of underlining <see cref="TaggableItem" />
 ///     Contains only information how to display item DisplayName and its tags, if exist.
 ///     Additional functionalities, like drop-to-tag, should be implemented in parent components.
 /// </summary>
@@ -36,7 +36,11 @@ public partial class TaggableItemViewModel : ViewModelBase
         [MemberNotNull(nameof(_taggableItem))]
         set
         {
-            if (Equals(value, _taggableItem)) return;
+            if (Equals(value, _taggableItem))
+            {
+                return;
+            }
+
             _taggableItem = value;
 
             OnPropertyChanged();

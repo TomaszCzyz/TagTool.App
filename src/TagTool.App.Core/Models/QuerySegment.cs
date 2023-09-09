@@ -11,7 +11,7 @@ public sealed class QuerySegment
 
     private bool Equals(QuerySegment other) => Tag.Equals(other.Tag);
 
-    public override bool Equals(object? obj) => ReferenceEquals(this, obj) || obj is QuerySegment other && Equals(other);
+    public override bool Equals(object? obj) => ReferenceEquals(this, obj) || (obj is QuerySegment other && Equals(other));
 
     public override int GetHashCode() => Tag.GetHashCode();
 }

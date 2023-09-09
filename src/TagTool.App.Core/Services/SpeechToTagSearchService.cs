@@ -26,11 +26,17 @@ public class SpeechToTagSearchService : ISpeechToTagSearchService
 
     public async Task<IEnumerable<string>> GetTranscriptionWords(string? filePath)
     {
-        if (string.IsNullOrEmpty(filePath)) return Enumerable.Empty<string>();
+        if (string.IsNullOrEmpty(filePath))
+        {
+            return Enumerable.Empty<string>();
+        }
 
         var transcription = await GetSpeechTranscription(filePath);
 
-        if (transcription is null) return Enumerable.Empty<string>();
+        if (transcription is null)
+        {
+            return Enumerable.Empty<string>();
+        }
 
         char[] delimiterChars = { ' ', ',', '.', ':', '\t' };
 
@@ -39,11 +45,17 @@ public class SpeechToTagSearchService : ISpeechToTagSearchService
 
     public async Task<IEnumerable<string>> GetTags(string? filePath)
     {
-        if (string.IsNullOrEmpty(filePath)) return Enumerable.Empty<string>();
+        if (string.IsNullOrEmpty(filePath))
+        {
+            return Enumerable.Empty<string>();
+        }
 
         var transcription = await GetSpeechTranscription(filePath);
 
-        if (transcription is null) return Enumerable.Empty<string>();
+        if (transcription is null)
+        {
+            return Enumerable.Empty<string>();
+        }
 
         var tagNames = await TranscriptionToTags(transcription);
 

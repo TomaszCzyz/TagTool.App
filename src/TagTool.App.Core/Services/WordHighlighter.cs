@@ -50,13 +50,16 @@ public class WordHighlighter : IWordHighlighter
 
         FlushNotHighlighted();
 
+        return inlines;
+
         void FlushNotHighlighted()
         {
-            if (lastIndex == index) return;
+            if (lastIndex == index)
+            {
+                return;
+            }
 
             inlines.Add(new Run { Text = tagName[lastIndex..index] });
         }
-
-        return inlines;
     }
 }

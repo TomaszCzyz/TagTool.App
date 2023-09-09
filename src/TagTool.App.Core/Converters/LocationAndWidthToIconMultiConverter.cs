@@ -13,8 +13,15 @@ public class LocationAndWidthToIconMultiConverter : IMultiValueConverter
 
     public object? Convert(IList<object?> values, Type targetType, object? parameter, CultureInfo culture)
     {
-        if (values.Count != 2) return null;
-        if (values[0] is not string path || values[1] is not double fontSize) return null;
+        if (values.Count != 2)
+        {
+            return null;
+        }
+
+        if (values[0] is not string path || values[1] is not double fontSize)
+        {
+            return null;
+        }
 
         return _iconPathToBitmapConverter.Convert(path, typeof(Bitmap), fontSize * IconToFontSizeRatio, culture);
     }
@@ -27,7 +34,10 @@ public class TaggableItemToToIconConverter : IMultiValueConverter
 
     public object? Convert(IList<object?> values, Type targetType, object? parameter, CultureInfo culture)
     {
-        if (values is not [TaggableItem taggableItem, double fontSize]) return null;
+        if (values is not [TaggableItem taggableItem, double fontSize])
+        {
+            return null;
+        }
 
         return taggableItem switch
         {
