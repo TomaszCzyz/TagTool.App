@@ -2,6 +2,7 @@
 using Avalonia.Controls.Primitives;
 using Avalonia.Input;
 using Avalonia.Platform.Storage;
+using TagTool.App.Core.ViewModels;
 using TagTool.App.ViewModels.UserControls;
 using TagTool.App.Views.Dialogs;
 
@@ -17,6 +18,9 @@ public partial class TaggableItemsSearchView : UserControl
 
         DragDropInfoAreaBorder.AddHandler(DragDrop.DropEvent, Drop);
         // DragDropInfoAreaBorder.AddHandler(DragDrop.DragOverEvent, DragOver);
+        
+        TaggableItemsListBox.AddHandler(KeyDownEvent, OnKeyDown_ExecuteLinkedAction, handledEventsToo: true);
+        TaggableItemsListBox.AddHandler(DoubleTappedEvent, OnDoubleTapped_ExecuteLinkedAction, handledEventsToo: true);
     }
 
     protected override void OnApplyTemplate(TemplateAppliedEventArgs e)
@@ -27,6 +31,29 @@ public partial class TaggableItemsSearchView : UserControl
         window.AddHandler(DragDrop.DropEvent, (_, _) => DragDropInfoAreaBorder.IsVisible = false);
 
         base.OnApplyTemplate(e);
+    }
+    
+    private static void OnDoubleTapped_ExecuteLinkedAction(object? sender, TappedEventArgs args)
+    {
+        // todo: if itemType == Folder, then open folder in TagTool.a new App's FileSystemView
+        if (sender is ListBox { SelectedItem: TaggableItemViewModel vm })
+        {
+            vm.ExecuteLinkedActionCommand.Execute(null);
+        }
+    }
+
+    private static void OnKeyDown_ExecuteLinkedAction(object? sender, KeyEventArgs args)
+    {
+        // todo: if itemType == Folder, then open folder in TagTool.a new App's FileSystemView
+        if (args.Key != Key.Enter)
+        {
+            return;
+        }
+
+        if (sender is ListBox { SelectedItem: TaggableItemViewModel vm })
+        {
+            vm.ExecuteLinkedActionCommand.Execute(null);
+        }
     }
 
     private async void Drop(object? sender, DragEventArgs e)

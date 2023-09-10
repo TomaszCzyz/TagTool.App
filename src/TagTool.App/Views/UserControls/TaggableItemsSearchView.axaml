@@ -25,7 +25,7 @@
         <!-- SearchResults -->
         <Panel>
             <ListBox
-                Name="SearchResultsDataGrid"
+                Name="TaggableItemsListBox"
                 Background="Transparent"
                 Focusable="True"
                 FontSize="{DynamicResource AppContentFontSize}"

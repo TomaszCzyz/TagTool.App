@@ -24,7 +24,7 @@ public partial class MainWindowView : Window
         SearchBarView.AddHandler(KeyDownEvent, SwitchFocusToSearchResults, handledEventsToo: true);
         TaggableItemsListBox.AddHandler(KeyDownEvent, SwitchFocusToSearchBar);
 
-        TaggableItemsListBox.AddHandler(KeyDownEvent, ExecuteLinkedAction, handledEventsToo: true);
+        TaggableItemsListBox.AddHandler(KeyDownEvent, OnKeyDown_ExecuteLinkedAction, handledEventsToo: true);
         TaggableItemsListBox.AddHandler(DoubleTappedEvent, OnDoubleTapped_ExecuteLinkedAction, handledEventsToo: true);
     }
 
@@ -36,7 +36,7 @@ public partial class MainWindowView : Window
         }
     }
 
-    private static void ExecuteLinkedAction(object? sender, KeyEventArgs args)
+    private static void OnKeyDown_ExecuteLinkedAction(object? sender, KeyEventArgs args)
     {
         if (args.Key != Key.Enter)
         {

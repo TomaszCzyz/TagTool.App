@@ -25,7 +25,7 @@ public partial class MyTagsView : UserControl
         listBoxItem.AddHandler(PointerPressedEvent, HandleDrag, handledEventsToo: true);
     }
 
-    private static async void HandleDrag(object? sender, PointerPressedEventArgs e)
+    private void HandleDrag(object? sender, PointerPressedEventArgs e)
     {
         if (sender is not ListBoxItem { DataContext: ITag tag }
             || e.GetCurrentPoint(null).Properties.PointerUpdateKind != PointerUpdateKind.LeftButtonPressed)
@@ -36,7 +36,6 @@ public partial class MyTagsView : UserControl
         var dragData = new DataObject();
         dragData.Set("draggedTag", tag);
 
-        // maybe remove await?
-        var _ = await DragDrop.DoDragDrop(e, dragData, DragDropEffects.Link);
+        _ = DragDrop.DoDragDrop(e, dragData, DragDropEffects.Link);
     }
 }

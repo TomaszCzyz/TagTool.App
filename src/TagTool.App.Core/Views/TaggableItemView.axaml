@@ -56,7 +56,6 @@
                 Grid.Column="1"
                 HorizontalAlignment="Stretch"
                 VerticalAlignment="Center"
-                Foreground="Black"
                 Text="{Binding DisplayName}">
                 <TextBlock.ContextFlyout>
                     <MenuFlyout>
