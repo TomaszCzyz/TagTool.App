@@ -151,7 +151,7 @@ public sealed partial class TaggableItemsSearchBarViewModel : ViewModelBase, IDi
     {
         var callOptions = new CallOptions()
             .WithCancellationToken(cancellationToken)
-            .WithDeadline(DateTime.Now.AddMinutes(1));
+            .WithDeadline(DateTime.UtcNow.AddMinutes(1));
 
         var streamingCall = _tagService.SearchTags(
             new SearchTagsRequest
