@@ -9,3 +9,11 @@ public class NewNotificationMessage : ValueChangedMessage<Notification>
     {
     }
 }
+
+public static class NotificationExtensions
+{
+    public static NewNotificationMessage ToMessage(this Notification notification)
+    {
+        return new NewNotificationMessage(notification);
+    }
+}

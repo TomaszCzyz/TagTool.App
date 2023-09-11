@@ -18,6 +18,8 @@ using TagTool.App.Core.TagMapper;
 using TagTool.App.Models;
 using TagTool.Backend;
 using TagTool.Backend.DomainTypes;
+using DayTag = TagTool.App.Core.Models.DayTag;
+using MonthTag = TagTool.App.Core.Models.MonthTag;
 
 namespace TagTool.App.ViewModels.UserControls;
 
@@ -32,7 +34,9 @@ public partial class MyTagsViewModel : Document
     [ObservableProperty]
     private string? _selectedTag;
 
-    public ObservableCollection<ITag> AllTags { get; } = new();
+    public ObservableCollection<ITag> DateAndTimeTags { get; set; } = new();
+
+    public ObservableCollection<ITag> TextTags { get; } = new();
 
     /// <summary>
     ///     ctor for XAML previewer
@@ -60,19 +64,47 @@ public partial class MyTagsViewModel : Document
     }
 
     private void Initialize()
-        => Dispatcher.UIThread.InvokeAsync(async () =>
+    {
+        DateAndTimeTags = new ObservableCollection<ITag>
+        {
+            new DayTag { DayOfWeek = DayOfWeek.Monday },
+            new DayTag { DayOfWeek = DayOfWeek.Tuesday },
+            new DayTag { DayOfWeek = DayOfWeek.Wednesday },
+            new DayTag { DayOfWeek = DayOfWeek.Thursday },
+            new DayTag { DayOfWeek = DayOfWeek.Friday },
+            new DayTag { DayOfWeek = DayOfWeek.Sunday },
+            new DayTag { DayOfWeek = DayOfWeek.Saturday },
+            new MonthTag { Month = 1 },
+            new MonthTag { Month = 2 },
+            new MonthTag { Month = 3 },
+            new MonthTag { Month = 4 },
+            new MonthTag { Month = 5 },
+            new MonthTag { Month = 6 },
+            new MonthTag { Month = 7 },
+            new MonthTag { Month = 8 },
+            new MonthTag { Month = 9 },
+            new MonthTag { Month = 10 },
+            new MonthTag { Month = 11 },
+            new MonthTag { Month = 12 },
+        };
+
+        Dispatcher.UIThread.InvokeAsync(async () =>
         {
             var searchTagsRequest = new SearchTagsRequest
             {
                 SearchText = "*",
                 SearchType = SearchTagsRequest.Types.SearchType.Wildcard,
-                ResultsLimit = 20
+                ResultsLimit = 30
             };
             var streamingCall = _tagService.SearchTags(searchTagsRequest);
+
             await streamingCall.ResponseStream
                 .ReadAllAsync()
-                .ForEachAsync(reply => AllTags.Add(TagMapper.MapToDomain(reply.Tag)));
+                .Select(reply => TagMapper.MapToDomain(reply.Tag))
+                .Where(tag => tag is TextTag)
+                .ForEachAsync(textTag => TextTags.Add(textTag));
         });
+    }
 
     [RelayCommand]
     private void CreateTag()
@@ -96,9 +128,9 @@ public partial class MyTagsViewModel : Document
         }
 
         // todo: make extension method 'AddIfNotExists(..)'
-        if (!AllTags.Select(tag => tag.DisplayText).Contains(CreateTagText))
+        if (!TextTags.Select(tag => tag.DisplayText).Contains(CreateTagText))
         {
-            AllTags.Add(new TextTag { Name = CreateTagText });
+            TextTags.Add(new TextTag { Name = CreateTagText });
         }
 
         CreateTagText = "";
@@ -116,8 +148,8 @@ public partial class MyTagsViewModel : Document
         switch (deleteTagsReply.ResultCase)
         {
             case DeleteTagReply.ResultOneofCase.DeletedTagName:
-                var first = AllTags.First(tag => tag.DisplayText == deleteTagsReply.DeletedTagName);
-                AllTags.Remove(first);
+                var first = TextTags.First(tag => tag.DisplayText == deleteTagsReply.DeletedTagName);
+                TextTags.Remove(first);
                 break;
             case DeleteTagReply.ResultOneofCase.ErrorMessage:
                 var notification = new Notification(
