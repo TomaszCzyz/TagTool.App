@@ -88,7 +88,8 @@
                 <ItemsControl
                     DockPanel.Dock="Left"
                     HorizontalAlignment="Left"
-                    ItemsSource="{Binding AddressSegments}">
+                    ItemsSource="{Binding AddressSegments}"
+                    PropertyChanged="AvaloniaObject_OnPropertyChanged">
                     <ItemsControl.ItemsPanel>
                         <ItemsPanelTemplate>
                             <StackPanel Orientation="Horizontal" />

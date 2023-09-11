@@ -38,7 +38,7 @@ public partial class FileSystemView : UserControl
         AddressTextBox?.SelectAll();
     }
 
-    private void FolderContent_OnSelectionChanged(object? sender, SelectionChangedEventArgs e)
+    private void FolderContent_OnSelectionChanged(object? _, SelectionChangedEventArgs e)
     {
         FolderContentListBox.Focus();
         TextBlockSelectedItems.Text = $"{FolderContentListBox.SelectedItems?.Count ?? 0} selected |";
@@ -106,6 +106,14 @@ public partial class FileSystemView : UserControl
 
             _isYesNoDialogOpened = false;
             args.Handled = true;
+        }
+    }
+
+    private void AvaloniaObject_OnPropertyChanged(object? sender, AvaloniaPropertyChangedEventArgs e)
+    {
+        if (e.Property == ItemsControl.ItemCountProperty && FolderContentListBox.Scroll is not null)
+        {
+            FolderContentListBox.Scroll.Offset = Vector.Zero;
         }
     }
 }
