@@ -85,18 +85,7 @@ public partial class MainWindowViewModel : ViewModelBase, IRecipient<NewNotifica
     [RelayCommand]
     private void AddDocumentToDock(string type)
     {
-        if (_dockFactory.LeftDock.IsActive)
-        {
-            _dockFactory.LeftDock.CreateNewDocumentCommand.Execute(type);
-        }
-        else if (_dockFactory.RightDock.IsActive)
-        {
-            _dockFactory.RightDock.CreateNewDocumentCommand.Execute(type);
-        }
-        else
-        {
-            _dockFactory.CentralDock.CreateNewDocumentCommand.Execute(type);
-        }
+        _dockFactory.DocumentDock.CreateNewDocumentCommand.Execute(type);
     }
 
     [RelayCommand]
@@ -109,7 +98,7 @@ public partial class MainWindowViewModel : ViewModelBase, IRecipient<NewNotifica
 
         if (!isVisible)
         {
-            _dockFactory.CollapseDock(_dockFactory.LeftDock);
+            // _dockFactory.CollapseDock(_dockFactory.LeftDock);
         }
     }
 

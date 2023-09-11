@@ -9,82 +9,40 @@ namespace TagTool.App.Docks;
 
 public class MyDockFactory : Factory
 {
-    private readonly IServiceProvider _serviceProvider;
-    private IRootDock? _rootDock;
-    private IDocumentDock? _documentDock;
-
-    public MyDocumentDock LeftDock { get; private set; } = null!;
-    public MyDocumentDock RightDock { get; private set; } = null!;
-    public MyDocumentDock CentralDock { get; private set; } = null!;
+    private readonly IRootDock _rootDock;
+    public MyDocumentDock DocumentDock { get; }
 
     public MyDockFactory(IServiceProvider serviceProvider)
     {
-        _serviceProvider = serviceProvider;
-    }
-
-    public override IRootDock CreateLayout()
-    {
-        var myTags1 = _serviceProvider.GetRequiredService<MyTagsViewModel>();
-        var taggableItemsSearchViewModel = _serviceProvider.GetRequiredService<TaggableItemsSearchViewModel>();
-        var fileSystemViewModel = _serviceProvider.GetRequiredService<FileSystemViewModel>();
-        var fileSystemSearchViewModel = _serviceProvider.GetRequiredService<FileSystemSearchViewModel>();
-
-        myTags1.Title = "MyTags";
-        taggableItemsSearchViewModel.Title = "TagSearch";
-        fileSystemViewModel.Title = "FileSystem";
-        fileSystemSearchViewModel.Title = "Search";
-
-        LeftDock = _serviceProvider.GetRequiredService<MyDocumentDock>();
-        LeftDock.Proportion = 0.25;
-        LeftDock.IsCollapsable = true;
-        LeftDock.VisibleDockables = CreateList<IDockable>(myTags1);
-        LeftDock.CanCreateDocument = true;
-
-        RightDock = _serviceProvider.GetRequiredService<MyDocumentDock>();
-        RightDock.Proportion = 0.25;
-        RightDock.IsCollapsable = false;
-        RightDock.CanCreateDocument = true;
-
-        CentralDock = _serviceProvider.GetRequiredService<MyDocumentDock>();
-        CentralDock.Proportion = double.NaN;
-        CentralDock.IsCollapsable = true;
-        CentralDock.VisibleDockables = CreateList<IDockable>(
-            taggableItemsSearchViewModel,
-            fileSystemViewModel,
-            fileSystemSearchViewModel);
-        CentralDock.CanCreateDocument = true;
-
-        var mainLayout = new ProportionalDock
+        var taggableItemsSearchViewModel = serviceProvider.GetRequiredService<TaggableItemsSearchViewModel>();
+        taggableItemsSearchViewModel.Title = "Tag Search";
+        taggableItemsSearchViewModel.CanClose = true;
+        var myDocumentDock = new MyDocumentDock(serviceProvider)
         {
-            Orientation = Orientation.Horizontal,
-            VisibleDockables = CreateList<IDockable>
-            (
-                LeftDock,
-                new ProportionalDockSplitter(),
-                CentralDock
-                // new ProportionalDockSplitter(),
-                // RightDock
-            )
+            CanCreateDocument = true,
+            Proportion = 1.0,
+            IsCollapsable = false,
+            VisibleDockables = CreateList<IDockable>(taggableItemsSearchViewModel)
         };
 
-        var rootDock = new RootDock
+        _rootDock = new RootDock
         {
             Title = "Default",
             IsCollapsable = false,
-            VisibleDockables = CreateList<IDockable>(mainLayout),
-            ActiveDockable = mainLayout,
-            DefaultDockable = mainLayout
+            VisibleDockables = CreateList<IDockable>(myDocumentDock),
+            ActiveDockable = DocumentDock,
+            DefaultDockable = DocumentDock
         };
-
-        _documentDock = CentralDock;
-        _rootDock = rootDock;
-
-        return rootDock;
+        DocumentDock = myDocumentDock;
     }
+
+    public sealed override IList<T> CreateList<T>(params T[] items) => base.CreateList(items);
+
+    public override IRootDock CreateLayout() => _rootDock;
 
     public override void InitLayout(IDockable layout)
     {
-        DockableLocator = new Dictionary<string, Func<IDockable?>> { ["Root"] = () => _rootDock, ["Files"] = () => _documentDock };
+        DockableLocator = new Dictionary<string, Func<IDockable?>> { ["Root"] = () => _rootDock, ["DocumentDock"] = () => DocumentDock };
         // HostWindowLocator = new Dictionary<string, Func<IHostWindow>> { [nameof(IDockWindow)] = () => new HostWindow() };
 
         base.InitLayout(layout);
