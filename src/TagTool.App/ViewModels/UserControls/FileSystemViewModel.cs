@@ -2,8 +2,10 @@
 using System.ComponentModel;
 using System.Diagnostics;
 using Avalonia.Controls;
+using Avalonia.Controls.Notifications;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using CommunityToolkit.Mvvm.Messaging;
 using Dock.Model.Mvvm.Controls;
 using DynamicData;
 using JetBrains.Annotations;
@@ -12,12 +14,15 @@ using TagTool.App.Core.Extensions;
 using TagTool.App.Core.Models;
 using TagTool.App.Core.Services;
 using TagTool.App.Core.ViewModels;
+using TagTool.App.Models;
 using TagTool.Backend;
+using TagTool.Backend.DomainTypes;
 
 namespace TagTool.App.ViewModels.UserControls;
 
 public partial class FileSystemViewModel : Document
 {
+    private readonly FolderActionsService.FolderActionsServiceClient _folderActionsService;
     private readonly TagService.TagServiceClient _tagService;
     private readonly FileActionsService.FileActionsServiceClient _fileActionsService;
     private readonly Stack<DirectoryInfo> _navigationHistoryBack = new();
@@ -69,6 +74,7 @@ public partial class FileSystemViewModel : Document
     public FileSystemViewModel(ITagToolBackend tagToolBackend)
     {
         _fileActionsService = tagToolBackend.GetFileActionsService();
+        _folderActionsService = tagToolBackend.GetFolderActionsService();
         _tagService = tagToolBackend.GetTagService();
 
         Initialize();
@@ -83,6 +89,89 @@ public partial class FileSystemViewModel : Document
             taggableItemViewModel.AreTagsVisible = value;
         }
     }
+
+    [RelayCommand]
+    private async Task DeleteTaggableItem(TaggableItemViewModel vm)
+    {
+        var isDeleted = vm.TaggableItem switch
+        {
+            TaggableFile taggableFile => await DeleteTaggableFile(taggableFile),
+            TaggableFolder taggableFolder => await DeleteTaggableFolder(taggableFolder),
+            _ => false
+        };
+
+        if (isDeleted)
+        {
+            // todo: it does not focus...
+            SelectNext();
+            Items.Remove(vm);
+        }
+    }
+
+    private void SelectNext()
+    {
+        if (SelectedItem is null)
+        {
+            return;
+        }
+
+        var selected = Items.IndexOf(SelectedItem);
+        SelectedItem = Items[selected + 1 % Items.Count];
+    }
+
+    private async Task<bool> DeleteTaggableFolder(TaggableFolder taggableFolder)
+    {
+        var request = new DeleteFolderRequest { Folder = new FolderDto { Path = taggableFolder.Path } };
+        var reply = await _folderActionsService.DeleteFolderAsync(request);
+
+        switch (reply.ResultCase)
+        {
+            case DeleteFolderReply.ResultOneofCase.DeletedFolderFullName:
+                WeakReferenceMessenger.Default.Send(
+                    new Notification(
+                        "Folder deleted successfully",
+                        $"Successfully deleted folder {Path.GetFileName(reply.DeletedFolderFullName)}.").ToMessage());
+
+                return true;
+            case DeleteFolderReply.ResultOneofCase.ErrorMessage:
+                WeakReferenceMessenger.Default.Send(
+                    new Notification(
+                        "Failed to delete the folder",
+                        $"The folder {Path.GetDirectoryName(taggableFolder.Path)} has not been deleted.\nBackend service message:\n{reply.ErrorMessage}",
+                        NotificationType.Warning).ToMessage());
+
+                return false;
+            default:
+                throw new ArgumentOutOfRangeException(reply.ResultCase.ToString());
+        }
+    }
+
+    private async Task<bool> DeleteTaggableFile(TaggableFile taggableFile)
+    {
+        var request = new DeleteFileRequest { File = new FileDto { Path = taggableFile.Path } };
+        var reply = await _fileActionsService.DeleteFileAsync(request);
+
+        switch (reply.ResultCase)
+        {
+            case DeleteFileReply.ResultOneofCase.DeletedFileFullName:
+                WeakReferenceMessenger.Default.Send(
+                    new Notification(
+                        "File deleted successfully",
+                        $"Successfully deleted file {Path.GetFileName(reply.DeletedFileFullName)}.").ToMessage());
+
+                return true;
+            case DeleteFileReply.ResultOneofCase.ErrorMessage:
+                WeakReferenceMessenger.Default.Send(
+                    new Notification("Failed to delete the file",
+                        $"File {Path.GetFileName(taggableFile.Path)} has not been deleted.\nBackend service message:\n{reply.ErrorMessage}",
+                        NotificationType.Warning));
+
+                return false;
+            default:
+                throw new ArgumentOutOfRangeException(reply.ResultCase.ToString());
+        }
+    }
+
 
     [RelayCommand]
     private void CancelAddressChange()

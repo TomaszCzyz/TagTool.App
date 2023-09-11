@@ -4,7 +4,9 @@ using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.LogicalTree;
 using Avalonia.VisualTree;
+using TagTool.App.Core.ViewModels;
 using TagTool.App.ViewModels.UserControls;
+using TagTool.App.Views.Dialogs;
 
 namespace TagTool.App.Views.UserControls;
 
@@ -37,7 +39,10 @@ public partial class FileSystemView : UserControl
     }
 
     private void FolderContent_OnSelectionChanged(object? sender, SelectionChangedEventArgs e)
-        => TextBlockSelectedItems.Text = $"{FolderContentListBox.SelectedItems?.Count ?? 0} selected |";
+    {
+        FolderContentListBox.Focus();
+        TextBlockSelectedItems.Text = $"{FolderContentListBox.SelectedItems?.Count ?? 0} selected |";
+    }
 
     private void FolderContent_OnKeyDown(object? sender, KeyEventArgs e)
     {
@@ -62,6 +67,7 @@ public partial class FileSystemView : UserControl
 
         listBoxItem.FocusAdorner = null;
         listBoxItem.AddHandler(DoubleTappedEvent, Handler);
+        listBoxItem.AddHandler(KeyDownEvent, OnKeyDown_DeleteHandler, RoutingStrategies.Tunnel);
         return;
 
         void Handler(object? _, TappedEventArgs args)
@@ -70,6 +76,36 @@ public partial class FileSystemView : UserControl
             args.Handled = true;
 
             FolderContentListBox.FindLogicalDescendantOfType<ListBoxItem>()?.Focus();
+        }
+    }
+
+    private bool _isYesNoDialogOpened;
+
+    private async Task OnKeyDown_DeleteHandler(object? sender, KeyEventArgs args)
+    {
+        if (args.Key != Key.Delete)
+        {
+            return;
+        }
+
+
+        var listBoxItem = (ListBoxItem)sender!;
+        var vm = (TaggableItemViewModel)listBoxItem.DataContext!;
+
+        if (!_isYesNoDialogOpened)
+        {
+            _isYesNoDialogOpened = true;
+
+            var dialog = new YesNoDialog { Question = $"You sure want to delete file {vm.TaggableItem.DisplayName}?" };
+            var (answer, _) = await dialog.ShowDialog<(bool Answer, bool Remember)>((Window)VisualRoot!);
+
+            if (answer)
+            {
+                ViewModel.DeleteTaggableItemCommand.Execute(vm);
+            }
+
+            _isYesNoDialogOpened = false;
+            args.Handled = true;
         }
     }
 }

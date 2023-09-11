@@ -9,7 +9,7 @@ public abstract class TaggableItem
 
 public class TaggableFile : TaggableItem
 {
-    public override string DisplayName => System.IO.Path.GetFileNameWithoutExtension(Path);
+    public override string DisplayName => System.IO.Path.GetFileName(Path);
 
     public required string Path { get; init; }
 }
