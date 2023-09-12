@@ -13,6 +13,7 @@ public partial class MyDocumentDock : DocumentDock
     public MyDocumentDock(IServiceProvider serviceProvider)
     {
         _serviceProvider = serviceProvider;
+        CanCreateDocument = true;
         CreateDocument = CreateNewDocumentCommand;
     }
 

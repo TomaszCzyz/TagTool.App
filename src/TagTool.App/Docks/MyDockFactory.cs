@@ -9,14 +9,14 @@ namespace TagTool.App.Docks;
 
 public class MyDockFactory : Factory
 {
-    private readonly IRootDock _rootDock;
-    public MyDocumentDock DocumentDock { get; }
+    public IRootDock? RootDock { get; set; }
+    public MyDocumentDock? DocumentDock { get; set; }
 
-    public MyDockFactory(IServiceProvider serviceProvider)
+    private void CreateDefaultLayout(IServiceProvider serviceProvider)
     {
         var taggableItemsSearchViewModel = serviceProvider.GetRequiredService<TaggableItemsSearchViewModel>();
         taggableItemsSearchViewModel.Title = "Tag Search";
-        taggableItemsSearchViewModel.CanClose = true;
+        // taggableItemsSearchViewModel.CanClose = true;
         var myDocumentDock = new MyDocumentDock(serviceProvider)
         {
             CanCreateDocument = true,
@@ -25,26 +25,26 @@ public class MyDockFactory : Factory
             VisibleDockables = CreateList<IDockable>(taggableItemsSearchViewModel)
         };
 
-        _rootDock = new RootDock
+        DocumentDock = myDocumentDock;
+        RootDock = new RootDock
         {
             Title = "Default",
             IsCollapsable = false,
-            VisibleDockables = CreateList<IDockable>(myDocumentDock),
+            VisibleDockables = CreateList<IDockable>(DocumentDock),
             ActiveDockable = DocumentDock,
             DefaultDockable = DocumentDock
         };
-        DocumentDock = myDocumentDock;
     }
 
-    public sealed override IList<T> CreateList<T>(params T[] items) => base.CreateList(items);
+    // public sealed override IList<T> CreateList<T>(params T[] items) => base.CreateList(items);
 
-    public override IRootDock CreateLayout() => _rootDock;
+    public override IRootDock CreateLayout() => RootDock ?? throw new ArgumentNullException(nameof(RootDock));
 
-    public override void InitLayout(IDockable layout)
-    {
-        DockableLocator = new Dictionary<string, Func<IDockable?>> { ["Root"] = () => _rootDock, ["DocumentDock"] = () => DocumentDock };
-        // HostWindowLocator = new Dictionary<string, Func<IHostWindow>> { [nameof(IDockWindow)] = () => new HostWindow() };
-
-        base.InitLayout(layout);
-    }
+    // public override void InitLayout(IDockable layout)
+    // {
+    //     DockableLocator = new Dictionary<string, Func<IDockable?>> { ["Root"] = () => RootDock, ["DocumentDock"] = () => DocumentDock };
+    //     HostWindowLocator = new Dictionary<string, Func<IHostWindow>> { [nameof(IDockWindow)] = () => new HostWindow() };
+    //
+    //     base.InitLayout(layout);
+    // }
 }

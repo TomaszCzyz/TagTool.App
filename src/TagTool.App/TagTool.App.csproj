@@ -23,6 +23,7 @@
     <PackageReference Include="Avalonia.Svg.Skia" Version="11.0.0" />
     <PackageReference Include="Dock.Avalonia" Version="11.0.0" />
     <PackageReference Include="Dock.Model.Mvvm" Version="11.0.0" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
   </ItemGroup>
 
   <ItemGroup>

@@ -8,6 +8,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
 using Dock.Model.Controls;
+using Dock.Model.Mvvm.Controls;
 using JetBrains.Annotations;
 using Microsoft.Extensions.DependencyInjection;
 using TagTool.App.Core.Extensions;
@@ -21,7 +22,7 @@ namespace TagTool.App.ViewModels;
 
 public partial class MainWindowViewModel : ViewModelBase, IRecipient<NewNotificationMessage>
 {
-    private readonly MyDockFactory _dockFactory;
+    public MyDockFactory DockFactory { get; set; }
     private InputElement? _previouslyFocusedElement;
 
     [ObservableProperty]
@@ -36,6 +37,8 @@ public partial class MainWindowViewModel : ViewModelBase, IRecipient<NewNotifica
 
     [ObservableProperty]
     private IRootDock? _layout;
+    // try this:
+    // public IRootDock Layout => DockFactory.RootDock
 
     public WindowNotificationManager? NotificationManager { get; set; }
 
@@ -49,15 +52,44 @@ public partial class MainWindowViewModel : ViewModelBase, IRecipient<NewNotifica
             Debug.Fail("ctor for XAML Previewer should not be invoke during standard execution");
         }
 
-        _dockFactory = App.Current.Services.GetRequiredService<MyDockFactory>();
+        DockFactory = App.Current.Services.GetRequiredService<MyDockFactory>();
 
         Initialize();
     }
 
     [UsedImplicitly]
-    public MainWindowViewModel(MyDockFactory factory)
+    public MainWindowViewModel(IServiceProvider serviceProvider)
     {
-        _dockFactory = factory;
+        if (!File.Exists(@".\layout.json"))
+        {
+            // create default layout
+            return;
+        }
+
+        var jsonRootDock = File.ReadAllText(@".\layout.json");
+
+        if (string.IsNullOrEmpty(jsonRootDock))
+        {
+            // create default layout
+            return;
+        }
+
+        var serializer = new DockSerializer(serviceProvider);
+        var rootDock = serializer.Deserialize<RootDock>(jsonRootDock);
+
+        if (rootDock is null)
+        {
+            // create default layout
+            return;
+        }
+
+        // var myDocumentDock = serviceProvider.GetRequiredService<MyDocumentDock>();
+
+        Layout = rootDock;
+        var myDockFactory = new MyDockFactory { RootDock = rootDock, DocumentDock = (rootDock.DefaultDockable as MyDocumentDock)! };
+        DockFactory = myDockFactory;
+        Layout.Factory = myDockFactory;
+        Layout.Factory.InitLayout(rootDock);
 
         Initialize();
     }
@@ -74,18 +106,12 @@ public partial class MainWindowViewModel : ViewModelBase, IRecipient<NewNotifica
     private void Initialize()
     {
         WeakReferenceMessenger.Default.Register(this);
-
-        Layout = _dockFactory.CreateLayout();
-        if (Layout is not null)
-        {
-            _dockFactory.InitLayout(Layout);
-        }
     }
 
     [RelayCommand]
     private void AddDocumentToDock(string type)
     {
-        _dockFactory.DocumentDock.CreateNewDocumentCommand.Execute(type);
+        DockFactory.DocumentDock.CreateNewDocumentCommand.Execute(type);
     }
 
     [RelayCommand]

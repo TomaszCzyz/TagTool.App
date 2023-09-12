@@ -39,7 +39,7 @@ public partial class MainWindow : Window
         => ViewModel.NotificationManager =
             new WindowNotificationManager((Window)VisualRoot!)
             {
-                Position = NotificationPosition.BottomLeft,
+                Position = NotificationPosition.BottomRight,
                 MaxItems = 3,
                 Margin = new Thickness(0, 0, 15, 40)
             };

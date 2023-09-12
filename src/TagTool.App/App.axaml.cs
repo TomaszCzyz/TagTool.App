@@ -3,6 +3,7 @@ using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
 using Dock.Model.Core;
+using Dock.Model.Mvvm.Controls;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -39,11 +40,32 @@ public class App : Application
     {
         if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktopLifetime)
         {
-            var mainWindow = new MainWindow { DataContext = Services.GetRequiredService<MainWindowViewModel>() };
+            var serializer = new DockSerializer(Services);
+
+            var mainWindowViewModel = Services.GetRequiredService<MainWindowViewModel>();
+            var mainWindow = new MainWindow { DataContext = mainWindowViewModel };
 
             desktopLifetime.MainWindow = mainWindow;
 
-            desktopLifetime.Exit += (_, _) => Log.CloseAndFlush();
+            desktopLifetime.Exit += async (_, _) =>
+            {
+                // todo: move logic below to ViewModel, to overriden method OnClosing... ?
+                try
+                {
+                    await using var fileStream = File.Open(@".\layout.json", FileMode.Create);
+
+                    if (mainWindowViewModel.Layout is not null)
+                    {
+                        serializer.Save(fileStream, (mainWindowViewModel.Layout as RootDock)!);
+                    }
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e);
+                }
+
+                await Log.CloseAndFlushAsync();
+            };
         }
 
         base.OnFrameworkInitializationCompleted();

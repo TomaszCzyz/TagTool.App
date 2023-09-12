@@ -66,6 +66,7 @@
         <Panel>
             <ListBox
                 Name="TaggableItemsListBox"
+                Background="Transparent"
                 Width="{Binding #TopMostDockPanel.Bounds.Width}"
                 ItemsSource="{Binding SearchResults}">
                 <ListBox.ItemTemplate>

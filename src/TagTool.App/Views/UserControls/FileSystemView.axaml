@@ -197,6 +197,7 @@
         <ListBox
             Name="FolderContentListBox"
             Grid.Row="1"
+            Background="Transparent"
             Focusable="True"
             FontSize="{DynamicResource AppContentFontSize}"
             IsTextSearchEnabled="True"
