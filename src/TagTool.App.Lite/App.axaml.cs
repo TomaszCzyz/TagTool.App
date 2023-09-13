@@ -1,5 +1,6 @@
 using System;
 using System.Globalization;
+using System.IO;
 using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
@@ -13,6 +14,7 @@ using OpenAI.GPT3.ObjectModels;
 using Serilog;
 using Serilog.Core.Enrichers;
 using Serilog.Events;
+using Serilog.Formatting.Compact;
 using TagTool.App.Core.Extensions;
 using TagTool.App.Core.Services;
 using TagTool.App.Core.ViewModels;
@@ -88,19 +90,19 @@ public class App : Application
     private static void SetupSerilog()
     {
         const string outputTemplate = "[{Timestamp:HH:mm:ss} {Level:u3} {SourceContext}]{NewLine}{Message:lj}{NewLine}{Exception}";
+        var logsPath = Path.Join(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "TagTool", "App", "Logs");
 
         Log.Logger = new LoggerConfiguration()
-            .MinimumLevel.Verbose()
+            .MinimumLevel.Debug()
             .MinimumLevel.Override("Microsoft", LogEventLevel.Warning)
             .MinimumLevel.Override("System.Net.Http.HttpClient.IOpenAIService", LogEventLevel.Warning)
             .Enrich.FromLogContext()
             .Enrich.With(new PropertyEnricher("ApplicationName", "TagToolApp"))
             .WriteTo.Debug(outputTemplate: outputTemplate, formatProvider: CultureInfo.InvariantCulture)
             .WriteTo.File(
-                @"C:\Users\tczyz\Documents\TagToolApp\TagToolAppLogs.txt",
-                outputTemplate: outputTemplate,
-                formatProvider: CultureInfo.InvariantCulture,
-                shared: true)
+                new CompactJsonFormatter(),
+                $"{logsPath}/logs.json",
+                rollingInterval: RollingInterval.Day)
             .CreateLogger();
     }
 }
