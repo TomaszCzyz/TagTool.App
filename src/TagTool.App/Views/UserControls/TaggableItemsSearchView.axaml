@@ -11,7 +11,7 @@
     x:DataType="userControls:TaggableItemsSearchViewModel"
     x:Name="UserControlRoot"
     d:DesignWidth="700"
-    d:DesignHeight="700"
+    d:DesignHeight="50"
     mc:Ignorable="d"
     d:DataContext="{x:Static dd:DesignData.TaggableItemsSearchViewModel}">
 

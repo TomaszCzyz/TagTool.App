@@ -51,18 +51,21 @@
                 </Button>
                 <Button
                     Grid.Row="1"
+                    ToolTip.Tip="Open TagTool app"
                     Margin="3 0"
                     Padding="0"
+                    Command="{Binding OpenTagToolAppCommand}"
                     Background="Transparent">
                     <avalonia:MaterialIcon
                         Height="20"
                         Foreground="#999999"
-                        Kind="Settings" />
+                        Kind="OpenInNew" />
 
                 </Button>
             </Grid>
         </Grid>
 
+        <!-- Results panel -->
         <Panel>
             <ListBox
                 Name="TaggableItemsListBox"

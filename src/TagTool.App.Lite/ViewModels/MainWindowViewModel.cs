@@ -6,6 +6,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Avalonia.Controls;
 using Avalonia.Threading;
+using CommunityToolkit.Mvvm.Input;
 using DynamicData;
 using Google.Protobuf.WellKnownTypes;
 using JetBrains.Annotations;
@@ -19,7 +20,7 @@ using TagTool.Backend.DomainTypes;
 
 namespace TagTool.App.Lite.ViewModels;
 
-public class MainWindowViewModel : ViewModelBase
+public partial class MainWindowViewModel : ViewModelBase
 {
     private readonly TagService.TagServiceClient _tagService;
 
@@ -58,6 +59,25 @@ public class MainWindowViewModel : ViewModelBase
 
         // Initial, empty search to retrieve the most popular items.
         Dispatcher.UIThread.InvokeAsync(() => SearchForTaggableItems(null));
+    }
+
+    [RelayCommand]
+    private static async Task OpenTagToolApp()
+    {
+        await Task.Run(() =>
+        {
+            var process = new Process
+            {
+                StartInfo = new ProcessStartInfo
+                {
+                    WorkingDirectory = @"C:\Users\tczyz\Source\Repos\My\TagTool\TagTool.App\src\TagTool.App\bin\Debug\net7.0",
+                    FileName = @"C:\Users\tczyz\Source\Repos\My\TagTool\TagTool.App\src\TagTool.App\bin\Debug\net7.0\TagTool.App.exe",
+                    UseShellExecute = true
+                }
+            };
+
+            process.Start();
+        });
     }
 
     private async Task SearchForTaggableItems(ICollection<QuerySegment>? argsQuerySegments)
