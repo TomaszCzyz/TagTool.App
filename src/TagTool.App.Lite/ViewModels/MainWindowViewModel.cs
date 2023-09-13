@@ -27,6 +27,8 @@ public partial class MainWindowViewModel : ViewModelBase
     public TaggableItemsSearchBarViewModel SearchBarViewModel { get; }
 
     public ObservableCollection<TaggableItemViewModel> SearchResults { get; } = new();
+    
+    public ObservableCollection<TaggableItemViewModel> OtherResults { get; set; } = new();
 
     /// <summary>
     ///     ctor for XAML previewer
@@ -59,6 +61,8 @@ public partial class MainWindowViewModel : ViewModelBase
 
         // Initial, empty search to retrieve the most popular items.
         Dispatcher.UIThread.InvokeAsync(() => SearchForTaggableItems(null));
+        
+        OtherResults.Add(new TaggableItemViewModel(_tagService) { TaggableItem = new TaggableFile { Path = "info.FullName" }, AreTagsVisible = true });
     }
 
     [RelayCommand]

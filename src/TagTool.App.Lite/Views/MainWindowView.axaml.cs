@@ -1,3 +1,4 @@
+using System.Linq;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
@@ -24,8 +25,14 @@ public partial class MainWindowView : Window
         SearchBarView.AddHandler(KeyDownEvent, SwitchFocusToSearchResults, handledEventsToo: true);
         TaggableItemsListBox.AddHandler(KeyDownEvent, SwitchFocusToSearchBar);
 
+        // Focus switching between SearchResults and OtherResults
+        TaggableItemsListBox.AddHandler(KeyDownEvent, SwitchFocusToOtherResults);
+        OtherResultsListBox.AddHandler(KeyDownEvent, SwitchFocusFromOtherResultsToSearchResults);
+
         TaggableItemsListBox.AddHandler(KeyDownEvent, OnKeyDown_ExecuteLinkedAction, handledEventsToo: true);
         TaggableItemsListBox.AddHandler(DoubleTappedEvent, OnDoubleTapped_ExecuteLinkedAction, handledEventsToo: true);
+        OtherResultsListBox.AddHandler(KeyDownEvent, OnKeyDown_ExecuteLinkedAction, handledEventsToo: true);
+        OtherResultsListBox.AddHandler(DoubleTappedEvent, OnDoubleTapped_ExecuteLinkedAction, handledEventsToo: true);
     }
 
     private static void OnDoubleTapped_ExecuteLinkedAction(object? sender, TappedEventArgs args)
@@ -54,6 +61,29 @@ public partial class MainWindowView : Window
         if (args.Key == Key.Up)
         {
             SearchBarView.FindDescendantOfType<AutoCompleteBox>()?.Focus();
+        }
+    }
+
+    private void SwitchFocusToOtherResults(object? sender, KeyEventArgs args)
+    {
+        if (args.Key == Key.Down && OtherResultsListBox.Items.Count != 0)
+        {
+            TaggableItemsListBox.Selection.Clear();
+
+            OtherResultsListBox.ContainerFromIndex(0)?.Focus();
+            OtherResultsListBox.Selection.Select(0);
+        }
+    }
+
+    private void SwitchFocusFromOtherResultsToSearchResults(object? sender, KeyEventArgs args)
+    {
+        if (args.Key == Key.Up && TaggableItemsListBox.Items.Count != 0)
+        {
+            OtherResultsListBox.Selection.Clear();
+
+            var lastItemIndex = TaggableItemsListBox.ItemCount - 1;
+            TaggableItemsListBox.ContainerFromIndex(lastItemIndex)?.Focus();
+            TaggableItemsListBox.Selection.Select(lastItemIndex);
         }
     }
 

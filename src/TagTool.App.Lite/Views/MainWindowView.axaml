@@ -51,11 +51,11 @@
                 </Button>
                 <Button
                     Grid.Row="1"
-                    ToolTip.Tip="Open TagTool app"
                     Margin="3 0"
                     Padding="0"
+                    Background="Transparent"
                     Command="{Binding OpenTagToolAppCommand}"
-                    Background="Transparent">
+                    ToolTip.Tip="Open TagTool app">
                     <avalonia:MaterialIcon
                         Height="20"
                         Foreground="#999999"
@@ -66,26 +66,52 @@
         </Grid>
 
         <!-- Results panel -->
-        <Panel>
-            <ListBox
-                Name="TaggableItemsListBox"
-                Background="Transparent"
-                Width="{Binding #TopMostDockPanel.Bounds.Width}"
-                ItemsSource="{Binding SearchResults}">
-                <ListBox.ItemTemplate>
-                    <DataTemplate x:DataType="viewModels:TaggableItemViewModel">
-                        <views:TaggableItemView HorizontalAlignment="Stretch" FontSize="14" />
-                    </DataTemplate>
-                </ListBox.ItemTemplate>
-            </ListBox>
-            <TextBlock
-                HorizontalAlignment="Center"
-                VerticalAlignment="Center"
-                Foreground="Chocolate"
-                IsVisible="{Binding !#TaggableItemsListBox.ItemCount}"
-                Text="No items matching given query" />
+        <StackPanel>
+            <!-- Query result -->
+            <Panel>
+                <ListBox
+                    Name="TaggableItemsListBox"
+                    Width="{Binding #TopMostDockPanel.Bounds.Width}"
+                    Background="Transparent"
+                    ItemsSource="{Binding SearchResults}">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate x:DataType="viewModels:TaggableItemViewModel">
+                            <views:TaggableItemView FontSize="14" />
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+                <TextBlock
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    Foreground="Chocolate"
+                    IsVisible="{Binding !#TaggableItemsListBox.ItemCount}"
+                    Text="No items matching given query" />
 
-        </Panel>
+            </Panel>
+            <Grid
+                ColumnDefinitions="* Auto *"
+                IsVisible="{Binding #OtherResultsListBox.ItemCount}"
+                RowDefinitions="Auto">
+                <Separator Grid.Column="0" />
+                <TextBlock Grid.Column="1" Text="Other items" />
+                <Separator Grid.Column="2" />
+            </Grid>
+            <!-- Other results -->
+            <!-- todo: maybe it should be one listbox with inserted separator-item... it should simplifying e.g. focusing -->
+            <Panel>
+                <ListBox
+                    Name="OtherResultsListBox"
+                    Width="{Binding #TopMostDockPanel.Bounds.Width}"
+                    Background="Transparent"
+                    ItemsSource="{Binding OtherResults}">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate x:DataType="viewModels:TaggableItemViewModel">
+                            <views:TaggableItemView FontSize="14" />
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+            </Panel>
+        </StackPanel>
     </DockPanel>
 
 </Window>
