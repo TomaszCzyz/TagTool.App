@@ -273,7 +273,7 @@ public sealed partial class TaggableItemsSearchBarViewModel : ViewModelBase, IDi
 
     private void OnCommitSearchQueryEvent(CommitSearchQueryEventArgs e)
     {
-        Debug.WriteLine($"CommitSearchQueryEvent invoked with {string.Join(", ", e.QuerySegments.Select(segment => segment.Tag.DisplayText))}");
+        _logger.LogDebug("CommitSearchQueryEvent invoked with {@QuerySegments}", e.QuerySegments);
         CommitSearchQueryEvent?.Invoke(this, e);
     }
 }

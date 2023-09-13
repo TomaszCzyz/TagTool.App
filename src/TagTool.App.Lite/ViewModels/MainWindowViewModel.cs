@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
@@ -52,18 +53,26 @@ public class MainWindowViewModel : ViewModelBase
     }
 
     private void Initialize()
-        => SearchBarViewModel.CommitSearchQueryEvent +=
-            (_, args) => Dispatcher.UIThread.InvokeAsync(() => SearchForTaggableItems(args.QuerySegments));
-
-    private async Task SearchForTaggableItems(ICollection<QuerySegment> argsQuerySegments)
     {
-        var tagQueryParams = argsQuerySegments.Select(segment
-            => new GetItemsByTagsRequest.Types.TagQueryParam
-            {
-                Tag = Any.Pack(TagMapper.MapToDto(segment.Tag)), State = MapQuerySegmentState(segment)
-            });
+        SearchBarViewModel.CommitSearchQueryEvent += (_, args) => Dispatcher.UIThread.InvokeAsync(() => SearchForTaggableItems(args.QuerySegments));
 
-        var reply = await _tagService.GetItemsByTagsAsync(new GetItemsByTagsRequest { QueryParams = { tagQueryParams } });
+        // Initial, empty search to retrieve the most popular items.
+        Dispatcher.UIThread.InvokeAsync(() => SearchForTaggableItems(null));
+    }
+
+    private async Task SearchForTaggableItems(ICollection<QuerySegment>? argsQuerySegments)
+    {
+        var tagQueryParams = argsQuerySegments?
+            .Select(segment =>
+                new GetItemsByTagsRequest.Types.TagQueryParam
+                {
+                    Tag = Any.Pack(TagMapper.MapToDto(segment.Tag)), State = MapQuerySegmentState(segment)
+                });
+
+        var reply = await _tagService.GetItemsByTagsAsync(new GetItemsByTagsRequest
+        {
+            QueryParams = { tagQueryParams ?? Array.Empty<GetItemsByTagsRequest.Types.TagQueryParam>() }
+        });
 
         SearchResults.Clear();
         SearchResults.AddRange(reply.TaggedItems.Select(item
