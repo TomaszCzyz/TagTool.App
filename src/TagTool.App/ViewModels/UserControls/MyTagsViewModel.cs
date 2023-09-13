@@ -85,7 +85,7 @@ public partial class MyTagsViewModel : Document
             new MonthTag { Month = 9 },
             new MonthTag { Month = 10 },
             new MonthTag { Month = 11 },
-            new MonthTag { Month = 12 },
+            new MonthTag { Month = 12 }
         };
 
         Dispatcher.UIThread.InvokeAsync(async () =>

@@ -116,7 +116,7 @@ public partial class FileSystemViewModel : Document
         }
 
         var selected = Items.IndexOf(SelectedItem);
-        SelectedItem = Items[selected + 1 % Items.Count];
+        SelectedItem = Items[(selected + 1) % Items.Count];
     }
 
     private async Task<bool> DeleteTaggableFolder(TaggableFolder taggableFolder)

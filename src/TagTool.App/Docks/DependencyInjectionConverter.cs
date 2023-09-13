@@ -10,6 +10,7 @@ namespace TagTool.App.Docks;
 public class DependencyInjectionContractResolver : DefaultContractResolver
 {
     private readonly IServiceProvider _serviceProvider;
+
     // private readonly Type _type = typeof(AvaloniaList<>);
     private readonly Type _type = typeof(ObservableCollection<>);
 
@@ -28,11 +29,9 @@ public class DependencyInjectionContractResolver : DefaultContractResolver
         return base.ResolveContract(type);
     }
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     protected override IList<JsonProperty> CreateProperties(Type type, MemberSerialization memberSerialization)
-    {
-        return base.CreateProperties(type, memberSerialization).Where(p => p.Writable).ToList();
-    }
+        => base.CreateProperties(type, memberSerialization).Where(p => p.Writable).ToList();
 
     protected override JsonObjectContract CreateObjectContract(Type objectType)
     {

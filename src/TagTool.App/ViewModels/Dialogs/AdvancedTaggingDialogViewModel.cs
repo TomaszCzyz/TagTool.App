@@ -101,9 +101,7 @@ public partial class AdvancedTaggingDialogViewModel : ViewModelBase, IDisposable
         }
 
         bool RecursiveRemove(ICollection<Node> items, Node selectedItem)
-        {
-            return items.Remove(selectedItem) || items.Any(item => item.AreChildrenInitialized && RecursiveRemove(item.Children, selectedItem));
-        }
+            => items.Remove(selectedItem) || items.Any(item => item.AreChildrenInitialized && RecursiveRemove(item.Children, selectedItem));
     }
 
     [RelayCommand]

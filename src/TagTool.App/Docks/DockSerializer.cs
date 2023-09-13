@@ -11,7 +11,7 @@ public class DockSerializer
     private readonly JsonSerializerSettings _settings;
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="DockSerializer"/> class with the specified list type.
+    ///     Initializes a new instance of the <see cref="DockSerializer" /> class with the specified list type.
     /// </summary>
     /// <param name="serviceProvider"></param>
     public DockSerializer(IServiceProvider serviceProvider)
@@ -31,15 +31,9 @@ public class DockSerializer
         };
     }
 
-    public string Serialize<T>(T value)
-    {
-        return JsonConvert.SerializeObject(value, _settings);
-    }
+    public string Serialize<T>(T value) => JsonConvert.SerializeObject(value, _settings);
 
-    public T? Deserialize<T>(string text)
-    {
-        return JsonConvert.DeserializeObject<T>(text, _settings);
-    }
+    public T? Deserialize<T>(string text) => JsonConvert.DeserializeObject<T>(text, _settings);
 
     public T? Load<T>(Stream stream)
     {
@@ -61,23 +55,16 @@ public class DockSerializer
     }
 }
 
-/// <summary>
-/// 
-/// </summary>
 public class ListContractResolver : DefaultContractResolver
 {
     private readonly Type _type;
 
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="type"></param>
     public ListContractResolver(Type type)
     {
         _type = type;
     }
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public override JsonContract ResolveContract(Type type)
     {
         if (type.GetTypeInfo().IsGenericType && type.GetGenericTypeDefinition() == typeof(IList<>))
@@ -88,9 +75,7 @@ public class ListContractResolver : DefaultContractResolver
         return base.ResolveContract(type);
     }
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     protected override IList<JsonProperty> CreateProperties(Type type, MemberSerialization memberSerialization)
-    {
-        return base.CreateProperties(type, memberSerialization).Where(p => p.Writable).ToList();
-    }
+        => base.CreateProperties(type, memberSerialization).Where(p => p.Writable).ToList();
 }

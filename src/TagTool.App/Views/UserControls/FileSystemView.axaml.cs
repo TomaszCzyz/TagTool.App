@@ -12,6 +12,7 @@ namespace TagTool.App.Views.UserControls;
 
 public partial class FileSystemView : UserControl
 {
+    private bool _isYesNoDialogOpened;
     private FileSystemViewModel ViewModel => (FileSystemViewModel)DataContext!;
 
     public FileSystemView()
@@ -78,8 +79,6 @@ public partial class FileSystemView : UserControl
             FolderContentListBox.FindLogicalDescendantOfType<ListBoxItem>()?.Focus();
         }
     }
-
-    private bool _isYesNoDialogOpened;
 
     private async Task OnKeyDown_DeleteHandler(object? sender, KeyEventArgs args)
     {

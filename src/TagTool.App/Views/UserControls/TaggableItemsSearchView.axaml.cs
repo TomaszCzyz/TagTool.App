@@ -18,7 +18,7 @@ public partial class TaggableItemsSearchView : UserControl
 
         DragDropInfoAreaBorder.AddHandler(DragDrop.DropEvent, Drop);
         // DragDropInfoAreaBorder.AddHandler(DragDrop.DragOverEvent, DragOver);
-        
+
         TaggableItemsListBox.AddHandler(KeyDownEvent, OnKeyDown_ExecuteLinkedAction, handledEventsToo: true);
         TaggableItemsListBox.AddHandler(DoubleTappedEvent, OnDoubleTapped_ExecuteLinkedAction, handledEventsToo: true);
     }
@@ -32,7 +32,7 @@ public partial class TaggableItemsSearchView : UserControl
 
         base.OnApplyTemplate(e);
     }
-    
+
     private static void OnDoubleTapped_ExecuteLinkedAction(object? sender, TappedEventArgs args)
     {
         // todo: if itemType == Folder, then open folder in TagTool.a new App's FileSystemView

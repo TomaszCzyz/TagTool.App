@@ -22,7 +22,6 @@ namespace TagTool.App.ViewModels;
 
 public partial class MainWindowViewModel : ViewModelBase, IRecipient<NewNotificationMessage>
 {
-    public MyDockFactory DockFactory { get; set; }
     private InputElement? _previouslyFocusedElement;
 
     [ObservableProperty]
@@ -37,6 +36,8 @@ public partial class MainWindowViewModel : ViewModelBase, IRecipient<NewNotifica
 
     [ObservableProperty]
     private IRootDock? _layout;
+
+    public MyDockFactory DockFactory { get; set; }
     // try this:
     // public IRootDock Layout => DockFactory.RootDock
 
@@ -103,16 +104,10 @@ public partial class MainWindowViewModel : ViewModelBase, IRecipient<NewNotifica
                 NotificationManager = NotificationManager
             });
 
-    private void Initialize()
-    {
-        WeakReferenceMessenger.Default.Register(this);
-    }
+    private void Initialize() => WeakReferenceMessenger.Default.Register(this);
 
     [RelayCommand]
-    private void AddDocumentToDock(string type)
-    {
-        DockFactory.DocumentDock.CreateNewDocumentCommand.Execute(type);
-    }
+    private void AddDocumentToDock(string type) => DockFactory.DocumentDock.CreateNewDocumentCommand.Execute(type);
 
     [RelayCommand]
     private void ChangeLeftToolMenuPanelVisibility(object param)
