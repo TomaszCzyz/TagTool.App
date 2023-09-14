@@ -42,5 +42,6 @@
     <Application.Styles>
         <FluentTheme />
         <avalonia:MaterialIconStyles />
+        <StyleInclude Source="avares://TagTool.App.Core/Controls/MyControls.axaml" />
     </Application.Styles>
 </Application>

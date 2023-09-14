@@ -1,0 +1,485 @@
+﻿<ResourceDictionary
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="clr-namespace:TagTool.App.Core.Controls">
+    <Design.PreviewWith>
+        <Border Padding="20">
+            <StackPanel Spacing="20">
+                <local:ProgressRing
+                    Width="60"
+                    Height="60"
+                    IsActive="True" />
+
+            </StackPanel>
+        </Border>
+    </Design.PreviewWith>
+    <ControlTheme x:Key="{x:Type local:ProgressRing}" TargetType="local:ProgressRing">
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="Foreground" Value="White" />
+        <Setter Property="IsHitTestVisible" Value="False" />
+        <Setter Property="HorizontalAlignment" Value="Center" />
+        <Setter Property="VerticalAlignment" Value="Center" />
+        <Setter Property="MinHeight" Value="20" />
+        <Setter Property="MinWidth" Value="20" />
+        <Setter Property="ClipToBounds" Value="True" />
+        <Setter Property="Template">
+            <ControlTemplate>
+                <Border
+                    MaxWidth="{TemplateBinding MaxSideLength}"
+                    MaxHeight="{TemplateBinding MaxSideLength}"
+                    Padding="{TemplateBinding Padding}"
+                    Background="{TemplateBinding Background}"
+                    BorderBrush="{TemplateBinding BorderBrush}"
+                    BorderThickness="{TemplateBinding BorderThickness}"
+                    CornerRadius="0"
+                    IsVisible="{TemplateBinding IsActive}">
+                    <Border.RenderTransform>
+                        <TransformGroup>
+                            <RotateTransform />
+                            <TranslateTransform />
+                        </TransformGroup>
+                    </Border.RenderTransform>
+                    <Grid>
+                        <Canvas Name="PART_E1R">
+                            <Ellipse
+                                Name="PART_E1"
+                                Width="{TemplateBinding EllipseDiameter}"
+                                Height="{TemplateBinding EllipseDiameter}"
+                                Margin="{TemplateBinding EllipseOffset}"
+                                HorizontalAlignment="Left"
+                                VerticalAlignment="Top"
+                                Fill="{TemplateBinding Foreground}"
+                                IsVisible="{TemplateBinding IsActive}"
+                                Opacity="0" />
+
+                        </Canvas>
+                        <Canvas Name="PART_E2R">
+                            <Ellipse
+                                Name="PART_E2"
+                                Width="{TemplateBinding EllipseDiameter}"
+                                Height="{TemplateBinding EllipseDiameter}"
+                                Margin="{TemplateBinding EllipseOffset}"
+                                HorizontalAlignment="Left"
+                                VerticalAlignment="Top"
+                                Fill="{TemplateBinding Foreground}"
+                                IsVisible="{TemplateBinding IsActive}"
+                                Opacity="0" />
+
+                        </Canvas>
+                        <Canvas Name="PART_E3R">
+                            <Ellipse
+                                Name="PART_E3"
+                                Width="{TemplateBinding EllipseDiameter}"
+                                Height="{TemplateBinding EllipseDiameter}"
+                                Margin="{TemplateBinding EllipseOffset}"
+                                HorizontalAlignment="Left"
+                                VerticalAlignment="Top"
+                                Fill="{TemplateBinding Foreground}"
+                                IsVisible="{TemplateBinding IsActive}"
+                                Opacity="0" />
+
+                        </Canvas>
+                        <Canvas Name="PART_E4R">
+                            <Ellipse
+                                Name="PART_E4"
+                                Width="{TemplateBinding EllipseDiameter}"
+                                Height="{TemplateBinding EllipseDiameter}"
+                                Margin="{TemplateBinding EllipseOffset}"
+                                HorizontalAlignment="Left"
+                                VerticalAlignment="Top"
+                                Fill="{TemplateBinding Foreground}"
+                                IsVisible="{TemplateBinding IsActive}"
+                                Opacity="0" />
+
+                        </Canvas>
+                        <Canvas Name="PART_E5R">
+                            <Ellipse
+                                Name="PART_E5"
+                                Width="{TemplateBinding EllipseDiameter}"
+                                Height="{TemplateBinding EllipseDiameter}"
+                                Margin="{TemplateBinding EllipseOffset}"
+                                HorizontalAlignment="Left"
+                                VerticalAlignment="Top"
+                                Fill="{TemplateBinding Foreground}"
+                                IsVisible="{TemplateBinding IsActive}"
+                                Opacity="0" />
+
+                        </Canvas>
+                        <Canvas Name="PART_E6R">
+                            <Ellipse
+                                Name="PART_E6"
+                                Width="{TemplateBinding EllipseDiameter}"
+                                Height="{TemplateBinding EllipseDiameter}"
+                                Margin="{TemplateBinding EllipseOffset}"
+                                HorizontalAlignment="Left"
+                                VerticalAlignment="Top"
+                                Fill="{TemplateBinding Foreground}"
+                                IsVisible="{TemplateBinding IsActive}"
+                                Opacity="0" />
+
+                        </Canvas>
+                    </Grid>
+                </Border>
+            </ControlTemplate>
+        </Setter>
+        <Style Selector="^:active /template/ Ellipse#PART_E1">
+            <Style.Animations>
+                <Animation
+                    Delay="0"
+                    FillMode="None"
+                    IterationCount="Infinite"
+                    Duration="0:0:4.4">
+                    <KeyFrame KeyTime="0:0:0.001">
+                        <Setter Property="Opacity" Value="1" />
+                    </KeyFrame>
+                    <KeyFrame KeyTime="0:0:3.21">
+                        <Setter Property="Opacity" Value="1" />
+                    </KeyFrame>
+                    <KeyFrame KeyTime="0:0:3.22">
+                        <Setter Property="Opacity" Value="0" />
+                    </KeyFrame>
+                    <KeyFrame KeyTime="0:0:3.47">
+                        <Setter Property="Opacity" Value="0" />
+                    </KeyFrame>
+                </Animation>
+            </Style.Animations>
+        </Style>
+        <Style Selector="^:active /template/ Ellipse#PART_E2">
+            <Style.Animations>
+                <Animation
+                    Delay="0:0:0.167"
+                    FillMode="None"
+                    IterationCount="Infinite"
+                    Duration="0:0:4.4">
+                    <KeyFrame KeyTime="0:0:0.001">
+                        <Setter Property="Opacity" Value="1" />
+                    </KeyFrame>
+                    <KeyFrame KeyTime="0:0:3.21">
+                        <Setter Property="Opacity" Value="1" />
+                    </KeyFrame>
+                    <KeyFrame KeyTime="0:0:3.22">
+                        <Setter Property="Opacity" Value="0" />
+                    </KeyFrame>
+                    <KeyFrame KeyTime="0:0:3.47">
+                        <Setter Property="Opacity" Value="0" />
+                    </KeyFrame>
+                </Animation>
+            </Style.Animations>
+        </Style>
+        <Style Selector="^:active /template/ Ellipse#PART_E3">
+            <Style.Animations>
+                <Animation
+                    Delay="0:0:0.334"
+                    FillMode="None"
+                    IterationCount="Infinite"
+                    Duration="0:0:4.4">
+                    <KeyFrame KeyTime="0:0:0.001">
+                        <Setter Property="Opacity" Value="1" />
+                    </KeyFrame>
+                    <KeyFrame KeyTime="0:0:3.21">
+                        <Setter Property="Opacity" Value="1" />
+                    </KeyFrame>
+                    <KeyFrame KeyTime="0:0:3.22">
+                        <Setter Property="Opacity" Value="0" />
+                    </KeyFrame>
+                    <KeyFrame KeyTime="0:0:3.47">
+                        <Setter Property="Opacity" Value="0" />
+                    </KeyFrame>
+                </Animation>
+            </Style.Animations>
+        </Style>
+        <Style Selector="^:active /template/ Ellipse#PART_E4">
+            <Style.Animations>
+                <Animation
+                    Delay="0:0:0.501"
+                    FillMode="None"
+                    IterationCount="Infinite"
+                    Duration="0:0:4.4">
+                    <KeyFrame KeyTime="0:0:0.001">
+                        <Setter Property="Opacity" Value="1" />
+                    </KeyFrame>
+                    <KeyFrame KeyTime="0:0:3.21">
+                        <Setter Property="Opacity" Value="1" />
+                    </KeyFrame>
+                    <KeyFrame KeyTime="0:0:3.22">
+                        <Setter Property="Opacity" Value="0" />
+                    </KeyFrame>
+                    <KeyFrame KeyTime="0:0:3.47">
+                        <Setter Property="Opacity" Value="0" />
+                    </KeyFrame>
+                </Animation>
+            </Style.Animations>
+        </Style>
+        <Style Selector="^:active /template/ Ellipse#PART_E5">
+            <Style.Animations>
+                <Animation
+                    Delay="0:0:0.668"
+                    FillMode="None"
+                    IterationCount="Infinite"
+                    Duration="0:0:4.4">
+                    <KeyFrame KeyTime="0:0:0.001">
+                        <Setter Property="Opacity" Value="1" />
+                    </KeyFrame>
+                    <KeyFrame KeyTime="0:0:3.21">
+                        <Setter Property="Opacity" Value="1" />
+                    </KeyFrame>
+                    <KeyFrame KeyTime="0:0:3.22">
+                        <Setter Property="Opacity" Value="0" />
+                    </KeyFrame>
+                    <KeyFrame KeyTime="0:0:3.47">
+                        <Setter Property="Opacity" Value="0" />
+                    </KeyFrame>
+                </Animation>
+            </Style.Animations>
+        </Style>
+        <Style Selector="^:active /template/ Ellipse#PART_E6">
+            <Style.Animations>
+                <Animation
+                    Delay="0:0:0.835"
+                    FillMode="None"
+                    IterationCount="Infinite"
+                    Duration="0:0:4.4">
+                    <KeyFrame KeyTime="0:0:0.001">
+                        <Setter Property="Opacity" Value="1" />
+                    </KeyFrame>
+                    <KeyFrame KeyTime="0:0:3.21">
+                        <Setter Property="Opacity" Value="1" />
+                    </KeyFrame>
+                    <KeyFrame KeyTime="0:0:3.22">
+                        <Setter Property="Opacity" Value="0" />
+                    </KeyFrame>
+                    <KeyFrame KeyTime="0:0:3.47">
+                        <Setter Property="Opacity" Value="0" />
+                    </KeyFrame>
+                </Animation>
+            </Style.Animations>
+        </Style>
+        <Style Selector="^:active /template/ Canvas#PART_E1R">
+            <Style.Animations>
+                <Animation
+                    Delay="0:0:0.0"
+                    FillMode="None"
+                    IterationCount="Infinite"
+                    Duration="0:0:4.4">
+                    <KeyFrame KeySpline="0.13,0.21,0.1,0.7" KeyTime="0:0:0.001">
+                        <Setter Property="RotateTransform.Angle" Value="-110" />
+                    </KeyFrame>
+                    <KeyFrame KeySpline="0.02,0.33,0.38,0.77" KeyTime="0:0:0.433">
+                        <Setter Property="RotateTransform.Angle" Value="10" />
+                    </KeyFrame>
+                    <KeyFrame KeyTime="0:0:1.2">
+                        <Setter Property="RotateTransform.Angle" Value="93" />
+                    </KeyFrame>
+                    <KeyFrame KeySpline="0.57,0.17,0.95,0.75" KeyTime="0:0:1.617">
+                        <Setter Property="RotateTransform.Angle" Value="205" />
+                    </KeyFrame>
+                    <KeyFrame KeySpline="0,0.19,0.07,0.72" KeyTime="0:0:2.017">
+                        <Setter Property="RotateTransform.Angle" Value="357" />
+                    </KeyFrame>
+                    <KeyFrame KeyTime="0:0:2.783">
+                        <Setter Property="RotateTransform.Angle" Value="439" />
+                    </KeyFrame>
+                    <KeyFrame KeySpline="0,0,0.95,0.37" KeyTime="0:0:3.217">
+                        <Setter Property="RotateTransform.Angle" Value="585" />
+                    </KeyFrame>
+                    <KeyFrame KeyTime="0:0:3.47">
+                        <Setter Property="RotateTransform.Angle" Value="610" />
+                    </KeyFrame>
+                </Animation>
+            </Style.Animations>
+        </Style>
+        <Style Selector="^:active /template/ Canvas#PART_E2R">
+            <Style.Animations>
+                <Animation
+                    Delay="0:0:0.167"
+                    FillMode="None"
+                    IterationCount="Infinite"
+                    Duration="0:0:4.4">
+                    <KeyFrame KeySpline="0.13,0.21,0.1,0.7" KeyTime="0:0:0.001">
+                        <Setter Property="RotateTransform.Angle" Value="-116" />
+                    </KeyFrame>
+                    <KeyFrame KeySpline="0.02,0.33,0.38,0.77" KeyTime="0:0:0.433">
+                        <Setter Property="RotateTransform.Angle" Value="4" />
+                    </KeyFrame>
+                    <KeyFrame KeyTime="0:0:1.2">
+                        <Setter Property="RotateTransform.Angle" Value="87" />
+                    </KeyFrame>
+                    <KeyFrame KeySpline="0.57,0.17,0.95,0.75" KeyTime="0:0:1.617">
+                        <Setter Property="RotateTransform.Angle" Value="199" />
+                    </KeyFrame>
+                    <KeyFrame KeySpline="0,0.19,0.07,0.72" KeyTime="0:0:2.017">
+                        <Setter Property="RotateTransform.Angle" Value="351" />
+                    </KeyFrame>
+                    <KeyFrame KeyTime="0:0:2.783">
+                        <Setter Property="RotateTransform.Angle" Value="433" />
+                    </KeyFrame>
+                    <KeyFrame KeySpline="0,0,0.95,0.37" KeyTime="0:0:3.217">
+                        <Setter Property="RotateTransform.Angle" Value="579" />
+                    </KeyFrame>
+                    <KeyFrame KeyTime="0:0:3.47">
+                        <Setter Property="RotateTransform.Angle" Value="604" />
+                    </KeyFrame>
+                </Animation>
+            </Style.Animations>
+        </Style>
+        <Style Selector="^:active /template/ Canvas#PART_E3R">
+            <Style.Setters>
+                <Setter Property="IsVisible" Value="True" />
+            </Style.Setters>
+            <Style.Animations>
+                <Animation
+                    Delay="0:0:0.334"
+                    FillMode="None"
+                    IterationCount="Infinite"
+                    Duration="0:0:4.4">
+                    <KeyFrame KeySpline="0.13,0.21,0.1,0.7" KeyTime="0:0:0.001">
+                        <Setter Property="RotateTransform.Angle" Value="-122" />
+                    </KeyFrame>
+                    <KeyFrame KeySpline="0.02,0.33,0.38,0.77" KeyTime="0:0:0.433">
+                        <Setter Property="RotateTransform.Angle" Value="-2" />
+                    </KeyFrame>
+                    <KeyFrame KeyTime="0:0:1.2">
+                        <Setter Property="RotateTransform.Angle" Value="81" />
+                    </KeyFrame>
+                    <KeyFrame KeySpline="0.57,0.17,0.95,0.75" KeyTime="0:0:1.617">
+                        <Setter Property="RotateTransform.Angle" Value="193" />
+                    </KeyFrame>
+                    <KeyFrame KeySpline="0,0.19,0.07,0.72" KeyTime="0:0:2.017">
+                        <Setter Property="RotateTransform.Angle" Value="345" />
+                    </KeyFrame>
+                    <KeyFrame KeyTime="0:0:2.783">
+                        <Setter Property="RotateTransform.Angle" Value="427" />
+                    </KeyFrame>
+                    <KeyFrame KeySpline="0,0,0.95,0.37" KeyTime="0:0:3.217">
+                        <Setter Property="RotateTransform.Angle" Value="567" />
+                    </KeyFrame>
+                    <KeyFrame KeyTime="0:0:3.47">
+                        <Setter Property="RotateTransform.Angle" Value="598" />
+                    </KeyFrame>
+                </Animation>
+            </Style.Animations>
+        </Style>
+        <Style Selector="^:active /template/ Canvas#PART_E4R">
+            <Style.Setters>
+                <Setter Property="IsVisible" Value="True" />
+            </Style.Setters>
+            <Style.Animations>
+                <Animation
+                    Delay="0:0:0.501"
+                    FillMode="None"
+                    IterationCount="Infinite"
+                    Duration="0:0:4.4">
+                    <KeyFrame KeySpline="0.13,0.21,0.1,0.7" KeyTime="0:0:0.001">
+                        <Setter Property="RotateTransform.Angle" Value="-128" />
+                    </KeyFrame>
+                    <KeyFrame KeySpline="0.02,0.33,0.38,0.77" KeyTime="0:0:0.433">
+                        <Setter Property="RotateTransform.Angle" Value="-8" />
+                    </KeyFrame>
+                    <KeyFrame KeyTime="0:0:1.2">
+                        <Setter Property="RotateTransform.Angle" Value="75" />
+                    </KeyFrame>
+                    <KeyFrame KeySpline="0.57,0.17,0.95,0.75" KeyTime="0:0:1.617">
+                        <Setter Property="RotateTransform.Angle" Value="187" />
+                    </KeyFrame>
+                    <KeyFrame KeySpline="0,0.19,0.07,0.72" KeyTime="0:0:2.017">
+                        <Setter Property="RotateTransform.Angle" Value="339" />
+                    </KeyFrame>
+                    <KeyFrame KeyTime="0:0:2.783">
+                        <Setter Property="RotateTransform.Angle" Value="421" />
+                    </KeyFrame>
+                    <KeyFrame KeySpline="0,0,0.95,0.37" KeyTime="0:0:3.217">
+                        <Setter Property="RotateTransform.Angle" Value="567" />
+                    </KeyFrame>
+                    <KeyFrame KeyTime="0:0:3.47">
+                        <Setter Property="RotateTransform.Angle" Value="592" />
+                    </KeyFrame>
+                </Animation>
+            </Style.Animations>
+        </Style>
+        <Style Selector="^:active /template/ Canvas#PART_E5R">
+            <Style.Setters>
+                <Setter Property="IsVisible" Value="True" />
+            </Style.Setters>
+            <Style.Animations>
+                <Animation
+                    Delay="0:0:0.668"
+                    FillMode="None"
+                    IterationCount="Infinite"
+                    Duration="0:0:4.4">
+                    <KeyFrame KeySpline="0.13,0.21,0.1,0.7" KeyTime="0:0:0.001">
+                        <Setter Property="RotateTransform.Angle" Value="-134" />
+                    </KeyFrame>
+                    <KeyFrame KeySpline="0.02,0.33,0.38,0.77" KeyTime="0:0:0.433">
+                        <Setter Property="RotateTransform.Angle" Value="-14" />
+                    </KeyFrame>
+                    <KeyFrame KeyTime="0:0:1.2">
+                        <Setter Property="RotateTransform.Angle" Value="69" />
+                    </KeyFrame>
+                    <KeyFrame KeySpline="0.57,0.17,0.95,0.75" KeyTime="0:0:1.617">
+                        <Setter Property="RotateTransform.Angle" Value="181" />
+                    </KeyFrame>
+                    <KeyFrame KeySpline="0,0.19,0.07,0.72" KeyTime="0:0:2.017">
+                        <Setter Property="RotateTransform.Angle" Value="331" />
+                    </KeyFrame>
+                    <KeyFrame KeyTime="0:0:2.783">
+                        <Setter Property="RotateTransform.Angle" Value="415" />
+                    </KeyFrame>
+                    <KeyFrame KeySpline="0,0,0.95,0.37" KeyTime="0:0:3.217">
+                        <Setter Property="RotateTransform.Angle" Value="561" />
+                    </KeyFrame>
+                    <KeyFrame KeyTime="0:0:3.47">
+                        <Setter Property="RotateTransform.Angle" Value="586" />
+                    </KeyFrame>
+                </Animation>
+            </Style.Animations>
+        </Style>
+        <Style Selector="^:active /template/ Canvas#PART_E6R">
+            <Style.Setters>
+                <Setter Property="IsVisible" Value="True" />
+            </Style.Setters>
+            <Style.Animations>
+                <Animation
+                    Delay="0:0:0.835"
+                    FillMode="None"
+                    IterationCount="Infinite"
+                    Duration="0:0:4.4">
+                    <KeyFrame KeySpline="0.13,0.21,0.1,0.7" KeyTime="0:0:0.001">
+                        <Setter Property="RotateTransform.Angle" Value="-140" />
+                    </KeyFrame>
+                    <KeyFrame KeySpline="0.02,0.33,0.38,0.77" KeyTime="0:0:0.433">
+                        <Setter Property="RotateTransform.Angle" Value="-20" />
+                    </KeyFrame>
+                    <KeyFrame KeyTime="0:0:1.2">
+                        <Setter Property="RotateTransform.Angle" Value="63" />
+                    </KeyFrame>
+                    <KeyFrame KeySpline="0.57,0.17,0.95,0.75" KeyTime="0:0:1.617">
+                        <Setter Property="RotateTransform.Angle" Value="175" />
+                    </KeyFrame>
+                    <KeyFrame KeySpline="0,0.19,0.07,0.72" KeyTime="0:0:2.017">
+                        <Setter Property="RotateTransform.Angle" Value="325" />
+                    </KeyFrame>
+                    <KeyFrame KeyTime="0:0:2.783">
+                        <Setter Property="RotateTransform.Angle" Value="409" />
+                    </KeyFrame>
+                    <KeyFrame KeySpline="0,0,0.95,0.37" KeyTime="0:0:3.217">
+                        <Setter Property="RotateTransform.Angle" Value="555" />
+                    </KeyFrame>
+                    <KeyFrame KeyTime="0:0:3.47">
+                        <Setter Property="RotateTransform.Angle" Value="580" />
+                    </KeyFrame>
+                </Animation>
+            </Style.Animations>
+        </Style>
+        <Style Selector="^:small /template/ Canvas#PART_E6R">
+            <Style.Setters>
+                <Setter Property="IsVisible" Value="False" />
+            </Style.Setters>
+        </Style>
+        <Style Selector="^:large /template/ Canvas#PART_E6R">
+            <Style.Setters>
+                <Setter Property="IsVisible" Value="True" />
+            </Style.Setters>
+        </Style>
+    </ControlTheme>
+</ResourceDictionary>
+
