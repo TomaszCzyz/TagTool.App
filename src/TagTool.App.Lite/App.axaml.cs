@@ -1,7 +1,6 @@
 using System;
 using System.Globalization;
 using System.IO;
-using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
 using Microsoft.Extensions.Configuration;
@@ -15,19 +14,21 @@ using Serilog;
 using Serilog.Core.Enrichers;
 using Serilog.Events;
 using Serilog.Formatting.Compact;
+using TagTool.App.Core;
 using TagTool.App.Core.Extensions;
 using TagTool.App.Core.Services;
+using TagTool.App.Core.Services.Previewers;
 using TagTool.App.Core.ViewModels;
 using TagTool.App.Lite.ViewModels;
 using TagTool.App.Lite.Views;
 
 namespace TagTool.App.Lite;
 
-public class App : Application
+public class App : AppTemplate
 {
-    public static new App Current => (App)Application.Current!;
-
-    public IServiceProvider Services { get; private set; } = null!;
+    // public static new App Current => (App)Application.Current!;
+    //
+    // public IServiceProvider Services { get; private set; } = null!;
 
     public override void Initialize()
     {
@@ -67,6 +68,7 @@ public class App : Application
         services.AddSingleton(configuration);
         services.AddSingleton<ITagToolBackendConnectionFactory, GrpcChannelFactory>();
         services.AddSingleton<ITagToolBackend, TagToolBackend>();
+        services.AddSingleton<PreviewerFactory>();
         services.AddTransient<ISpeechToTagSearchService, SpeechToTagSearchService>();
 
         services.AddOptions<OpenAiOptions>().Configure(settings =>

@@ -15,9 +15,6 @@
     d:DesignHeight="150"
     mc:Ignorable="d"
     DragDrop.AllowDrop="True">
-    <UserControl.Background>
-        <SolidColorBrush Opacity="0" Color="White" />
-    </UserControl.Background>
     <UserControl.Resources>
         <converters:TaggableItemToToIconConverter x:Key="TaggableItemToToIconConverter" />
     </UserControl.Resources>

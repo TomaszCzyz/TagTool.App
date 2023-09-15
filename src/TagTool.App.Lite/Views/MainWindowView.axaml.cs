@@ -1,3 +1,5 @@
+using System.Linq;
+using System.Threading.Tasks;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
@@ -5,11 +7,14 @@ using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.VisualTree;
 using TagTool.App.Core.ViewModels;
+using TagTool.App.Core.Views;
+using TagTool.App.Lite.ViewModels;
 
 namespace TagTool.App.Lite.Views;
 
 public partial class MainWindowView : Window
 {
+    private MainWindowViewModel ViewModel => (MainWindowViewModel)DataContext!;
     private bool _mouseDownForWindowMoving;
     private PointerPoint _originalPoint;
 
@@ -32,6 +37,22 @@ public partial class MainWindowView : Window
         TaggableItemsListBox.AddHandler(DoubleTappedEvent, OnDoubleTapped_ExecuteLinkedAction, handledEventsToo: true);
         OtherResultsListBox.AddHandler(KeyDownEvent, OnKeyDown_ExecuteLinkedAction, handledEventsToo: true);
         OtherResultsListBox.AddHandler(DoubleTappedEvent, OnDoubleTapped_ExecuteLinkedAction, handledEventsToo: true);
+
+        TaggableItemsListBox.AddHandler(KeyDownEvent, OpenPreviewer_OnKeyDown);
+    }
+
+    private async Task OpenPreviewer_OnKeyDown(object? sender, KeyEventArgs e)
+    {
+        if (e.Key == Key.Space)
+        {
+            var items = ViewModel.SearchResults
+                .Select(model => model.TaggableItem)
+                .Concat(ViewModel.OtherResults.Select(model => model.TaggableItem))
+                .ToList();
+
+            var previewerWindow = new PreviewerWindow(items, TaggableItemsListBox.SelectedIndex);
+            await previewerWindow.ShowDialog((Window)VisualRoot!);
+        }
     }
 
     private static void OnDoubleTapped_ExecuteLinkedAction(object? sender, TappedEventArgs args)

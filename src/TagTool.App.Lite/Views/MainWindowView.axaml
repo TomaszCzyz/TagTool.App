@@ -74,6 +74,7 @@
                     Width="{Binding #TopMostDockPanel.Bounds.Width}"
                     Background="Transparent"
                     ItemsSource="{Binding SearchResults}">
+                    <!-- todo: maybe DataTemplate is not needed if I have ViewLocator-->
                     <ListBox.ItemTemplate>
                         <DataTemplate x:DataType="viewModels:TaggableItemViewModel">
                             <views:TaggableItemView FontSize="14" />

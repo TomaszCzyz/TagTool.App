@@ -20,10 +20,14 @@
             Width="50"
             Height="50"
             Foreground="White"
-            IsActive="True" />
+            IsActive="{Binding IsPreviewLoading}" />
 
-        <Border BorderBrush="Aquamarine" BorderThickness="1">
-            <Image Source="{Binding Image}" />
-        </Border>
+        <Image IsVisible="{Binding IsImagePreviewVisible}" Source="{Binding ImagePreviewer.Preview, FallbackValue=null}" />
+
+        <TextBlock
+            Name="UnsupportedFilePreview"
+            IsVisible="{Binding IsUnsupportedPreviewVisible}"
+            Text="Unsupported" />
+
     </Panel>
 </UserControl>
