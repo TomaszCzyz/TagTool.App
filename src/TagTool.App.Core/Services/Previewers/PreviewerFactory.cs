@@ -21,6 +21,8 @@ public class PreviewerFactory
             return rasterImagePreviewerViewModel;
         }
 
-        return new UnsupportedFilePreviewer(item);
+        var unsupportedFilePreviewer = _serviceProvider.GetRequiredService<UnsupportedFilePreviewer>();
+        unsupportedFilePreviewer.Item = item;
+        return unsupportedFilePreviewer;
     }
 }

@@ -1,5 +1,4 @@
-﻿using Avalonia;
-using Avalonia.Media.Imaging;
+﻿using Avalonia.Media.Imaging;
 
 namespace TagTool.App.Core.Services.Previewers;
 
@@ -8,6 +7,4 @@ public interface IRasterImagePreviewer : IPreviewer
     public Bitmap? Preview { get; }
 
     public double ScalingFactor { get; set; }
-
-    public Size MaxImageSize { get; set; }
 }

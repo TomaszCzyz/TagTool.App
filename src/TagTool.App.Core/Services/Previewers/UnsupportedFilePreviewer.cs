@@ -1,7 +1,9 @@
-﻿using Avalonia;
-using Avalonia.Media;
+﻿using System.Drawing.Imaging;
+using Avalonia.Media.Imaging;
+using Avalonia.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
 using TagTool.App.Core.Models;
+using TaskExtensions = TagTool.App.Core.Extensions.TaskExtensions;
 
 namespace TagTool.App.Core.Services.Previewers;
 
@@ -13,7 +15,7 @@ public interface IUnsupportedFilePreviewer : IPreviewer
 public partial class UnsupportedFilePreviewData : ObservableObject
 {
     [ObservableProperty]
-    private IImage? _iconPreview;
+    private Bitmap? _iconPreview;
 
     [ObservableProperty]
     private string? _fileName;
@@ -36,33 +38,17 @@ public partial class UnsupportedFilePreviewer : ObservableObject, IUnsupportedFi
     [ObservableProperty]
     private PreviewState _state;
 
-    public UnsupportedFilePreviewer(TaggableItem item)
-    {
-        Item = item;
-        if (item is TaggableFile file)
-        {
-            Preview.FileName = Path.GetFileName(file.Path);
-        }
-    }
-
     public bool IsPreviewLoaded => Preview.IconPreview != null;
 
-    private TaggableItem Item { get; }
+    public TaggableItem? Item { get; set; }
 
-    private Task<bool>? IconPreviewTask { get; set; }
-
-    private Task<bool>? DisplayInfoTask { get; set; }
+    private Task<bool>? _iconPreviewTask;
+    private Task<bool>? _displayInfoTask;
+    private readonly IFileIconProvider _defaultFileIconProvider = new DefaultFileIconProvider();
 
     public void Dispose()
     {
         GC.SuppressFinalize(this);
-    }
-
-    public Task<PreviewSize> GetPreviewSizeAsync(CancellationToken cancellationToken)
-    {
-        var size = new Size(680, 500);
-        var previewSize = new PreviewSize(size, true);
-        return Task.FromResult(previewSize);
     }
 
     public async Task LoadPreviewAsync(CancellationToken cancellationToken)
@@ -71,38 +57,47 @@ public partial class UnsupportedFilePreviewer : ObservableObject, IUnsupportedFi
 
         State = PreviewState.Loading;
 
-        IconPreviewTask = LoadIconPreviewAsync(cancellationToken);
+        _iconPreviewTask = LoadIconPreviewAsync(cancellationToken);
         // DisplayInfoTask = LoadDisplayInfoAsync(cancellationToken);
 
         // await Task.WhenAll(IconPreviewTask, DisplayInfoTask);
-        await Task.WhenAll(IconPreviewTask);
+        await Task.WhenAll(_iconPreviewTask);
 
         State = HasFailedLoadingPreview() ? PreviewState.Error : PreviewState.Loaded;
     }
 
     public async Task<bool> LoadIconPreviewAsync(CancellationToken cancellationToken)
     {
-        bool isIconValid = false;
+        var path = Item switch
+        {
+            TaggableFile file => file.Path,
+            TaggableFolder folder => folder.Path,
+            _ => ""
+        };
+        var isIconValid = false;
 
-        // var isTaskSuccessful = await TaskExtensions.RunSafe(async () =>
-        // {
-        //     cancellationToken.ThrowIfCancellationRequested();
-        //     await Dispatcher.UIThread.InvokeAsync(async () =>
-        //     {
-        //         cancellationToken.ThrowIfCancellationRequested();
-        //
-        //         var iconBitmap = await IconHelper.GetThumbnailAsync(Item.Path, cancellationToken)
-        //                          ?? await IconHelper.GetIconAsync(Item.Path, cancellationToken);
-        //
-        //         cancellationToken.ThrowIfCancellationRequested();
-        //
-        //         isIconValid = iconBitmap != null;
-        //
-        //         // Preview.IconPreview = iconBitmap ?? new SvgImageSource(new Uri("ms-appx:///Assets/Peek/DefaultFileIcon.svg"));
-        //     });
-        // });
+        var isTaskSuccessful = await TaskExtensions.RunSafe(async () =>
+        {
+            cancellationToken.ThrowIfCancellationRequested();
+            await Dispatcher.UIThread.InvokeAsync(async () =>
+            {
+                cancellationToken.ThrowIfCancellationRequested();
 
-        return isIconValid;// && isTaskSuccessful;
+                var bitmap = _defaultFileIconProvider.GetFileIcon(path)?.ToBitmap();
+
+                isIconValid = bitmap != null;
+
+                using var memoryStream = new MemoryStream();
+                bitmap?.Save(memoryStream, ImageFormat.Png);
+                await memoryStream.FlushAsync(cancellationToken);
+                memoryStream.Seek(0, SeekOrigin.Begin);
+
+                // todo: handle default icons
+                Preview.IconPreview = new Bitmap(memoryStream); // ?? new SvgImageSource(new Uri("ms-appx:///Assets/Peek/DefaultFileIcon.svg"));
+            });
+        });
+
+        return isIconValid && isTaskSuccessful;
     }
 
     // public async Task<bool> LoadDisplayInfoAsync(CancellationToken cancellationToken)
@@ -139,8 +134,8 @@ public partial class UnsupportedFilePreviewer : ObservableObject, IUnsupportedFi
 
     private bool HasFailedLoadingPreview()
     {
-        var isLoadingIconPreviewSuccessful = IconPreviewTask?.Result ?? false;
-        var isLoadingDisplayInfoSuccessful = DisplayInfoTask?.Result ?? false;
+        var isLoadingIconPreviewSuccessful = _iconPreviewTask?.Result ?? false;
+        var isLoadingDisplayInfoSuccessful = _displayInfoTask?.Result ?? false;
 
         return !isLoadingIconPreviewSuccessful || !isLoadingDisplayInfoSuccessful;
     }

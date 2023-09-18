@@ -5,6 +5,7 @@ using Avalonia.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
 using JetBrains.Annotations;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using TagTool.App.Core.Models;
 using TagTool.App.Core.Services.Previewers;
 
@@ -12,6 +13,7 @@ namespace TagTool.App.Core.ViewModels;
 
 public partial class TaggableItemPreviewerViewModel : ViewModelBase, IDisposable
 {
+    private readonly ILogger<TaggableItemPreviewerViewModel> _logger;
     private readonly PreviewerFactory _previewerFactory;
 
     private CancellationTokenSource _cancellationTokenSource = new();
@@ -52,12 +54,15 @@ public partial class TaggableItemPreviewerViewModel : ViewModelBase, IDisposable
 
         // Previewer = new UnsupportedFilePreviewer(new TaggableFile { Path = @"C:\Users\tczyz\Pictures\2023 - Catania\20230309_103823.jpg" });
         _previewerFactory = AppTemplate.Current.Services.GetRequiredService<PreviewerFactory>();
-        Item = new TaggableFile { Path = @"C:\Users\tczyz\Pictures\2023 - Catania\20230309_103823.jpg" };
+        _logger = AppTemplate.Current.Services.GetRequiredService<ILogger<TaggableItemPreviewerViewModel>>();
+
+        Item = new TaggableFile { Path = @"C:\Users\tczyz\Pictures\2023 - Catania" };
     }
 
     [UsedImplicitly]
-    public TaggableItemPreviewerViewModel(PreviewerFactory previewerFactory)
+    public TaggableItemPreviewerViewModel(ILogger<TaggableItemPreviewerViewModel> logger, PreviewerFactory previewerFactory)
     {
+        _logger = logger;
         _previewerFactory = previewerFactory;
     }
 
@@ -69,8 +74,6 @@ public partial class TaggableItemPreviewerViewModel : ViewModelBase, IDisposable
 
     partial void OnPreviewerChanging(IPreviewer? value)
     {
-        // ImagePreview.Source = null;
-
         if (Previewer != null)
         {
             Previewer.PropertyChanged -= PreviewerErrorState_PropertyChanged;
@@ -82,12 +85,13 @@ public partial class TaggableItemPreviewerViewModel : ViewModelBase, IDisposable
         }
     }
 
+    /// <summary>
+    ///     Fallback on DefaultPreviewer if we fail to load the correct Preview
+    /// </summary>
     private async void PreviewerErrorState_PropertyChanged(object? sender, PropertyChangedEventArgs e)
     {
-        // Fallback on DefaultPreviewer if we fail to load the correct Preview
         if (e.PropertyName == nameof(IPreviewer.State) && Previewer?.State == PreviewState.Error)
         {
-            // Cancel previous loading task
             _cancellationTokenSource.Cancel();
             _cancellationTokenSource = new CancellationTokenSource();
 
@@ -95,7 +99,7 @@ public partial class TaggableItemPreviewerViewModel : ViewModelBase, IDisposable
             {
                 // Previewer = _previewerFactory.CreateDefaultPreviewer(Item);
                 throw new NotImplementedException();
-                await UpdatePreviewAsync(_cancellationTokenSource.Token);
+                // await UpdatePreviewAsync(_cancellationTokenSource.Token);
             }
         }
     }
@@ -106,8 +110,6 @@ public partial class TaggableItemPreviewerViewModel : ViewModelBase, IDisposable
         {
             imagePreviewer.ScalingFactor = ScalingFactor;
         }
-
-        // Dispatcher.UIThread.InvokeAsync(async () => await UpdatePreviewSizeAsync(_cancellationTokenSource.Token));
     }
 
     partial void OnItemChanged(TaggableItem? oldValue, TaggableItem? newValue)
@@ -135,9 +137,6 @@ public partial class TaggableItemPreviewerViewModel : ViewModelBase, IDisposable
 
         try
         {
-            // cancellationToken.ThrowIfCancellationRequested();
-            // await UpdatePreviewSizeAsync(cancellationToken);
-
             cancellationToken.ThrowIfCancellationRequested();
             await Previewer.LoadPreviewAsync(cancellationToken);
 
@@ -148,10 +147,9 @@ public partial class TaggableItemPreviewerViewModel : ViewModelBase, IDisposable
         {
             // TODO: Log task cancelled exception?
         }
-        catch
+        catch (Exception ex)
         {
-            // Fall back to Default previewer
-            // Logger.LogError("Error in UpdatePreviewAsync, falling back to default previewer: " + ex.Message);
+            _logger.LogError(ex , "Error in UpdatePreviewAsync, falling back to default previewer");
             Previewer.State = PreviewState.Error;
         }
     }

@@ -9,7 +9,6 @@ using TaskExtensions = TagTool.App.Core.Extensions.TaskExtensions;
 
 namespace TagTool.App.Core.Services.Previewers;
 
-// todo: ViewModel is a bit of overkill... it is just observable object
 [UsedImplicitly]
 public partial class RasterImagePreviewer : ObservableObject, IRasterImagePreviewer, IDisposable
 {
@@ -116,19 +115,6 @@ public partial class RasterImagePreviewer : ObservableObject, IRasterImagePrevie
 
     public static bool IsFileTypeSupported(string fileExt) => _supportedFileTypes.Contains(fileExt);
 
-    public Task<PreviewSize> GetPreviewSizeAsync(CancellationToken cancellationToken)
-    {
-        cancellationToken.ThrowIfCancellationRequested();
-        ImageSize = Preview?.Size; // ?? throw new InvalidOperationException("Did not get the size of a Preview");
-        // ImageSize = await Task.Run(Item.GetImageSize);
-        // if (ImageSize == null)
-        // {
-        //     ImageSize = await WICHelper.GetImageSize(Item.Path);
-        // }
-
-        return Task.FromResult(new PreviewSize(ImageSize));
-    }
-
     public async Task LoadPreviewAsync(CancellationToken cancellationToken)
     {
         if (Item is null)
@@ -165,20 +151,6 @@ public partial class RasterImagePreviewer : ObservableObject, IRasterImagePrevie
         }
     }
 
-    partial void OnScalingFactorChanged(double value) => UpdateMaxImageSize();
-
-    partial void OnImageSizeChanged(Size? value) => UpdateMaxImageSize();
-
-    private void UpdateMaxImageSize()
-    {
-        var imageWidth = ImageSize?.Width ?? 0;
-        var imageHeight = ImageSize?.Height ?? 0;
-
-        MaxImageSize = ScalingFactor != 0
-            ? new Size(imageWidth / ScalingFactor, imageHeight / ScalingFactor)
-            : new Size(imageWidth, imageHeight);
-    }
-
     private Task<bool> LoadLowQualityThumbnailAsync(CancellationToken cancellationToken)
         => TaskExtensions.RunSafe(async () =>
         {
@@ -189,7 +161,7 @@ public partial class RasterImagePreviewer : ObservableObject, IRasterImagePrevie
                 cancellationToken.ThrowIfCancellationRequested();
                 if (!IsFullImageLoaded && !IsHighQualityThumbnailLoaded)
                 {
-                    await using var stream = new FileStream(Item.Path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite | FileShare.Delete);
+                    await using var stream = new FileStream(Item!.Path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite | FileShare.Delete);
                     _lowQualityThumbnailPreview = Bitmap.DecodeToHeight(stream, 256, BitmapInterpolationMode.LowQuality);
                 }
             });
@@ -205,7 +177,7 @@ public partial class RasterImagePreviewer : ObservableObject, IRasterImagePrevie
                 cancellationToken.ThrowIfCancellationRequested();
                 if (!IsFullImageLoaded)
                 {
-                    await using var stream = new FileStream(Item.Path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite | FileShare.Delete);
+                    await using var stream = new FileStream(Item!.Path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite | FileShare.Delete);
                     _highQualityThumbnailPreview = Bitmap.DecodeToHeight(stream, 720, BitmapInterpolationMode.MediumQuality);
                 }
             });
@@ -220,8 +192,9 @@ public partial class RasterImagePreviewer : ObservableObject, IRasterImagePrevie
             {
                 cancellationToken.ThrowIfCancellationRequested();
 
-                await using var stream = new FileStream(Item.Path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite | FileShare.Delete);
+                await using var stream = new FileStream(Item!.Path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite | FileShare.Delete);
 
+                // todo: we can get max size of a previewer window and also do 'Bitmap.DecodeTo...'
                 Preview = new Bitmap(stream);
                 OnPropertyChanged(nameof(Preview));
             });
@@ -240,6 +213,7 @@ public partial class RasterImagePreviewer : ObservableObject, IRasterImagePrevie
     {
         _lowQualityThumbnailPreview?.Dispose();
         _highQualityThumbnailPreview?.Dispose();
+        Preview?.Dispose();
         _lowQualityThumbnailPreview = null;
         _highQualityThumbnailTask = null;
         Preview = null;

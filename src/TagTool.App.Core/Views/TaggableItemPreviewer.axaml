@@ -29,7 +29,7 @@
                     <Image Source="{Binding Preview}" />
                 </DataTemplate>
                 <DataTemplate DataType="previewers:UnsupportedFilePreviewer">
-                    <TextBlock Text="Unsupported" />
+                    <TextBlock Text="{Binding Item}" />
                 </DataTemplate>
             </ContentControl.DataTemplates>
         </ContentControl>
