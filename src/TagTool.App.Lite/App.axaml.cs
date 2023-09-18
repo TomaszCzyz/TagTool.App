@@ -69,6 +69,7 @@ public class App : AppTemplate
         services.AddSingleton<ITagToolBackendConnectionFactory, GrpcChannelFactory>();
         services.AddSingleton<ITagToolBackend, TagToolBackend>();
         services.AddSingleton<PreviewerFactory>();
+        services.AddSingleton<RasterImagePreviewer>();
         services.AddTransient<ISpeechToTagSearchService, SpeechToTagSearchService>();
 
         services.AddOptions<OpenAiOptions>().Configure(settings =>

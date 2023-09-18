@@ -14,9 +14,9 @@ public class PreviewerFactory
 
     public IPreviewer Create(TaggableItem item)
     {
-        if (item is TaggableFile file && RasterImagePreviewerViewModel.IsFileTypeSupported(Path.GetExtension(file.Path)))
+        if (item is TaggableFile file && RasterImagePreviewer.IsFileTypeSupported(Path.GetExtension(file.Path)))
         {
-            var rasterImagePreviewerViewModel = _serviceProvider.GetRequiredService<RasterImagePreviewerViewModel>();
+            var rasterImagePreviewerViewModel = _serviceProvider.GetRequiredService<RasterImagePreviewer>();
             rasterImagePreviewerViewModel.Item = file;
             return rasterImagePreviewerViewModel;
         }

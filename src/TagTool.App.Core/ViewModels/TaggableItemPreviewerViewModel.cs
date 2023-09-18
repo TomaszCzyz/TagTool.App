@@ -4,6 +4,7 @@ using Avalonia.Controls;
 using Avalonia.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
 using JetBrains.Annotations;
+using Microsoft.Extensions.DependencyInjection;
 using TagTool.App.Core.Models;
 using TagTool.App.Core.Services.Previewers;
 
@@ -49,7 +50,9 @@ public partial class TaggableItemPreviewerViewModel : ViewModelBase, IDisposable
             Debug.Fail("ctor for XAML Previewer should not be invoke during standard execution");
         }
 
-        _previewerFactory = null!;
+        // Previewer = new UnsupportedFilePreviewer(new TaggableFile { Path = @"C:\Users\tczyz\Pictures\2023 - Catania\20230309_103823.jpg" });
+        _previewerFactory = AppTemplate.Current.Services.GetRequiredService<PreviewerFactory>();
+        Item = new TaggableFile { Path = @"C:\Users\tczyz\Pictures\2023 - Catania\20230309_103823.jpg" };
     }
 
     [UsedImplicitly]

@@ -1,4 +1,6 @@
-﻿using Avalonia.Controls;
+﻿using System.Diagnostics;
+using Avalonia;
+using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Interactivity;
 using Microsoft.Extensions.DependencyInjection;
@@ -16,8 +18,17 @@ public partial class PreviewerWindow : Window
     public PreviewerWindow(IList<TaggableItem> items, int selectedIndex)
     {
         _items = items;
-        _selectedIndex = selectedIndex;
+        _selectedIndex = GetArrayIndex(selectedIndex, _items.Count);
         InitializeComponent();
+
+        var screenFromWindow = Screens.ScreenFromWindow(this);
+        if (screenFromWindow is not null)
+        {
+            TaggableItemPreviewerView.MaxHeight = screenFromWindow.Bounds.Size.Height * 0.8;
+            TaggableItemPreviewerView.MaxWidth = screenFromWindow.Bounds.Size.Width * 0.8;
+            TaggableItemPreviewerView.MinHeight = 250;
+            TaggableItemPreviewerView.MinWidth = 400;
+        }
 
         RootWindow.AddHandler(KeyDownEvent, PreviewSequentItem_OnKeyDown);
     }
@@ -63,5 +74,25 @@ public partial class PreviewerWindow : Window
         _taggableItemPreviewerViewModel.Item = _items[_selectedIndex];
 
         DataContext = _taggableItemPreviewerViewModel;
+    }
+
+    /// <summary>
+    ///     Set position of the window to keep windows in the center of a screen. 
+    /// </summary>
+    private void TaggableItemPreviewerView_OnSizeChanged(object? sender, SizeChangedEventArgs e)
+    {
+        Debug.WriteLine($"size has changed from {e.PreviousSize} to {e.NewSize}");
+        Debug.WriteLine($"\t\twindows position: {Position}");
+        var screen = Screens.ScreenFromWindow(Owner!) ?? Screens.ScreenFromPoint(Position);
+
+        if (screen is null)
+        {
+            return;
+        }
+
+        var width = screen.Bounds.Size.Width / 2.0 - e.NewSize.Width / 2;
+        var height = screen.Bounds.Size.Height / 2.0 - e.NewSize.Height / 2;
+
+        Position = new PixelPoint((int)width, (int)height);
     }
 }

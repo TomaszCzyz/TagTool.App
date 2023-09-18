@@ -4,6 +4,7 @@
     xmlns:controls="clr-namespace:TagTool.App.Core.Controls"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:previewers="clr-namespace:TagTool.App.Core.Services.Previewers"
     xmlns:viewModels="clr-namespace:TagTool.App.Core.ViewModels"
     x:Class="TagTool.App.Core.Views.TaggableItemPreviewer"
     x:DataType="viewModels:TaggableItemPreviewerViewModel"
@@ -22,7 +23,16 @@
             Foreground="White"
             IsActive="{Binding IsPreviewLoading}" />
 
-        <Image IsVisible="{Binding IsImagePreviewVisible}" Source="{Binding ImagePreviewer.Preview, FallbackValue=null}" />
+        <ContentControl Content="{Binding Previewer}">
+            <ContentControl.DataTemplates>
+                <DataTemplate DataType="previewers:RasterImagePreviewer">
+                    <Image Source="{Binding Preview}" />
+                </DataTemplate>
+                <DataTemplate DataType="previewers:UnsupportedFilePreviewer">
+                    <TextBlock Text="Unsupported" />
+                </DataTemplate>
+            </ContentControl.DataTemplates>
+        </ContentControl>
 
         <TextBlock
             Name="UnsupportedFilePreview"

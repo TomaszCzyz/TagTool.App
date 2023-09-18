@@ -9,13 +9,20 @@
     d:DesignWidth="800"
     d:DesignHeight="450"
     mc:Ignorable="d"
+    Background="Transparent"
+    ExtendClientAreaChromeHints="Default"
+    ExtendClientAreaTitleBarHeightHint="-1"
+    ExtendClientAreaToDecorationsHint="True"
     RequestedThemeVariant="Dark"
+    ShowInTaskbar="False"
     SizeToContent="WidthAndHeight"
-    Title="PreviewerWindow">
+    Title="PreviewerWindow"
+    WindowStartupLocation="Manual">
+    <!-- option: WindowStartupLocation="CenterScreen" does not work good with SizeToContent setup -->
 
     <Grid RowDefinitions="48,*">
         <TextBlock Grid.Row="0" Text="Titlebar" />
-        
+
         <!-- <views:TitleBar -->
         <!-- x:Name="TitleBarControl" -->
         <!-- Grid.Row="0" -->
@@ -24,6 +31,14 @@
         <!-- Item="{x:Bind ViewModel.CurrentItem, Mode=OneWay}" -->
         <!-- NumberOfFiles="{x:Bind ViewModel.Items.Count, Mode=OneWay}" /> -->
 
-        <views:TaggableItemPreviewer Grid.Row="1" Loaded="Control_OnLoaded" />
+
+        <views:TaggableItemPreviewer
+            Name="TaggableItemPreviewerView"
+            Grid.Row="1"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Center"
+            SizeChanged="TaggableItemPreviewerView_OnSizeChanged"
+            Loaded="Control_OnLoaded" />
+
     </Grid>
 </Window>

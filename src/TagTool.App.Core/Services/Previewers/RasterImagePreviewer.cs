@@ -5,14 +5,13 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using JetBrains.Annotations;
 using Microsoft.Extensions.Logging;
 using TagTool.App.Core.Models;
-using TagTool.App.Core.ViewModels;
 using TaskExtensions = TagTool.App.Core.Extensions.TaskExtensions;
 
 namespace TagTool.App.Core.Services.Previewers;
 
 // todo: ViewModel is a bit of overkill... it is just observable object
 [UsedImplicitly]
-public partial class RasterImagePreviewerViewModel : ViewModelBase, IRasterImagePreviewer, IDisposable
+public partial class RasterImagePreviewer : ObservableObject, IRasterImagePreviewer, IDisposable
 {
     private static readonly HashSet<string> _supportedFileTypes = new()
     {
@@ -76,7 +75,7 @@ public partial class RasterImagePreviewerViewModel : ViewModelBase, IRasterImage
         ".cr3"
     };
 
-    private readonly ILogger<RasterImagePreviewerViewModel> _logger;
+    private readonly ILogger<RasterImagePreviewer> _logger;
 
     private Bitmap? _lowQualityThumbnailPreview;
     private Bitmap? _highQualityThumbnailPreview;
@@ -102,7 +101,7 @@ public partial class RasterImagePreviewerViewModel : ViewModelBase, IRasterImage
 
     private bool IsFullImageLoaded => _fullQualityImageTask?.Status == TaskStatus.RanToCompletion;
 
-    public RasterImagePreviewerViewModel(ILogger<RasterImagePreviewerViewModel> logger)
+    public RasterImagePreviewer(ILogger<RasterImagePreviewer> logger)
     {
         _logger = logger;
     }
