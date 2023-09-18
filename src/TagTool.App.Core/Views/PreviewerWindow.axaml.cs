@@ -13,7 +13,7 @@ public partial class PreviewerWindow : Window
 {
     private readonly IList<TaggableItem> _items;
     private int _selectedIndex;
-    private TaggableItemPreviewerViewModel _taggableItemPreviewerViewModel;
+    private TaggableItemPreviewerViewModel _taggableItemPreviewerViewModel = null!;
 
     public PreviewerWindow(IList<TaggableItem> items, int selectedIndex)
     {
@@ -65,7 +65,7 @@ public partial class PreviewerWindow : Window
     private static int GetArrayIndex(int i, int arrayLength)
     {
         var mod = i % arrayLength;
-        return (mod >= 0) ? mod : mod + arrayLength;
+        return mod >= 0 ? mod : mod + arrayLength;
     }
 
     private void Control_OnLoaded(object? sender, RoutedEventArgs e)
@@ -77,21 +77,26 @@ public partial class PreviewerWindow : Window
     }
 
     /// <summary>
-    ///     Set position of the window to keep windows in the center of a screen. 
+    ///     Sets position of the window to keep windows in the center of a screen.
     /// </summary>
     private void TaggableItemPreviewerView_OnSizeChanged(object? sender, SizeChangedEventArgs e)
     {
         Debug.WriteLine($"size has changed from {e.PreviousSize} to {e.NewSize}");
         Debug.WriteLine($"\t\twindows position: {Position}");
-        var screen = Screens.ScreenFromWindow(Owner!) ?? Screens.ScreenFromPoint(Position);
+
+        var screen = Owner switch
+        {
+            not null => Screens.ScreenFromWindow(Owner),
+            null => null
+        } ?? Screens.ScreenFromPoint(Position);
 
         if (screen is null)
         {
             return;
         }
 
-        var width = screen.Bounds.Size.Width / 2.0 - e.NewSize.Width / 2;
-        var height = screen.Bounds.Size.Height / 2.0 - e.NewSize.Height / 2;
+        var width = (screen.Bounds.Size.Width / 2.0) - (e.NewSize.Width / 2);
+        var height = (screen.Bounds.Size.Height / 2.0) - (e.NewSize.Height / 2);
 
         Position = new PixelPoint((int)width, (int)height);
     }
