@@ -66,6 +66,7 @@ public partial class MainWindowViewModel : ViewModelBase, IRecipient<NewNotifica
         _workspaceManager = workspaceManager;
 
         var (rootDock, dockFactory) = workspaceManager.GetLayout();
+        // dockFactory.CreateLayout();
         dockFactory.InitLayout(rootDock);
         Layout = rootDock;
         DockFactory = dockFactory;

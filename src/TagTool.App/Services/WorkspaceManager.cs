@@ -30,6 +30,8 @@ public class WorkspaceManager : IWorkspaceManager
         _serializer = new DockSerializer(serviceProvider);
     }
 
+    // public (IDock, IFactory) GetLayout() => CreateDefaultLayout();
+
     public (IDock, IFactory) GetLayout()
         => TryGetLayout(out var rootDock, out var dockFactory)
             ? (rootDock, dockFactory)
@@ -73,26 +75,44 @@ public class WorkspaceManager : IWorkspaceManager
 
     private (IDock, IFactory) CreateDefaultLayout()
     {
-        var taggableItemsSearchViewModel = _serviceProvider.GetRequiredService<TaggableItemsSearchViewModel>();
-        taggableItemsSearchViewModel.Title = "Tag Search";
+        var taggableItemsSearch = _serviceProvider.GetRequiredService<TaggableItemsSearchViewModel>();
+        var myTags = _serviceProvider.GetRequiredService<MyTagsViewModel>();
+        taggableItemsSearch.Title = "Tag Search";
+        myTags.Title = "My Tags";
 
-        var documentDock = new MyDocumentDock(_serviceProvider)
+        var documentDock1 = new MyDocumentDock(_serviceProvider)
         {
             CanCreateDocument = true,
-            Proportion = 1.0,
+            Proportion = 0.25,
             IsCollapsable = false,
-            VisibleDockables = new ObservableCollection<IDockable>(new IDockable[] { taggableItemsSearchViewModel })
+            VisibleDockables = new ObservableCollection<IDockable>(new IDockable[] { myTags })
         };
 
+        var documentDock2 = new MyDocumentDock(_serviceProvider)
+        {
+            CanCreateDocument = true,
+            IsCollapsable = false,
+            VisibleDockables = new ObservableCollection<IDockable>(new IDockable[] { taggableItemsSearch })
+        };
+
+        var proportionalDock = new ProportionalDock
+        {
+            IsCollapsable = false,
+            Orientation = Orientation.Horizontal,
+            ActiveDockable = null,
+            VisibleDockables
+                = new ObservableCollection<IDockable>(new IDockable[] { documentDock1, new ProportionalDockSplitter(), documentDock2 })
+        };
         var defaultDockFactory = _serviceProvider.GetRequiredService<DefaultDockFactory>();
+
         var rootDock = new RootDock
         {
             Title = "Default",
             IsCollapsable = false,
             Factory = defaultDockFactory,
-            VisibleDockables = new ObservableCollection<IDockable>(new IDockable[] { documentDock }),
-            ActiveDockable = documentDock,
-            DefaultDockable = documentDock
+            VisibleDockables = new ObservableCollection<IDockable>(new IDockable[] { proportionalDock }),
+            ActiveDockable = proportionalDock, // without it, nothing appears
+            DefaultDockable = null
         };
 
         rootDock.Factory = defaultDockFactory;
