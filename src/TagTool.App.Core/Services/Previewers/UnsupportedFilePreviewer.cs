@@ -51,6 +51,8 @@ public partial class UnsupportedFilePreviewer : ObservableObject, IUnsupportedFi
 
     public void Dispose()
     {
+        Preview.IconPreview?.Dispose();
+        Preview.IconPreview = null;
         GC.SuppressFinalize(this);
     }
 
@@ -161,6 +163,7 @@ public partial class UnsupportedFilePreviewer : ObservableObject, IUnsupportedFi
             return;
         }
 
+        // todo: make calculation of a size truly cancellable (I think it requires Mutex with cancellation flag)
         var folderSize = await Task.Run(() => CalculateDirSizeInner(path), cancellationToken);
 
         // Check if during size calculations the currently previewed item has not changed.
