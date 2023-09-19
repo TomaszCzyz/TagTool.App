@@ -56,7 +56,7 @@ public partial class TaggableItemPreviewerViewModel : ViewModelBase, IDisposable
         _previewerFactory = AppTemplate.Current.Services.GetRequiredService<PreviewerFactory>();
         _logger = AppTemplate.Current.Services.GetRequiredService<ILogger<TaggableItemPreviewerViewModel>>();
 
-        Item = new TaggableFile { Path = @"C:\Users\tczyz\Pictures\2023 - Catania" };
+        Item = new TaggableFolder { Path = @"C:\Users\tczyz\Pictures\2023 - Catania" };
     }
 
     [UsedImplicitly]

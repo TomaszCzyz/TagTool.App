@@ -4,7 +4,7 @@ namespace TagTool.App.Core.Extensions;
 
 public static class LongExtensions
 {
-    public static string GetBytesReadable(this long i, string format)
+    public static string GetBytesReadable(this long i, string format = "0.##")
     {
         i = i < 0 ? -i : i;
 
