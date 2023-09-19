@@ -30,8 +30,6 @@ public class WorkspaceManager : IWorkspaceManager
         _serializer = new DockSerializer(serviceProvider);
     }
 
-    // public (IDock, IFactory) GetLayout() => CreateDefaultLayout();
-
     public (IDock, IFactory) GetLayout()
         => TryGetLayout(out var rootDock, out var dockFactory)
             ? (rootDock, dockFactory)
@@ -63,12 +61,7 @@ public class WorkspaceManager : IWorkspaceManager
 
         var defaultDockFactory = _serviceProvider.GetRequiredService<DefaultDockFactory>();
         rootDock.Factory = defaultDockFactory;
-        // if (rootDock.Factory is null)
-        // {
-        //     (rootDock, dockFactory) = (null, null);
-        //     return false;
-        // }
-
+     
         dockFactory = defaultDockFactory;
         return true;
     }
@@ -111,7 +104,9 @@ public class WorkspaceManager : IWorkspaceManager
             IsCollapsable = false,
             Factory = defaultDockFactory,
             VisibleDockables = new ObservableCollection<IDockable>(new IDockable[] { proportionalDock }),
-            ActiveDockable = proportionalDock, // without it, nothing appears
+            // Without setting ActiveDockable, nothing appears. Maybe it is also important that DocumentDocks are
+            // wrapped by ProportionalDock, because is specifies: [DataContract(IsReference = true)]
+            ActiveDockable = proportionalDock,  
             DefaultDockable = null
         };
 
