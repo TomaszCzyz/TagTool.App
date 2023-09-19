@@ -16,7 +16,6 @@ public class DockSerializer
     /// <param name="serviceProvider"></param>
     public DockSerializer(IServiceProvider serviceProvider)
     {
-        // var converter = serviceProvider.GetRequiredService<DependencyInjectionConverter<TaggableItemsSearchViewModel>>();
         var contractResolver = new DependencyInjectionContractResolver(serviceProvider);
 
         _settings = new JsonSerializerSettings

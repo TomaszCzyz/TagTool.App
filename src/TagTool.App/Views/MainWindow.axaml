@@ -119,8 +119,6 @@
                                                                 Margin="0"
                                                                 Padding="0"
                                                                 HorizontalAlignment="Stretch"
-                                                                Command="{Binding ElementName=RootWindow, Path=DataContext.AddDocumentToDockCommand, FallbackValue=null}"
-                                                                CommandParameter="{Binding .}"
                                                                 Click="Button_OnClick">
 
                                                                 <TextBlock Text="{Binding .}" />

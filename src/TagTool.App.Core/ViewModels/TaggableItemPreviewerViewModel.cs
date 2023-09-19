@@ -149,7 +149,7 @@ public partial class TaggableItemPreviewerViewModel : ViewModelBase, IDisposable
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex , "Error in UpdatePreviewAsync, falling back to default previewer");
+            _logger.LogError(ex, "Error in UpdatePreviewAsync, falling back to default previewer");
             Previewer.State = PreviewState.Error;
         }
     }

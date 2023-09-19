@@ -7,7 +7,7 @@ using Avalonia.VisualTree;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
-using Dock.Model.Controls;
+using Dock.Model.Core;
 using Dock.Model.Mvvm.Controls;
 using JetBrains.Annotations;
 using Microsoft.Extensions.DependencyInjection;
@@ -15,6 +15,7 @@ using TagTool.App.Core.Extensions;
 using TagTool.App.Core.ViewModels;
 using TagTool.App.Docks;
 using TagTool.App.Models;
+using TagTool.App.Services;
 using TagTool.App.ViewModels.UserControls;
 using TagTool.App.Views.UserControls;
 
@@ -22,6 +23,7 @@ namespace TagTool.App.ViewModels;
 
 public partial class MainWindowViewModel : ViewModelBase, IRecipient<NewNotificationMessage>
 {
+    private readonly IWorkspaceManager _workspaceManager;
     private InputElement? _previouslyFocusedElement;
 
     [ObservableProperty]
@@ -35,11 +37,11 @@ public partial class MainWindowViewModel : ViewModelBase, IRecipient<NewNotifica
         = new(new[] { "Search", "My Tags", "File Explorer", "Items Tagger", "Tree File Explorer", "New Search Bar", "Tags Relations" });
 
     [ObservableProperty]
-    private IRootDock? _layout;
+    private IDock? _layout;
 
-    public MyDockFactory DockFactory { get; set; }
     // try this:
     // public IRootDock Layout => DockFactory.RootDock
+    public IFactory DockFactory { get; set; }
 
     public WindowNotificationManager? NotificationManager { get; set; }
 
@@ -53,44 +55,20 @@ public partial class MainWindowViewModel : ViewModelBase, IRecipient<NewNotifica
             Debug.Fail("ctor for XAML Previewer should not be invoke during standard execution");
         }
 
-        DockFactory = App.Current.Services.GetRequiredService<MyDockFactory>();
+        DockFactory = App.Current.Services.GetRequiredService<DefaultDockFactory>();
 
         Initialize();
     }
 
     [UsedImplicitly]
-    public MainWindowViewModel(IServiceProvider serviceProvider)
+    public MainWindowViewModel(IServiceProvider serviceProvider, IWorkspaceManager workspaceManager)
     {
-        if (!File.Exists(@".\layout.json"))
-        {
-            // create default layout
-            return;
-        }
+        _workspaceManager = workspaceManager;
 
-        var jsonRootDock = File.ReadAllText(@".\layout.json");
-
-        if (string.IsNullOrEmpty(jsonRootDock))
-        {
-            // create default layout
-            return;
-        }
-
-        var serializer = new DockSerializer(serviceProvider);
-        var rootDock = serializer.Deserialize<RootDock>(jsonRootDock);
-
-        if (rootDock is null)
-        {
-            // create default layout
-            return;
-        }
-
-        // var myDocumentDock = serviceProvider.GetRequiredService<MyDocumentDock>();
-
+        var (rootDock, dockFactory) = workspaceManager.GetLayout();
+        dockFactory.InitLayout(rootDock);
         Layout = rootDock;
-        var myDockFactory = new MyDockFactory { RootDock = rootDock, DocumentDock = (rootDock.DefaultDockable as MyDocumentDock)! };
-        DockFactory = myDockFactory;
-        Layout.Factory = myDockFactory;
-        Layout.Factory.InitLayout(rootDock);
+        DockFactory = dockFactory;
 
         Initialize();
     }
@@ -105,9 +83,6 @@ public partial class MainWindowViewModel : ViewModelBase, IRecipient<NewNotifica
             });
 
     private void Initialize() => WeakReferenceMessenger.Default.Register(this);
-
-    [RelayCommand]
-    private void AddDocumentToDock(string type) => DockFactory.DocumentDock.CreateNewDocumentCommand.Execute(type);
 
     [RelayCommand]
     private void ChangeLeftToolMenuPanelVisibility(object param)
@@ -147,6 +122,15 @@ public partial class MainWindowViewModel : ViewModelBase, IRecipient<NewNotifica
         _previouslyFocusedElement = elementToFocus;
 
         // _focusManager.Focus(elementToFocus);
+    }
+
+    [RelayCommand]
+    private void SaveLayout()
+    {
+        if (Layout is RootDock root)
+        {
+            _workspaceManager.SaveLayout(root);
+        }
     }
 
     private InputElement? NextToFocus(AutoCompleteBox?[] focusTargets)

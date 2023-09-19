@@ -3,7 +3,6 @@ using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
 using Dock.Model.Core;
-using Dock.Model.Mvvm.Controls;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -18,6 +17,7 @@ using TagTool.App.Core.Services;
 using TagTool.App.Core.ViewModels;
 using TagTool.App.Docks;
 using TagTool.App.Options;
+using TagTool.App.Services;
 using TagTool.App.ViewModels;
 using TagTool.App.Views;
 
@@ -47,25 +47,7 @@ public class App : Application
 
             desktopLifetime.MainWindow = mainWindow;
 
-            desktopLifetime.Exit += async (_, _) =>
-            {
-                // todo: move logic below to ViewModel, to overriden method OnClosing... ?
-                try
-                {
-                    await using var fileStream = File.Open(@".\layout.json", FileMode.Create);
-
-                    if (mainWindowViewModel.Layout is not null)
-                    {
-                        serializer.Save(fileStream, (mainWindowViewModel.Layout as RootDock)!);
-                    }
-                }
-                catch (Exception e)
-                {
-                    Console.WriteLine(e);
-                }
-
-                await Log.CloseAndFlushAsync();
-            };
+            desktopLifetime.Exit += async (_, _) => await Log.CloseAndFlushAsync();
         }
 
         base.OnFrameworkInitializationCompleted();
@@ -99,7 +81,8 @@ public class App : Application
         services.AddSingleton<ITagToolBackend, TagToolBackend>();
         services.AddTransient<ISpeechToTagSearchService, SpeechToTagSearchService>();
 
-        services.AddSingleton<MyDockFactory>();
+        services.AddSingleton<IWorkspaceManager, WorkspaceManager>();
+        services.AddSingleton<DefaultDockFactory>();
         services.AddTransient<MyDocumentDock>();
 
         services
