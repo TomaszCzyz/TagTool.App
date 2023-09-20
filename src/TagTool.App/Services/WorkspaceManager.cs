@@ -37,6 +37,7 @@ public class WorkspaceManager : IWorkspaceManager
 
     private bool TryGetLayout([NotNullWhen(true)] out IDock? rootDock, [NotNullWhen(true)] out IFactory? dockFactory)
     {
+        _logger.LogDebug("Trying to read layout from file...");
         if (!File.Exists(@".\layout.json"))
         {
             (rootDock, dockFactory) = (null, null);
@@ -61,13 +62,15 @@ public class WorkspaceManager : IWorkspaceManager
 
         var defaultDockFactory = _serviceProvider.GetRequiredService<DefaultDockFactory>();
         rootDock.Factory = defaultDockFactory;
-     
+
         dockFactory = defaultDockFactory;
         return true;
     }
 
     private (IDock, IFactory) CreateDefaultLayout()
     {
+        _logger.LogDebug("Creating default layout");
+
         var taggableItemsSearch = _serviceProvider.GetRequiredService<TaggableItemsSearchViewModel>();
         var myTags = _serviceProvider.GetRequiredService<MyTagsViewModel>();
         taggableItemsSearch.Title = "Tag Search";
@@ -106,7 +109,7 @@ public class WorkspaceManager : IWorkspaceManager
             VisibleDockables = new ObservableCollection<IDockable>(new IDockable[] { proportionalDock }),
             // Without setting ActiveDockable, nothing appears. Maybe it is also important that DocumentDocks are
             // wrapped by ProportionalDock, because is specifies: [DataContract(IsReference = true)]
-            ActiveDockable = proportionalDock,  
+            ActiveDockable = proportionalDock,
             DefaultDockable = null
         };
 
