@@ -27,7 +27,7 @@ public partial class MyDocumentDock : DocumentDock
 
         var (documentType, tabName) = type switch
         {
-            "My Tags" => (typeof(MyTagsViewModel), "MyTags"),
+            "Tags Library" => (typeof(TagsLibraryViewModel), "TagsLibrary"),
             "Search" => (typeof(TaggableItemsSearchViewModel), "Search"),
             "File Explorer" => (typeof(FileSystemViewModel), "FileExplorer"),
             "Items Tagger" => (typeof(ItemsTaggingTabViewModel), "ItemsTagger"),

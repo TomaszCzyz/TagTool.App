@@ -23,9 +23,9 @@ using MonthTag = TagTool.App.Core.Models.MonthTag;
 
 namespace TagTool.App.ViewModels.UserControls;
 
-public partial class MyTagsViewModel : Document
+public partial class TagsLibraryViewModel : Document
 {
-    private readonly ILogger<MyTagsViewModel> _logger;
+    private readonly ILogger<TagsLibraryViewModel> _logger;
     private readonly TagService.TagServiceClient _tagService;
 
     [ObservableProperty]
@@ -42,20 +42,20 @@ public partial class MyTagsViewModel : Document
     ///     ctor for XAML previewer
     /// </summary>
     [UsedImplicitly]
-    public MyTagsViewModel()
+    public TagsLibraryViewModel()
     {
         if (!Design.IsDesignMode)
         {
             Debug.Fail("ctor for XAML Previewer should not be invoke during standard execution");
         }
 
-        _logger = App.Current.Services.GetRequiredService<ILogger<MyTagsViewModel>>();
+        _logger = App.Current.Services.GetRequiredService<ILogger<TagsLibraryViewModel>>();
         _tagService = App.Current.Services.GetRequiredService<ITagToolBackend>().GetTagService();
 
         Initialize();
     }
 
-    public MyTagsViewModel(ILogger<MyTagsViewModel> logger, ITagToolBackend tagToolBackend)
+    public TagsLibraryViewModel(ILogger<TagsLibraryViewModel> logger, ITagToolBackend tagToolBackend)
     {
         _logger = logger;
         _tagService = tagToolBackend.GetTagService();

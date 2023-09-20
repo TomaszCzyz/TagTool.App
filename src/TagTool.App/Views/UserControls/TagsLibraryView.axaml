@@ -8,13 +8,13 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:models="clr-namespace:TagTool.App.Core.Models;assembly=TagTool.App.Core"
     xmlns:userControls="clr-namespace:TagTool.App.ViewModels.UserControls"
-    x:Class="TagTool.App.Views.UserControls.MyTagsView"
-    x:DataType="userControls:MyTagsViewModel"
+    x:Class="TagTool.App.Views.UserControls.TagsLibraryView"
+    x:DataType="userControls:TagsLibraryViewModel"
     x:Name="RootUserControl"
     d:DesignWidth="800"
     d:DesignHeight="450"
     mc:Ignorable="d"
-    d:DataContext="{x:Static dd:DesignData.MyTagsViewModel}">
+    d:DataContext="{x:Static dd:DesignData.TagsLibraryViewModel}">
     <UserControl.Styles>
         <Style Selector="ListBoxItem">
             <Setter Property="Padding" Value="4" />
@@ -45,7 +45,7 @@
                     <ListBox.ContextFlyout>
                         <MenuFlyout>
                             <MenuItem
-                                Command="{ReflectionBinding #RootUserControl.((userControls:MyTagsViewModel)DataContext).RemoveTagCommand, FallbackValue=null}"
+                                Command="{ReflectionBinding #RootUserControl.((userControls:TagsLibraryViewModel)DataContext).RemoveTagCommand, FallbackValue=null}"
                                 CommandParameter="{Binding #TagsListBox.SelectedItem}"
                                 Header="Remove">
                                 <MenuItem.Icon>
@@ -96,7 +96,7 @@
                     <ListBox.ContextFlyout>
                         <MenuFlyout>
                             <MenuItem
-                                Command="{ReflectionBinding #RootUserControl.((userControls:MyTagsViewModel)DataContext).RemoveTagCommand, FallbackValue=null}"
+                                Command="{ReflectionBinding #RootUserControl.((userControls:TagsLibraryViewModel)DataContext).RemoveTagCommand, FallbackValue=null}"
                                 CommandParameter="{Binding #TagsListBox.SelectedItem}"
                                 Header="Remove">
                                 <MenuItem.Icon>

@@ -6,7 +6,7 @@ public static class DesignData
 {
     public static TaggableItemsSearchViewModel TaggableItemsSearchViewModel { get; } = new();
 
-    public static MyTagsViewModel MyTagsViewModel { get; } = new();
+    public static TagsLibraryViewModel TagsLibraryViewModel { get; } = new();
 
     public static TagsAssociationsViewModel TagsAssociationsViewModel { get; } = new();
 }

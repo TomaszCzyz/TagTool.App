@@ -9,11 +9,11 @@ using TagTool.App.ViewModels.UserControls;
 namespace TagTool.App.Views.UserControls;
 
 [UsedImplicitly]
-public partial class MyTagsView : UserControl
+public partial class TagsLibraryView : UserControl
 {
-    private MyTagsViewModel ViewModel => (MyTagsViewModel)DataContext!;
+    private TagsLibraryViewModel LibraryViewModel => (TagsLibraryViewModel)DataContext!;
 
-    public MyTagsView()
+    public TagsLibraryView()
     {
         InitializeComponent();
     }

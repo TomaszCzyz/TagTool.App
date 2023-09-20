@@ -37,7 +37,7 @@ public class WorkspaceManager : IWorkspaceManager
 
     private bool TryGetLayout([NotNullWhen(true)] out IDock? rootDock, [NotNullWhen(true)] out IFactory? dockFactory)
     {
-        _logger.LogDebug("Trying to read layout from file...");
+        _logger.LogDebug("Trying to read layout from file");
         if (!File.Exists(@".\layout.json"))
         {
             (rootDock, dockFactory) = (null, null);
@@ -52,7 +52,16 @@ public class WorkspaceManager : IWorkspaceManager
             return false;
         }
 
-        rootDock = _serializer.Deserialize<RootDock>(jsonRootDock);
+        try
+        {
+            rootDock = _serializer.Deserialize<RootDock>(jsonRootDock);
+        }
+        catch (Exception e)
+        {
+            _logger.LogWarning(e, "Error during deserialization of dock layout {LayoutString}", jsonRootDock);
+            (rootDock, dockFactory) = (null, null);
+            return false;
+        }
 
         if (rootDock is null)
         {
@@ -72,9 +81,9 @@ public class WorkspaceManager : IWorkspaceManager
         _logger.LogDebug("Creating default layout");
 
         var taggableItemsSearch = _serviceProvider.GetRequiredService<TaggableItemsSearchViewModel>();
-        var myTags = _serviceProvider.GetRequiredService<MyTagsViewModel>();
+        var myTags = _serviceProvider.GetRequiredService<TagsLibraryViewModel>();
         taggableItemsSearch.Title = "Tag Search";
-        myTags.Title = "My Tags";
+        myTags.Title = "Tags Library";
 
         var documentDock1 = new MyDocumentDock(_serviceProvider)
         {
@@ -120,9 +129,13 @@ public class WorkspaceManager : IWorkspaceManager
 
     public async Task SaveLayout(RootDock layout)
     {
+        // todo: get it form settings
+        var path = @".\layout.json";
+
         try
         {
-            await using var fileStream = File.Open(@".\layout.json", FileMode.Create);
+            _logger.LogInformation("Saving dock layout to file {Path}", path);
+            await using var fileStream = File.Open(path, FileMode.Create);
 
             _serializer.Save(fileStream, layout);
         }
