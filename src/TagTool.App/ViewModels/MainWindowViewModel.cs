@@ -11,6 +11,7 @@ using Dock.Model.Core;
 using Dock.Model.Mvvm.Controls;
 using JetBrains.Annotations;
 using Microsoft.Extensions.DependencyInjection;
+using TagTool.App.Core;
 using TagTool.App.Core.Extensions;
 using TagTool.App.Core.ViewModels;
 using TagTool.App.Docks;
@@ -39,10 +40,6 @@ public partial class MainWindowViewModel : ViewModelBase, IRecipient<NewNotifica
     [ObservableProperty]
     private IDock? _layout;
 
-    // try this:
-    // public IRootDock Layout => DockFactory.RootDock
-    public IFactory DockFactory { get; set; }
-
     public WindowNotificationManager? NotificationManager { get; set; }
 
     /// <summary>
@@ -55,7 +52,7 @@ public partial class MainWindowViewModel : ViewModelBase, IRecipient<NewNotifica
             Debug.Fail("ctor for XAML Previewer should not be invoke during standard execution");
         }
 
-        DockFactory = App.Current.Services.GetRequiredService<DefaultDockFactory>();
+        _workspaceManager = AppTemplate.Current.Services.GetRequiredService<IWorkspaceManager>();
 
         Initialize();
     }
@@ -66,10 +63,8 @@ public partial class MainWindowViewModel : ViewModelBase, IRecipient<NewNotifica
         _workspaceManager = workspaceManager;
 
         var (rootDock, dockFactory) = workspaceManager.GetLayout();
-        // dockFactory.CreateLayout();
         dockFactory.InitLayout(rootDock);
         Layout = rootDock;
-        DockFactory = dockFactory;
 
         Initialize();
     }
