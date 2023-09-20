@@ -3,6 +3,7 @@ using Avalonia.Controls;
 using CommunityToolkit.Mvvm.ComponentModel;
 using JetBrains.Annotations;
 using Microsoft.Extensions.DependencyInjection;
+using TagTool.App.Core;
 using TagTool.App.Core.ViewModels;
 
 namespace TagTool.App.ViewModels.UserControls;
@@ -27,7 +28,7 @@ public partial class MenuViewModel : ViewModelBase
             Debug.Fail("ctor for XAML Previewer should not be invoke during standard execution");
         }
 
-        _parentWindow = App.Current.Services.GetRequiredService<MainWindowViewModel>();
+        _parentWindow = AppTemplate.Current.Services.GetRequiredService<MainWindowViewModel>();
     }
 
     [UsedImplicitly]

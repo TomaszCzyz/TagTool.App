@@ -6,6 +6,7 @@ using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.LogicalTree;
 using Dock.Avalonia.Controls;
+using TagTool.App.Core;
 using TagTool.App.Docks;
 using TagTool.App.ViewModels;
 
@@ -13,7 +14,7 @@ namespace TagTool.App.Views;
 
 public partial class MainWindow : Window
 {
-    private double _appContentFontSizeCache = (double)App.Current.Resources["AppContentFontSize"]!;
+    private double _appContentFontSizeCache = (double)AppTemplate.Current.Resources["AppContentFontSize"]!;
     private bool _mouseDownForWindowMoving;
     private PointerPoint _originalPoint;
 
@@ -93,7 +94,7 @@ public partial class MainWindow : Window
     private void ChangeFontSize(bool zoomIn)
     {
         _appContentFontSizeCache += zoomIn ? 1 : -1;
-        App.Current.Resources["AppContentFontSize"] = _appContentFontSizeCache;
+        AppTemplate.Current.Resources["AppContentFontSize"] = _appContentFontSizeCache;
     }
 
     private void InputElement_OnPointerWheelChanged(object? sender, PointerWheelEventArgs e)

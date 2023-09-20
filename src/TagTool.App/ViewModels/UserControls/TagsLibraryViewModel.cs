@@ -12,6 +12,7 @@ using Grpc.Core;
 using JetBrains.Annotations;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using TagTool.App.Core;
 using TagTool.App.Core.Models;
 using TagTool.App.Core.Services;
 using TagTool.App.Core.TagMapper;
@@ -49,8 +50,8 @@ public partial class TagsLibraryViewModel : Document
             Debug.Fail("ctor for XAML Previewer should not be invoke during standard execution");
         }
 
-        _logger = App.Current.Services.GetRequiredService<ILogger<TagsLibraryViewModel>>();
-        _tagService = App.Current.Services.GetRequiredService<ITagToolBackend>().GetTagService();
+        _logger = AppTemplate.Current.Services.GetRequiredService<ILogger<TagsLibraryViewModel>>();
+        _tagService = AppTemplate.Current.Services.GetRequiredService<ITagToolBackend>().GetTagService();
 
         Initialize();
     }

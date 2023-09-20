@@ -6,6 +6,7 @@ using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.VisualTree;
+using TagTool.App.Core;
 using TagTool.App.Core.ViewModels;
 using TagTool.App.Core.Views;
 using TagTool.App.Lite.ViewModels;
@@ -165,7 +166,7 @@ public partial class MainWindowView : Window
 
     private static void ShutdownApplication()
     {
-        if (App.Current.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime applicationLifetime)
+        if (AppTemplate.Current.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime applicationLifetime)
         {
             applicationLifetime.Shutdown();
         }

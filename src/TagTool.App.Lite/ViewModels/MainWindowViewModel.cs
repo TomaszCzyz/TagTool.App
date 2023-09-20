@@ -11,6 +11,7 @@ using DynamicData;
 using Google.Protobuf.WellKnownTypes;
 using JetBrains.Annotations;
 using Microsoft.Extensions.DependencyInjection;
+using TagTool.App.Core;
 using TagTool.App.Core.Models;
 using TagTool.App.Core.Services;
 using TagTool.App.Core.TagMapper;
@@ -40,8 +41,8 @@ public partial class MainWindowViewModel : ViewModelBase
             Debug.Fail("ctor for XAML Previewer should not be invoke during standard execution");
         }
 
-        _tagService = App.Current.Services.GetRequiredService<ITagToolBackend>().GetTagService();
-        SearchBarViewModel = App.Current.Services.GetRequiredService<TaggableItemsSearchBarViewModel>();
+        _tagService = AppTemplate.Current.Services.GetRequiredService<ITagToolBackend>().GetTagService();
+        SearchBarViewModel = AppTemplate.Current.Services.GetRequiredService<TaggableItemsSearchBarViewModel>();
 
         Initialize();
     }

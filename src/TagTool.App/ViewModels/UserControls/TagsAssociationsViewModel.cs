@@ -11,6 +11,7 @@ using Google.Protobuf.WellKnownTypes;
 using Grpc.Core;
 using JetBrains.Annotations;
 using Microsoft.Extensions.DependencyInjection;
+using TagTool.App.Core;
 using TagTool.App.Core.Extensions;
 using TagTool.App.Core.Models;
 using TagTool.App.Core.Services;
@@ -42,7 +43,7 @@ public partial class TagsAssociationsViewModel : Document
             Debug.Fail("ctor for XAML Previewer should not be invoke during standard execution");
         }
 
-        _tagService = App.Current.Services.GetRequiredService<ITagToolBackend>().GetTagService();
+        _tagService = AppTemplate.Current.Services.GetRequiredService<ITagToolBackend>().GetTagService();
         ReloadAllRelations();
     }
 

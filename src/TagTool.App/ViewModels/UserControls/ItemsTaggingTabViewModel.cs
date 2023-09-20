@@ -6,6 +6,7 @@ using Dock.Model.Mvvm.Controls;
 using DynamicData;
 using JetBrains.Annotations;
 using Microsoft.Extensions.DependencyInjection;
+using TagTool.App.Core;
 using TagTool.App.Core.Models;
 using TagTool.App.Core.Services;
 using TagTool.App.Core.ViewModels;
@@ -28,7 +29,7 @@ public partial class ItemsTaggingTabViewModel : Document
             Debug.Fail("ctor for XAML Previewer should not be invoke during standard execution");
         }
 
-        _tagService = App.Current.Services.GetRequiredService<ITagToolBackend>().GetTagService();
+        _tagService = AppTemplate.Current.Services.GetRequiredService<ITagToolBackend>().GetTagService();
 
         var dir = new DirectoryInfo(@"C:\Users\tczyz\MyFiles");
         var files = dir

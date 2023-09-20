@@ -10,6 +10,7 @@ using Dock.Model.Mvvm.Controls;
 using DynamicData;
 using JetBrains.Annotations;
 using Microsoft.Extensions.DependencyInjection;
+using TagTool.App.Core;
 using TagTool.App.Core.Extensions;
 using TagTool.App.Core.Models;
 using TagTool.App.Core.Services;
@@ -64,8 +65,8 @@ public partial class FileSystemViewModel : Document
             Debug.Fail("ctor for XAML Previewer should not be invoke during standard execution");
         }
 
-        _fileActionsService = App.Current.Services.GetRequiredService<ITagToolBackend>().GetFileActionsService();
-        _tagService = App.Current.Services.GetRequiredService<ITagToolBackend>().GetTagService();
+        _fileActionsService = AppTemplate.Current.Services.GetRequiredService<ITagToolBackend>().GetFileActionsService();
+        _tagService = AppTemplate.Current.Services.GetRequiredService<ITagToolBackend>().GetTagService();
 
         Initialize();
     }

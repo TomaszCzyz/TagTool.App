@@ -8,6 +8,7 @@ using Dock.Model.Mvvm.Controls;
 using Grpc.Core;
 using JetBrains.Annotations;
 using Microsoft.Extensions.DependencyInjection;
+using TagTool.App.Core;
 using TagTool.App.Core.Models;
 using TagTool.App.Core.Services;
 using TagTool.App.Core.ViewModels;
@@ -51,8 +52,8 @@ public partial class FileSystemSearchViewModel : Document, IDisposable
             Debug.Fail("ctor for XAML Previewer should not be invoke during standard execution");
         }
 
-        _fileSystemSearchService = App.Current.Services.GetRequiredService<ITagToolBackend>().GetFileSystemSearchService();
-        _tagService = App.Current.Services.GetRequiredService<ITagToolBackend>().GetTagService();
+        _fileSystemSearchService = AppTemplate.Current.Services.GetRequiredService<ITagToolBackend>().GetFileSystemSearchService();
+        _tagService = AppTemplate.Current.Services.GetRequiredService<ITagToolBackend>().GetTagService();
     }
 
     [UsedImplicitly]
