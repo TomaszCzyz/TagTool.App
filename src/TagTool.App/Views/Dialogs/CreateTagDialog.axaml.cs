@@ -10,12 +10,14 @@ namespace TagTool.App.Views.Dialogs;
 
 public partial class CreateTagDialog : Window
 {
+    private readonly CreateTagDialogViewModel _viewModel = AppTemplate.Current.Services.GetRequiredService<CreateTagDialogViewModel>();
+
     public CreateTagDialog()
     {
 #if DEBUG
         this.AttachDevTools();
 #endif
-        DataContext = AppTemplate.Current.Services.GetRequiredService<CreateTagDialogViewModel>();
+        DataContext = _viewModel;
         InitializeComponent();
 
         AddHandler(KeyDownEvent, Window_OnKeyDown);
@@ -39,5 +41,12 @@ public partial class CreateTagDialog : Window
                 Close(NewTagNameTextBox.Text);
                 break;
         }
+    }
+
+    protected override void OnClosing(WindowClosingEventArgs e)
+    {
+        _viewModel.Dispose();
+
+        base.OnClosing(e);
     }
 }

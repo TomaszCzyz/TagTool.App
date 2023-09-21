@@ -52,6 +52,7 @@ public partial class CreateTagDialogViewModel : ViewModelBase, IDisposable, INot
     public void Dispose()
     {
         GC.SuppressFinalize(this);
+        _streamingCall.RequestStream.CompleteAsync();
         _streamingCall.Dispose();
     }
 
