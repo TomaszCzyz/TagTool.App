@@ -30,9 +30,6 @@ public partial class TagsLibraryViewModel : Document
     private readonly TagService.TagServiceClient _tagService;
 
     [ObservableProperty]
-    private string? _createTagText;
-
-    [ObservableProperty]
     private string? _selectedTag;
 
     public ObservableCollection<ITag> DateAndTimeTags { get; set; } = new();
@@ -108,33 +105,30 @@ public partial class TagsLibraryViewModel : Document
     }
 
     [RelayCommand]
-    private void CreateTag()
+    private void CreateTag(string newTagName)
     {
-        if (string.IsNullOrEmpty(CreateTagText))
-        {
-            return;
-        }
+        _logger.LogInformation("Requesting tag creation {Request}", newTagName);
 
-        var createTagsRequest = new CreateTagRequest { Tag = Any.Pack(new NormalTag { Name = CreateTagText }) };
-
-        _logger.LogInformation("Requesting tag creation {Request}", createTagsRequest);
-
+        var createTagsRequest = new CreateTagRequest { Tag = Any.Pack(new NormalTag { Name = newTagName }) };
         var reply = _tagService.CreateTag(createTagsRequest);
-        // todo: check is success
 
         switch (reply.ResultCase)
         {
             case CreateTagReply.ResultOneofCase.ErrorMessage:
+                var notification = new Notification(
+                    "Fail create tag",
+                    $"Tag {newTagName} has not been created.\nBackend service message:\n{reply.ErrorMessage}",
+                    NotificationType.Warning);
+
+                WeakReferenceMessenger.Default.Send(new NewNotificationMessage(notification));
                 break;
         }
 
         // todo: make extension method 'AddIfNotExists(..)'
-        if (!TextTags.Select(tag => tag.DisplayText).Contains(CreateTagText))
+        if (!TextTags.Select(tag => tag.DisplayText).Contains(newTagName))
         {
-            TextTags.Add(new TextTag { Name = CreateTagText });
+            TextTags.Add(new TextTag { Name = newTagName });
         }
-
-        CreateTagText = "";
     }
 
     [RelayCommand]

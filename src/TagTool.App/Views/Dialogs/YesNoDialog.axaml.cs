@@ -17,7 +17,7 @@ public partial class YesNoDialog : Window
 #endif
         InitializeComponent();
 
-        AddHandler(KeyDownEvent, OnKeyDown);
+        AddHandler(KeyDownEvent, Window_OnKeyDown);
     }
 
     protected override void OnApplyTemplate(TemplateAppliedEventArgs e)
@@ -33,7 +33,7 @@ public partial class YesNoDialog : Window
         base.OnLoaded(e);
     }
 
-    private void OnKeyDown(object? sender, KeyEventArgs e)
+    private void Window_OnKeyDown(object? sender, KeyEventArgs e)
     {
         if (e.Key == Key.Escape)
         {

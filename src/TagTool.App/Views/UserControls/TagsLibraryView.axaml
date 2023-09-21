@@ -149,29 +149,14 @@
                     </ListBox.ItemTemplate>
                 </ListBox>
             </Expander>
-            <!-- <Grid ColumnDefinitions="*,Auto" RowDefinitions="Auto"> -->
-            <!-- <TextBox -->
-            <!-- Grid.Column="0" -->
-            <!-- Text="{Binding CreateTagText}" -->
-            <!-- Watermark="enter new tag name"> -->
-            <!--         <TextBox.KeyBindings> -->
-            <!--             <KeyBinding Command="{Binding CreateTagCommand}" Gesture="Enter" /> -->
-            <!--         </TextBox.KeyBindings> -->
-            <!--     </TextBox> -->
-            <!--  -->
-            <!-- <Button -->
-            <!-- Grid.Column="1" -->
-            <!-- Command="{Binding CreateTagCommand}" -->
-            <!-- Content="CreateTag" /> -->
-            <!--  -->
-            <!-- </Grid> -->
         </StackPanel>
         <Button
             Margin="5"
             HorizontalAlignment="Right"
             VerticalAlignment="Bottom"
             Background="#225D5F61"
-            CornerRadius="10">
+            CornerRadius="10"
+            Click="AddTagButton_OnClick">
 
             <avalonia:MaterialIcon
                 Width="40"
