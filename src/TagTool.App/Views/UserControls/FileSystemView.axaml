@@ -13,7 +13,6 @@
     d:DesignWidth="800"
     d:DesignHeight="700"
     mc:Ignorable="d">
-
     <UserControl.Styles>
         <Style Selector="Button.Transparent">
             <Setter Property="Background" Value="Transparent" />
@@ -25,7 +24,6 @@
     </Design.DataContext>
 
     <Grid RowDefinitions="30,*,Auto">
-
         <!-- Address bar -->
         <Grid Grid.Row="0" ColumnDefinitions="Auto,Auto,Auto,*,Auto">
             <Grid.Styles>
@@ -47,7 +45,6 @@
 
                 <Svg Path="/Assets/Svgs/Light/arrow_back.svg" />
             </Button>
-
             <Button
                 Grid.Column="1"
                 Classes="NavigationButton"
@@ -55,7 +52,6 @@
 
                 <Svg Path="/Assets/Svgs/Light/arrow_forward.svg" />
             </Button>
-
             <Button
                 Grid.Column="2"
                 Classes="NavigationButton"
@@ -63,7 +59,6 @@
 
                 <Svg Path="/Assets/Svgs/Light/arrow_upward.svg" />
             </Button>
-
             <TextBox
                 Name="AddressTextBox"
                 Grid.Column="3"
@@ -78,7 +73,6 @@
                     <KeyBinding Command="{CompiledBinding CommitAddressCommand}" Gesture="Enter" />
                 </TextBox.KeyBindings>
             </TextBox>
-
             <!-- Interactive address -->
             <DockPanel
                 Grid.Column="3"
@@ -135,14 +129,12 @@
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>
                 </ItemsControl>
-
                 <Border
                     HorizontalAlignment="Stretch"
                     Background="Transparent"
                     PointerPressed="Border_OnPointerPressed" />
 
             </DockPanel>
-
             <Border
                 Grid.Column="4"
                 Width="{Binding $self.Bounds.Height}"
@@ -170,7 +162,6 @@
                         <Setter Property="IsVisible" Value="False" />
                     </Style>
                 </Border.Styles>
-
                 <ToggleButton
                     Padding="0"
                     HorizontalAlignment="Center"
@@ -192,7 +183,6 @@
                 </ToggleButton>
             </Border>
         </Grid>
-
         <!-- Folder content grid -->
         <ListBox
             Name="FolderContentListBox"
@@ -216,7 +206,6 @@
                 </DataTemplate>
             </ListBox.DataTemplates>
         </ListBox>
-
         <!-- QuickSearch text field -->
         <Border
             Grid.Row="1"
@@ -236,7 +225,6 @@
                 <TextBlock Name="FuzzySearchTextBlock" Padding="4" />
             </DockPanel>
         </Border>
-
         <!-- Footer -->
         <StackPanel Grid.Row="2" Orientation="Horizontal">
             <TextBlock
@@ -251,7 +239,6 @@
                 Text="" />
 
         </StackPanel>
-
         <ProgressBar
             Grid.Row="2"
             IsIndeterminate="True"
