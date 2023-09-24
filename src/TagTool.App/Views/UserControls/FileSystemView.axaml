@@ -7,6 +7,7 @@
     xmlns:userControls="clr-namespace:TagTool.App.ViewModels.UserControls"
     xmlns:viewModels="clr-namespace:TagTool.App.Core.ViewModels;assembly=TagTool.App.Core"
     xmlns:views="clr-namespace:TagTool.App.Core.Views;assembly=TagTool.App.Core"
+    xmlns:controls="clr-namespace:TagTool.App.Controls"
     x:Class="TagTool.App.Views.UserControls.FileSystemView"
     x:DataType="userControls:FileSystemViewModel"
     x:Name="UserControlRoot"
@@ -185,7 +186,7 @@
         </Grid>
         <!-- Folder content grid -->
         <!-- NOTE: text search for VirtualizingStackPanel is performed only on visible items -->
-        <ListBox
+        <controls:TextSearchableListBox
             Name="FolderContentListBox"
             Grid.Row="1"
             Background="Transparent"
@@ -209,7 +210,7 @@
                     <views:TaggableItemView FontSize="14" AttachedToVisualTree="Visual_OnAttachedToVisualTree" />
                 </DataTemplate>
             </ListBox.DataTemplates>
-        </ListBox>
+        </controls:TextSearchableListBox>
         <!-- QuickSearch text field -->
         <Border
             Grid.Row="1"

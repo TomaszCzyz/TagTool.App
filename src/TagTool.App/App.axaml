@@ -45,6 +45,7 @@
         <StyleInclude Source="avares://Avalonia.Controls.DataGrid/Themes/Fluent.xaml" />
         <StyleInclude Source="/Views/TemplatedControls/TagChip.axaml" />
         <StyleInclude Source="/Views/TemplatedControls/SpecialTag.axaml" />
+        <StyleInclude Source="/Controls/TextSearchableListBox.axaml" />
 
         <Style Selector="DocumentControl /template/ Grid#PART_Grid">
             <Setter Property="Height" Value="0" />

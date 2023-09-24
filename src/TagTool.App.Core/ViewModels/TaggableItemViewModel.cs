@@ -15,6 +15,11 @@ using MonthTag = TagTool.App.Core.Models.MonthTag;
 
 namespace TagTool.App.Core.ViewModels;
 
+public interface ITextSearchable
+{
+    ReadOnlySpan<char> SearchText { get; }
+}
+
 /// <summary>
 ///     Basic representation of item that might be tagged, that should be use to display only.
 ///     This class will react ot updates of underlining <see cref="TaggableItem" />
@@ -22,7 +27,7 @@ namespace TagTool.App.Core.ViewModels;
 ///     Additional functionalities, like drop-to-tag, should be implemented in parent components.
 /// </summary>
 [DebuggerDisplay("{DisplayName}")]
-public partial class TaggableItemViewModel : ViewModelBase
+public partial class TaggableItemViewModel : ViewModelBase, ITextSearchable
 {
     private readonly TagService.TagServiceClient _tagService;
     private TaggableItem _taggableItem;
@@ -52,6 +57,8 @@ public partial class TaggableItemViewModel : ViewModelBase
     public string DisplayName => TaggableItem.DisplayName;
 
     public IReadOnlySet<ITag>? AssociatedTags => TaggableItem.Tags;
+
+    public ReadOnlySpan<char> SearchText => DisplayName.AsSpan();
 
     /// <summary>
     ///     ctor for XAML previewer
