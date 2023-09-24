@@ -11,28 +11,28 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\TagTool.App.Core\TagTool.App.Core.csproj" />
+    <ProjectReference Include="..\TagTool.App.Core\TagTool.App.Core.csproj"/>
   </ItemGroup>
 
   <ItemGroup>
-    <TrimmableAssembly Include="Avalonia.Themes.Fluent" />
+    <TrimmableAssembly Include="Avalonia.Themes.Fluent"/>
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Avalonia.Controls.DataGrid" Version="11.0.0" />
-    <PackageReference Include="Avalonia.Svg.Skia" Version="11.0.0" />
-    <PackageReference Include="Dock.Avalonia" Version="11.0.0" />
-    <PackageReference Include="Dock.Model.Mvvm" Version="11.0.0" />
-    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+    <PackageReference Include="Avalonia.Controls.DataGrid" Version="11.0.4"/>
+    <PackageReference Include="Avalonia.Svg.Skia" Version="11.0.0.2"/>
+    <PackageReference Include="Dock.Avalonia" Version="11.0.0.2"/>
+    <PackageReference Include="Dock.Model.Mvvm" Version="11.0.0.2"/>
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3"/>
   </ItemGroup>
 
   <ItemGroup>
-    <AvaloniaResource Include="Assets\**" />
-    <None Remove=".gitignore" />
-    <None Remove="defaultAppSettings.json" />
-    <Content Include="defaultAppSettings.json" CopyToOutputDirectory="PreserveNewest" />
-    <None Remove="workspaceSettings.json" />
-    <Content Include="userSettings.json" CopyToOutputDirectory="PreserveNewest" />
+    <AvaloniaResource Include="Assets\**"/>
+    <None Remove=".gitignore"/>
+    <None Remove="defaultAppSettings.json"/>
+    <Content Include="defaultAppSettings.json" CopyToOutputDirectory="PreserveNewest"/>
+    <None Remove="workspaceSettings.json"/>
+    <Content Include="userSettings.json" CopyToOutputDirectory="PreserveNewest"/>
   </ItemGroup>
 
 </Project>
