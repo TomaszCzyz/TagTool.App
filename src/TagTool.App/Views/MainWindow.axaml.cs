@@ -17,14 +17,9 @@ public partial class MainWindow : Window
     private double _appContentFontSizeCache = (double)AppTemplate.Current.Resources["AppContentFontSize"]!;
     private bool _mouseDownForWindowMoving;
     private PointerPoint _originalPoint;
+    private IInputElement? _focusedBeforeSwitcherPopup;
 
     private MainWindowViewModel ViewModel => (MainWindowViewModel)DataContext!;
-
-    protected override void OnClosing(WindowClosingEventArgs e)
-    {
-        ViewModel.SaveLayoutCommand.Execute(null);
-        base.OnClosing(e);
-    }
 
     public MainWindow()
     {
@@ -33,6 +28,7 @@ public partial class MainWindow : Window
         this.AttachDevTools();
 #endif
         AddHandler(KeyDownEvent, EscapePressedHandler);
+        SwitcherPopup.AddHandler(KeyDownEvent, SwitcherPopup_OnKeyDown, RoutingStrategies.Tunnel);
         return;
 
         void EscapePressedHandler(object? sender, KeyEventArgs args)
@@ -42,6 +38,12 @@ public partial class MainWindow : Window
                 Focus();
             }
         }
+    }
+
+    protected override void OnClosing(WindowClosingEventArgs e)
+    {
+        ViewModel.SaveLayoutCommand.Execute(null);
+        base.OnClosing(e);
     }
 
     protected override void OnApplyTemplate(TemplateAppliedEventArgs e)
@@ -81,9 +83,9 @@ public partial class MainWindow : Window
 
     private void Button_OnClick(object? sender, RoutedEventArgs e)
     {
-        var control = ((Control)sender!);
+        var control = (Control)sender!;
         var dockControl = control.FindLogicalAncestorOfType<DocumentDockControl>();
-        var myDocumentDock = ((MyDocumentDock)dockControl!.DataContext!);
+        var myDocumentDock = (MyDocumentDock)dockControl!.DataContext!;
         var toolName = control.DataContext;
         myDocumentDock.CreateNewDocumentCommand.Execute(toolName);
 
@@ -97,7 +99,7 @@ public partial class MainWindow : Window
         AppTemplate.Current.Resources["AppContentFontSize"] = _appContentFontSizeCache;
     }
 
-    private void InputElement_OnPointerWheelChanged(object? sender, PointerWheelEventArgs e)
+    private void MainWindow_OnPointerWheelChanged(object? sender, PointerWheelEventArgs e)
     {
         if (!e.KeyModifiers.Equals(KeyModifiers.Control))
         {
@@ -109,15 +111,68 @@ public partial class MainWindow : Window
         e.Handled = true;
     }
 
-    private void MainContentBorder_OnKeyDown(object? sender, KeyEventArgs e)
+    private void MainWindow_OnKeyDown(object? sender, KeyEventArgs e)
     {
-        if (!e.KeyModifiers.Equals(KeyModifiers.Control) || (e.Key != Key.Add && e.Key != Key.Subtract))
+        switch (e)
         {
-            return;
+            case { Key: Key.Add or Key.Subtract, KeyModifiers: KeyModifiers.Control }:
+                ChangeFontSize(e.Key == Key.Add);
+
+                e.Handled = true;
+                break;
+            case { Key: Key.Tab, KeyModifiers: KeyModifiers.Control }:
+                _focusedBeforeSwitcherPopup = FocusManager?.GetFocusedElement();
+                SwitcherPopup.IsOpen = true;
+
+                SwitcherListBox.Selection.Select(0);
+                SwitcherListBox.ContainerFromIndex(0)?.Focus(NavigationMethod.Tab);
+
+                e.Handled = true;
+                break;
         }
+    }
 
-        ChangeFontSize(e.Key == Key.Add);
+    private void MainWindow_OnKeyUp(object? sender, KeyEventArgs e)
+    {
+        switch (e)
+        {
+            case { KeyModifiers: KeyModifiers.Control | KeyModifiers.Shift }:
+                // Catch case of backwards navigation with ctrl+shift+tab to avoid popup closing. 
+                break;
+            case { KeyModifiers: not KeyModifiers.Control }:
+                if (SwitcherPopup.IsOpen)
+                {
+                    SwitcherPopup.IsOpen = false;
+                    _focusedBeforeSwitcherPopup?.Focus();
+                    e.Handled = true;
+                }
 
-        e.Handled = true;
+                break;
+        }
+    }
+
+    private void SwitcherPopup_OnKeyDown(object? sender, KeyEventArgs e)
+    {
+        switch (e)
+        {
+            case { Key: Key.Tab, KeyModifiers: KeyModifiers.Shift | KeyModifiers.Control }:
+                if (SwitcherPopup.IsOpen)
+                {
+                    var index = SwitcherListBox.SelectedIndex;
+                    SwitcherListBox.Selection.Select((index - 1 + SwitcherListBox.ItemCount) % SwitcherListBox.ItemCount);
+                    e.Handled = true;
+                }
+
+                break;
+            case { Key: Key.Tab }:
+                if (SwitcherPopup.IsOpen)
+                {
+                    var index = SwitcherListBox.SelectedIndex;
+                    SwitcherListBox.SelectedIndex = (index + 1) % SwitcherListBox.ItemCount;
+                    e.Handled = true;
+                }
+
+                break;
+        }
     }
 }

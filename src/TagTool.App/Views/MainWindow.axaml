@@ -53,7 +53,10 @@
         <vm:MainWindowViewModel />
     </Design.DataContext>
 
-    <Panel>
+    <Panel
+        PointerWheelChanged="MainWindow_OnPointerWheelChanged"
+        KeyDown="MainWindow_OnKeyDown"
+        KeyUp="MainWindow_OnKeyUp">
         <ExperimentalAcrylicBorder IsHitTestVisible="False">
             <ExperimentalAcrylicBorder.Material>
                 <ExperimentalAcrylicMaterial
@@ -78,10 +81,7 @@
             </Border>
 
             <!-- Main content -->
-            <Border
-                Grid.Row="1"
-                PointerWheelChanged="InputElement_OnPointerWheelChanged"
-                KeyDown="MainContentBorder_OnKeyDown">
+            <Border Grid.Row="1">
                 <Border.Styles>
                     <Style Selector="DocumentTabStrip /template/ Button#PART_ButtonCreate">
                         <Setter Property="Template">
@@ -136,6 +136,33 @@
                 </Border.Styles>
                 <DockControl Layout="{ReflectionBinding Layout}" />
             </Border>
+            <!-- Switcher Popup -->
+            <Popup
+                Grid.Row="1"
+                Name="SwitcherPopup"
+                IsOpen="False"
+                Focusable="True"
+                IsLightDismissEnabled="True"
+                Placement="Center"
+                WindowManagerAddShadowHint="True">
+                <Border
+                    Width="250"
+                    Height="300"
+                    ClipToBounds="True"
+                    CornerRadius="10"
+                    ZIndex="1">
+                    <ListBox
+                        SelectionMode="Single"
+                        WrapSelection="True"
+                        Name="SwitcherListBox">
+                        <ListBoxItem>Item</ListBoxItem>
+                        <ListBoxItem>Item</ListBoxItem>
+                        <ListBoxItem>Item</ListBoxItem>
+                        <ListBoxItem>Item</ListBoxItem>
+                    </ListBox>
+                </Border>
+            </Popup>
+
         </Grid>
     </Panel>
 </Window>
