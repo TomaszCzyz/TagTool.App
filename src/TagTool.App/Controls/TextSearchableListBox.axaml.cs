@@ -13,36 +13,27 @@ public class TextSearchableListBox : ListBox
     /// <inheritdoc />
     protected override void OnTextInput(TextInputEventArgs e)
     {
-        if (!e.Handled)
+        if (e.Handled || !IsTextSearchEnabled)
         {
-            if (!IsTextSearchEnabled)
-            {
-                return;
-            }
-
-            StopTextSearchTimer();
-
-            _textSearchTerm += e.Text;
-
-            bool Match(object? item)
-            {
-                return item is ITextSearchable textSearchable
-                       && textSearchable.SearchText.StartsWith(_textSearchTerm, StringComparison.OrdinalIgnoreCase);
-            }
-
-
-            var index = Items.IndexOf(Items.FirstOrDefault(Match));
-            // var container = GetRealizedContainers().FirstOrDefault(Match);
-
-            if (index != -1)
-            {
-                SelectedIndex = index;
-            }
-
-            StartTextSearchTimer();
-
-            e.Handled = true;
+            return;
         }
+
+        StopTextSearchTimer();
+
+        _textSearchTerm += e.Text;
+
+        var item = Items
+            .OfType<ITextSearchable>()
+            .FirstOrDefault(searchable => searchable.SearchText.StartsWith(_textSearchTerm, StringComparison.OrdinalIgnoreCase));
+
+        if (item is not null)
+        {
+            SelectedIndex = Items.IndexOf(item);
+        }
+
+        StartTextSearchTimer();
+
+        e.Handled = true;
     }
 
     private void StartTextSearchTimer()
