@@ -51,12 +51,12 @@ public partial class FileSystemView : UserControl
         {
             case Key.Back when string.IsNullOrEmpty(FuzzySearchTextBlock.Text):
                 ViewModel.NavigateUpCommand.Execute(null);
-                FolderContentListBox.FindLogicalDescendantOfType<ListBoxItem>()?.Focus();
+                FolderContentListBox.Focus();
                 e.Handled = true;
                 break;
             case Key.Enter:
                 ViewModel.NavigateCommand.Execute(null);
-                FolderContentListBox.FindLogicalDescendantOfType<ListBoxItem>()?.Focus();
+                FolderContentListBox.Focus();
                 e.Handled = true;
                 break;
         }

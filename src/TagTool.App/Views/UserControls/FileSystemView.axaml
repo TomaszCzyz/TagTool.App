@@ -184,6 +184,7 @@
             </Border>
         </Grid>
         <!-- Folder content grid -->
+        <!-- NOTE: text search for VirtualizingStackPanel is performed only on visible items -->
         <ListBox
             Name="FolderContentListBox"
             Grid.Row="1"
@@ -198,6 +199,9 @@
             <ListBox.Styles>
                 <Style Selector="ListBoxItem">
                     <Setter Property="Padding" Value="2" />
+                    <Setter x:DataType="viewModels:TaggableItemViewModel" Property="TextSearch.Text">
+                        <ReflectionBinding Path="DisplayName" />
+                    </Setter>
                 </Style>
             </ListBox.Styles>
             <ListBox.DataTemplates>
