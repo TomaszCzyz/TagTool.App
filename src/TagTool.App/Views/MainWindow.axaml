@@ -5,8 +5,10 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:userControls="clr-namespace:TagTool.App.Views.UserControls"
     xmlns:viewModels="clr-namespace:TagTool.App.ViewModels.UserControls"
+    xmlns:viewModels0="clr-namespace:TagTool.App.ViewModels"
     xmlns:vm="using:TagTool.App.ViewModels"
     x:Class="TagTool.App.Views.MainWindow"
+    x:DataType="viewModels0:MainWindowViewModel"
     x:Name="RootWindow"
     d:DesignWidth="1400"
     d:DesignHeight="700"
@@ -54,9 +56,9 @@
     </Design.DataContext>
 
     <Panel
+        KeyUp="MainWindow_OnKeyUp"
         PointerWheelChanged="MainWindow_OnPointerWheelChanged"
-        KeyDown="MainWindow_OnKeyDown"
-        KeyUp="MainWindow_OnKeyUp">
+        KeyDown="MainWindow_OnKeyDown">
         <ExperimentalAcrylicBorder IsHitTestVisible="False">
             <ExperimentalAcrylicBorder.Material>
                 <ExperimentalAcrylicMaterial
@@ -138,11 +140,11 @@
             </Border>
             <!-- Switcher Popup -->
             <Popup
-                Grid.Row="1"
                 Name="SwitcherPopup"
-                IsOpen="False"
+                Grid.Row="1"
                 Focusable="True"
                 IsLightDismissEnabled="True"
+                IsOpen="False"
                 Placement="Center"
                 WindowManagerAddShadowHint="True">
                 <Border
@@ -152,14 +154,10 @@
                     CornerRadius="10"
                     ZIndex="1">
                     <ListBox
+                        Name="SwitcherListBox"
                         SelectionMode="Single"
-                        WrapSelection="True"
-                        Name="SwitcherListBox">
-                        <ListBoxItem>Item</ListBoxItem>
-                        <ListBoxItem>Item</ListBoxItem>
-                        <ListBoxItem>Item</ListBoxItem>
-                        <ListBoxItem>Item</ListBoxItem>
-                    </ListBox>
+                        WrapSelection="True" />
+
                 </Border>
             </Popup>
 

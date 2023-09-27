@@ -6,6 +6,8 @@ using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.LogicalTree;
 using Dock.Avalonia.Controls;
+using Dock.Model.Core;
+using Dock.Model.Mvvm.Controls;
 using TagTool.App.Core;
 using TagTool.App.Docks;
 using TagTool.App.ViewModels;
@@ -18,6 +20,7 @@ public partial class MainWindow : Window
     private bool _mouseDownForWindowMoving;
     private PointerPoint _originalPoint;
     private IInputElement? _focusedBeforeSwitcherPopup;
+    private (IDockable, Document)[]? _visibleDocumentsWithOwners;
 
     private MainWindowViewModel ViewModel => (MainWindowViewModel)DataContext!;
 
@@ -121,11 +124,18 @@ public partial class MainWindow : Window
                 e.Handled = true;
                 break;
             case { Key: Key.Tab, KeyModifiers: KeyModifiers.Control }:
+                var dockControl = this.FindLogicalDescendantOfType<DockControl>()!;
+                _visibleDocumentsWithOwners = GetVisibleDocumentsWithOwners(dockControl.Layout!).ToArray();
+                SwitcherListBox.ItemsSource = _visibleDocumentsWithOwners.Select(tuple => tuple.Item2.Title);
+
                 _focusedBeforeSwitcherPopup = FocusManager?.GetFocusedElement();
                 SwitcherPopup.IsOpen = true;
 
-                SwitcherListBox.Selection.Select(0);
-                SwitcherListBox.ContainerFromIndex(0)?.Focus(NavigationMethod.Tab);
+                if (SwitcherListBox.ItemCount != 0)
+                {
+                    SwitcherListBox.Selection.Select(0);
+                    SwitcherListBox.ContainerFromIndex(0)?.Focus(NavigationMethod.Tab);
+                }
 
                 e.Handled = true;
                 break;
@@ -142,6 +152,10 @@ public partial class MainWindow : Window
             case { KeyModifiers: not KeyModifiers.Control }:
                 if (SwitcherPopup.IsOpen)
                 {
+                    var selected = _visibleDocumentsWithOwners?[SwitcherListBox.SelectedIndex];
+
+                    ViewModel.GoToDocumentCommand.Execute(selected);
+
                     SwitcherPopup.IsOpen = false;
                     _focusedBeforeSwitcherPopup?.Focus();
                     e.Handled = true;
@@ -173,6 +187,32 @@ public partial class MainWindow : Window
                 }
 
                 break;
+        }
+    }
+
+    private IEnumerable<(IDockable, Document)> GetVisibleDocumentsWithOwners(IDock dock)
+    {
+        if (dock.VisibleDockables is null)
+        {
+            yield break;
+        }
+
+        foreach (var dockable in dock.VisibleDockables)
+        {
+            if (dockable is Document document)
+            {
+                if (dockable.Owner is not null)
+                {
+                    yield return (dockable.Owner, document);
+                }
+            }
+            else if (dockable is IDock dockInner)
+            {
+                foreach (var dockableInner in GetVisibleDocumentsWithOwners(dockInner))
+                {
+                    yield return dockableInner;
+                }
+            }
         }
     }
 }

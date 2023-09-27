@@ -92,7 +92,7 @@ public partial class TagsLibraryViewModel : Document
             {
                 SearchText = "*",
                 SearchType = SearchTagsRequest.Types.SearchType.Wildcard,
-                ResultsLimit = 30
+                ResultsLimit = 50
             };
             var streamingCall = _tagService.SearchTags(searchTagsRequest);
 

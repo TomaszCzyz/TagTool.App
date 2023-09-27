@@ -14,7 +14,6 @@ using Microsoft.Extensions.DependencyInjection;
 using TagTool.App.Core;
 using TagTool.App.Core.Extensions;
 using TagTool.App.Core.ViewModels;
-using TagTool.App.Docks;
 using TagTool.App.Models;
 using TagTool.App.Services;
 using TagTool.App.ViewModels.UserControls;
@@ -67,6 +66,15 @@ public partial class MainWindowViewModel : ViewModelBase, IRecipient<NewNotifica
         Layout = rootDock;
 
         Initialize();
+    }
+
+    [RelayCommand]
+    private void GoToDocument((IDockable? Owner, Document? Document) input)
+    {
+        if (input is { Owner: { } owner, Document: { } doc })
+        {
+            Layout?.Factory?.SetFocusedDockable((owner as IDock)!, doc);
+        }
     }
 
     public void Receive(NewNotificationMessage message)
