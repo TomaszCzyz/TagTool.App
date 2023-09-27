@@ -13,7 +13,8 @@
     d:DesignWidth="700"
     d:DesignHeight="50"
     mc:Ignorable="d"
-    d:DataContext="{x:Static dd:DesignData.TaggableItemsSearchViewModel}">
+    d:DataContext="{x:Static dd:DesignData.TaggableItemsSearchViewModel}"
+    Focusable="True">
 
     <DockPanel Margin="2">
         <!-- Search Bar -->

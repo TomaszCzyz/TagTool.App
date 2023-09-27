@@ -23,6 +23,13 @@ public partial class FileSystemView : UserControl
         FolderContentListBox.AddHandler(KeyDownEvent, FolderContent_OnKeyDown, handledEventsToo: true);
     }
 
+    protected override void OnGotFocus(GotFocusEventArgs e)
+    {
+        base.OnGotFocus(e);
+
+        FolderContentListBox.Focus();
+    }
+
     private void AddressTextBox_OnLostFocus(object? sender, RoutedEventArgs e) => ViewModel.CancelAddressChangeCommand.Execute(e);
 
     private void Border_OnPointerPressed(object? sender, PointerPressedEventArgs e)

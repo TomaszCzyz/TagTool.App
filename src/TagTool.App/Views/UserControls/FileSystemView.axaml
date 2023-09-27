@@ -2,18 +2,19 @@
     xmlns="https://github.com/avaloniaui"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+    xmlns:controls="clr-namespace:TagTool.App.Controls"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:userControls="clr-namespace:TagTool.App.ViewModels.UserControls"
     xmlns:viewModels="clr-namespace:TagTool.App.Core.ViewModels;assembly=TagTool.App.Core"
     xmlns:views="clr-namespace:TagTool.App.Core.Views;assembly=TagTool.App.Core"
-    xmlns:controls="clr-namespace:TagTool.App.Controls"
     x:Class="TagTool.App.Views.UserControls.FileSystemView"
     x:DataType="userControls:FileSystemViewModel"
     x:Name="UserControlRoot"
     d:DesignWidth="800"
     d:DesignHeight="700"
-    mc:Ignorable="d">
+    mc:Ignorable="d"
+    Focusable="True">
     <UserControl.Styles>
         <Style Selector="Button.Transparent">
             <Setter Property="Background" Value="Transparent" />

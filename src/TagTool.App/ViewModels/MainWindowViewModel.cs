@@ -68,15 +68,6 @@ public partial class MainWindowViewModel : ViewModelBase, IRecipient<NewNotifica
         Initialize();
     }
 
-    [RelayCommand]
-    private void GoToDocument((IDockable? Owner, Document? Document) input)
-    {
-        if (input is { Owner: { } owner, Document: { } doc })
-        {
-            Layout?.Factory?.SetFocusedDockable((owner as IDock)!, doc);
-        }
-    }
-
     public void Receive(NewNotificationMessage message)
         => NotificationManager?.Show(
             new NotificationViewModel

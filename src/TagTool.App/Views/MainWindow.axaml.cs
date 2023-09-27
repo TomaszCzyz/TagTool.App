@@ -5,6 +5,7 @@ using Avalonia.Controls.Primitives;
 using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.LogicalTree;
+using Avalonia.VisualTree;
 using Dock.Avalonia.Controls;
 using Dock.Model.Core;
 using Dock.Model.Mvvm.Controls;
@@ -20,7 +21,7 @@ public partial class MainWindow : Window
     private bool _mouseDownForWindowMoving;
     private PointerPoint _originalPoint;
     private IInputElement? _focusedBeforeSwitcherPopup;
-    private (IDockable, Document)[]? _visibleDocumentsWithOwners;
+    private (IDock, Document)[]? _visibleDocumentsWithOwners;
 
     private MainWindowViewModel ViewModel => (MainWindowViewModel)DataContext!;
 
@@ -149,48 +150,50 @@ public partial class MainWindow : Window
             case { KeyModifiers: KeyModifiers.Control | KeyModifiers.Shift }:
                 // Catch case of backwards navigation with ctrl+shift+tab to avoid popup closing. 
                 break;
-            case { KeyModifiers: not KeyModifiers.Control }:
-                if (SwitcherPopup.IsOpen)
+            case { KeyModifiers: not KeyModifiers.Control } when SwitcherPopup.IsOpen:
+
+                if (_visibleDocumentsWithOwners is not null)
                 {
-                    var selected = _visibleDocumentsWithOwners?[SwitcherListBox.SelectedIndex];
+                    var dockControl = this.FindLogicalDescendantOfType<DockControl>()!;
+                    var (owner, doc) = _visibleDocumentsWithOwners[SwitcherListBox.SelectedIndex];
+                    dockControl.Layout?.Factory?.SetActiveDockable(owner);
+                    dockControl.Layout?.Factory?.SetFocusedDockable(owner, doc);
 
-                    ViewModel.GoToDocumentCommand.Execute(selected);
+                    var view = this.GetVisualDescendants()
+                        .FirstOrDefault(visual => visual is UserControl && visual.DataContext == doc);
 
-                    SwitcherPopup.IsOpen = false;
+                    (view as InputElement)?.Focus();
+                }
+                else
+                {
                     _focusedBeforeSwitcherPopup?.Focus();
-                    e.Handled = true;
                 }
 
+                SwitcherPopup.IsOpen = false;
+                e.Handled = true;
                 break;
         }
     }
 
     private void SwitcherPopup_OnKeyDown(object? sender, KeyEventArgs e)
     {
+        var index = SwitcherListBox.SelectedIndex;
         switch (e)
         {
-            case { Key: Key.Tab, KeyModifiers: KeyModifiers.Shift | KeyModifiers.Control }:
-                if (SwitcherPopup.IsOpen)
-                {
-                    var index = SwitcherListBox.SelectedIndex;
-                    SwitcherListBox.Selection.Select((index - 1 + SwitcherListBox.ItemCount) % SwitcherListBox.ItemCount);
-                    e.Handled = true;
-                }
+            case { Key: Key.Tab, KeyModifiers: KeyModifiers.Shift | KeyModifiers.Control } when SwitcherPopup.IsOpen:
+                SwitcherListBox.Selection.Select((index - 1 + SwitcherListBox.ItemCount) % SwitcherListBox.ItemCount);
 
+                e.Handled = true;
                 break;
-            case { Key: Key.Tab }:
-                if (SwitcherPopup.IsOpen)
-                {
-                    var index = SwitcherListBox.SelectedIndex;
-                    SwitcherListBox.SelectedIndex = (index + 1) % SwitcherListBox.ItemCount;
-                    e.Handled = true;
-                }
+            case { Key: Key.Tab } when SwitcherPopup.IsOpen:
+                SwitcherListBox.SelectedIndex = (index + 1) % SwitcherListBox.ItemCount;
 
+                e.Handled = true;
                 break;
         }
     }
 
-    private IEnumerable<(IDockable, Document)> GetVisibleDocumentsWithOwners(IDock dock)
+    private IEnumerable<(IDock, Document)> GetVisibleDocumentsWithOwners(IDock dock)
     {
         if (dock.VisibleDockables is null)
         {
@@ -201,9 +204,9 @@ public partial class MainWindow : Window
         {
             if (dockable is Document document)
             {
-                if (dockable.Owner is not null)
+                if (dockable.Owner is IDock iDock)
                 {
-                    yield return (dockable.Owner, document);
+                    yield return (iDock, document);
                 }
             }
             else if (dockable is IDock dockInner)

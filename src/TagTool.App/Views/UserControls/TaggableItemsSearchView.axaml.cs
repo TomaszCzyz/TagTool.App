@@ -23,6 +23,14 @@ public partial class TaggableItemsSearchView : UserControl
         TaggableItemsListBox.AddHandler(DoubleTappedEvent, OnDoubleTapped_ExecuteLinkedAction, handledEventsToo: true);
     }
 
+    protected override void OnGotFocus(GotFocusEventArgs e)
+    {
+        base.OnGotFocus(e);
+
+        SearchBarView.Focus();
+        e.Handled = true;
+    }
+
     protected override void OnApplyTemplate(TemplateAppliedEventArgs e)
     {
         var window = (Window)VisualRoot!;

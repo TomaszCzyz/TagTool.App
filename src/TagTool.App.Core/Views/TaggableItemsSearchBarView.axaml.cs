@@ -19,6 +19,13 @@ public partial class TaggableItemsSearchBarView : UserControl
         InitializeComponent();
     }
 
+    protected override void OnGotFocus(GotFocusEventArgs e)
+    {
+        base.OnGotFocus(e);
+        _textBox?.Focus();
+        e.Handled = true;
+    }
+
     private void SearchBarBorder_OnPointerPressed(object? sender, PointerPressedEventArgs e) => _autoCompleteBox?.Focus();
 
     private void AutoCompleteBox_OnAttachedToVisualTree(object? sender, LogicalTreeAttachmentEventArgs e)
