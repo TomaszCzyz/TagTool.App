@@ -66,6 +66,7 @@ public partial class FileSystemViewModel : Document
         }
 
         _fileActionsService = AppTemplate.Current.Services.GetRequiredService<ITagToolBackend>().GetFileActionsService();
+        _folderActionsService = AppTemplate.Current.Services.GetRequiredService<ITagToolBackend>().GetFolderActionsService();
         _tagService = AppTemplate.Current.Services.GetRequiredService<ITagToolBackend>().GetTagService();
 
         Initialize();

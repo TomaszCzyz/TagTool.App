@@ -186,7 +186,7 @@
             </Border>
         </Grid>
         <!-- Folder content grid -->
-        <!-- NOTE: text search for VirtualizingStackPanel is performed only on visible items -->
+        <!-- NOTE: text search for VirtualizingStackPanel is performed only on visible items for standard ListBox-->
         <controls:TextSearchableListBox
             Name="FolderContentListBox"
             Grid.Row="1"

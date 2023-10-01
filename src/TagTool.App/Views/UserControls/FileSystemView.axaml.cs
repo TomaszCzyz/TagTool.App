@@ -21,6 +21,7 @@ public partial class FileSystemView : UserControl
 
         // todo: split this logic to two handlers (one for quick search scenario, one for navigation scenario)
         FolderContentListBox.AddHandler(KeyDownEvent, FolderContent_OnKeyDown, handledEventsToo: true);
+        FolderContentListBox.AddHandler(KeyDownEvent, OnKeyDown_DeleteHandler);
     }
 
     protected override void OnGotFocus(GotFocusEventArgs e)
@@ -75,7 +76,6 @@ public partial class FileSystemView : UserControl
 
         listBoxItem.FocusAdorner = null;
         listBoxItem.AddHandler(DoubleTappedEvent, Handler);
-        listBoxItem.AddHandler(KeyDownEvent, OnKeyDown_DeleteHandler, RoutingStrategies.Tunnel);
         return;
 
         void Handler(object? _, TappedEventArgs args)
@@ -89,25 +89,21 @@ public partial class FileSystemView : UserControl
 
     private async Task OnKeyDown_DeleteHandler(object? sender, KeyEventArgs args)
     {
-        if (args.Key != Key.Delete)
+        if (args.Key != Key.Delete || ViewModel.SelectedItem is not { } selectedItem)
         {
             return;
         }
-
-
-        var listBoxItem = (ListBoxItem)sender!;
-        var vm = (TaggableItemViewModel)listBoxItem.DataContext!;
 
         if (!_isYesNoDialogOpened)
         {
             _isYesNoDialogOpened = true;
 
-            var dialog = new YesNoDialog { Question = $"You sure want to delete file {vm.TaggableItem.DisplayName}?" };
+            var dialog = new YesNoDialog { Question = $"You sure want to delete file {selectedItem.TaggableItem.DisplayName}?" };
             var (answer, _) = await dialog.ShowDialog<(bool Answer, bool Remember)>((Window)VisualRoot!);
 
             if (answer)
             {
-                ViewModel.DeleteTaggableItemCommand.Execute(vm);
+                ViewModel.DeleteTaggableItemCommand.Execute(selectedItem);
             }
 
             _isYesNoDialogOpened = false;
@@ -115,6 +111,9 @@ public partial class FileSystemView : UserControl
         }
     }
 
+    /// <summary>
+    ///     Scroll to top on folder change.
+    /// </summary>
     private void AvaloniaObject_OnPropertyChanged(object? sender, AvaloniaPropertyChangedEventArgs e)
     {
         if (e.Property == ItemsControl.ItemCountProperty && FolderContentListBox.Scroll is not null)

@@ -15,6 +15,7 @@ public class TextSearchableListBox : ListBox
     {
         if (e.Handled || !IsTextSearchEnabled)
         {
+            base.OnTextInput(e);
             return;
         }
 
@@ -34,6 +35,7 @@ public class TextSearchableListBox : ListBox
         StartTextSearchTimer();
 
         e.Handled = true;
+        base.OnTextInput(e);
     }
 
     private void StartTextSearchTimer()

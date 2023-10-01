@@ -1,7 +1,7 @@
 ﻿using Avalonia.Controls.Notifications;
 using CommunityToolkit.Mvvm.Messaging.Messages;
 
-namespace TagTool.App.Models;
+namespace TagTool.App.Core.Models;
 
 public class NewNotificationMessage : ValueChangedMessage<Notification>
 {
