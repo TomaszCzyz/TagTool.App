@@ -28,7 +28,7 @@ public partial class MainWindowViewModel : ViewModelBase
     public TaggableItemsSearchBarViewModel SearchBarViewModel { get; }
 
     public ObservableCollection<TaggableItemViewModel> SearchResults { get; } = new();
-    
+
     public ObservableCollection<TaggableItemViewModel> OtherResults { get; set; } = new();
 
     /// <summary>
@@ -62,8 +62,11 @@ public partial class MainWindowViewModel : ViewModelBase
 
         // Initial, empty search to retrieve the most popular items.
         Dispatcher.UIThread.InvokeAsync(() => SearchForTaggableItems(null));
-        
-        OtherResults.Add(new TaggableItemViewModel(_tagService) { TaggableItem = new TaggableFile { Path = "info.FullName" }, AreTagsVisible = true });
+
+        OtherResults.Add(new TaggableItemViewModel(_tagService)
+        {
+            TaggableItem = new TaggableFile { Path = "info.FullName" }, AreTagsVisible = true
+        });
     }
 
     [RelayCommand]
@@ -89,14 +92,11 @@ public partial class MainWindowViewModel : ViewModelBase
     {
         var tagQueryParams = argsQuerySegments?
             .Select(segment =>
-                new GetItemsByTagsRequest.Types.TagQueryParam
-                {
-                    Tag = Any.Pack(TagMapper.MapToDto(segment.Tag)), State = MapQuerySegmentState(segment)
-                });
+                new TagQueryParam { Tag = Any.Pack(TagMapper.MapToDto(segment.Tag)), State = MapQuerySegmentState(segment) });
 
         var reply = await _tagService.GetItemsByTagsAsync(new GetItemsByTagsRequest
         {
-            QueryParams = { tagQueryParams ?? Array.Empty<GetItemsByTagsRequest.Types.TagQueryParam>() }
+            QueryParams = { tagQueryParams ?? Array.Empty<TagQueryParam>() }
         });
 
         SearchResults.Clear();
@@ -113,12 +113,12 @@ public partial class MainWindowViewModel : ViewModelBase
             }));
     }
 
-    private static GetItemsByTagsRequest.Types.QuerySegmentState MapQuerySegmentState(QuerySegment segment)
+    private static TagQueryParam.Types.QuerySegmentState MapQuerySegmentState(QuerySegment segment)
         => segment.State switch
         {
-            QuerySegmentState.Exclude => GetItemsByTagsRequest.Types.QuerySegmentState.Exclude,
-            QuerySegmentState.Include => GetItemsByTagsRequest.Types.QuerySegmentState.Include,
-            QuerySegmentState.MustBePresent => GetItemsByTagsRequest.Types.QuerySegmentState.MustBePresent,
+            QuerySegmentState.Exclude => TagQueryParam.Types.QuerySegmentState.Exclude,
+            QuerySegmentState.Include => TagQueryParam.Types.QuerySegmentState.Include,
+            QuerySegmentState.MustBePresent => TagQueryParam.Types.QuerySegmentState.MustBePresent,
             _ => throw new UnreachableException()
         };
 }

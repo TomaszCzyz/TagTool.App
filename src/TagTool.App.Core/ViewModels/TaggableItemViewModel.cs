@@ -7,8 +7,10 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
 using Google.Protobuf.WellKnownTypes;
+using Microsoft.Extensions.DependencyInjection;
 using TagTool.App.Core.Extensions;
 using TagTool.App.Core.Models;
+using TagTool.App.Core.Services;
 using TagTool.Backend;
 using TagTool.Backend.DomainTypes;
 using MonthTag = TagTool.App.Core.Models.MonthTag;
@@ -30,6 +32,8 @@ public interface ITextSearchable
 public partial class TaggableItemViewModel : ViewModelBase, ITextSearchable
 {
     private readonly TagService.TagServiceClient _tagService;
+    private readonly FileActionsService.FileActionsServiceClient _fileActionsService;
+    private readonly FolderActionsService.FolderActionsServiceClient _folderActionsService;
     private TaggableItem _taggableItem;
 
     [ObservableProperty]
@@ -71,6 +75,8 @@ public partial class TaggableItemViewModel : ViewModelBase, ITextSearchable
         }
 
         _tagService = null!;
+        _fileActionsService = null!;
+        _folderActionsService = null!;
         TaggableItem = new TaggableFile
         {
             Path = @"C:\Users\tczyz\MyFiles\FromOec\DigitalSign.gif",
@@ -83,10 +89,77 @@ public partial class TaggableItemViewModel : ViewModelBase, ITextSearchable
         // todo: add cancellation token support (tags should not be loaded for example when folder has been exited or tags are not visible)
         _tagService = tagServiceClient;
 
+        // todo: rework this to use DI properly
+        var tagToolBackend = AppTemplate.Current.Services.GetRequiredService<ITagToolBackend>();
+        _fileActionsService = tagToolBackend.GetFileActionsService();
+        _folderActionsService = tagToolBackend.GetFolderActionsService();
+
         if (AreTagsVisible)
         {
             Dispatcher.UIThread.InvokeAsync(UpdateTaggableItem, DispatcherPriority.Background);
         }
+    }
+
+    [RelayCommand]
+    private async Task MoveToCommonStorage()
+    {
+        switch (TaggableItem)
+        {
+            case TaggableFile file:
+                await MoveFileToCommonStorage(file);
+
+                break;
+            case TaggableFolder folder:
+                await MoveFolderToCommonStorage(folder);
+
+                break;
+            default:
+                throw new UnreachableException();
+        }
+    }
+
+    private async Task MoveFolderToCommonStorage(TaggableFolder folder)
+    {
+        var moveFolderRequest = new MoveFolderRequest { Folder = new FolderDto { Path = folder.Path }, Destination = "CommonStorage" };
+        // todo: add cancellation option or timeout
+        var moveFolderReply = await _folderActionsService.MoveFolderAsync(moveFolderRequest);
+
+        var notification = moveFolderReply.ResultCase switch
+        {
+            MoveFolderReply.ResultOneofCase.NewLocation
+                => new Notification(
+                    "Folder moved successfully",
+                    $"Successfully moved the folder to {moveFolderReply.NewLocation}."),
+            MoveFolderReply.ResultOneofCase.ErrorMessage
+                => new Notification(
+                    "Failed to move a folder",
+                    $"Unable to move the file\nBackend service message:\n{moveFolderReply.ErrorMessage}."),
+            _ => throw new UnreachableException()
+        };
+
+        WeakReferenceMessenger.Default.Send(notification.ToMessage());
+    }
+
+    private async Task MoveFileToCommonStorage(TaggableFile file)
+    {
+        var moveFileRequest = new MoveFileRequest { File = new FileDto { Path = file.Path }, Destination = "CommonStorage" };
+        // todo: add cancellation option or timeout
+        var moveFileReply = await _fileActionsService.MoveFileAsync(moveFileRequest);
+
+        var notification = moveFileReply.ResultCase switch
+        {
+            MoveFileReply.ResultOneofCase.NewLocation
+                => new Notification(
+                    "File moved successfully",
+                    $"Successfully moved the file to {moveFileReply.NewLocation}."),
+            MoveFileReply.ResultOneofCase.ErrorMessage
+                => new Notification(
+                    "Failed to move a file",
+                    $"Unable to move a file\nBackend service message:\n{moveFileReply.ErrorMessage}."),
+            _ => throw new UnreachableException()
+        };
+
+        WeakReferenceMessenger.Default.Send(notification.ToMessage());
     }
 
     [RelayCommand]

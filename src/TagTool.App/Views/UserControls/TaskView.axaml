@@ -1,0 +1,70 @@
+﻿<UserControl
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:views="clr-namespace:TagTool.App.Core.Views;assembly=TagTool.App.Core"
+    xmlns:vm="clr-namespace:TagTool.App.ViewModels.UserControls"
+    x:Class="TagTool.App.Views.UserControls.TaskView"
+    x:DataType="vm:TaskViewModel"
+    d:DesignWidth="800"
+    d:DesignHeight="450"
+    mc:Ignorable="d">
+
+    <Design.DataContext>
+        <vm:TaskViewModel />
+    </Design.DataContext>
+
+    <StackPanel
+        Margin="5"
+        Orientation="Vertical"
+        Spacing="10">
+        <TextBlock Text="Task for items:" />
+        <!-- Search Bar -->
+        <views:TaggableItemsSearchBarView
+            Name="SearchBarView"
+            DataContext="{Binding SearchBarViewModel, Mode=TwoWay}"
+            Focusable="True" />
+
+        <TextBlock Text="Executed on:" />
+        <ItemsControl Name="TriggersItemsControl" />
+        <!-- IsVisible="{Binding !!Triggers.Count}" -->
+        <Button IsVisible="{Binding IsEditing}" Click="Button_OnClick">
+            <avalonia:MaterialIcon Kind="Plus" />
+        </Button>
+        <TextBlock Text="job:" />
+        <StackPanel Orientation="Horizontal" Spacing="10">
+            <ComboBox
+                Name="JobComboBox"
+                SelectionChanged="JobComboBox_OnSelectionChanged"
+                ItemsSource="{Binding Jobs}">
+                <ComboBox.ItemTemplate>
+                    <DataTemplate DataType="vm:JobInfo">
+                        <StackPanel>
+                            <TextBlock Text="{Binding Name}" />
+                        </StackPanel>
+                    </DataTemplate>
+                </ComboBox.ItemTemplate>
+            </ComboBox>
+            <TextBlock VerticalAlignment="Center" Text="{Binding #JobComboBox.((vm:JobInfo)SelectionBoxItem).Description, FallbackValue=null}" />
+        </StackPanel>
+        <TextBlock Text="with arguments:" />
+        <TextBox Name="JobArgumentsTextBox" Text="{Binding JobArguments}" />
+        <!-- Edit/Save buttons -->
+        <Button
+            HorizontalAlignment="Right"
+            VerticalAlignment="Bottom"
+            Command="{Binding UpdateTaskCommand}"
+            IsVisible="{Binding !IsEditing}">
+            <avalonia:MaterialIcon Kind="Edit" />
+        </Button>
+        <Button
+            HorizontalAlignment="Right"
+            VerticalAlignment="Bottom"
+            Command="{Binding UpdateTaskCommand}"
+            IsVisible="{Binding IsEditing}">
+            <TextBlock Text="Save" />
+        </Button>
+    </StackPanel>
+</UserControl>

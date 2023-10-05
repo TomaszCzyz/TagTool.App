@@ -79,14 +79,14 @@ public partial class TaggableItemsSearchViewModel : Document
     {
         var tagQueryParams = querySegments?
             .Select(segment =>
-                new GetItemsByTagsRequest.Types.TagQueryParam
+                new TagQueryParam
                 {
                     Tag = Any.Pack(TagMapper.MapToDto(segment.Tag)), State = MapQuerySegmentState(segment)
                 });
 
         var reply = await _tagService.GetItemsByTagsAsync(new GetItemsByTagsRequest
         {
-            QueryParams = { tagQueryParams ?? Array.Empty<GetItemsByTagsRequest.Types.TagQueryParam>() }
+            QueryParams = { tagQueryParams ?? Array.Empty<TagQueryParam>() }
         });
 
         FoundTaggedItems.Clear();
@@ -176,12 +176,12 @@ public partial class TaggableItemsSearchViewModel : Document
         }
     }
 
-    private static GetItemsByTagsRequest.Types.QuerySegmentState MapQuerySegmentState(QuerySegment segment)
+    private static TagQueryParam.Types.QuerySegmentState MapQuerySegmentState(QuerySegment segment)
         => segment.State switch
         {
-            QuerySegmentState.Exclude => GetItemsByTagsRequest.Types.QuerySegmentState.Exclude,
-            QuerySegmentState.Include => GetItemsByTagsRequest.Types.QuerySegmentState.Include,
-            QuerySegmentState.MustBePresent => GetItemsByTagsRequest.Types.QuerySegmentState.MustBePresent,
+            QuerySegmentState.Exclude => TagQueryParam.Types.QuerySegmentState.Exclude,
+            QuerySegmentState.Include => TagQueryParam.Types.QuerySegmentState.Include,
+            QuerySegmentState.MustBePresent => TagQueryParam.Types.QuerySegmentState.MustBePresent,
             _ => throw new UnreachableException()
         };
 }

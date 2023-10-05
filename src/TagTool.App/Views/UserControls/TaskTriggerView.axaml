@@ -1,0 +1,98 @@
+﻿<UserControl
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:converters="clr-namespace:TagTool.App.Converters"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:views="clr-namespace:TagTool.App.Views.UserControls"
+    xmlns:vm="clr-namespace:TagTool.App.ViewModels.UserControls"
+    x:Class="TagTool.App.Views.UserControls.TaskTriggerView"
+    d:DesignWidth="800"
+    d:DesignHeight="450"
+    mc:Ignorable="d">
+    <UserControl.Resources>
+        <converters:StringToBoolConverter x:Key="IsTriggerTypeScheduleConverter" StringToCompare="{x:Static vm:TriggerType.Schedule}" />
+        <converters:StringToBoolConverter x:Key="IsTriggerTypeEventConverter" StringToCompare="{x:Static vm:TriggerType.Event}" />
+        <converters:StringToBoolConverter x:Key="IsCustomCronConverter" StringToCompare="Custom" />
+        <converters:CronToDescriptionConverter x:Key="CronToDescriptionConverter" />
+    </UserControl.Resources>
+    <UserControl.Styles>
+        <Style Selector="StackPanel">
+            <Setter Property="Orientation" Value="Horizontal" />
+            <Setter Property="Spacing" Value="10" />
+            <Setter Property="VerticalAlignment" Value="Center" />
+        </Style>
+        <Style Selector="ComboBox">
+            <Setter Property="IsEnabled">
+                <Binding FallbackValue="False" Path="$parent[views:TaskView].((vm:TaskViewModel)DataContext).IsEditing" />
+            </Setter>
+            <Style Selector="^:disabled">
+                <Style Selector="^ /template/ Border#Background">
+                    <Setter Property="Background" Value="{TemplateBinding Background}" />
+                    <Setter Property="BorderBrush" Value="{TemplateBinding BorderBrush}" />
+                </Style>
+                <Style Selector="^ /template/ ContentControl#ContentPresenter">
+                    <Setter Property="Foreground" Value="{TemplateBinding Foreground}" />
+                </Style>
+                <Style Selector="^ /template/ TextBlock#PlaceholderTextBlock">
+                    <Setter Property="Foreground" Value="{TemplateBinding Foreground}" />
+                </Style>
+            </Style>
+        </Style>
+    </UserControl.Styles>
+    <StackPanel>
+        <!-- <avalonia:MaterialIcon Kind="Circle" /> -->
+        <ComboBox
+            Name="TriggerTypeComboBox"
+            MinWidth="105"
+            SelectedIndex="1">
+            <ComboBoxItem>Schedule</ComboBoxItem>
+            <ComboBoxItem>Event</ComboBoxItem>
+        </ComboBox>
+        <!-- Elements for 'schedule' option -->
+        <StackPanel Name="CronInfoStackPanel" IsVisible="{Binding #TriggerTypeComboBox.SelectionBoxItem, Converter={StaticResource IsTriggerTypeScheduleConverter}}">
+            <TextBlock
+                MinWidth="50"
+                VerticalAlignment="Center"
+                Text="every:" />
+
+            <ComboBox
+                Name="CronComboBox"
+                MinWidth="125"
+                SelectedIndex="0">
+                <ComboBoxItem>custom</ComboBoxItem>
+                <ComboBoxItem>15 minutes</ComboBoxItem>
+                <ComboBoxItem>30 minutes</ComboBoxItem>
+                <ComboBoxItem>1 hour</ComboBoxItem>
+                <ComboBoxItem>3 hour</ComboBoxItem>
+                <ComboBoxItem>12 hour</ComboBoxItem>
+                <ComboBoxItem>1 day</ComboBoxItem>
+                <ComboBoxItem>7 day</ComboBoxItem>
+                <ComboBoxItem>1 month</ComboBoxItem>
+                <ComboBoxItem>never</ComboBoxItem>
+            </ComboBox>
+        </StackPanel>
+        <!-- Elements for 'custom' option in 'schedule' type trigger -->
+        <StackPanel>
+            <StackPanel.IsVisible>
+                <MultiBinding Converter="{x:Static BoolConverters.And}">
+                    <Binding Path="#CronInfoStackPanel.IsVisible" />
+                    <Binding Converter="{StaticResource IsCustomCronConverter}" Path="#CronComboBox.SelectionBoxItem" />
+                </MultiBinding>
+            </StackPanel.IsVisible>
+            <TextBlock VerticalAlignment="Center" Text="with Cron:" />
+            <TextBox Name="CustomCronTextBox" Text="10-20 5 */3 * *" />
+            <TextBlock VerticalAlignment="Center" Text="{Binding #CustomCronTextBox.Text, Converter={StaticResource CronToDescriptionConverter}}" />
+        </StackPanel>
+        <!-- Elements for 'event' option -->
+        <StackPanel IsVisible="{Binding #TriggerTypeComboBox.SelectionBoxItem, Converter={StaticResource IsTriggerTypeEventConverter}}">
+            <TextBlock
+                MinWidth="50"
+                VerticalAlignment="Center"
+                Text="of type:" />
+            <ComboBox MinWidth="125" SelectedIndex="0">
+                <ComboBoxItem>ItemTagged</ComboBoxItem>
+            </ComboBox>
+        </StackPanel>
+    </StackPanel>
+</UserControl>

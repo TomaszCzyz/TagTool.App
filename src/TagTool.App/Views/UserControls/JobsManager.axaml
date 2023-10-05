@@ -1,0 +1,44 @@
+﻿<UserControl
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:userControls="clr-namespace:TagTool.App.Views.UserControls"
+    x:Class="TagTool.App.Views.UserControls.TasksManager"
+    d:DesignWidth="800"
+    d:DesignHeight="450"
+    mc:Ignorable="d">
+
+    <Panel>
+        <ListBox Padding="0">
+            <ListBoxItem Padding="0">
+                <Expander HorizontalAlignment="Stretch" IsExpanded="True">
+                    <Expander.Header>
+                        <StackPanel>
+                            <TextBlock Text="Job name and description" />
+                            <TextBlock Text="query" />
+                        </StackPanel>
+                    </Expander.Header>
+                    <Panel>
+                        <!-- <TextBlock Text="Lazy loaded content (detailed info about job and its history)" /> -->
+                        <userControls:TaskView />
+                    </Panel>
+                </Expander>
+            </ListBoxItem>
+             <ListBoxItem Padding="0">
+                <Expander HorizontalAlignment="Stretch">
+                    <Expander.Header>
+                        <StackPanel>
+                            <TextBlock Text="Job name and description" />
+                            <TextBlock Text="query" />
+                        </StackPanel>
+                    </Expander.Header>
+                    <Panel>
+                        <TextBlock Text="Lazy loaded content (detailed info about job and its history)" />
+                    </Panel>
+                </Expander>
+            </ListBoxItem>
+        </ListBox>
+    </Panel>
+</UserControl>
+
