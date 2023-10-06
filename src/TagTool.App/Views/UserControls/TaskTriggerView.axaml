@@ -7,6 +7,7 @@
     xmlns:views="clr-namespace:TagTool.App.Views.UserControls"
     xmlns:vm="clr-namespace:TagTool.App.ViewModels.UserControls"
     x:Class="TagTool.App.Views.UserControls.TaskTriggerView"
+    x:DataType="vm:TaskTriggerViewModel"
     d:DesignWidth="800"
     d:DesignHeight="450"
     mc:Ignorable="d">
@@ -24,31 +25,22 @@
         </Style>
         <Style Selector="ComboBox">
             <Setter Property="IsEnabled">
-                <Binding FallbackValue="False" Path="$parent[views:TaskView].((vm:TaskViewModel)DataContext).IsEditing" />
+                <Binding FallbackValue="True" Path="$parent[views:TaskView].((vm:TaskViewModel)DataContext).IsEditing" />
             </Setter>
-            <Style Selector="^:disabled">
-                <Style Selector="^ /template/ Border#Background">
-                    <Setter Property="Background" Value="{TemplateBinding Background}" />
-                    <Setter Property="BorderBrush" Value="{TemplateBinding BorderBrush}" />
-                </Style>
-                <Style Selector="^ /template/ ContentControl#ContentPresenter">
-                    <Setter Property="Foreground" Value="{TemplateBinding Foreground}" />
-                </Style>
-                <Style Selector="^ /template/ TextBlock#PlaceholderTextBlock">
-                    <Setter Property="Foreground" Value="{TemplateBinding Foreground}" />
-                </Style>
-            </Style>
         </Style>
     </UserControl.Styles>
+
+    <Design.DataContext>
+        <vm:TaskTriggerViewModel />
+    </Design.DataContext>
+
     <StackPanel>
-        <!-- <avalonia:MaterialIcon Kind="Circle" /> -->
         <ComboBox
             Name="TriggerTypeComboBox"
             MinWidth="105"
-            SelectedIndex="1">
-            <ComboBoxItem>Schedule</ComboBoxItem>
-            <ComboBoxItem>Event</ComboBoxItem>
-        </ComboBox>
+            ItemsSource="{Binding TriggerTypes, Mode=OneTime}"
+            SelectedItem="{Binding TriggerTypeSelectedItem}" />
+
         <!-- Elements for 'schedule' option -->
         <StackPanel Name="CronInfoStackPanel" IsVisible="{Binding #TriggerTypeComboBox.SelectionBoxItem, Converter={StaticResource IsTriggerTypeScheduleConverter}}">
             <TextBlock
@@ -59,18 +51,9 @@
             <ComboBox
                 Name="CronComboBox"
                 MinWidth="125"
-                SelectedIndex="0">
-                <ComboBoxItem>custom</ComboBoxItem>
-                <ComboBoxItem>15 minutes</ComboBoxItem>
-                <ComboBoxItem>30 minutes</ComboBoxItem>
-                <ComboBoxItem>1 hour</ComboBoxItem>
-                <ComboBoxItem>3 hour</ComboBoxItem>
-                <ComboBoxItem>12 hour</ComboBoxItem>
-                <ComboBoxItem>1 day</ComboBoxItem>
-                <ComboBoxItem>7 day</ComboBoxItem>
-                <ComboBoxItem>1 month</ComboBoxItem>
-                <ComboBoxItem>never</ComboBoxItem>
-            </ComboBox>
+                ItemsSource="{Binding PredefinedCronOptions, Mode=OneTime}"
+                SelectedItem="{Binding CronPredefineOptionSelectedItem}" />
+
         </StackPanel>
         <!-- Elements for 'custom' option in 'schedule' type trigger -->
         <StackPanel>
@@ -81,7 +64,11 @@
                 </MultiBinding>
             </StackPanel.IsVisible>
             <TextBlock VerticalAlignment="Center" Text="with Cron:" />
-            <TextBox Name="CustomCronTextBox" Text="10-20 5 */3 * *" />
+            <TextBox
+                Name="CustomCronTextBox"
+                Text="{Binding CustomCronText, Mode=OneWayToSource}"
+                Watermark="10-20 5 */3 * *" />
+
             <TextBlock VerticalAlignment="Center" Text="{Binding #CustomCronTextBox.Text, Converter={StaticResource CronToDescriptionConverter}}" />
         </StackPanel>
         <!-- Elements for 'event' option -->
@@ -90,9 +77,13 @@
                 MinWidth="50"
                 VerticalAlignment="Center"
                 Text="of type:" />
-            <ComboBox MinWidth="125" SelectedIndex="0">
-                <ComboBoxItem>ItemTagged</ComboBoxItem>
-            </ComboBox>
+
+            <ComboBox
+                MinWidth="125"
+                ItemsSource="{Binding EventTypes, Mode=OneTime}"
+                SelectedIndex="0"
+                SelectedItem="{Binding EventTypeSelectedItem}" />
+
         </StackPanel>
     </StackPanel>
 </UserControl>

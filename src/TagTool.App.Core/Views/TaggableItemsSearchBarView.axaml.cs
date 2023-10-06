@@ -40,6 +40,20 @@ public partial class TaggableItemsSearchBarView : UserControl
     private void AutoCompleteBox_OnLoaded(object? sender, RoutedEventArgs e)
     {
         _textBox = _autoCompleteBox.FindDescendantOfType<TextBox>()!;
+        _textBox.AddHandler(PointerPressedEvent, (_, _) => _autoCompleteBox!.IsDropDownOpen = true, handledEventsToo: true);
+
+        _autoCompleteBox!.AddHandler(
+            PointerPressedEvent,
+            (_, _) =>
+            {
+                if (_autoCompleteBox.SelectedItem is null)
+                {
+                    return;
+                }
+
+                AddTagToQuery();
+            },
+            handledEventsToo: true);
 
         var listBoxItem = _autoCompleteBox.FindAncestorOfType<ListBoxItem>()!;
         listBoxItem.GotFocus += (_, _) => _textBox.Focus();
@@ -54,10 +68,7 @@ public partial class TaggableItemsSearchBarView : UserControl
         switch (e.Key)
         {
             case Key.Enter when autoCompleteBox.SelectedItem is not null:
-                ViewModel.AddTagToSearchQueryCommand.Execute(autoCompleteBox.SelectedItem);
-
-                // workaround for clearing Text in AutoCompleteBox when IsTextCompletionEnabled is true
-                autoCompleteBox.FindDescendantOfType<TextBox>()!.Text = "";
+                AddTagToQuery();
                 break;
             case Key.Left when _textBox?.CaretIndex == 0 && ViewModel.QuerySegments.Count != 0:
                 TagsListBox.Focus();
@@ -67,6 +78,14 @@ public partial class TaggableItemsSearchBarView : UserControl
                 e.Handled = false;
                 break;
         }
+    }
+
+    private void AddTagToQuery()
+    {
+        ViewModel.AddTagToSearchQueryCommand.Execute(_autoCompleteBox!.SelectedItem);
+
+        // workaround for clearing Text in AutoCompleteBox when IsTextCompletionEnabled is true
+        _autoCompleteBox.FindDescendantOfType<TextBox>()!.Text = "";
     }
 
     private void TagsListBox_OnKeyDown(object? sender, KeyEventArgs e)

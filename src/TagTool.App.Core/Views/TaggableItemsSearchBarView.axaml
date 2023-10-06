@@ -240,6 +240,7 @@
                                 Background="Transparent"
                                 BorderThickness="0"
                                 FilterMode="None"
+                                MinimumPrefixLength="0"
                                 IsTextCompletionEnabled="True"
                                 Watermark="Next Tag..."
                                 AttachedToLogicalTree="AutoCompleteBox_OnAttachedToVisualTree"

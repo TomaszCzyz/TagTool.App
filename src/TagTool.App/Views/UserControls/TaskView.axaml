@@ -11,6 +11,32 @@
     d:DesignWidth="800"
     d:DesignHeight="450"
     mc:Ignorable="d">
+    <UserControl.Styles>
+        <Style Selector="ComboBox">
+            <Style Selector="^:disabled">
+                <Style Selector="^ /template/ Border#Background">
+                    <Setter Property="Background" Value="{TemplateBinding Background}" />
+                    <Setter Property="BorderBrush" Value="{TemplateBinding BorderBrush}" />
+                </Style>
+                <Style Selector="^ /template/ ContentControl#ContentPresenter">
+                    <Setter Property="Foreground" Value="{TemplateBinding Foreground}" />
+                </Style>
+                <Style Selector="^ /template/ TextBlock#PlaceholderTextBlock">
+                    <Setter Property="Foreground" Value="{TemplateBinding Foreground}" />
+                </Style>
+            </Style>
+        </Style>
+        <Style Selector="TextBox">
+            <Style Selector="^:disabled">
+                <Setter Property="Foreground" Value="{TemplateBinding Foreground}" />
+
+                <Style Selector="^ /template/ Border#PART_BorderElement">
+                    <Setter Property="Background" Value="{TemplateBinding Background}" />
+                    <Setter Property="BorderBrush" Value="{TemplateBinding BorderBrush}" />
+                </Style>
+            </Style>
+        </Style>
+    </UserControl.Styles>
 
     <Design.DataContext>
         <vm:TaskViewModel />
@@ -20,25 +46,38 @@
         Margin="5"
         Orientation="Vertical"
         Spacing="10">
-        <TextBlock Text="Task for items:" />
-        <!-- Search Bar -->
+        <StackPanel Orientation="Horizontal" Spacing="10">
+            <TextBlock VerticalAlignment="Center" Text="Task with name" />
+            <TextBox Watermark="{Binding TaskId}" />
+            <TextBlock VerticalAlignment="Center" Text="for items:" />
+        </StackPanel>
+        <!-- todo: disable modification when !IsEditing -->
         <views:TaggableItemsSearchBarView
             Name="SearchBarView"
             DataContext="{Binding SearchBarViewModel, Mode=TwoWay}"
             Focusable="True" />
 
-        <TextBlock Text="Executed on:" />
-        <ItemsControl Name="TriggersItemsControl" />
-        <!-- IsVisible="{Binding !!Triggers.Count}" -->
-        <Button IsVisible="{Binding IsEditing}" Click="Button_OnClick">
+        <TextBlock
+            Foreground="Red"
+            IsVisible="{Binding TagQueryError, Converter={x:Static StringConverters.IsNotNullOrEmpty}}"
+            Text="{Binding TagQueryError}" />
+
+        <TextBlock Text="executed on:" />
+        <ItemsControl
+            Name="TriggersItemsControl"
+            IsVisible="{Binding !!Triggers.Count}"
+            ItemsSource="{Binding Triggers}" />
+
+        <Button Command="{Binding AddTriggerCommand}" IsVisible="{Binding IsEditing}">
             <avalonia:MaterialIcon Kind="Plus" />
         </Button>
-        <TextBlock Text="job:" />
+        <TextBlock Text="with job:" />
         <StackPanel Orientation="Horizontal" Spacing="10">
             <ComboBox
                 Name="JobComboBox"
-                SelectionChanged="JobComboBox_OnSelectionChanged"
-                ItemsSource="{Binding Jobs}">
+                IsEnabled="{Binding IsEditing}"
+                ItemsSource="{Binding Jobs}"
+                SelectedItem="{Binding SelectedJob}">
                 <ComboBox.ItemTemplate>
                     <DataTemplate DataType="vm:JobInfo">
                         <StackPanel>
@@ -47,24 +86,25 @@
                     </DataTemplate>
                 </ComboBox.ItemTemplate>
             </ComboBox>
-            <TextBlock VerticalAlignment="Center" Text="{Binding #JobComboBox.((vm:JobInfo)SelectionBoxItem).Description, FallbackValue=null}" />
+            <TextBlock VerticalAlignment="Center" Text="{Binding #JobComboBox.((vm:JobInfo)SelectionBoxItem).Description, FallbackValue=''}" />
         </StackPanel>
         <TextBlock Text="with arguments:" />
-        <TextBox Name="JobArgumentsTextBox" Text="{Binding JobArguments}" />
+        <TextBox
+            Name="JobArgumentsTextBox"
+            IsEnabled="{Binding IsEditing}"
+            Text="{Binding JobArguments}" />
         <!-- Edit/Save buttons -->
-        <Button
-            HorizontalAlignment="Right"
-            VerticalAlignment="Bottom"
+        <ToggleButton
+            Name="SaveEditToggleButton"
+            MinHeight="33"
+            IsChecked="{Binding IsEditing}"
             Command="{Binding UpdateTaskCommand}"
-            IsVisible="{Binding !IsEditing}">
-            <avalonia:MaterialIcon Kind="Edit" />
-        </Button>
-        <Button
             HorizontalAlignment="Right"
-            VerticalAlignment="Bottom"
-            Command="{Binding UpdateTaskCommand}"
-            IsVisible="{Binding IsEditing}">
-            <TextBlock Text="Save" />
-        </Button>
+            VerticalAlignment="Bottom">
+            <Panel>
+                <avalonia:MaterialIcon IsVisible="{Binding !#SaveEditToggleButton.IsChecked}" Kind="Edit" />
+                <TextBlock IsVisible="{Binding #SaveEditToggleButton.IsChecked}" Text="Save" />
+            </Panel>
+        </ToggleButton>
     </StackPanel>
 </UserControl>
