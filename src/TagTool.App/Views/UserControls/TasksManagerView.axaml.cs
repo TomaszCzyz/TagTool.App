@@ -2,9 +2,9 @@
 
 namespace TagTool.App.Views.UserControls;
 
-public partial class TasksManager : UserControl
+public partial class TasksManagerView : UserControl
 {
-    public TasksManager()
+    public TasksManagerView()
     {
         InitializeComponent();
     }

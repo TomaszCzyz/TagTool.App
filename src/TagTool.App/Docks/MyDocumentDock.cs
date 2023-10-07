@@ -33,6 +33,7 @@ public partial class MyDocumentDock : DocumentDock
             "Items Tagger" => (typeof(ItemsTaggingTabViewModel), "ItemsTagger"),
             "New Search Bar" => (typeof(TaggableItemsSearchBarViewModel), "NewSearchBar"),
             "Tags Relations" => (typeof(TagsAssociationsViewModel), "TagsRelations"),
+            "Tasks Manager" => (typeof(TasksManagerViewModel), "TasksManager"),
             _ => throw new ArgumentOutOfRangeException(nameof(type), type, null)
         };
 

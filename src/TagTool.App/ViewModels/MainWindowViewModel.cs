@@ -34,7 +34,7 @@ public partial class MainWindowViewModel : ViewModelBase, IRecipient<NewNotifica
 
     [ObservableProperty]
     private ObservableCollection<string> _tools
-        = new(new[] { "Search", "Tags Library", "File Explorer", "Items Tagger", "Tree File Explorer", "New Search Bar", "Tags Relations" });
+        = new(new[] { "Search", "Tags Library", "File Explorer", "Items Tagger", "Tree File Explorer", "New Search Bar", "Tags Relations", "Tasks Manager" });
 
     [ObservableProperty]
     private IDock? _layout;

@@ -1,0 +1,39 @@
+﻿<UserControl
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:userControls="clr-namespace:TagTool.App.Views.UserControls"
+    xmlns:vm="clr-namespace:TagTool.App.ViewModels.UserControls"
+    x:Class="TagTool.App.Views.UserControls.TasksManagerView"
+    x:DataType="vm:TasksManagerViewModel"
+    d:DesignWidth="800"
+    d:DesignHeight="800"
+    mc:Ignorable="d">
+
+    <Design.DataContext>
+        <vm:TasksManagerViewModel />
+    </Design.DataContext>
+
+    <Panel>
+        <ItemsControl Padding="0" ItemsSource="{Binding TaskViewModels}">
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <Expander HorizontalAlignment="Stretch" IsExpanded="True">
+                        <Expander.Header>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="{Binding TaskId, StringFormat='Task name: {0} '}" />
+                                <!-- <TextBlock Text="{Binding , StringFormat='description: {0} '}" /> -->
+                            </StackPanel>
+                        </Expander.Header>
+                        <Panel>
+                            <!-- <TextBlock Text="Lazy loaded content (detailed info about job and its history)" /> -->
+                            <userControls:TaskView DataContext="{Binding}" />
+                        </Panel>
+                    </Expander>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
+    </Panel>
+</UserControl>
+

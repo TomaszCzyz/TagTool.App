@@ -10,6 +10,7 @@
     x:DataType="vm:TaskViewModel"
     d:DesignWidth="800"
     d:DesignHeight="450"
+    Name="TaskViewRoot"
     mc:Ignorable="d">
     <UserControl.Styles>
         <Style Selector="ComboBox">
@@ -46,16 +47,24 @@
         Margin="5"
         Orientation="Vertical"
         Spacing="10">
-        <StackPanel Orientation="Horizontal" Spacing="10">
-            <TextBlock VerticalAlignment="Center" Text="Task with name" />
-            <TextBox Watermark="{Binding TaskId}" />
-            <TextBlock VerticalAlignment="Center" Text="for items:" />
+        <StackPanel Orientation="Horizontal">
+            <TextBlock VerticalAlignment="Center" Text="Task with name " />
+            <TextBlock Text="{Binding TaskId}" FontWeight="Bold"/>
+            <TextBlock VerticalAlignment="Center" Text=" for items:" />
         </StackPanel>
         <!-- todo: disable modification when !IsEditing -->
         <views:TaggableItemsSearchBarView
             Name="SearchBarView"
             DataContext="{Binding SearchBarViewModel, Mode=TwoWay}"
-            Focusable="True" />
+            Focusable="True" >
+        <views:TaggableItemsSearchBarView.Styles>
+            <Style Selector="AutoCompleteBox">
+                <Setter Property="IsEnabled" >
+                    <Binding Path="#TaskViewRoot.((vm:TaskViewModel)DataContext).IsEditing" FallbackValue="True"></Binding>
+                </Setter>
+            </Style>
+        </views:TaggableItemsSearchBarView.Styles>    
+        </views:TaggableItemsSearchBarView>
 
         <TextBlock
             Foreground="Red"
@@ -88,11 +97,17 @@
             </ComboBox>
             <TextBlock VerticalAlignment="Center" Text="{Binding #JobComboBox.((vm:JobInfo)SelectionBoxItem).Description, FallbackValue=''}" />
         </StackPanel>
+        <TextBlock
+            Foreground="Red"
+            IsVisible="{Binding SelectedJobError, Converter={x:Static StringConverters.IsNotNullOrEmpty}}"
+            Text="{Binding SelectedJobError}" />
+        
         <TextBlock Text="with arguments:" />
         <TextBox
             Name="JobArgumentsTextBox"
             IsEnabled="{Binding IsEditing}"
             Text="{Binding JobArguments}" />
+
         <!-- Edit/Save buttons -->
         <ToggleButton
             Name="SaveEditToggleButton"

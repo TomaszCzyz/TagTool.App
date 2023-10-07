@@ -50,9 +50,12 @@ public partial class TaskViewModel : ViewModelBase
     [ObservableProperty]
     private string? _tagQueryError;
 
+    [ObservableProperty]
+    private string? _selectedJobError;
+
     public TaggableItemsSearchBarViewModel SearchBarViewModel { get; }
 
-    public ObservableCollection<TaskTriggerViewModel> Triggers { get; } = new();
+    public ObservableCollection<TaskTriggerViewModel> Triggers { get; set; } = new();
 
     public ICollection<JobInfo> Jobs { get; } = new[]
     {
@@ -113,6 +116,7 @@ public partial class TaskViewModel : ViewModelBase
 
     partial void OnSelectedJobChanged(JobInfo? value)
     {
+        ValidateJob();
         if (value is null)
         {
             return;
@@ -130,34 +134,19 @@ public partial class TaskViewModel : ViewModelBase
     [RelayCommand]
     private Task UpdateTask()
     {
-        if (!ValidateTagQuery())
+        var validateTagQuery = ValidateTagQuery();
+        var validateJob = ValidateJob();
+        if (!validateTagQuery || !validateJob)
         {
             IsEditing = true;
             return Task.CompletedTask;
         }
 
-        if (SelectedJob is null)
-        {
-            // todo: it should inform about failure; e.g. Save button could have loading indicator and in a case of a failure
-            // button would NOT change state to edit.
-            return Task.CompletedTask;
-        }
+        Debug.Assert(SelectedJob != null, nameof(SelectedJob) + " != null");
+
         IsEditing ^= true;
 
-        var attributes = new Attributes();
-        foreach (var line in JobArguments.Split(Environment.NewLine))
-        {
-            var keyAndValue = line.Split(':');
-            if (keyAndValue.Length != 2)
-            {
-                throw new ParseException($"Each line should contain key value pair, incorrect line: {line}");
-            }
-
-            var key = keyAndValue[0].Trim('\"');
-            var value = keyAndValue[1].Trim('\"');
-            var mapField = new MapField<string, string> { { key, value } };
-            attributes.Values.Add(mapField);
-        }
+        var attributes = ParseAttributes();
 
         var tagQueryParams = SearchBarViewModel.QuerySegments.Select(segment => segment.MapToDto());
 
@@ -179,6 +168,26 @@ public partial class TaskViewModel : ViewModelBase
         return Task.CompletedTask;
     }
 
+    private Attributes ParseAttributes()
+    {
+        var attributes = new Attributes();
+        foreach (var line in JobArguments.Split(Environment.NewLine))
+        {
+            var keyAndValue = line.Split(':');
+            if (keyAndValue.Length != 2)
+            {
+                throw new ParseException($"Each line should contain key value pair separated with ':', incorrect line: {line}");
+            }
+
+            var key = keyAndValue[0].Trim('\"');
+            var value = keyAndValue[1].Trim('\"');
+            var mapField = new MapField<string, string> { { key, value } };
+            attributes.Values.Add(mapField);
+        }
+
+        return attributes;
+    }
+
     private bool ValidateTagQuery()
     {
         if (SearchBarViewModel.QuerySegments.Count == 0)
@@ -194,6 +203,18 @@ public partial class TaskViewModel : ViewModelBase
         }
 
         TagQueryError = "";
+        return true;
+    }
+
+    private bool ValidateJob()
+    {
+        if (SelectedJob is null)
+        {
+            SelectedJobError = "Job has to be selected.";
+            return false;
+        }
+
+        SelectedJobError = "";
         return true;
     }
 
