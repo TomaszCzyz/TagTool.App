@@ -4,6 +4,7 @@
     xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:userControls="clr-namespace:TagTool.App.Views.UserControls"
     xmlns:views="clr-namespace:TagTool.App.Core.Views;assembly=TagTool.App.Core"
     xmlns:vm="clr-namespace:TagTool.App.ViewModels.UserControls"
     x:Class="TagTool.App.Views.UserControls.TaskView"
@@ -75,7 +76,13 @@
         <ItemsControl
             Name="TriggersItemsControl"
             IsVisible="{Binding !!Triggers.Count}"
-            ItemsSource="{Binding Triggers}" />
+            ItemsSource="{Binding Triggers}">
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <userControls:TaskTriggerView DataContext="{Binding .}" />
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
 
         <Button Command="{Binding AddTriggerCommand}" IsVisible="{Binding IsEditing}">
             <avalonia:MaterialIcon Kind="Plus" />
@@ -85,8 +92,8 @@
             <ComboBox
                 Name="JobComboBox"
                 IsEnabled="{Binding IsEditing}"
-                ItemsSource="{Binding Jobs}"
-                SelectedItem="{Binding SelectedJob}">
+                ItemsSource="{Binding $parent[userControls:TasksManagerView].((vm:TasksManagerViewModel)DataContext).Jobs, FallbackValue=null}"
+                SelectedItem="{Binding SelectedJob, Mode=TwoWay}">
                 <ComboBox.ItemTemplate>
                     <DataTemplate DataType="vm:JobInfo">
                         <StackPanel>
@@ -107,7 +114,7 @@
             Name="JobArgumentsTextBox"
             IsEnabled="{Binding IsEditing}"
             Text="{Binding JobArguments}" />
-        
+
         <TextBlock
             Foreground="Red"
             IsVisible="{Binding JobAttributesError, Converter={x:Static StringConverters.IsNotNullOrEmpty}}"

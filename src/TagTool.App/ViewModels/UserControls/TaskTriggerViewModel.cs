@@ -12,7 +12,7 @@ public enum TriggerType
 
 public partial class TaskTriggerViewModel : ViewModelBase
 {
-    private readonly Dictionary<string, string> _predefinedCronOptionsMap = new()
+    public Dictionary<string, string> PredefinedCronOptionsMap { get; } = new()
     {
         { "15 minutes", "*/15 * * * *" },
         { "30 minutes", "*/30 * * * *" },
@@ -46,7 +46,7 @@ public partial class TaskTriggerViewModel : ViewModelBase
     public string? Cron
         => TriggerTypeSelectedItem == TriggerType.Schedule && CronPredefineOptionSelectedItem == "custom"
             ? CustomCronText
-            : _predefinedCronOptionsMap[CronPredefineOptionSelectedItem];
+            : PredefinedCronOptionsMap[CronPredefineOptionSelectedItem];
 
     public TriggerType[] TriggerTypes { get; } = { TriggerType.Schedule, TriggerType.Event };
 

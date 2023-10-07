@@ -28,6 +28,11 @@
                 <Binding FallbackValue="True" Path="$parent[views:TaskView].((vm:TaskViewModel)DataContext).IsEditing" />
             </Setter>
         </Style>
+        <Style Selector="TextBox">
+            <Setter Property="IsEnabled">
+                <Binding FallbackValue="True" Path="$parent[views:TaskView].((vm:TaskViewModel)DataContext).IsEditing" />
+            </Setter>
+        </Style>
     </UserControl.Styles>
 
     <Design.DataContext>
@@ -66,7 +71,7 @@
             <TextBlock VerticalAlignment="Center" Text="with Cron:" />
             <TextBox
                 Name="CustomCronTextBox"
-                Text="{Binding CustomCronText, Mode=OneWayToSource}"
+                Text="{Binding CustomCronText, Mode=TwoWay}"
                 Watermark="10-20 5 */3 * *" />
 
             <TextBlock VerticalAlignment="Center" Text="{Binding #CustomCronTextBox.Text, Converter={StaticResource CronToDescriptionConverter}}" />

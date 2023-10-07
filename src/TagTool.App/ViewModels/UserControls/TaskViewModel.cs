@@ -5,7 +5,6 @@ using Avalonia.Controls;
 using Avalonia.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using DynamicData;
 using Google.Protobuf.Collections;
 using JetBrains.Annotations;
 using Microsoft.Extensions.DependencyInjection;
@@ -13,7 +12,6 @@ using Microsoft.Extensions.Logging;
 using TagTool.App.Core;
 using TagTool.App.Core.Models;
 using TagTool.App.Core.Services;
-using TagTool.App.Core.TagMapper;
 using TagTool.App.Core.ViewModels;
 using TagTool.Backend;
 
@@ -25,6 +23,25 @@ public class JobInfo
     public required string Description { get; init; }
     public required string ArgumentsExample { get; init; }
     public required ItemTypeTag[] ApplicableToItemType { get; init; }
+
+    private bool Equals(JobInfo other) => Name == other.Name;
+
+    public override bool Equals(object? obj)
+    {
+        if (ReferenceEquals(null, obj))
+        {
+            return false;
+        }
+
+        if (ReferenceEquals(this, obj))
+        {
+            return true;
+        }
+
+        return obj.GetType() == GetType() && Equals((JobInfo)obj);
+    }
+
+    public override int GetHashCode() => Name.GetHashCode();
 }
 
 /// <summary>
@@ -61,8 +78,6 @@ public partial class TaskViewModel : ViewModelBase
 
     public ObservableCollection<TaskTriggerViewModel> Triggers { get; set; } = new();
 
-    public IList<JobInfo> Jobs { get; } = new List<JobInfo>();
-
     /// <summary>
     ///     ctor for XAML previewer
     /// </summary>
@@ -94,23 +109,6 @@ public partial class TaskViewModel : ViewModelBase
     private void Initialize()
     {
         Dispatcher.UIThread.Post(() => SearchBarViewModel.QuerySegments.CollectionChanged += (_, _) => TryValidateTagQuery(out _));
-        Dispatcher.UIThread.Invoke(GetAvailableJobs);
-    }
-
-    private void GetAvailableJobs()
-    {
-        var reply = _tagService.GetAvailableJobs(new GetAvailableJobsRequest());
-
-        var jobInfos = reply.Infos.Select(info => new JobInfo
-        {
-            Name = info.Id,
-            Description = info.Description,
-            ArgumentsExample = string.Join('\n', info.AttributesDescriptions.Values.Select(pair => $"{pair.Key}: {pair.Value}")),
-            ApplicableToItemType = info.ApplicableToItemTypes.Select(TagMapper.MapToDomain).OfType<ItemTypeTag>().ToArray()
-        });
-
-        Jobs.AddRange(jobInfos);
-        OnPropertyChanged(nameof(Jobs));
     }
 
     partial void OnSelectedJobChanged(JobInfo? value)
@@ -135,7 +133,7 @@ public partial class TaskViewModel : ViewModelBase
     [RelayCommand]
     private async Task UpdateTask()
     {
-        if (!IsEditing)
+        if (IsEditing)
         {
             return;
         }
@@ -150,6 +148,13 @@ public partial class TaskViewModel : ViewModelBase
             return;
         }
 
+        await UpdateTaskInner(job, tagQuery, attributes);
+
+        IsEditing = false;
+    }
+
+    private async Task UpdateTaskInner(JobInfo? job, ICollection<QuerySegment>? tagQuery, Attributes attributes)
+    {
         Debug.Assert(job != null, nameof(job) + " != null");
         Debug.Assert(tagQuery != null, nameof(tagQuery) + " != null");
 
@@ -164,11 +169,9 @@ public partial class TaskViewModel : ViewModelBase
 
         _logger.LogDebug("Sending request {@AddOrUpdateJobRequest}", request);
         var reply = await _tagService.AddOrUpdateJobAsync(request);
-
-        IsEditing = false;
     }
 
-    private static AddOrUpdateJobRequest.Types.TriggerInfo MapTriggerInfo(TaskTriggerViewModel model)
+    private static TriggerInfo MapTriggerInfo(TaskTriggerViewModel model)
         => new() { Type = MapTriggerType(model.TriggerTypeSelectedItem), Arg = MapArgs(model) };
 
     private bool TryParseAttributes(out Attributes attributes)
@@ -250,11 +253,11 @@ public partial class TaskViewModel : ViewModelBase
             _ => throw new UnreachableException()
         };
 
-    private static AddOrUpdateJobRequest.Types.TriggerType MapTriggerType(TriggerType? triggerType)
+    private static Backend.TriggerType MapTriggerType(TriggerType? triggerType)
         => triggerType switch
         {
-            TriggerType.Schedule => AddOrUpdateJobRequest.Types.TriggerType.Cron,
-            TriggerType.Event => AddOrUpdateJobRequest.Types.TriggerType.Event,
+            TriggerType.Schedule => Backend.TriggerType.Cron,
+            TriggerType.Event => Backend.TriggerType.Event,
             _ => throw new UnreachableException()
         };
 }

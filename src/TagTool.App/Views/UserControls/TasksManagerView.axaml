@@ -15,7 +15,7 @@
         <vm:TasksManagerViewModel />
     </Design.DataContext>
 
-    <Panel>
+    <ScrollViewer>
         <ItemsControl Padding="0" ItemsSource="{Binding TaskViewModels}">
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
@@ -34,6 +34,6 @@
                 </DataTemplate>
             </ItemsControl.ItemTemplate>
         </ItemsControl>
-    </Panel>
+    </ScrollViewer>
 </UserControl>
 
