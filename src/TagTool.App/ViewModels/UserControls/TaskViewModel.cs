@@ -1,12 +1,12 @@
 ﻿using System.Collections.ObjectModel;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using Avalonia.Controls;
 using Avalonia.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using ExCSS;
+using DynamicData;
 using Google.Protobuf.Collections;
-using Google.Protobuf.WellKnownTypes;
 using JetBrains.Annotations;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -24,6 +24,7 @@ public class JobInfo
     public required string Name { get; init; }
     public required string Description { get; init; }
     public required string ArgumentsExample { get; init; }
+    public required ItemTypeTag[] ApplicableToItemType { get; init; }
 }
 
 /// <summary>
@@ -53,33 +54,14 @@ public partial class TaskViewModel : ViewModelBase
     [ObservableProperty]
     private string? _selectedJobError;
 
+    [ObservableProperty]
+    private string? _jobAttributesError;
+
     public TaggableItemsSearchBarViewModel SearchBarViewModel { get; }
 
     public ObservableCollection<TaskTriggerViewModel> Triggers { get; set; } = new();
 
-    public ICollection<JobInfo> Jobs { get; } = new[]
-    {
-        new JobInfo
-        {
-            Name = "MoveFileJob",
-            Description = "Moves file to a specified location.",
-            ArgumentsExample =
-                """
-                "to": "<destination folder full path>"
-                "create_subfolder_from_extension": bool
-                """
-        },
-        new JobInfo
-        {
-            Name = "CopyFileJob",
-            Description = "Copies file to a specified location.",
-            ArgumentsExample =
-                """
-                "to": "<destination folder full path>"
-                "create_subfolder_from_extension": bool
-                """
-        }
-    };
+    public IList<JobInfo> Jobs { get; } = new List<JobInfo>();
 
     /// <summary>
     ///     ctor for XAML previewer
@@ -111,12 +93,29 @@ public partial class TaskViewModel : ViewModelBase
 
     private void Initialize()
     {
-        Dispatcher.UIThread.Post(() => SearchBarViewModel.QuerySegments.CollectionChanged += (_, _) => ValidateTagQuery());
+        Dispatcher.UIThread.Post(() => SearchBarViewModel.QuerySegments.CollectionChanged += (_, _) => TryValidateTagQuery(out _));
+        Dispatcher.UIThread.Invoke(GetAvailableJobs);
+    }
+
+    private void GetAvailableJobs()
+    {
+        var reply = _tagService.GetAvailableJobs(new GetAvailableJobsRequest());
+
+        var jobInfos = reply.Infos.Select(info => new JobInfo
+        {
+            Name = info.Id,
+            Description = info.Description,
+            ArgumentsExample = string.Join('\n', info.AttributesDescriptions.Values.Select(pair => $"{pair.Key}: {pair.Value}")),
+            ApplicableToItemType = info.ApplicableToItemTypes.Select(TagMapper.MapToDomain).OfType<ItemTypeTag>().ToArray()
+        });
+
+        Jobs.AddRange(jobInfos);
+        OnPropertyChanged(nameof(Jobs));
     }
 
     partial void OnSelectedJobChanged(JobInfo? value)
     {
-        ValidateJob();
+        _ = TryValidateJob(out _);
         if (value is null)
         {
             return;
@@ -125,6 +124,8 @@ public partial class TaskViewModel : ViewModelBase
         JobArguments = value.ArgumentsExample;
     }
 
+    partial void OnJobAttributesErrorChanged(string? value) => _ = TryParseAttributes(out _);
+
     [RelayCommand]
     private void AddTrigger()
     {
@@ -132,51 +133,54 @@ public partial class TaskViewModel : ViewModelBase
     }
 
     [RelayCommand]
-    private Task UpdateTask()
+    private async Task UpdateTask()
     {
-        var validateTagQuery = ValidateTagQuery();
-        var validateJob = ValidateJob();
-        if (!validateTagQuery || !validateJob)
+        if (!IsEditing)
         {
-            IsEditing = true;
-            return Task.CompletedTask;
+            return;
         }
 
-        Debug.Assert(SelectedJob != null, nameof(SelectedJob) + " != null");
+        var tryValidateTagQuery = TryValidateTagQuery(out var tagQuery);
+        var tryValidateJob = TryValidateJob(out var job);
+        var tryParseAttributes = TryParseAttributes(out var attributes);
 
-        IsEditing ^= true;
+        if (!tryValidateTagQuery || !tryValidateJob || !tryParseAttributes)
+        {
+            IsEditing = true;
+            return;
+        }
 
-        var attributes = ParseAttributes();
-
-        var tagQueryParams = SearchBarViewModel.QuerySegments.Select(segment => segment.MapToDto());
-
-        var triggers = Triggers.Select(model =>
-            new AddOrUpdateJobRequest.Types.TriggerInfo { Type = MapTriggerType(model.TriggerTypeSelectedItem), Arg = MapArgs(model) });
+        Debug.Assert(job != null, nameof(job) + " != null");
+        Debug.Assert(tagQuery != null, nameof(tagQuery) + " != null");
 
         var request = new AddOrUpdateJobRequest
         {
             TaskId = TaskId,
-            JobId = SelectedJob.Name,
-            JobAttributes = { attributes },
-            QueryParams = { tagQueryParams },
-            Triggers = { triggers }
+            JobId = job.Name,
+            JobAttributes = attributes,
+            QueryParams = { tagQuery.Select(segment => segment.MapToDto()) },
+            Triggers = { Triggers.Select(MapTriggerInfo) }
         };
 
         _logger.LogDebug("Sending request {@AddOrUpdateJobRequest}", request);
+        var reply = await _tagService.AddOrUpdateJobAsync(request);
 
-        // _tagService.AddOrUpdateJobAsync(request);
-        return Task.CompletedTask;
+        IsEditing = false;
     }
 
-    private Attributes ParseAttributes()
+    private static AddOrUpdateJobRequest.Types.TriggerInfo MapTriggerInfo(TaskTriggerViewModel model)
+        => new() { Type = MapTriggerType(model.TriggerTypeSelectedItem), Arg = MapArgs(model) };
+
+    private bool TryParseAttributes(out Attributes attributes)
     {
-        var attributes = new Attributes();
-        foreach (var line in JobArguments.Split(Environment.NewLine))
+        attributes = new Attributes();
+        foreach (var line in JobArguments.Split('\n'))
         {
             var keyAndValue = line.Split(':');
             if (keyAndValue.Length != 2)
             {
-                throw new ParseException($"Each line should contain key value pair separated with ':', incorrect line: {line}");
+                JobAttributesError = $"Each line should contain key value pair separated with ':',\nincorrect line: {line}";
+                return false;
             }
 
             var key = keyAndValue[0].Trim('\"');
@@ -185,11 +189,13 @@ public partial class TaskViewModel : ViewModelBase
             attributes.Values.Add(mapField);
         }
 
-        return attributes;
+        JobAttributesError = "";
+        return true;
     }
 
-    private bool ValidateTagQuery()
+    private bool TryValidateTagQuery([NotNullWhen(true)] out ICollection<QuerySegment>? tagQuery)
     {
+        tagQuery = null;
         if (SearchBarViewModel.QuerySegments.Count == 0)
         {
             TagQueryError = "Tag query cannot be empty.";
@@ -203,18 +209,36 @@ public partial class TaskViewModel : ViewModelBase
         }
 
         TagQueryError = "";
+        tagQuery = SearchBarViewModel.QuerySegments;
         return true;
     }
 
-    private bool ValidateJob()
+    private bool TryValidateJob([NotNullWhen(true)] out JobInfo? jobInfo)
     {
+        jobInfo = null;
         if (SelectedJob is null)
         {
             SelectedJobError = "Job has to be selected.";
             return false;
         }
 
+        var queriedTypeTags = SearchBarViewModel.QuerySegments.Select(segment => segment.Tag).OfType<ItemTypeTag>().ToArray();
+
+        if (queriedTypeTags.Length == 0)
+        {
+            SelectedJobError = "At least one one item type tag has to be provided in a tag query.";
+            return false;
+        }
+
+        if (queriedTypeTags.Any(typeTag => !SelectedJob.ApplicableToItemType.Contains(typeTag)))
+        {
+            var s = string.Join(", ", SelectedJob.ApplicableToItemType.Select(tag => tag.DisplayText));
+            SelectedJobError = $"Selected Job can only be applied to items of type(s): {s}.";
+            return false;
+        }
+
         SelectedJobError = "";
+        jobInfo = SelectedJob;
         return true;
     }
 
