@@ -159,9 +159,7 @@ public partial class TaskViewModel : ViewModelBase
             attributes.Values.Add(mapField);
         }
 
-        var tagQueryParams = SearchBarViewModel.QuerySegments
-            .Select(segment =>
-                new TagQueryParam { Tag = Any.Pack(TagMapper.MapToDto(segment.Tag)), State = MapQuerySegmentState(segment) });
+        var tagQueryParams = SearchBarViewModel.QuerySegments.Select(segment => segment.MapToDto());
 
         var triggers = Triggers.Select(model =>
             new AddOrUpdateJobRequest.Types.TriggerInfo { Type = MapTriggerType(model.TriggerTypeSelectedItem), Arg = MapArgs(model) });
@@ -212,15 +210,6 @@ public partial class TaskViewModel : ViewModelBase
         {
             TriggerType.Schedule => AddOrUpdateJobRequest.Types.TriggerType.Cron,
             TriggerType.Event => AddOrUpdateJobRequest.Types.TriggerType.Event,
-            _ => throw new UnreachableException()
-        };
-
-    private static TagQueryParam.Types.QuerySegmentState MapQuerySegmentState(QuerySegment segment)
-        => segment.State switch
-        {
-            QuerySegmentState.Exclude => TagQueryParam.Types.QuerySegmentState.Exclude,
-            QuerySegmentState.Include => TagQueryParam.Types.QuerySegmentState.Include,
-            QuerySegmentState.MustBePresent => TagQueryParam.Types.QuerySegmentState.MustBePresent,
             _ => throw new UnreachableException()
         };
 }

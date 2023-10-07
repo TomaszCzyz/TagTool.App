@@ -77,12 +77,7 @@ public partial class TaggableItemsSearchViewModel : Document
 
     private async Task SearchForTaggableItems(ICollection<QuerySegment>? querySegments)
     {
-        var tagQueryParams = querySegments?
-            .Select(segment =>
-                new TagQueryParam
-                {
-                    Tag = Any.Pack(TagMapper.MapToDto(segment.Tag)), State = MapQuerySegmentState(segment)
-                });
+        var tagQueryParams = querySegments?.Select(segment => segment.MapToDto());
 
         var reply = await _tagService.GetItemsByTagsAsync(new GetItemsByTagsRequest
         {
@@ -175,13 +170,4 @@ public partial class TaggableItemsSearchViewModel : Document
                 break;
         }
     }
-
-    private static TagQueryParam.Types.QuerySegmentState MapQuerySegmentState(QuerySegment segment)
-        => segment.State switch
-        {
-            QuerySegmentState.Exclude => TagQueryParam.Types.QuerySegmentState.Exclude,
-            QuerySegmentState.Include => TagQueryParam.Types.QuerySegmentState.Include,
-            QuerySegmentState.MustBePresent => TagQueryParam.Types.QuerySegmentState.MustBePresent,
-            _ => throw new UnreachableException()
-        };
 }
