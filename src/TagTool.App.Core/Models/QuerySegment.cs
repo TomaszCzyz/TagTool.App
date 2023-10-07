@@ -21,14 +21,26 @@ public sealed class QuerySegment
 public static class QuerySegmentExtensions
 {
     public static TagQueryParam MapToDto(this QuerySegment segment)
-        => new() { Tag = Any.Pack(TagMapper.TagMapper.MapToDto(segment.Tag)), State = MapQuerySegmentState(segment) };
+        => new() { Tag = Any.Pack(TagMapper.TagMapper.MapToDto(segment.Tag)), State = MapQuerySegmentStateToDto(segment.State) };
 
-    private static TagQueryParam.Types.QuerySegmentState MapQuerySegmentState(QuerySegment segment)
-        => segment.State switch
+    public static QuerySegment MapFromDto(this TagQueryParam segment)
+        => new() { Tag = TagMapper.TagMapper.MapToDomain(segment.Tag), State = MapQuerySegmentStateFromDto(segment.State) };
+
+    private static TagQueryParam.Types.QuerySegmentState MapQuerySegmentStateToDto(QuerySegmentState state)
+        => state switch
         {
             QuerySegmentState.Exclude => TagQueryParam.Types.QuerySegmentState.Exclude,
             QuerySegmentState.Include => TagQueryParam.Types.QuerySegmentState.Include,
             QuerySegmentState.MustBePresent => TagQueryParam.Types.QuerySegmentState.MustBePresent,
+            _ => throw new UnreachableException()
+        };
+
+    private static QuerySegmentState MapQuerySegmentStateFromDto(TagQueryParam.Types.QuerySegmentState segment)
+        => segment switch
+        {
+            TagQueryParam.Types.QuerySegmentState.Exclude => QuerySegmentState.Exclude,
+            TagQueryParam.Types.QuerySegmentState.Include => QuerySegmentState.Include,
+            TagQueryParam.Types.QuerySegmentState.MustBePresent => QuerySegmentState.MustBePresent,
             _ => throw new UnreachableException()
         };
 }
