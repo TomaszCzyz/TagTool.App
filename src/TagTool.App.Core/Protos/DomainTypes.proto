@@ -26,13 +26,20 @@ message FolderDto {
   string path = 1;
 }
 
+message TaggableItemDto {
+  oneof item {
+    FileDto file = 2;
+    FolderDto folder = 3;
+  };
+}
+
 // The message that unambiguously represents taggable item with associated tags.
 // It should be used in replies (does not make sense for requests). 
 message TaggedItem {
   repeated google.protobuf.Any tags = 1;
-  oneof item {
-    FileDto file = 2;
-    FolderDto folder = 3;
+  oneof itemIdentifier {
+    string id = 2;
+    TaggableItemDto taggableItem = 3;
   };
 }
 

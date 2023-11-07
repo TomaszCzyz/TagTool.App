@@ -11,7 +11,6 @@ using JetBrains.Annotations;
 using Microsoft.Extensions.Logging;
 using TagTool.App.Core.Models;
 using TagTool.App.Core.Services;
-using TagTool.App.Core.TagMapper;
 using TagTool.App.Core.ViewModels;
 using TagTool.App.Models;
 using TagTool.Backend;
@@ -88,10 +87,10 @@ public partial class TaggableItemsSearchViewModel : Document
         FoundTaggedItems.AddRange(reply.TaggedItems.Select(item
             => new TaggableItemViewModel(_tagService)
             {
-                TaggableItem = item.ItemCase switch
+                TaggableItem = item.TaggableItem.ItemCase switch
                 {
-                    TaggedItem.ItemOneofCase.File => new TaggableFile { Path = item.File.Path },
-                    TaggedItem.ItemOneofCase.Folder => new TaggableFolder { Path = item.Folder.Path },
+                    TaggableItemDto.ItemOneofCase.File => new TaggableFile { Path = item.TaggableItem.File.Path },
+                    TaggableItemDto.ItemOneofCase.Folder => new TaggableFolder { Path = item.TaggableItem.Folder.Path },
                     _ => throw new UnreachableException()
                 },
                 AreTagsVisible = true
@@ -103,14 +102,14 @@ public partial class TaggableItemsSearchViewModel : Document
         var alreadyTaggedItems = new List<FileSystemInfo>();
         foreach (var info in infos)
         {
-            var request = info switch
+            var taggableItemDto = info switch
             {
-                DirectoryInfo dirInfo => new GetItemRequest { File = new FileDto { Path = dirInfo.FullName } },
-                FileInfo fileInfo => new GetItemRequest { Folder = new FolderDto { Path = fileInfo.FullName } },
+                DirectoryInfo dirInfo => new TaggableItemDto { File = new FileDto { Path = dirInfo.FullName } },
+                FileInfo fileInfo => new TaggableItemDto { Folder = new FolderDto { Path = fileInfo.FullName } },
                 _ => throw new ArgumentOutOfRangeException(nameof(infos))
             };
 
-            var reply = await _tagService.GetItemAsync(request);
+            var reply = await _tagService.GetItemAsync(new GetItemRequest { TaggableItemDto = taggableItemDto });
 
             if (reply.ResultCase is GetItemReply.ResultOneofCase.TaggedItem && reply.TaggedItem.Tags.Count != 0)
             {
@@ -131,23 +130,21 @@ public partial class TaggableItemsSearchViewModel : Document
             var any = Any.Pack(new NormalTag { Name = tagName });
             var tagRequest = info switch
             {
-                DirectoryInfo dirInfo
-                    => new TagItemRequest { Folder = new FolderDto { Path = dirInfo.FullName }, Tag = any },
-                FileInfo fileInfo
-                    => new TagItemRequest { File = new FileDto { Path = fileInfo.FullName }, Tag = any },
+                DirectoryInfo dirInfo => new TaggableItemDto { Folder = new FolderDto { Path = dirInfo.FullName } },
+                FileInfo fileInfo => new TaggableItemDto { File = new FileDto { Path = fileInfo.FullName } },
                 _ => throw new UnreachableException()
             };
 
-            var reply = await _tagService.TagItemAsync(tagRequest);
+            var reply = await _tagService.TagItemAsync(new TagItemRequest { Tag = any, Item = tagRequest });
 
-            if (input.MoveToInternalStorage && tagRequest.ItemCase is TagItemRequest.ItemOneofCase.File)
+            if (input.MoveToInternalStorage && tagRequest.ItemCase is TaggableItemDto.ItemOneofCase.File)
             {
                 await MoveToInternalStorage(info, tagRequest.File);
             }
 
             switch (reply.ResultCase)
             {
-                case TagItemReply.ResultOneofCase.TaggedItem:
+                case TagItemReply.ResultOneofCase.Item:
                     break;
                 case TagItemReply.ResultOneofCase.ErrorMessage:
                     _logger.LogWarning("Unable to add tag item {Item} with a tag {TagName} to", tagRequest.ItemCase, tagName);

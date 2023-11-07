@@ -165,14 +165,14 @@ public partial class TaggableItemViewModel : ViewModelBase, ITextSearchable
     [RelayCommand]
     private async Task ExecuteLinkedAction()
     {
-        var request = TaggableItem switch
+        var taggableItemDto = TaggableItem switch
         {
-            TaggableFile file => new ExecuteLinkedActionRequest { File = new FileDto { Path = file.Path } },
-            TaggableFolder folder => new ExecuteLinkedActionRequest { Folder = new FolderDto { Path = folder.Path } },
+            TaggableFile file => new TaggableItemDto { File = new FileDto { Path = file.Path } },
+            TaggableFolder folder => new TaggableItemDto { Folder = new FolderDto { Path = folder.Path } },
             _ => throw new UnreachableException()
         };
 
-        var reply = await _tagService.ExecuteLinkedActionAsync(request);
+        var reply = await _tagService.ExecuteLinkedActionAsync(new ExecuteLinkedActionRequest { Item = taggableItemDto });
 
         if (reply.ResultCase == ExecuteLinkedActionReply.ResultOneofCase.Error)
         {
@@ -184,27 +184,27 @@ public partial class TaggableItemViewModel : ViewModelBase, ITextSearchable
     private async Task TagIt(ITag tag)
     {
         var anyTag = Any.Pack(TagMapper.TagMapper.MapToDto(tag));
-        var tagRequest = TaggableItem switch
+        var taggableItemDto = TaggableItem switch
         {
-            TaggableFile file => new TagItemRequest { Tag = anyTag, File = new FileDto { Path = file.Path } },
-            TaggableFolder folder => new TagItemRequest { Tag = anyTag, Folder = new FolderDto { Path = folder.Path } },
+            TaggableFile file => new TaggableItemDto { File = new FileDto { Path = file.Path } },
+            TaggableFolder folder => new TaggableItemDto { Folder = new FolderDto { Path = folder.Path } },
             _ => throw new UnreachableException()
         };
 
-        var tagReply = await _tagService.TagItemAsync(tagRequest);
+        var tagReply = await _tagService.TagItemAsync(new TagItemRequest { Tag = anyTag, Item = taggableItemDto });
 
         switch (tagReply.ResultCase)
         {
-            case TagItemReply.ResultOneofCase.TaggedItem:
+            case TagItemReply.ResultOneofCase.Item:
                 TaggableItem = TaggableItem switch
                 {
-                    TaggableFile file => new TaggableFile { Path = file.Path, Tags = tagReply.TaggedItem.Tags.MapToDomain().ToHashSet() },
-                    TaggableFolder folder => new TaggableFolder { Path = folder.Path, Tags = tagReply.TaggedItem.Tags.MapToDomain().ToHashSet() },
+                    TaggableFile file => new TaggableFile { Path = file.Path, Tags = tagReply.Item.Tags.MapToDomain().ToHashSet() },
+                    TaggableFolder folder => new TaggableFolder { Path = folder.Path, Tags = tagReply.Item.Tags.MapToDomain().ToHashSet() },
                     _ => throw new UnreachableException()
                 };
                 break;
             case TagItemReply.ResultOneofCase.ErrorMessage:
-                Debug.WriteLine($"Unable to tag item {tagRequest}");
+                Debug.WriteLine($"Unable to tag item {taggableItemDto}");
                 break;
             default:
                 throw new UnreachableException();
@@ -215,14 +215,14 @@ public partial class TaggableItemViewModel : ViewModelBase, ITextSearchable
     private async Task UntagItem(ITag tag)
     {
         var anyTag = Any.Pack(TagMapper.TagMapper.MapToDto(tag));
-        var untagItemRequest = TaggableItem switch
+        var taggableItemDto = TaggableItem switch
         {
-            TaggableFile file => new UntagItemRequest { Tag = anyTag, File = new FileDto { Path = file.Path } },
-            TaggableFolder folder => new UntagItemRequest { Tag = anyTag, Folder = new FolderDto { Path = folder.Path } },
+            TaggableFile file => new TaggableItemDto { File = new FileDto { Path = file.Path } },
+            TaggableFolder folder => new TaggableItemDto { Folder = new FolderDto { Path = folder.Path } },
             _ => throw new UnreachableException()
         };
 
-        var reply = await _tagService.UntagItemAsync(untagItemRequest);
+        var reply = await _tagService.UntagItemAsync(new UntagItemRequest { Tag = anyTag, Item = taggableItemDto });
 
         switch (reply.ResultCase)
         {
@@ -235,7 +235,7 @@ public partial class TaggableItemViewModel : ViewModelBase, ITextSearchable
                 };
                 break;
             case UntagItemReply.ResultOneofCase.ErrorMessage:
-                Debug.WriteLine($"Unable to tag item {untagItemRequest}");
+                Debug.WriteLine($"Unable to tag item {taggableItemDto}");
                 break;
             default:
                 throw new UnreachableException();
@@ -244,14 +244,14 @@ public partial class TaggableItemViewModel : ViewModelBase, ITextSearchable
 
     private async Task UpdateTaggableItem()
     {
-        var getItemInfoRequest = TaggableItem switch
+        var taggableItemDto = TaggableItem switch
         {
-            TaggableFile file => new GetItemRequest { File = new FileDto { Path = file.Path } },
-            TaggableFolder folder => new GetItemRequest { Folder = new FolderDto { Path = folder.Path } },
+            TaggableFile file => new TaggableItemDto { File = new FileDto { Path = file.Path } },
+            TaggableFolder folder => new TaggableItemDto { Folder = new FolderDto { Path = folder.Path } },
             _ => throw new UnreachableException()
         };
 
-        var reply = await _tagService.GetItemAsync(getItemInfoRequest);
+        var reply = await _tagService.GetItemAsync(new GetItemRequest { TaggableItemDto = taggableItemDto });
 
         switch (reply.ResultCase)
         {

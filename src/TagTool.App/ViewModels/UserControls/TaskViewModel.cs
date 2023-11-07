@@ -158,17 +158,17 @@ public partial class TaskViewModel : ViewModelBase
         Debug.Assert(job != null, nameof(job) + " != null");
         Debug.Assert(tagQuery != null, nameof(tagQuery) + " != null");
 
-        var request = new AddOrUpdateJobRequest
+        var request = new AddOrUpdateTaskRequest
         {
             TaskId = TaskId,
-            JobId = job.Name,
-            JobAttributes = attributes,
+            ActionId = job.Name,
+            ActionAttributes = attributes,
             QueryParams = { tagQuery.Select(segment => segment.MapToDto()) },
             Triggers = { Triggers.Select(MapTriggerInfo) }
         };
 
         _logger.LogDebug("Sending request {@AddOrUpdateJobRequest}", request);
-        var reply = await _tagService.AddOrUpdateJobAsync(request);
+        var reply = await _tagService.AddOrUpdateTaskAsync(request);
     }
 
     private static TriggerInfo MapTriggerInfo(TaskTriggerViewModel model)

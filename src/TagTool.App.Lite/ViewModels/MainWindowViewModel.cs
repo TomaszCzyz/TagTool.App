@@ -101,10 +101,10 @@ public partial class MainWindowViewModel : ViewModelBase
         SearchResults.AddRange(reply.TaggedItems.Select(item
             => new TaggableItemViewModel(_tagService)
             {
-                TaggableItem = item.ItemCase switch
+                TaggableItem = item.TaggableItem.ItemCase switch
                 {
-                    TaggedItem.ItemOneofCase.File => new TaggableFile { Path = item.File.Path },
-                    TaggedItem.ItemOneofCase.Folder => new TaggableFolder { Path = item.Folder.Path },
+                    TaggableItemDto.ItemOneofCase.File => new TaggableFile { Path = item.TaggableItem.File.Path },
+                    TaggableItemDto.ItemOneofCase.Folder => new TaggableFolder { Path = item.TaggableItem.Folder.Path },
                     _ => throw new UnreachableException()
                 },
                 AreTagsVisible = true

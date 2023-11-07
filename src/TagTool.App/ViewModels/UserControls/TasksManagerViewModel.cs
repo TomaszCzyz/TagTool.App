@@ -57,7 +57,7 @@ public class TasksManagerViewModel : Document
         {
             using var serviceScope = _serviceProvider.CreateScope();
 
-            var streamingCall = _tagService.GetRunningTasks(new GetRunningTasksRequest());
+            var streamingCall = _tagService.GetExistingTasks(new GetExistingTasksRequest());
             await foreach (var reply in streamingCall.ResponseStream.ReadAllAsync().AsAsyncEnumerable())
             {
                 var triggers = reply.Triggers.Select(info =>
@@ -73,7 +73,7 @@ public class TasksManagerViewModel : Document
                 taskViewModel.TaskId = reply.TaskId;
                 taskViewModel.SearchBarViewModel.QuerySegments.AddRange(reply.QueryParams.Select(param => param.MapFromDto()));
                 taskViewModel.Triggers.AddRange(triggers);
-                taskViewModel.SelectedJob = Jobs.First(info => info.Name == reply.JobId);
+                taskViewModel.SelectedJob = Jobs.First(info => info.Name == reply.ActionId);
 
                 TaskViewModels.Add(taskViewModel);
             }
@@ -107,7 +107,7 @@ public class TasksManagerViewModel : Document
 
     private void GetAvailableJobs()
     {
-        var reply = _tagService.GetAvailableJobs(new GetAvailableJobsRequest());
+        var reply = _tagService.GetAvailableActions(new GetAvailableActionsRequest());
 
         var jobInfos = reply.Infos.Select(info => new JobInfo
         {

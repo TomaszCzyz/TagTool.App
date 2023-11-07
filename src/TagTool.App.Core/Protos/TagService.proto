@@ -1,6 +1,7 @@
 syntax = "proto3";
 
 import "google/protobuf/any.proto";
+import "google/protobuf/wrappers.proto";
 import "Protos/DomainTypes.proto";
 
 option csharp_namespace = "TagTool.Backend";
@@ -59,10 +60,9 @@ service TagService {
 
   rpc ExecuteLinkedAction(ExecuteLinkedActionRequest) returns (ExecuteLinkedActionReply);
 
-  rpc AddOrUpdateJob(AddOrUpdateJobRequest) returns (AddOrUpdateJobReply);
-
-  rpc GetAvailableJobs(GetAvailableJobsRequest) returns (GetAvailableJobsReply);
-  rpc GetRunningTasks(GetRunningTasksRequest) returns (stream GetRunningTasksReply);
+  rpc AddOrUpdateTask(AddOrUpdateTaskRequest) returns (AddOrUpdateTaskReply);
+  rpc GetAvailableActions(GetAvailableActionsRequest) returns (GetAvailableActionsReply);
+  rpc GetExistingTasks(GetExistingTasksRequest) returns (stream GetExistingTasksReply);
 }
 
 // The request to create a new tag.
@@ -74,10 +74,10 @@ message CreateTagRequest {
 // The reply indicating whether tag creation was successful or not.
 message CreateTagReply {
   oneof result {
-    // The newly created Tag's name.
-    string createdTagName = 1;
+    // The newly created Tag.
+    google.protobuf.Any tag = 1;
     // The Error message.
-    string errorMessage = 2;
+    google.protobuf.StringValue errorMessage = 2;
   };
 }
 
@@ -110,9 +110,9 @@ message DeleteTagRequest {
 message DeleteTagReply {
   oneof result {
     // The deleted Tag's name.
-    string deletedTagName = 1;
+    google.protobuf.Any tag = 1;
     // The Error message in case of a failure.
-    string errorMessage = 2;
+    google.protobuf.StringValue errorMessage = 2;
   };
 }
 
@@ -139,7 +139,7 @@ message AddSynonymRequest {
 
 message AddSynonymReply {
   oneof result {
-    string successMessage = 1;
+    google.protobuf.StringValue successMessage = 1;
     Error error = 2;
   }
 }
@@ -151,7 +151,7 @@ message RemoveSynonymRequest {
 
 message RemoveSynonymReply {
   oneof result {
-    string successMessage = 1;
+    google.protobuf.StringValue successMessage = 1;
     Error error = 2;
   }
 }
@@ -163,7 +163,7 @@ message AddChildRequest {
 
 message AddChildReply {
   oneof result {
-    string successMessage = 1;
+    google.protobuf.StringValue successMessage = 1;
     Error error = 2;
   }
 }
@@ -175,7 +175,7 @@ message RemoveChildRequest {
 
 message RemoveChildReply {
   oneof result {
-    string successMessage = 1;
+    google.protobuf.StringValue successMessage = 1;
     Error error = 2;
   }
 }
@@ -185,19 +185,16 @@ message TagItemRequest {
   // The Tag to be added to the item.
   google.protobuf.Any tag = 1;
   // The Item to tag.
-  oneof item {
-    FileDto file = 2;
-    FolderDto folder = 3;
-  };
+  TaggableItemDto item = 2;
 }
 
 // The reply indicating whether tagging was successful or not.
 message TagItemReply {
   oneof result {
     // The item with all its tags.
-    TaggedItem taggedItem = 1;
+    TaggedItem Item = 1;
     // The Error message in case of a failure.
-    string errorMessage = 2;
+    google.protobuf.StringValue errorMessage = 2;
   };
 }
 
@@ -206,10 +203,7 @@ message UntagItemRequest {
   // The Tag to be removed from the item.
   google.protobuf.Any tag = 1;
   // The item to untag
-  oneof item {
-    FileDto file = 2;
-    FolderDto folder = 3;
-  };
+  TaggableItemDto item = 2;
 }
 
 // The reply indicating whether untagging was successful or not.
@@ -218,17 +212,15 @@ message UntagItemReply {
     // The item with all its tags.
     TaggedItem taggedItem = 1;
     // The Error message in case of a failure.
-    string errorMessage = 2;
+    google.protobuf.StringValue errorMessage = 2;
   }
 }
 
 // The request to get information about an specified Item
 message GetItemRequest {
+  google.protobuf.StringValue id = 1;
   // The item for which we want to retrieve information.
-  oneof item {
-    FileDto file = 2;
-    FolderDto folder = 3;
-  };
+  TaggableItemDto taggableItemDto = 2;
 }
 
 // The reply with information about an item or error message 
@@ -237,7 +229,7 @@ message GetItemReply {
     // The item associated tags.
     TaggedItem taggedItem = 1;
     // The Error message in case of a failure.
-    string errorMessage = 2;
+    google.protobuf.StringValue errorMessage = 2;
   }
 }
 
@@ -272,10 +264,7 @@ message GetItemsByTagsReply {
 // The request to check if given Item exists.
 message DoesItemExistsRequest {
   // The item to check.
-  oneof item {
-    FileDto file = 1;
-    FolderDto folder = 2;
-  };
+  TaggableItemDto item = 1;
 }
 
 // The reply indicating if item exists.
@@ -340,9 +329,9 @@ message UndoRequest {}
 message UndoReply {
   oneof result {
     // The command's response message.
-    string undoCommand = 1;
+    google.protobuf.StringValue undoCommand = 1;
     // The error message, when undo operation failed. 
-    string errorMessage = 2;
+    google.protobuf.StringValue errorMessage = 2;
   }
 }
 
@@ -353,9 +342,9 @@ message RedoRequest {}
 message RedoReply {
   oneof result {
     // The command's response message.
-    string redoCommand = 1;
+    google.protobuf.StringValue redoCommand = 1;
     // The error message, when redo operation failed.
-    string errorMessage = 2;
+    google.protobuf.StringValue errorMessage = 2;
   }
 }
 
@@ -386,10 +375,7 @@ message SetTagNamingConventionReply {
 }
 
 message ExecuteLinkedActionRequest {
-  oneof item {
-    FileDto file = 1;
-    FolderDto folder = 2;
-  };
+  TaggableItemDto item = 1;
 }
 
 message ExecuteLinkedActionReply {
@@ -398,11 +384,11 @@ message ExecuteLinkedActionReply {
   }
 }
 
-message AddOrUpdateJobRequest {
+message AddOrUpdateTaskRequest {
   string taskId = 1;
   repeated TagQueryParam queryParams = 2;
-  string jobId = 3;
-  Attributes jobAttributes = 4;
+  string actionId = 3;
+  Attributes actionAttributes = 4;
   repeated TriggerInfo triggers = 5;
 }
 
@@ -411,7 +397,6 @@ message TriggerInfo {
   string arg = 2;
 }
 
-// todo: nest it in TriggerInfo?
 enum TriggerType {
   Manual = 0;
   Cron = 1;
@@ -422,28 +407,28 @@ message Attributes {
   map<string, string> values = 1;
 }
 
-message AddOrUpdateJobReply {
+message AddOrUpdateTaskReply {
 }
 
-message GetAvailableJobsRequest {}
+message GetAvailableActionsRequest {}
 
-message GetAvailableJobsReply {
-  repeated JobInfo infos = 1;
+message GetAvailableActionsReply {
+  repeated ActionInfo infos = 1;
 }
 
-message JobInfo {
+message ActionInfo {
   string id = 1;
   string description = 2;
   Attributes attributesDescriptions = 3;
   repeated google.protobuf.Any applicableToItemTypes = 4;
 }
 
-message GetRunningTasksRequest {}
+message GetExistingTasksRequest {}
 
-message GetRunningTasksReply {
+message GetExistingTasksReply {
   string taskId = 1;
   repeated TagQueryParam queryParams = 2;
-  string jobId = 3;
-  Attributes jobAttributes = 4;
+  string actionId = 3;
+  Attributes actionAttributes = 4;
   repeated TriggerInfo triggers = 5;
 }

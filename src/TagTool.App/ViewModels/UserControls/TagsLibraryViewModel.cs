@@ -16,7 +16,6 @@ using TagTool.App.Core;
 using TagTool.App.Core.Models;
 using TagTool.App.Core.Services;
 using TagTool.App.Core.TagMapper;
-using TagTool.App.Models;
 using TagTool.Backend;
 using TagTool.Backend.DomainTypes;
 using DayTag = TagTool.App.Core.Models.DayTag;
@@ -142,9 +141,10 @@ public partial class TagsLibraryViewModel : Document
 
         switch (deleteTagsReply.ResultCase)
         {
-            case DeleteTagReply.ResultOneofCase.DeletedTagName:
-                var first = TextTags.First(tag => tag.DisplayText == deleteTagsReply.DeletedTagName);
-                TextTags.Remove(first);
+            case DeleteTagReply.ResultOneofCase.Tag:
+                // todo: adjust to newer api
+                // var first = TextTags.First(tag => tag.DisplayText == deleteTagsReply.DeletedTagName);
+                // TextTags.Remove(first);
                 break;
             case DeleteTagReply.ResultOneofCase.ErrorMessage:
                 var notification = new Notification(
