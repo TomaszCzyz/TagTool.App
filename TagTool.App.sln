@@ -9,6 +9,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SolutionItems", "SolutionIt
 		global.json = global.json
 		nuget.config = nuget.config
 		Settings.XamlStyler = Settings.XamlStyler
+		README.md = README.md
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TagTool.App.Lite", "src\TagTool.App.Lite\TagTool.App.Lite.csproj", "{4923A981-0EE2-4581-B4E9-34071AE91F45}"
