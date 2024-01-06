@@ -9,10 +9,10 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Avalonia" Version="11.0.4"/>
-    <PackageReference Include="Avalonia.Desktop" Version="11.0.4"/>
-    <PackageReference Condition="'$(Configuration)' == 'Debug'" Include="Avalonia.Diagnostics" Version="11.0.4"/>
-    <PackageReference Include="Avalonia.Themes.Fluent" Version="11.0.4"/>
+    <PackageReference Include="Avalonia" Version="11.0.6"/>
+    <PackageReference Include="Avalonia.Desktop" Version="11.0.6"/>
+    <PackageReference Condition="'$(Configuration)' == 'Debug'" Include="Avalonia.Diagnostics" Version="11.0.6"/>
+    <PackageReference Include="Avalonia.Themes.Fluent" Version="11.0.6"/>
     <PackageReference Include="Betalgo.OpenAI.GPT3" Version="6.8.3"/>
     <PackageReference Include="CommunityToolkit.Mvvm" Version="8.2.1"/>
     <PackageReference Include="DynamicData" Version="8.0.2"/>
