@@ -11,16 +11,16 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\TagTool.App.Core\TagTool.App.Core.csproj" />
+    <ProjectReference Include="..\TagTool.App.Core\TagTool.App.Core.csproj"/>
   </ItemGroup>
 
   <ItemGroup>
-    <AvaloniaResource Include="Assets\**" />
-    <None Remove=".gitignore" />
+    <AvaloniaResource Include="Assets\**"/>
+    <None Remove=".gitignore"/>
   </ItemGroup>
 
   <ItemGroup>
-    <TrimmerRootDescriptor Include="Roots.xml" />
+    <TrimmerRootDescriptor Include="Roots.xml"/>
   </ItemGroup>
 
 </Project>
