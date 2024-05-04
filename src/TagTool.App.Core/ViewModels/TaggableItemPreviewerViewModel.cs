@@ -88,19 +88,21 @@ public partial class TaggableItemPreviewerViewModel : ViewModelBase, IDisposable
     /// <summary>
     ///     Fallback on DefaultPreviewer if we fail to load the correct Preview
     /// </summary>
-    private async void PreviewerErrorState_PropertyChanged(object? sender, PropertyChangedEventArgs e)
+    private void PreviewerErrorState_PropertyChanged(object? sender, PropertyChangedEventArgs e)
     {
-        if (e.PropertyName == nameof(IPreviewer.State) && Previewer?.State == PreviewState.Error)
+        if (e.PropertyName != nameof(IPreviewer.State) || Previewer?.State != PreviewState.Error)
         {
-            _cancellationTokenSource.Cancel();
-            _cancellationTokenSource = new CancellationTokenSource();
+            return;
+        }
 
-            if (Previewer is not IUnsupportedFilePreviewer)
-            {
-                // Previewer = _previewerFactory.CreateDefaultPreviewer(Item);
-                throw new NotImplementedException();
-                // await UpdatePreviewAsync(_cancellationTokenSource.Token);
-            }
+        _cancellationTokenSource.Cancel();
+        _cancellationTokenSource = new CancellationTokenSource();
+
+        if (Previewer is not IUnsupportedFilePreviewer)
+        {
+            // Previewer = _previewerFactory.CreateDefaultPreviewer(Item);
+            throw new NotImplementedException();
+            // await UpdatePreviewAsync(_cancellationTokenSource.Token);
         }
     }
 

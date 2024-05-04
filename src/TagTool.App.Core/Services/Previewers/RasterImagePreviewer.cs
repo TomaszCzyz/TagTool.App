@@ -3,7 +3,6 @@ using Avalonia.Media.Imaging;
 using Avalonia.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
 using JetBrains.Annotations;
-using Microsoft.Extensions.Logging;
 using TagTool.App.Core.Models;
 using TaskExtensions = TagTool.App.Core.Extensions.TaskExtensions;
 
@@ -74,8 +73,6 @@ public partial class RasterImagePreviewer : ObservableObject, IRasterImagePrevie
         ".cr3"
     };
 
-    private readonly ILogger<RasterImagePreviewer> _logger;
-
     private Bitmap? _lowQualityThumbnailPreview;
     private Bitmap? _highQualityThumbnailPreview;
     private Task<bool>? _lowQualityThumbnailTask;
@@ -99,11 +96,6 @@ public partial class RasterImagePreviewer : ObservableObject, IRasterImagePrevie
     private bool IsHighQualityThumbnailLoaded => _highQualityThumbnailTask?.Status == TaskStatus.RanToCompletion;
 
     private bool IsFullImageLoaded => _fullQualityImageTask?.Status == TaskStatus.RanToCompletion;
-
-    public RasterImagePreviewer(ILogger<RasterImagePreviewer> logger)
-    {
-        _logger = logger;
-    }
 
     public void Dispose()
     {

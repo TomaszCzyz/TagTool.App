@@ -220,8 +220,6 @@ public sealed partial class TaggableItemsSearchBarViewModel : ViewModelBase, IDi
             var searchTags = words
                 .Select(tagName =>
                 {
-                    var tag = new NormalTag { Name = tagName };
-
                     var reply = _tagService.DoesTagExists(new DoesTagExistsRequest { Tag = Any.Pack(new NormalTag { Name = tagName }) });
 
                     return reply.ResultCase switch

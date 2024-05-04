@@ -13,12 +13,11 @@
     <PackageReference Include="Avalonia.Desktop" Version="11.0.10" />
     <PackageReference Condition="'$(Configuration)' == 'Debug'" Include="Avalonia.Diagnostics" Version="11.0.10" />
     <PackageReference Include="Avalonia.Themes.Fluent" Version="11.0.10" />
-    <PackageReference Include="Betalgo.OpenAI.GPT3" Version="6.8.3"/>
     <PackageReference Include="CommunityToolkit.Mvvm" Version="8.2.2"/>
     <PackageReference Include="DynamicData" Version="8.4.1" />
     <PackageReference Include="Google.Protobuf" Version="3.26.1" />
     <PackageReference Include="Grpc.Net.Client" Version="2.62.0" />
-    <PackageReference Include="Grpc.Tools" Version="2.62.0">
+    <PackageReference Include="Grpc.Tools" Version="2.63.0">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>

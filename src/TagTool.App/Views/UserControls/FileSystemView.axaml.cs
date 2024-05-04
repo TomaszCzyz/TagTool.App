@@ -4,7 +4,6 @@ using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.LogicalTree;
 using Avalonia.VisualTree;
-using TagTool.App.Core.ViewModels;
 using TagTool.App.ViewModels.UserControls;
 using TagTool.App.Views.Dialogs;
 

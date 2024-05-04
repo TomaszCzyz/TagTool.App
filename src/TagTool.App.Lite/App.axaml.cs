@@ -1,4 +1,3 @@
-using System;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
 using Microsoft.Extensions.DependencyInjection;
@@ -33,7 +32,7 @@ public class App : AppTemplate
         base.OnFrameworkInitializationCompleted();
     }
 
-    private static IServiceProvider ConfigureServices()
+    private static ServiceProvider ConfigureServices()
     {
         var services = new ServiceCollection();
 

@@ -16,7 +16,6 @@ using TagTool.App.Core.Extensions;
 using TagTool.App.Core.Models;
 using TagTool.App.Core.Services;
 using TagTool.App.Core.TagMapper;
-using TagTool.App.Models;
 using TagTool.Backend;
 
 namespace TagTool.App.ViewModels.UserControls;
