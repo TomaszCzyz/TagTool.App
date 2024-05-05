@@ -26,9 +26,9 @@ public partial class TaskTriggerViewModel : ViewModelBase
     };
 
     public static string[] PredefinedCronOptions { get; } =
-    {
+    [
         "never", "15 minutes", "30 minutes", "1 hour", "3 hour", "12 hour", "1 day", "7 day", "1 month", "custom"
-    };
+    ];
 
     [ObservableProperty]
     private TriggerType? _triggerTypeSelectedItem = TriggerType.Schedule;
@@ -48,7 +48,7 @@ public partial class TaskTriggerViewModel : ViewModelBase
             ? CustomCronText
             : PredefinedCronOptionsMap[CronPredefineOptionSelectedItem];
 
-    public TriggerType[] TriggerTypes { get; } = { TriggerType.Schedule, TriggerType.Event };
+    public TriggerType[] TriggerTypes { get; } = [TriggerType.Schedule, TriggerType.Event];
 
-    public static string[] EventTypes { get; } = { "ItemTagged" };
+    public static string[] EventTypes { get; } = ["ItemTagged"];
 }

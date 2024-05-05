@@ -47,9 +47,9 @@ public sealed partial class TaggableItemsSearchBarViewModel : ViewModelBase, IDi
     [ObservableProperty]
     private double _voiceIntensity;
 
-    public ObservableCollection<object> DisplayedSearchBarElements { get; } = new() { new TextBoxMarker() };
+    public ObservableCollection<object> DisplayedSearchBarElements { get; } = [new TextBoxMarker()];
 
-    public ObservableCollection<QuerySegment> QuerySegments { get; } = new();
+    public ObservableCollection<QuerySegment> QuerySegments { get; } = [];
 
     public bool IsActive => _bassAudioCaptureService?.IsActive() ?? false;
 

@@ -31,9 +31,9 @@ public partial class TagsLibraryViewModel : Document
     [ObservableProperty]
     private string? _selectedTag;
 
-    public ObservableCollection<ITag> DateAndTimeTags { get; set; } = new();
+    public ObservableCollection<ITag> DateAndTimeTags { get; set; } = [];
 
-    public ObservableCollection<ITag> TextTags { get; } = new();
+    public ObservableCollection<ITag> TextTags { get; } = [];
 
     /// <summary>
     ///     ctor for XAML previewer
@@ -62,8 +62,8 @@ public partial class TagsLibraryViewModel : Document
 
     private void Initialize()
     {
-        DateAndTimeTags = new ObservableCollection<ITag>
-        {
+        DateAndTimeTags =
+        [
             new DayTag { DayOfWeek = DayOfWeek.Monday },
             new DayTag { DayOfWeek = DayOfWeek.Tuesday },
             new DayTag { DayOfWeek = DayOfWeek.Wednesday },
@@ -83,7 +83,7 @@ public partial class TagsLibraryViewModel : Document
             new MonthTag { Month = 10 },
             new MonthTag { Month = 11 },
             new MonthTag { Month = 12 }
-        };
+        ];
 
         Dispatcher.UIThread.InvokeAsync(async () =>
         {

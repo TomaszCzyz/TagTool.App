@@ -11,9 +11,8 @@ namespace TagTool.App.Core.Services.Previewers;
 [UsedImplicitly]
 public partial class RasterImagePreviewer : ObservableObject, IRasterImagePreviewer, IDisposable
 {
-    private static readonly HashSet<string> _supportedFileTypes = new()
-    {
-        // Image types
+    private static readonly HashSet<string> _supportedFileTypes =
+    [
         ".bmp",
         ".gif",
         ".jpg",
@@ -71,7 +70,7 @@ public partial class RasterImagePreviewer : ObservableObject, IRasterImagePrevie
         ".x3f",
         ".ori",
         ".cr3"
-    };
+    ];
 
     private Bitmap? _lowQualityThumbnailPreview;
     private Bitmap? _highQualityThumbnailPreview;

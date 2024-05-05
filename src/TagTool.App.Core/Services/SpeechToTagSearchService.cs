@@ -34,7 +34,7 @@ public class SpeechToTagSearchService : ISpeechToTagSearchService
             return Enumerable.Empty<string>();
         }
 
-        char[] delimiterChars = { ' ', ',', '.', ':', '\t' };
+        char[] delimiterChars = [' ', ',', '.', ':', '\t'];
 
         return transcription.Split(delimiterChars).Where(s => !string.IsNullOrWhiteSpace(s));
     }

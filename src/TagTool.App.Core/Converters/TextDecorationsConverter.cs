@@ -17,16 +17,16 @@ public class TextDecorationsConverter : IValueConverter
 
         return state switch
         {
-            QuerySegmentState.Include => new TextDecorationCollection(),
-            QuerySegmentState.Exclude => new TextDecorationCollection
-            {
-                new()
+            QuerySegmentState.Include => [],
+            QuerySegmentState.Exclude =>
+            [
+                new TextDecoration
                 {
                     Location = TextDecorationLocation.Strikethrough,
                     StrokeThickness = 3,
                     StrokeThicknessUnit = TextDecorationUnit.Pixel
                 }
-            },
+            ],
             QuerySegmentState.MustBePresent => new TextDecorationCollection
             {
                 new()

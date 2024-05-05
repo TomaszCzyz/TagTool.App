@@ -59,7 +59,7 @@ public partial class CreateTagDialogViewModel : ViewModelBase, IDisposable, INot
     public IEnumerable GetErrors(string? propertyName)
         => propertyName switch
         {
-            nameof(TagName) => new[] { _valueError },
+            nameof(TagName) => [_valueError],
             _ => Array.Empty<object?>()
         };
 
