@@ -27,7 +27,7 @@ public class LocationAndWidthToIconMultiConverter : IMultiValueConverter
     }
 }
 
-public class TaggableItemToToIconConverter : IMultiValueConverter
+public class TaggableItemToIconConverter : IMultiValueConverter
 {
     private static readonly IconPathToBitmapConverter _iconPathToBitmapConverter = new();
     public double IconToFontSizeRatio { get; set; } = 1.5;

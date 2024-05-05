@@ -15,7 +15,7 @@ public class IconPathToBitmapConverter : IValueConverter
     private static readonly Stream _defaultFileIcon = AssetLoader.Open(new Uri(DefaultFileIconAssetUri));
     private static readonly Stream _defaultFolderIcon = AssetLoader.Open(new Uri(DefaultFolderIconAssetUri));
 
-    private readonly IFileIconProvider _defaultFileIconProvider = new DefaultFileIconProvider();
+    private readonly DefaultFileIconProvider _defaultFileIconProvider = new();
 
     public object? Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
     {
@@ -36,23 +36,9 @@ public class IconPathToBitmapConverter : IValueConverter
             return CreateBitmap(_defaultFolderIcon, length);
         }
 
-#pragma warning disable CA1416
-        // todo: make this behaviour platform agnostic
+        var bitmap = _defaultFileIconProvider.GetFileIcon(path, length);
 
-        var bitmap = _defaultFileIconProvider.GetFileIcon(path)?.ToBitmap();
-
-        if (bitmap is null)
-        {
-            return CreateBitmap(_defaultFileIcon, length);
-        }
-
-        using var memoryStream = new MemoryStream();
-        bitmap.Save(memoryStream, ImageFormat.Png);
-        memoryStream.Flush();
-        memoryStream.Seek(0, SeekOrigin.Begin);
-
-        return CreateBitmap(memoryStream, length);
-#pragma warning restore CA1416
+        return bitmap ?? CreateBitmap(_defaultFileIcon, length);
     }
 
     public object ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture) => throw new NotImplementedException();
@@ -65,9 +51,9 @@ public class IconPathToBitmapConverter : IValueConverter
             return new Bitmap(stream);
         }
 
-        var decodeToWidth = Bitmap.DecodeToHeight(stream, length);
+        var decodeToHeight = Bitmap.DecodeToHeight(stream, length);
         stream.Seek(0, SeekOrigin.Begin);
 
-        return decodeToWidth;
+        return decodeToHeight;
     }
 }

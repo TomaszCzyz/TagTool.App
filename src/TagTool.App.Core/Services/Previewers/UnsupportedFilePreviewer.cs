@@ -83,21 +83,16 @@ public partial class UnsupportedFilePreviewer : ObservableObject, IUnsupportedFi
         var isTaskSuccessful = await TaskExtensions.RunSafe(async () =>
         {
             cancellationToken.ThrowIfCancellationRequested();
-            await Dispatcher.UIThread.InvokeAsync(async () =>
+            await Dispatcher.UIThread.Invoke(() =>
             {
                 cancellationToken.ThrowIfCancellationRequested();
 
-                var bitmap = _defaultFileIconProvider.GetFileIcon(path)?.ToBitmap();
-
-                isIconValid = bitmap != null;
-
-                using var memoryStream = new MemoryStream();
-                bitmap?.Save(memoryStream, ImageFormat.Png);
-                await memoryStream.FlushAsync(cancellationToken);
-                memoryStream.Seek(0, SeekOrigin.Begin);
+                var bitmap = _defaultFileIconProvider.GetFileIcon(path, default);
 
                 // todo: handle default icons
-                Preview.IconPreview = new Bitmap(memoryStream); // ?? new SvgImageSource(new Uri("ms-appx:///Assets/Peek/DefaultFileIcon.svg"));
+                Preview.IconPreview = bitmap; // ?? new SvgImageSource(new Uri("ms-appx:///Assets/Peek/DefaultFileIcon.svg"));
+                isIconValid = bitmap != null;
+                return Task.CompletedTask;
             });
         });
 
@@ -167,7 +162,7 @@ public partial class UnsupportedFilePreviewer : ObservableObject, IUnsupportedFi
         var folderSize = await Task.Run(() => CalculateDirSizeInner(path), cancellationToken);
 
         // Check if during size calculations the currently previewed item has not changed.
-        // I think it cannot happen, because CalculateDirSizeInner would first throw because of a cancellation. 
+        // I think it cannot happen, because CalculateDirSizeInner would first throw because of a cancellation.
         if (Preview.FileName == Path.GetFileName(path))
         {
             Preview.FileSize = folderSize.GetBytesReadable();

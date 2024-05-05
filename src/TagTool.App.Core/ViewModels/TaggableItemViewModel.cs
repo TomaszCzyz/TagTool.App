@@ -23,9 +23,9 @@ public interface ITextSearchable
 }
 
 /// <summary>
-///     Basic representation of item that might be tagged, that should be use to display only.
+///     Basic representation of item that might be tagged, that should be used to display only.
 ///     This class will react ot updates of underlining <see cref="TaggableItem" />
-///     Contains only information how to display item DisplayName and its tags, if exist.
+///     Contains only information how to display item DisplayName and its tags, if existed.
 ///     Additional functionalities, like drop-to-tag, should be implemented in parent components.
 /// </summary>
 [DebuggerDisplay("{DisplayName}")]

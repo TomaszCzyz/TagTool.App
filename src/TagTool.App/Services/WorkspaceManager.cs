@@ -26,7 +26,7 @@ public class WorkspaceManager : IWorkspaceManager
     {
         _logger = logger;
         _serviceProvider = serviceProvider;
-        // todo: register DockSerializer and inject it. 
+        // todo: register DockSerializer and inject it.
         _serializer = new DockSerializer(serviceProvider);
     }
 
@@ -117,7 +117,7 @@ public class WorkspaceManager : IWorkspaceManager
             Factory = defaultDockFactory,
             VisibleDockables = new ObservableCollection<IDockable>(new IDockable[] { proportionalDock }),
             // Without setting ActiveDockable, nothing appears. Maybe it is also important that DocumentDocks are
-            // wrapped by ProportionalDock, because is specifies: [DataContract(IsReference = true)]
+            // wrapped by ProportionalDock, because it specifies: [DataContract(IsReference = true)]
             ActiveDockable = proportionalDock,
             DefaultDockable = null
         };

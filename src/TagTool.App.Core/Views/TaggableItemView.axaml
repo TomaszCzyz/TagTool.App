@@ -16,7 +16,7 @@
     mc:Ignorable="d"
     DragDrop.AllowDrop="True">
     <UserControl.Resources>
-        <converters:TaggableItemToToIconConverter x:Key="TaggableItemToToIconConverter" />
+        <converters:TaggableItemToIconConverter x:Key="TaggableItemToToIconConverter" />
     </UserControl.Resources>
 
     <Design.DataContext>

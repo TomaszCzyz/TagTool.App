@@ -81,7 +81,7 @@ public partial class FileSystemViewModel : Document
         Initialize();
     }
 
-    private void Initialize() => CurrentFolder = new DirectoryInfo(@"C:\Users\tczyz\MyFiles");
+    private void Initialize() => CurrentFolder = new DirectoryInfo(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile));
 
     partial void OnAreTagsVisibleChanged(bool value)
     {
