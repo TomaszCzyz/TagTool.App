@@ -20,7 +20,9 @@
     FontFamily="avares://TagTool.App/Assets/Fonts#Lato"
     Icon="/Assets/avalonia-logo.ico"
     Title="TagTool.App"
-    TransparencyLevelHint="AcrylicBlur">
+    TransparencyLevelHint="AcrylicBlur"
+    Width="1400"
+    Height="700">
     <Window.DataTemplates>
         <DataTemplate DataType="viewModels:NotificationViewModel">
             <userControls:CustomNotificationView />
