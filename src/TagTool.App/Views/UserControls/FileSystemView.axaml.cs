@@ -23,9 +23,8 @@ public partial class FileSystemView : UserControl
         FolderContentListBox.AddHandler(KeyDownEvent, OnKeyDown_DeleteHandler);
     }
 
-    protected override void OnGotFocus(GotFocusEventArgs e)
-    {
-        base.OnGotFocus(e);
+    protected override void OnLoaded(RoutedEventArgs e) {
+        base.OnLoaded(e);
 
         FolderContentListBox.Focus();
     }
