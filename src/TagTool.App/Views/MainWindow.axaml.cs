@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Notifications;
@@ -9,6 +10,7 @@ using Avalonia.VisualTree;
 using Dock.Avalonia.Controls;
 using Dock.Model.Core;
 using Dock.Model.Mvvm.Controls;
+using Serilog;
 using TagTool.App.Core;
 using TagTool.App.Docks;
 using TagTool.App.ViewModels;
@@ -148,7 +150,7 @@ public partial class MainWindow : Window
         switch (e)
         {
             case { KeyModifiers: KeyModifiers.Control | KeyModifiers.Shift }:
-                // Catch case of backwards navigation with ctrl+shift+tab to avoid popup closing. 
+                // Catch case of backwards navigation with ctrl+shift+tab to avoid popup closing.
                 break;
             case { KeyModifiers: not KeyModifiers.Control } when SwitcherPopup.IsOpen:
 

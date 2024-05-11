@@ -29,13 +29,13 @@ public partial class FileSystemViewModel : Document
     private readonly Stack<DirectoryInfo> _navigationHistoryForward = new();
 
     [ObservableProperty]
-    private ObservableCollection<TaggableItemViewModel> _items = new();
+    private ObservableCollection<TaggableItemViewModel> _items = [];
 
     [ObservableProperty]
-    private ObservableCollection<AddressSegmentViewModel> _addressSegments = new();
+    private ObservableCollection<AddressSegmentViewModel> _addressSegments = [];
 
     [ObservableProperty]
-    private DirectoryInfo _currentFolder = new("C:");
+    private DirectoryInfo _currentFolder = new(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile));
 
     [ObservableProperty]
     private bool _isEditing;

@@ -3,7 +3,9 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
     xmlns:controls="clr-namespace:TagTool.App.Controls"
+    xmlns:converters="clr-namespace:TagTool.App.Converters"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:io="clr-namespace:System.IO;assembly=System.Runtime"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:userControls="clr-namespace:TagTool.App.ViewModels.UserControls"
     xmlns:viewModels="clr-namespace:TagTool.App.Core.ViewModels;assembly=TagTool.App.Core"
@@ -15,6 +17,13 @@
     d:DesignHeight="700"
     mc:Ignorable="d"
     Focusable="True">
+    <UserControl.Resources>
+        <converters:StringToBoolConverter
+            x:Key="IsLinuxRootDirConverter"
+            StringToCompare="/"
+            ValueWhenMatched="False" />
+
+    </UserControl.Resources>
     <UserControl.Styles>
         <Style Selector="Button.Transparent">
             <Setter Property="Background" Value="Transparent" />
@@ -43,23 +52,37 @@
             <Button
                 Grid.Column="0"
                 Classes="NavigationButton"
-                Command="{CompiledBinding NavigateBackCommand}">
+                Command="{CompiledBinding NavigateBackCommand}"
+                IsEnabled="{Binding !CanNavigateBack}">
+                <avalonia:MaterialIcon
+                    Width="20"
+                    Height="20"
+                    Foreground="White"
+                    Kind="ArrowBack" />
 
-                <Svg Path="/Assets/Svgs/Light/arrow_back.svg" />
             </Button>
             <Button
                 Grid.Column="1"
                 Classes="NavigationButton"
-                Command="{Binding NavigateForwardCommand}">
+                Command="{Binding NavigateForwardCommand}"
+                IsEnabled="{Binding !CanNavigateForward}">
+                <avalonia:MaterialIcon
+                    Width="20"
+                    Height="20"
+                    Foreground="White"
+                    Kind="ArrowForward" />
 
-                <Svg Path="/Assets/Svgs/Light/arrow_forward.svg" />
             </Button>
             <Button
                 Grid.Column="2"
                 Classes="NavigationButton"
                 Command="{Binding NavigateUpCommand}">
+                <avalonia:MaterialIcon
+                    Width="20"
+                    Height="20"
+                    Foreground="White"
+                    Kind="ArrowUpward" />
 
-                <Svg Path="/Assets/Svgs/Light/arrow_upward.svg" />
             </Button>
             <TextBox
                 Name="AddressTextBox"
@@ -105,13 +128,14 @@
                                 <Button
                                     Classes="ButtonAddressBar Transparent"
                                     Command="{Binding NavigateHereCommand}"
-                                    Content="{Binding Name}" />
+                                    Content="{Binding Name}"
+                                    IsVisible="{Binding Name, Converter={StaticResource IsLinuxRootDirConverter}}" />
 
                                 <Button
                                     x:Name="PopupButton"
                                     Classes="ButtonAddressBar Transparent"
                                     Command="{Binding OpenPopupCommand}"
-                                    Content="\" />
+                                    Content="{x:Static io:Path.DirectorySeparatorChar}" />
 
                                 <Popup
                                     IsLightDismissEnabled="True"
@@ -186,7 +210,7 @@
             </Border>
         </Grid>
         <!-- Folder content grid -->
-        <!-- NOTE: text search for VirtualizingStackPanel is performed only on visible items for standard ListBox-->
+        <!-- NOTE: text search for VirtualizingStackPanel is performed only on visible items for standard ListBox -->
         <controls:TextSearchableListBox
             Name="FolderContentListBox"
             Grid.Row="1"
