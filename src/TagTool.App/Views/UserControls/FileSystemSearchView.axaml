@@ -23,7 +23,6 @@
             Foreground="CornflowerBlue"
             Kind="CircleSmall"
             />
-
         <avalonia:MaterialIcon
             x:Key="WildCardSearchIcon"
             Width="20"
@@ -33,7 +32,6 @@
             Foreground="GreenYellow"
             Kind="CircleHalf"
             />
-
         <avalonia:MaterialIcon
             x:Key="RegexSearchIcon"
             Width="20"
@@ -43,16 +41,12 @@
             Foreground="{StaticResource MyLightSecondary500}"
             Kind="CircleMedium"
             />
-
     </UserControl.Resources>
-
     <Design.DataContext>
         <userControls:FileSystemSearchViewModel />
     </Design.DataContext>
-
     <Border>
         <Grid ColumnDefinitions="*" RowDefinitions="Auto, *, Auto">
-
             <!-- Root folder bar -->
             <Grid ColumnDefinitions="Auto,*,Auto,Auto" RowDefinitions="Auto, Auto">
                 <Label
@@ -61,7 +55,6 @@
                     VerticalAlignment="Center"
                     Content="Search in:"
                     />
-
                 <TextBox
                     Grid.Row="0"
                     Grid.Column="1"
@@ -69,7 +62,6 @@
                     HorizontalContentAlignment="Stretch"
                     Text="{Binding SearchRoot}"
                     />
-
                 <Button
                     Grid.Row="0"
                     Grid.Column="2"
@@ -77,7 +69,6 @@
                     Background="Transparent"
                     Command="{ReflectionBinding StartSearchCommand}"
                     >
-
                     <avalonia:MaterialIcon
                         Width="20"
                         Height="20"
@@ -86,16 +77,13 @@
                         Foreground="{StaticResource MyLightSecondary500}"
                         Kind="Magnify"
                         />
-
                 </Button>
-
                 <Label
                     Grid.Row="1"
                     Grid.Column="0"
                     VerticalAlignment="Center"
                     Content="Search for:"
                     />
-
                 <TextBox
                     Grid.Row="1"
                     Grid.Column="1"
@@ -149,21 +137,17 @@
                                     Foreground="{StaticResource MyLightSecondary500}"
                                     Kind="FormatLetterCase"
                                     />
-
                             </ToggleButton>
-
                             <ToggleButton
                                 Classes="SearchType"
                                 Padding="3"
                                 IsChecked="{Binding SearchType}"
                                 IsThreeState="True"
                                 />
-
                         </StackPanel>
                     </TextBox.InnerRightContent>
                 </TextBox>
             </Grid>
-
             <!-- Search results -->
             <ListBox Grid.Row="1" ItemsSource="{Binding SearchResults}">
                 <ListBox.DataTemplates>
@@ -171,16 +155,13 @@
                         <views:TaggableItemView FontSize="14" />
                     </DataTemplate>
                 </ListBox.DataTemplates>
-
             </ListBox>
-
             <ProgressBar
                 Grid.Row="1"
                 VerticalAlignment="Bottom"
                 IsIndeterminate="{Binding StartSearchCommand.IsRunning}"
                 IsVisible="{Binding StartSearchCommand.IsRunning}"
                 />
-
             <!-- Currently search directory bar -->
             <Border
                 Grid.Row="2"

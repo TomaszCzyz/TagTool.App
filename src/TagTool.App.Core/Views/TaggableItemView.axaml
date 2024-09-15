@@ -19,11 +19,9 @@
     <UserControl.Resources>
         <converters:TaggableItemToIconConverter x:Key="TaggableItemToToIconConverter" />
     </UserControl.Resources>
-
     <Design.DataContext>
         <viewModels:TaggableItemViewModel />
     </Design.DataContext>
-
     <Border
         Name="DragDropInfoAreaBorder"
         Padding="6"
@@ -38,7 +36,6 @@
             ColumnDefinitions="30,Auto,*"
             RowDefinitions="Auto"
             >
-
             <Image
                 Name="IconImage"
                 Grid.Column="0"
@@ -51,7 +48,6 @@
                     </MultiBinding>
                 </Image.Source>
             </Image>
-
             <TextBlock
                 Name="DisplayNameTextBlock"
                 Grid.Column="1"
@@ -70,7 +66,6 @@
                     </MenuFlyout>
                 </TextBlock.ContextFlyout>
             </TextBlock>
-
             <!-- Associated tags -->
             <Border
                 Grid.Column="2"

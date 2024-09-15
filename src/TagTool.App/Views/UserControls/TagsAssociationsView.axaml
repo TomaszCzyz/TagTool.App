@@ -17,7 +17,6 @@
     mc:Ignorable="d"
     d:DataContext="{x:Static dd:DesignData.TagsAssociationsViewModel}"
     >
-
     <Panel>
         <DataGrid
             CanUserReorderColumns="True"
@@ -59,7 +58,6 @@
                         </Border>
                     </DataTemplate>
                 </DataGridTemplateColumn>
-
                 <DataGridTemplateColumn
                     Width="2*"
                     Header="Tags in group"
@@ -103,7 +101,6 @@
                         </Border>
                     </DataTemplate>
                 </DataGridTemplateColumn>
-
                 <DataGridTemplateColumn
                     Width="2*"
                     Header="Ancestor groups"
@@ -141,7 +138,6 @@
             <!-- Opacity="{Binding $parent[ListBoxItem].Opacity, Converter={StaticResource DoubleRangeConverter}}" -->
             <!-- Command="{ReflectionBinding #UserControlRoot.((viewModels:TaggableItemsSearchBarViewModel)DataContext).RemoveTagFromSearchQueryCommand, FallbackValue=null}" -->
             <!-- CommandParameter="{Binding .}" -->
-
             <avalonia:MaterialIcon
                 Width="40"
                 Height="40"
@@ -151,8 +147,6 @@
                 Kind="Add"
                 Opacity="0.6"
                 />
-
         </Button>
     </Panel>
-
 </UserControl>

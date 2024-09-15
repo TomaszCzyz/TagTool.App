@@ -3,7 +3,6 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:core="using:Dock.Model.Core"
     >
-
     <Design.PreviewWith>
         <Border Padding="20">
             <StackPanel Spacing="20">
@@ -13,7 +12,6 @@
             </StackPanel>
         </Border>
     </Design.PreviewWith>
-
     <ControlTheme x:Key="{x:Type DocumentTabStripItem}" TargetType="DocumentTabStripItem">
         <Setter Property="(TextElement.FontSize)" Value="{DynamicResource DockFontSizeNormal}" />
         <Setter Property="FontWeight" Value="Normal" />
@@ -24,7 +22,6 @@
         <Setter Property="BorderBrush" Value="{DynamicResource DockThemeBorderLowBrush}" />
         <Setter Property="BorderThickness" Value="0" />
         <Setter Property="Padding" Value="4 0 4 0" />
-
         <Setter x:DataType="core:IDockable" Property="Template">
             <ControlTemplate>
                 <Panel>
@@ -122,7 +119,6 @@
                             </StackPanel>
                         </DockableControl>
                     </Border>
-
                     <Rectangle
                         Name="PART_Rectangle"
                         Height="2"
@@ -131,39 +127,30 @@
                         RadiusX="1"
                         RadiusY="1"
                         />
-
                 </Panel>
-
             </ControlTemplate>
         </Setter>
-
         <Style Selector="^:selected /template/ Path#PART_ClosePath">
             <Setter Property="Fill" Value="{DynamicResource DockApplicationAccentForegroundBrush}" />
         </Style>
-
         <Style Selector="^:pointerover /template/ Path#PART_ClosePath">
             <Setter Property="Fill" Value="{DynamicResource DockApplicationAccentForegroundBrush}" />
         </Style>
-
 
         <Style Selector="^:not(:active):selected">
             <Setter Property="Background" Value="Transparent" />
             <Setter Property="Foreground" Value="{DynamicResource DockThemeForegroundBrush}" />
         </Style>
-
         <Style Selector="^:not(:active):selected /template/ Rectangle#PART_Rectangle">
             <Setter Property="Fill" Value="{DynamicResource DockThemeBorderLowBrush}" />
         </Style>
-
         <Style Selector="^:active:selected">
             <Setter Property="Background" Value="Transparent" />
             <Setter Property="Foreground" Value="{DynamicResource AppFontColor}" />
         </Style>
-
         <Style Selector="^:active:selected /template/ Rectangle#PART_Rectangle">
             <Setter Property="Fill" Value="{DynamicResource DockApplicationAccentBrushLow}" />
         </Style>
-
         <Style Selector="^:not(:selected):pointerover">
             <Setter Property="Background" Value="{DynamicResource DockApplicationAccentBrushMed}" />
             <Setter Property="Foreground" Value="{DynamicResource DockApplicationAccentForegroundBrush}" />
@@ -173,7 +160,5 @@
         <!--     <Setter Property="Background" Value="{DynamicResource DockApplicationAccentBrushLow}" /> -->
         <!--     <Setter Property="Foreground" Value="{DynamicResource DockApplicationAccentForegroundBrush}" /> -->
         <!-- </Style> -->
-
     </ControlTheme>
-
 </ResourceDictionary>

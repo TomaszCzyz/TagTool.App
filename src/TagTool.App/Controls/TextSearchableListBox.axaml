@@ -6,7 +6,6 @@
     <Design.PreviewWith>
         <controls:TextSearchableListBox />
     </Design.PreviewWith>
-
     <Style Selector="controls|TextSearchableListBox">
         <!-- Set Defaults -->
         <Setter Property="Foreground" Value="{DynamicResource SystemControlForegroundBaseHighBrush}" />
@@ -50,4 +49,3 @@
         </Setter>
     </Style>
 </Styles>
-

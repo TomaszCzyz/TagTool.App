@@ -12,11 +12,9 @@
     d:DesignHeight="75"
     mc:Ignorable="d"
     >
-
     <Design.DataContext>
         <userControls:MenuViewModel />
     </Design.DataContext>
-
     <UserControl.Styles>
         <Style Selector="Menu">
             <Setter Property="Height" Value="28" />
@@ -30,7 +28,6 @@
             <Setter Property="FontSize" Value="18" />
         </Style>
     </UserControl.Styles>
-
     <StackPanel Orientation="Horizontal">
         <Button Padding="5" Background="Transparent">
             <Svg
@@ -38,7 +35,6 @@
                 Height="28"
                 Path="/Assets/Svgs/Light/menu_4_bars.svg"
                 />
-
             <Button.Flyout>
                 <MenuFlyout Placement="BottomEdgeAlignedLeft">
                     <MenuItem Header="_File">
@@ -50,7 +46,6 @@
                             <MenuItem Header="Nested" />
                         </MenuItem>
                     </MenuItem>
-
                     <MenuItem Header="_Edit">
                         <MenuItem Header="_Undo" />
                         <Separator />
@@ -73,7 +68,6 @@
                 </MenuFlyout>
             </Button.Flyout>
         </Button>
-
         <ToggleButton
             Name="ShowLeftToolMenuButton"
             Background="Transparent"
@@ -88,22 +82,18 @@
                     </Setter>
                 </Style>
             </ToggleButton.Styles>
-
             <avalonia:MaterialIcon
                 Width="28"
                 Height="28"
                 Kind="MenuOpen"
                 />
-
         </ToggleButton>
-
         <ToggleButton Background="Transparent" IsChecked="False">
             <avalonia:MaterialIcon
                 Width="28"
                 Height="28"
                 Kind="MenuOpen"
                 />
-
         </ToggleButton>
     </StackPanel>
 </UserControl>

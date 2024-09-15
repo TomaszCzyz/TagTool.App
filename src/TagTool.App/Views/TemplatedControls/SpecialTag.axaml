@@ -10,7 +10,6 @@
         <converters:MovePointXConverter x:Key="MovePointXConverter" />
         <converters:SolidColorBrushToColorConverter x:Key="SolidColorBrushToColorConverter" />
     </Styles.Resources>
-
     <Design.PreviewWith>
         <Panel>
             <StackPanel Margin="5" Spacing="1">
@@ -19,20 +18,15 @@
                     SpecialTagName="FileName"
                     Text="PartOfName"
                     />
-
                 <controls:SpecialTag SpecialTagName="FileName" Text="PartOfName" />
-
                 <controls:SpecialTag
                     Classes="LargeSpecialTag"
                     SpecialTagName="FileName"
                     Text="Tagname"
                     />
-
             </StackPanel>
         </Panel>
-
     </Design.PreviewWith>
-
     <Style Selector="controls|SpecialTag">
         <Setter Property="Background" Value="Transparent" />
         <Setter Property="BorderThickness" Value="1" />
@@ -49,7 +43,6 @@
                     ColumnDefinitions="Auto, Auto"
                     RowDefinitions="Auto, Auto"
                     >
-
                     <TextBlock
                         Name="PART_OutlineTextBlock"
                         Grid.Row="0"
@@ -75,7 +68,6 @@
                         BorderThickness="{TemplateBinding BorderThickness}"
                         CornerRadius="{TemplateBinding CornerRadius}"
                         />
-
                     <TextBlock
                         Name="MainTextBlock"
                         Grid.Row="1"
@@ -90,7 +82,6 @@
                         Foreground="{TemplateBinding Foreground}"
                         Text="{TemplateBinding Text}"
                         />
-
                     <!-- todo: clip to rectangle geometry in 'PART_MainTextBorder' would more more performant probably -->
                     <Rectangle
                         Name="PART_BorderClipRectangle"
@@ -103,7 +94,6 @@
                         VerticalAlignment="Top"
                         Fill="{TemplateBinding ClipRectangleFill}"
                         />
-
                     <Button
                         Name="PART_DeleteButton"
                         Grid.Row="1"
@@ -113,21 +103,17 @@
                         Margin="-4 2 4 2"
                         IsVisible="{TemplateBinding IsDeletable}"
                         >
-
                         <avalonia:MaterialIcon
                             Width="{Binding $parent.Width}"
                             Height="{Binding $parent.Height}"
                             Foreground="#999999"
                             Kind="Close"
                             />
-
                     </Button>
-
                 </Grid>
             </ControlTemplate>
         </Setter>
     </Style>
-
     <Style Selector="controls|SpecialTag.SmallSpecialTag">
         <Setter Property="FontSize" Value="8" />
         <Style Selector="^ /template/ Rectangle#PART_BorderClipRectangle">
@@ -137,7 +123,6 @@
             <Setter Property="Margin" Value="4 0 0 -2" />
         </Style>
     </Style>
-
     <Style Selector="controls|SpecialTag.LargeSpecialTag">
         <Setter Property="FontSize" Value="18" />
         <Style Selector="^ /template/ Rectangle#PART_BorderClipRectangle">

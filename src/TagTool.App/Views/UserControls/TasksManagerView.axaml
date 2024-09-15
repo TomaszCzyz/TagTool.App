@@ -11,11 +11,9 @@
     d:DesignHeight="800"
     mc:Ignorable="d"
     >
-
     <Design.DataContext>
         <vm:TasksManagerViewModel />
     </Design.DataContext>
-
     <ScrollViewer>
         <ItemsControl Padding="0" ItemsSource="{Binding TaskViewModels}">
             <ItemsControl.ItemTemplate>
@@ -37,4 +35,3 @@
         </ItemsControl>
     </ScrollViewer>
 </UserControl>
-

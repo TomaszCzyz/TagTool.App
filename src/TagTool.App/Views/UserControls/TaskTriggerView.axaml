@@ -35,11 +35,9 @@
             </Setter>
         </Style>
     </UserControl.Styles>
-
     <Design.DataContext>
         <vm:TaskTriggerViewModel />
     </Design.DataContext>
-
     <StackPanel>
         <ComboBox
             Name="TriggerTypeComboBox"
@@ -47,7 +45,6 @@
             ItemsSource="{Binding TriggerTypes, Mode=OneTime}"
             SelectedItem="{Binding TriggerTypeSelectedItem}"
             />
-
         <!-- Elements for 'schedule' option -->
         <StackPanel Name="CronInfoStackPanel" IsVisible="{Binding #TriggerTypeComboBox.SelectionBoxItem, Converter={StaticResource IsTriggerTypeScheduleConverter}}">
             <TextBlock
@@ -55,14 +52,12 @@
                 VerticalAlignment="Center"
                 Text="every:"
                 />
-
             <ComboBox
                 Name="CronComboBox"
                 MinWidth="125"
                 ItemsSource="{Binding PredefinedCronOptions, Mode=OneTime}"
                 SelectedItem="{Binding CronPredefineOptionSelectedItem}"
                 />
-
         </StackPanel>
         <!-- Elements for 'custom' option in 'schedule' type trigger -->
         <StackPanel>
@@ -78,7 +73,6 @@
                 Text="{Binding CustomCronText, Mode=TwoWay}"
                 Watermark="10-20 5 */3 * *"
                 />
-
             <TextBlock VerticalAlignment="Center" Text="{Binding #CustomCronTextBox.Text, Converter={StaticResource CronToDescriptionConverter}}" />
         </StackPanel>
         <!-- Elements for 'event' option -->
@@ -88,14 +82,12 @@
                 VerticalAlignment="Center"
                 Text="of type:"
                 />
-
             <ComboBox
                 MinWidth="125"
                 ItemsSource="{Binding EventTypes, Mode=OneTime}"
                 SelectedIndex="0"
                 SelectedItem="{Binding EventTypeSelectedItem}"
                 />
-
         </StackPanel>
     </StackPanel>
 </UserControl>

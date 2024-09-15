@@ -16,7 +16,6 @@
     d:DataContext="{x:Static dd:DesignData.TaggableItemsSearchViewModel}"
     Focusable="True"
     >
-
     <DockPanel Margin="2">
         <!-- Search Bar -->
         <views:TaggableItemsSearchBarView
@@ -24,7 +23,6 @@
             DockPanel.Dock="Top"
             DataContext="{Binding SearchBarViewModel, Mode=TwoWay}"
             />
-
         <!-- SearchResults -->
         <Panel>
             <ListBox
@@ -51,14 +49,12 @@
                 IsVisible="False"
                 Opacity="0.6"
                 >
-
                 <TextBlock
                     HorizontalAlignment="Center"
                     VerticalAlignment="Center"
                     FontSize="20"
                     Text="Drop file(s) or folder(s) here"
                     />
-
             </Border>
         </Panel>
     </DockPanel>

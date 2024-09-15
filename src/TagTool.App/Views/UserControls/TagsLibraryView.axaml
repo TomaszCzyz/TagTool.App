@@ -54,7 +54,6 @@
             />
     </UserControl.Resources>
 
-
     <Panel>
         <StackPanel Margin="0 0 0 0" Orientation="Vertical">
             <Expander
@@ -171,7 +170,6 @@
             CornerRadius="10"
             Click="AddTagButton_OnClick"
             >
-
             <avalonia:MaterialIcon
                 Width="40"
                 Height="40"
@@ -181,7 +179,6 @@
                 Kind="Add"
                 Opacity="0.6"
                 />
-
         </Button>
     </Panel>
 </UserControl>

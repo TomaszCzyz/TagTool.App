@@ -32,7 +32,6 @@
         <Style Selector="TextBox">
             <Style Selector="^:disabled">
                 <Setter Property="Foreground" Value="{TemplateBinding Foreground}" />
-
                 <Style Selector="^ /template/ Border#PART_BorderElement">
                     <Setter Property="Background" Value="{TemplateBinding Background}" />
                     <Setter Property="BorderBrush" Value="{TemplateBinding BorderBrush}" />
@@ -40,11 +39,9 @@
             </Style>
         </Style>
     </UserControl.Styles>
-
     <Design.DataContext>
         <vm:TaskViewModel />
     </Design.DataContext>
-
     <StackPanel
         Margin="5"
         Orientation="Vertical"
@@ -69,13 +66,11 @@
                 </Style>
             </views:TaggableItemsSearchBarView.Styles>
         </views:TaggableItemsSearchBarView>
-
         <TextBlock
             Foreground="Red"
             IsVisible="{Binding TagQueryError, Converter={x:Static StringConverters.IsNotNullOrEmpty}}"
             Text="{Binding TagQueryError}"
             />
-
         <TextBlock Text="executed on:" />
         <ItemsControl
             Name="TriggersItemsControl"
@@ -88,7 +83,6 @@
                 </DataTemplate>
             </ItemsControl.ItemTemplate>
         </ItemsControl>
-
         <Button Command="{Binding AddTriggerCommand}" IsVisible="{Binding IsEditing}">
             <avalonia:MaterialIcon Kind="Plus" />
         </Button>
@@ -115,20 +109,17 @@
             IsVisible="{Binding SelectedJobError, Converter={x:Static StringConverters.IsNotNullOrEmpty}}"
             Text="{Binding SelectedJobError}"
             />
-
         <TextBlock Text="with arguments:" />
         <TextBox
             Name="JobArgumentsTextBox"
             IsEnabled="{Binding IsEditing}"
             Text="{Binding JobArguments}"
             />
-
         <TextBlock
             Foreground="Red"
             IsVisible="{Binding JobAttributesError, Converter={x:Static StringConverters.IsNotNullOrEmpty}}"
             Text="{Binding JobAttributesError}"
             />
-
         <!-- Edit/Save buttons -->
         <ToggleButton
             Name="SaveEditToggleButton"

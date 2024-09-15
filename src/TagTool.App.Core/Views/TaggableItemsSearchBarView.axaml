@@ -26,7 +26,6 @@
             OutputMax="1.0"
             OutputMin="0.0"
             />
-
         <converters:TextDecorationsConverter x:Key="TextDecorationsConverter" />
     </UserControl.Resources>
     <UserControl.Styles>
@@ -34,7 +33,6 @@
             <Style Selector="^ /template/ ContentPresenter#PART_ContentPresenter">
                 <Setter Property="Background" Value="Transparent" />
             </Style>
-
             <Style Selector="^:pointerover /template/ ContentPresenter#PART_ContentPresenter">
                 <Setter Property="Background" Value="{DynamicResource ToggleButtonBackgroundCheckedPointerOver}" />
             </Style>
@@ -50,11 +48,9 @@
             </Setter>
         </Style>
     </UserControl.Styles>
-
     <Design.DataContext>
         <viewModels:TaggableItemsSearchBarViewModel />
     </Design.DataContext>
-
     <!-- Search Bar -->
     <Border
         Name="SearchBarBorder"
@@ -71,7 +67,6 @@
                 <BrushTransition Property="BorderBrush" Duration="0:0:0.2" />
             </Transitions>
         </Border.Transitions>
-
         <Grid
             Name="SearchBarGrid"
             VerticalAlignment="Top"
@@ -100,15 +95,12 @@
                     <Setter Property="Margin" Value="2" />
                     <Setter Property="Opacity" Value="0.5" />
                     <Setter Property="MaxHeight" Value="30" />
-
                     <Style Selector="^:pointerover">
                         <Setter Property="Opacity" Value="1" />
                     </Style>
-
                     <Style Selector="^:selected">
                         <Setter Property="Opacity" Value="1" />
                     </Style>
-
                     <Style Selector="^:pointerover /template/ ContentPresenter#PART_ContentPresenter, ^:selected /template/ ContentPresenter#PART_ContentPresenter">
                         <Setter Property="Background" Value="Transparent" />
                     </Style>
@@ -116,7 +108,6 @@
                 <Style Selector="TextBox.Transparent">
                     <Setter Property="BorderThickness" Value="0" />
                     <Setter Property="Background" Value="Transparent" />
-
                     <!-- pointerover -->
                     <Style Selector="^:pointerover, ^:focus-within, ^:focus">
                         <Style Selector="^ /template/ Border#PART_BorderElement">
@@ -129,7 +120,6 @@
                     <Setter Property="Background" Value="Transparent" />
                 </Style>
             </Grid.Styles>
-
             <Button
                 Grid.Column="0"
                 Margin="10 0 -2 0"
@@ -137,7 +127,6 @@
                 Background="Transparent"
                 Command="{ReflectionBinding CommitSearchCommand}"
                 >
-
                 <avalonia:MaterialIcon
                     Width="20"
                     Height="20"
@@ -146,16 +135,13 @@
                     Foreground="{StaticResource MyLightSecondary500}"
                     Kind="Magnify"
                     />
-
             </Button>
-
             <!-- SearchBar's query -->
             <ScrollViewer
                 Grid.Column="1"
                 HorizontalAlignment="Stretch"
                 VerticalAlignment="Top"
                 >
-
                 <!-- Query box -->
                 <ListBox
                     Name="TagsListBox"
@@ -187,19 +173,16 @@
                                                 CommandParameter="{x:Static models:QuerySegmentState.Include}"
                                                 Header="Include"
                                                 />
-
                                             <MenuItem
                                                 Command="{ReflectionBinding #UserControlRoot.((viewModels:TaggableItemsSearchBarViewModel)DataContext).UpdateQuerySegmentStateCommand, FallbackValue=null}"
                                                 CommandParameter="{x:Static models:QuerySegmentState.Exclude}"
                                                 Header="Exclude"
                                                 />
-
                                             <MenuItem
                                                 Command="{ReflectionBinding #UserControlRoot.((viewModels:TaggableItemsSearchBarViewModel)DataContext).UpdateQuerySegmentStateCommand, FallbackValue=null}"
                                                 CommandParameter="{x:Static models:QuerySegmentState.MustBePresent}"
                                                 Header="MustBePresent"
                                                 />
-
                                         </MenuFlyout>
                                     </ContentControl.ContextFlyout>
                                     <ContentControl.Styles>
@@ -213,7 +196,6 @@
                                                     FallbackValue="null"
                                                     Path="$parent[Grid].((models:QuerySegment)DataContext).State"
                                                     />
-
                                             </Setter>
                                             <Setter Property="Margin" Value="4 1" />
                                             <Setter Property="VerticalAlignment" Value="Center" />
@@ -222,7 +204,6 @@
                                         </Style>
                                     </ContentControl.Styles>
                                 </ContentControl>
-
                                 <Button
                                     Grid.Column="1"
                                     Classes="Transparent"
@@ -236,7 +217,6 @@
                                     CornerRadius="100"
                                     Opacity="{Binding $parent[ListBoxItem].Opacity, Converter={StaticResource DoubleRangeConverter}}"
                                     >
-
                                     <avalonia:MaterialIcon
                                         Width="{Binding $parent.Width}"
                                         Height="{Binding $parent.Height}"
@@ -245,11 +225,9 @@
                                         Foreground="{StaticResource MyLightSecondary500}"
                                         Kind="Close"
                                         />
-
                                 </Button>
                             </Grid>
                         </DataTemplate>
-
                         <DataTemplate x:CompileBindings="False" DataType="models:TextBoxMarker">
                             <AutoCompleteBox
                                 Background="Transparent"
@@ -272,7 +250,6 @@
                                     <Style Selector="TextBox">
                                         <Setter Property="BorderThickness" Value="0" />
                                         <Setter Property="Background" Value="Transparent" />
-
                                         <!-- pointerover -->
                                         <Style Selector="^:pointerover, ^:focus-within, ^:focus">
                                             <Style Selector="^ /template/ Border#PART_BorderElement">
@@ -290,7 +267,6 @@
                     </ListBox.DataTemplates>
                 </ListBox>
             </ScrollViewer>
-
             <!-- Record button -->
             <ToggleButton
                 Grid.Column="2"
@@ -315,7 +291,6 @@
                 <!--     </Style> -->
                 <!--  -->
                 <!-- </ToggleButton.Styles> -->
-
                 <Panel MaxHeight="20">
                     <avalonia:MaterialIcon Kind="Microphone">
                         <avalonia:MaterialIcon.IsVisible>
@@ -325,7 +300,6 @@
                             </MultiBinding>
                         </avalonia:MaterialIcon.IsVisible>
                     </avalonia:MaterialIcon>
-
                     <ProgressBar
                         Width="10"
                         MinWidth="10"
@@ -337,7 +311,6 @@
                         Orientation="Vertical"
                         Value="{Binding VoiceIntensity}"
                         />
-
                     <controls:ProgressRing
                         Width="20"
                         Height="20"
@@ -347,7 +320,6 @@
                         Foreground="{StaticResource MyLightSecondary500}"
                         IsActive="{Binding RecordAudioCommand.IsRunning}"
                         />
-
                 </Panel>
             </ToggleButton>
         </Grid>

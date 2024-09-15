@@ -15,21 +15,17 @@
     Title="NameSpecialTagDialog"
     WindowStartupLocation="CenterOwner"
     >
-
     <Grid
         Margin="10"
         ColumnDefinitions="Auto"
         RowDefinitions="Auto,Auto,Auto"
         >
-
         <TextBlock Name="QuestionTextBlock" Grid.Row="0" />
-
         <CheckBox
             Name="RememberChoiceCheckBox"
             Grid.Row="1"
             Content="remember my choice"
             />
-
         <StackPanel
             Grid.Row="2"
             Margin="0 10 0 0"
@@ -37,13 +33,11 @@
             Orientation="Horizontal"
             Spacing="10"
             >
-
             <Button
                 Name="YesButton"
                 Content="Yes"
                 Click="YesButton_OnClick"
                 />
-
             <Button Content="No" Click="NoButton_OnClick" />
         </StackPanel>
     </Grid>

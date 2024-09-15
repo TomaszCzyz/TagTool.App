@@ -31,9 +31,7 @@
             </ExperimentalAcrylicBorder.Material>
         </ExperimentalAcrylicBorder>
         <Grid RowDefinitions="48,*">
-
             <TextBlock Grid.Row="0" Text="Titlebar" />
-
             <!-- <views:TitleBar -->
             <!-- x:Name="TitleBarControl" -->
             <!-- Grid.Row="0" -->
@@ -41,7 +39,6 @@
             <!-- IsMultiSelection="{x:Bind ViewModel.NeighboringItemsQuery.IsMultipleFilesActivation, Mode=OneWay}" -->
             <!-- Item="{x:Bind ViewModel.CurrentItem, Mode=OneWay}" -->
             <!-- NumberOfFiles="{x:Bind ViewModel.Items.Count, Mode=OneWay}" /> -->
-
 
             <views:TaggableItemPreviewer
                 Name="TaggableItemPreviewerView"
@@ -51,7 +48,6 @@
                 SizeChanged="TaggableItemPreviewerView_OnSizeChanged"
                 Loaded="Control_OnLoaded"
                 />
-
         </Grid>
     </Panel>
 </Window>

@@ -50,16 +50,13 @@
                         DataContext="{Binding $parent}"
                         IsChecked="{Binding IsChecked, RelativeSource={RelativeSource TemplatedParent}, Mode=TwoWay}"
                         />
-
                 </ControlTemplate>
             </Setter>
         </Style>
     </Window.Styles>
-
     <Design.DataContext>
         <vm:MainWindowViewModel />
     </Design.DataContext>
-
     <Panel
         KeyUp="MainWindow_OnKeyUp"
         PointerWheelChanged="MainWindow_OnPointerWheelChanged"
@@ -76,7 +73,6 @@
             </ExperimentalAcrylicBorder.Material>
         </ExperimentalAcrylicBorder>
         <Grid ColumnDefinitions="*" RowDefinitions="Auto,*">
-
             <!-- Top menu -->
             <Border
                 Grid.Row="0"
@@ -86,10 +82,8 @@
                 PointerPressed="InputElement_OnPointerPressed"
                 PointerReleased="InputElement_OnPointerReleased"
                 >
-
                 <userControls:MenuView />
             </Border>
-
             <!-- Main content -->
             <Border Grid.Row="1">
                 <Border.Styles>
@@ -104,13 +98,11 @@
                                             Padding="0"
                                             Kind="Plus"
                                             />
-
                                         <Popup
                                             IsLightDismissEnabled="True"
                                             IsOpen="{Binding $parent[ToggleButton].IsChecked, Mode=TwoWay}"
                                             PlacementTarget="{Binding $parent[ToggleButton]}"
                                             >
-
                                             <Border
                                                 Margin="0"
                                                 Padding="0"
@@ -124,7 +116,6 @@
                                                         <Setter Property="Padding" Value="0" />
                                                     </Style>
                                                 </Border.Styles>
-
                                                 <ListBox ItemsSource="{ReflectionBinding ElementName=RootWindow, Path=DataContext.Tools, FallbackValue=null}">
                                                     <ListBox.ItemTemplate>
                                                         <DataTemplate x:CompileBindings="False">
@@ -134,7 +125,6 @@
                                                                 HorizontalAlignment="Stretch"
                                                                 Click="Button_OnClick"
                                                                 >
-
                                                                 <TextBlock Text="{Binding .}" />
                                                             </Button>
                                                         </DataTemplate>
@@ -172,10 +162,8 @@
                         SelectionMode="Single"
                         WrapSelection="True"
                         />
-
                 </Border>
             </Popup>
-
         </Grid>
     </Panel>
 </Window>

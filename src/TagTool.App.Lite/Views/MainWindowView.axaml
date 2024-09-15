@@ -23,11 +23,9 @@
     PointerPressed="InputElement_OnPointerPressed"
     PointerReleased="InputElement_OnPointerReleased"
     >
-
     <Design.DataContext>
         <vm:MainWindowViewModel />
     </Design.DataContext>
-
     <DockPanel Name="TopMostDockPanel">
         <Grid DockPanel.Dock="Top" ColumnDefinitions="*, Auto">
             <!-- Search Bar -->
@@ -37,7 +35,6 @@
                 Focusable="True"
                 Loaded="TagsSearchBar_OnLoaded"
                 />
-
             <Grid
                 Grid.Column="1"
                 ColumnDefinitions="*, *"
@@ -57,7 +54,6 @@
                         Foreground="#999999"
                         Kind="NewBox"
                         />
-
                 </Button>
                 <Button
                     Grid.Row="0"
@@ -72,7 +68,6 @@
                         Foreground="#999999"
                         Kind="Close"
                         />
-
                 </Button>
                 <Button
                     Grid.Row="1"
@@ -88,11 +83,9 @@
                         Foreground="#999999"
                         Kind="OpenInNew"
                         />
-
                 </Button>
             </Grid>
         </Grid>
-
         <!-- Results panel -->
         <StackPanel>
             <!-- Query result -->
@@ -117,7 +110,6 @@
                     IsVisible="{Binding !#TaggableItemsListBox.ItemCount}"
                     Text="No items matching given query"
                     />
-
             </Panel>
             <Grid
                 ColumnDefinitions="* Auto *"
@@ -146,5 +138,4 @@
             </Panel>
         </StackPanel>
     </DockPanel>
-
 </Window>

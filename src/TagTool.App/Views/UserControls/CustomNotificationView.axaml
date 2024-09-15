@@ -9,11 +9,9 @@
     d:DesignWidth="400"
     d:DesignHeight="300"
     >
-
     <Design.DataContext>
         <userControls:NotificationViewModel />
     </Design.DataContext>
-
     <Border
         MinHeight="20"
         Padding="12"
@@ -21,7 +19,6 @@
         BorderThickness="1"
         CornerRadius="4"
         >
-
         <Grid ColumnDefinitions="Auto,*">
             <Panel
                 Width="25"
@@ -29,7 +26,6 @@
                 Margin="0 0 12 0"
                 VerticalAlignment="Top"
                 >
-
                 <TextBlock
                     VerticalAlignment="Center"
                     FontFamily="Segoe UI Symbol"
@@ -37,23 +33,19 @@
                     Text="&#xE115;"
                     TextAlignment="Center"
                     />
-
             </Panel>
-
             <DockPanel Grid.Column="1">
                 <TextBlock
                     DockPanel.Dock="Top"
                     FontWeight="Medium"
                     Text="{Binding Title}"
                     />
-
                 <TextBlock
                     Margin="0 8 0 0"
                     Opacity=".8"
                     Text="{Binding Message}"
                     TextWrapping="Wrap"
                     />
-
             </DockPanel>
         </Grid>
     </Border>

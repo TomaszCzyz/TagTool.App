@@ -12,11 +12,9 @@
     d:DesignHeight="450"
     mc:Ignorable="d"
     >
-
     <Design.DataContext>
         <viewModels:TaggableItemPreviewerViewModel />
     </Design.DataContext>
-
     <Panel>
         <controls:ProgressRing
             Width="50"
@@ -24,7 +22,6 @@
             Foreground="White"
             IsActive="{Binding IsPreviewLoading}"
             />
-
         <ContentControl Content="{Binding Previewer}">
             <ContentControl.DataTemplates>
                 <DataTemplate DataType="previewers:RasterImagePreviewer">
@@ -37,7 +34,6 @@
                         ColumnDefinitions="150 250"
                         RowDefinitions="Auto"
                         >
-
                         <Border
                             Grid.Column="0"
                             BorderBrush="Beige"
@@ -50,9 +46,7 @@
                                 VerticalAlignment="Center"
                                 Source="{Binding Preview.IconPreview}"
                                 />
-
                         </Border>
-
                         <StackPanel
                             Grid.Column="1"
                             Margin="30"
@@ -60,7 +54,6 @@
                             Orientation="Vertical"
                             Spacing="8"
                             >
-
                             <TextBlock FontSize="20" Text="{Binding Preview.FileName}" />
                             <TextBlock Text="{Binding Preview.FileType, StringFormat='Type: {0}'}" />
                             <TextBlock Text="{Binding Preview.FileSize, StringFormat='Size: {0}'}" />
@@ -70,12 +63,10 @@
                 </DataTemplate>
             </ContentControl.DataTemplates>
         </ContentControl>
-
         <TextBlock
             Name="UnsupportedFilePreview"
             IsVisible="{Binding Previewer, Converter={x:Static ObjectConverters.IsNull}}"
             Text="Default"
             />
-
     </Panel>
 </UserControl>

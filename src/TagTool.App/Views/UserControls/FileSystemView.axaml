@@ -24,18 +24,15 @@
             StringToCompare="/"
             ValueWhenMatched="False"
             />
-
     </UserControl.Resources>
     <UserControl.Styles>
         <Style Selector="Button.Transparent">
             <Setter Property="Background" Value="Transparent" />
         </Style>
     </UserControl.Styles>
-
     <Design.DataContext>
         <userControls:FileSystemViewModel />
     </Design.DataContext>
-
     <Grid RowDefinitions="30,*,Auto">
         <!-- Address bar -->
         <Grid Grid.Row="0" ColumnDefinitions="Auto,Auto,Auto,*,Auto">
@@ -45,7 +42,6 @@
                     <Setter Property="Margin" Value="1 4" />
                     <Setter Property="Padding" Value="1" />
                     <Setter Property="CornerRadius" Value="6" />
-
                     <Style Selector="^:disabled /template/ ContentPresenter#PART_ContentPresenter">
                         <Setter Property="Background" Value="Transparent" />
                     </Style>
@@ -63,7 +59,6 @@
                     Foreground="White"
                     Kind="ArrowBack"
                     />
-
             </Button>
             <Button
                 Grid.Column="1"
@@ -77,7 +72,6 @@
                     Foreground="White"
                     Kind="ArrowForward"
                     />
-
             </Button>
             <Button
                 Grid.Column="2"
@@ -90,7 +84,6 @@
                     Foreground="White"
                     Kind="ArrowUpward"
                     />
-
             </Button>
             <TextBox
                 Name="AddressTextBox"
@@ -113,7 +106,6 @@
                 Margin="5 0 0 0"
                 IsVisible="{Binding !IsEditing}"
                 >
-
                 <ItemsControl
                     DockPanel.Dock="Left"
                     HorizontalAlignment="Left"
@@ -142,14 +134,12 @@
                                     Content="{Binding Name}"
                                     IsVisible="{Binding Name, Converter={StaticResource IsLinuxRootDirConverter}}"
                                     />
-
                                 <Button
                                     x:Name="PopupButton"
                                     Classes="ButtonAddressBar Transparent"
                                     Command="{Binding OpenPopupCommand}"
                                     Content="{x:Static io:Path.DirectorySeparatorChar}"
                                     />
-
                                 <Popup
                                     IsLightDismissEnabled="True"
                                     IsOpen="{Binding IsPopupOpen, Mode=TwoWay}"
@@ -174,7 +164,6 @@
                     Background="Transparent"
                     PointerPressed="Border_OnPointerPressed"
                     />
-
             </DockPanel>
             <Border
                 Grid.Column="4"
@@ -210,20 +199,17 @@
                     VerticalAlignment="Center"
                     IsChecked="{Binding AreTagsVisible}"
                     >
-
                     <Panel>
                         <avalonia:MaterialIcon
                             Classes="tb-checked"
                             IsVisible="{ReflectionBinding !$parent[ToggleButton].IsChecked}"
                             Kind="VisibilityOutline"
                             />
-
                         <avalonia:MaterialIcon
                             Classes="tb-unchecked"
                             IsVisible="{ReflectionBinding $parent[ToggleButton].IsChecked}"
                             Kind="VisibilityOffOutline"
                             />
-
                     </Panel>
                 </ToggleButton>
             </Border>
@@ -266,14 +252,12 @@
             IsVisible="{Binding #FuzzySearchTextBlock.Text, Converter={x:Static StringConverters.IsNotNullOrEmpty}}"
             Opacity="0.7"
             >
-
             <DockPanel>
                 <avalonia:MaterialIcon
                     DockPanel.Dock="Left"
                     Margin="4 0 0 0"
                     Kind="Search"
                     />
-
                 <TextBlock Name="FuzzySearchTextBlock" Padding="4" />
             </DockPanel>
         </Border>
@@ -284,20 +268,17 @@
                 FontSize="12"
                 Text="{Binding Items.Count, StringFormat=\{0\} items |}"
                 />
-
             <TextBlock
                 Name="TextBlockSelectedItems"
                 Margin="5 2 0 0"
                 FontSize="12"
                 Text=""
                 />
-
         </StackPanel>
         <ProgressBar
             Grid.Row="2"
             IsIndeterminate="True"
             IsVisible="False"
             />
-
     </Grid>
 </UserControl>
