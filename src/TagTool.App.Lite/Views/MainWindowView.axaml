@@ -6,6 +6,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:viewModels="clr-namespace:TagTool.App.Core.ViewModels;assembly=TagTool.App.Core"
     xmlns:views="clr-namespace:TagTool.App.Core.Views;assembly=TagTool.App.Core"
+    xmlns:views1="clr-namespace:TagTool.App.Lite.Views"
     xmlns:vm="using:TagTool.App.Lite.ViewModels"
     x:Class="TagTool.App.Lite.Views.MainWindowView"
     x:DataType="vm:MainWindowViewModel"
@@ -40,52 +41,46 @@
                 ColumnDefinitions="*, *"
                 RowDefinitions="*, *"
                 >
+                <Grid.Styles>
+                    <Style Selector="Button">
+                        <Setter Property="Margin" Value="3 0" />
+                        <Setter Property="Padding" Value="0" />
+                        <Setter Property="Background" Value="Transparent" />
+                    </Style>
+                    <Style Selector="avalonia|MaterialIcon">
+                        <Setter Property="Height" Value="20" />
+                        <Setter Property="Foreground" Value="#999999" />
+                    </Style>
+                </Grid.Styles>
                 <Button
                     Grid.Row="0"
                     Grid.Column="0"
-                    Margin="3 0"
-                    Padding="0"
-                    Background="Transparent"
-                    Command="{Binding OpenTagToolAppCommand}"
                     ToolTip.Tip="Tag new files"
+                    Command="{Binding OpenTagToolAppCommand}"
                     >
-                    <avalonia:MaterialIcon
-                        Height="20"
-                        Foreground="#999999"
-                        Kind="NewBox"
-                        />
+                    <avalonia:MaterialIcon Kind="NewBox" />
                 </Button>
                 <Button
                     Grid.Row="0"
                     Grid.Column="1"
-                    Margin="3 0"
-                    Padding="0"
-                    Background="Transparent"
                     Click="CloseButton_OnClick"
                     >
-                    <avalonia:MaterialIcon
-                        Height="20"
-                        Foreground="#999999"
-                        Kind="Close"
-                        />
+                    <avalonia:MaterialIcon Kind="Close" />
                 </Button>
                 <Button
                     Grid.Row="1"
                     Grid.Column="1"
-                    Margin="3 0"
-                    Padding="0"
-                    Background="Transparent"
-                    Command="{Binding OpenTagToolAppCommand}"
                     ToolTip.Tip="Open TagTool app"
+                    Command="{Binding OpenTagToolAppCommand}"
                     >
-                    <avalonia:MaterialIcon
-                        Height="20"
-                        Foreground="#999999"
-                        Kind="OpenInNew"
-                        />
+                    <avalonia:MaterialIcon Kind="OpenInNew" />
                 </Button>
             </Grid>
         </Grid>
+        <!-- New items panel -->
+        <StackPanel>
+            <views1:NewItemsPanel />
+        </StackPanel>
         <!-- Results panel -->
         <StackPanel>
             <!-- Query result -->
