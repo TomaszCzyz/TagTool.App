@@ -36,8 +36,27 @@
                 Focusable="True"
                 Loaded="TagsSearchBar_OnLoaded" />
 
-            <Grid Grid.Column="1" RowDefinitions="*, *">
+            <Grid
+                Grid.Column="1"
+                ColumnDefinitions="*, *"
+                RowDefinitions="*, *">
                 <Button
+                    Grid.Row="0"
+                    Grid.Column="0"
+                    Margin="3 0"
+                    Padding="0"
+                    Background="Transparent"
+                    Command="{Binding OpenTagToolAppCommand}"
+                    ToolTip.Tip="Tag new files">
+                    <avalonia:MaterialIcon
+                        Height="20"
+                        Foreground="#999999"
+                        Kind="NewBox" />
+
+                </Button>
+                <Button
+                    Grid.Row="0"
+                    Grid.Column="1"
                     Margin="3 0"
                     Padding="0"
                     Background="Transparent"
@@ -50,6 +69,7 @@
                 </Button>
                 <Button
                     Grid.Row="1"
+                    Grid.Column="1"
                     Margin="3 0"
                     Padding="0"
                     Background="Transparent"
