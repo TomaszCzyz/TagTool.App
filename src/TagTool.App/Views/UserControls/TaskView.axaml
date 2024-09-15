@@ -12,7 +12,8 @@
     Name="TaskViewRoot"
     d:DesignWidth="800"
     d:DesignHeight="650"
-    mc:Ignorable="d">
+    mc:Ignorable="d"
+    >
     <UserControl.Styles>
         <Style Selector="ComboBox">
             <Style Selector="^:disabled">
@@ -47,7 +48,8 @@
     <StackPanel
         Margin="5"
         Orientation="Vertical"
-        Spacing="10">
+        Spacing="10"
+        >
         <StackPanel Orientation="Horizontal">
             <TextBlock VerticalAlignment="Center" Text="Task with name " />
             <TextBlock FontWeight="Bold" Text="{Binding TaskId}" />
@@ -57,7 +59,8 @@
         <views:TaggableItemsSearchBarView
             Name="SearchBarView"
             DataContext="{Binding SearchBarViewModel, Mode=TwoWay}"
-            Focusable="True">
+            Focusable="True"
+            >
             <views:TaggableItemsSearchBarView.Styles>
                 <Style Selector="AutoCompleteBox">
                     <Setter Property="IsEnabled">
@@ -70,13 +73,15 @@
         <TextBlock
             Foreground="Red"
             IsVisible="{Binding TagQueryError, Converter={x:Static StringConverters.IsNotNullOrEmpty}}"
-            Text="{Binding TagQueryError}" />
+            Text="{Binding TagQueryError}"
+            />
 
         <TextBlock Text="executed on:" />
         <ItemsControl
             Name="TriggersItemsControl"
             IsVisible="{Binding !!Triggers.Count}"
-            ItemsSource="{Binding Triggers}">
+            ItemsSource="{Binding Triggers}"
+            >
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
                     <userControls:TaskTriggerView DataContext="{Binding .}" />
@@ -93,7 +98,8 @@
                 Name="JobComboBox"
                 IsEnabled="{Binding IsEditing}"
                 ItemsSource="{Binding $parent[userControls:TasksManagerView].((vm:TasksManagerViewModel)DataContext).Jobs, FallbackValue=null}"
-                SelectedItem="{Binding SelectedJob, Mode=TwoWay}">
+                SelectedItem="{Binding SelectedJob, Mode=TwoWay}"
+                >
                 <ComboBox.ItemTemplate>
                     <DataTemplate DataType="vm:JobInfo">
                         <StackPanel>
@@ -107,18 +113,21 @@
         <TextBlock
             Foreground="Red"
             IsVisible="{Binding SelectedJobError, Converter={x:Static StringConverters.IsNotNullOrEmpty}}"
-            Text="{Binding SelectedJobError}" />
+            Text="{Binding SelectedJobError}"
+            />
 
         <TextBlock Text="with arguments:" />
         <TextBox
             Name="JobArgumentsTextBox"
             IsEnabled="{Binding IsEditing}"
-            Text="{Binding JobArguments}" />
+            Text="{Binding JobArguments}"
+            />
 
         <TextBlock
             Foreground="Red"
             IsVisible="{Binding JobAttributesError, Converter={x:Static StringConverters.IsNotNullOrEmpty}}"
-            Text="{Binding JobAttributesError}" />
+            Text="{Binding JobAttributesError}"
+            />
 
         <!-- Edit/Save buttons -->
         <ToggleButton
@@ -127,7 +136,8 @@
             HorizontalAlignment="Right"
             VerticalAlignment="Bottom"
             Command="{Binding UpdateTaskCommand}"
-            IsChecked="{Binding IsEditing}">
+            IsChecked="{Binding IsEditing}"
+            >
             <Panel>
                 <avalonia:MaterialIcon IsVisible="{Binding !#SaveEditToggleButton.IsChecked}" Kind="Edit" />
                 <TextBlock IsVisible="{Binding #SaveEditToggleButton.IsChecked}" Text="Save" />

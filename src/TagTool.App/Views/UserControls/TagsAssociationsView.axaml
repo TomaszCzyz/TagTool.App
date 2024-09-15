@@ -15,7 +15,8 @@
     d:DesignWidth="600"
     d:DesignHeight="450"
     mc:Ignorable="d"
-    d:DataContext="{x:Static dd:DesignData.TagsAssociationsViewModel}">
+    d:DataContext="{x:Static dd:DesignData.TagsAssociationsViewModel}"
+    >
 
     <Panel>
         <DataGrid
@@ -24,7 +25,8 @@
             CanUserSortColumns="False"
             ItemsSource="{Binding AssociationData}"
             SelectedItem="{Binding SelectedItem}"
-            SelectionMode="Single">
+            SelectionMode="Single"
+            >
             <DataGrid.Resources>
                 <!-- ReSharper disable once Xaml.RedundantResource -->
                 <SolidColorBrush x:Key="DataGridCellFocusVisualPrimaryBrush" Color="Transparent" />
@@ -40,17 +42,20 @@
                 <DataGridTemplateColumn
                     Width="Auto"
                     Header="Group name"
-                    IsReadOnly="True">
+                    IsReadOnly="True"
+                    >
                     <DataTemplate DataType="vm:AssociationData">
                         <Border
                             Background="Transparent"
                             BorderBrush="Brown"
-                            BorderThickness="0">
+                            BorderThickness="0"
+                            >
                             <TextBlock
                                 HorizontalAlignment="Center"
                                 VerticalAlignment="Center"
                                 FontSize="12"
-                                Text="{Binding GroupName}" />
+                                Text="{Binding GroupName}"
+                                />
                         </Border>
                     </DataTemplate>
                 </DataGridTemplateColumn>
@@ -58,7 +63,8 @@
                 <DataGridTemplateColumn
                     Width="2*"
                     Header="Tags in group"
-                    IsReadOnly="True">
+                    IsReadOnly="True"
+                    >
                     <DataTemplate DataType="vm:AssociationData">
                         <Border BorderBrush="Chartreuse" BorderThickness="0">
                             <ItemsControl
@@ -66,7 +72,8 @@
                                 VerticalAlignment="Center"
                                 Background="Transparent"
                                 ItemsSource="{ReflectionBinding Synonyms}"
-                                Loaded="TagsInGroupCell_OnLoaded">
+                                Loaded="TagsInGroupCell_OnLoaded"
+                                >
                                 <ItemsControl.ItemsPanel>
                                     <ItemsPanelTemplate>
                                         <WrapPanel Orientation="Horizontal" />
@@ -100,7 +107,8 @@
                 <DataGridTemplateColumn
                     Width="2*"
                     Header="Ancestor groups"
-                    IsReadOnly="True">
+                    IsReadOnly="True"
+                    >
                     <DataTemplate DataType="vm:AssociationData">
                         <Border BorderBrush="Chartreuse" BorderThickness="0">
                             <ItemsControl VerticalAlignment="Center" ItemsSource="{ReflectionBinding Ancestors}">
@@ -128,7 +136,8 @@
             HorizontalAlignment="Right"
             VerticalAlignment="Bottom"
             Background="#225D5F61"
-            CornerRadius="10">
+            CornerRadius="10"
+            >
             <!-- Opacity="{Binding $parent[ListBoxItem].Opacity, Converter={StaticResource DoubleRangeConverter}}" -->
             <!-- Command="{ReflectionBinding #UserControlRoot.((viewModels:TaggableItemsSearchBarViewModel)DataContext).RemoveTagFromSearchQueryCommand, FallbackValue=null}" -->
             <!-- CommandParameter="{Binding .}" -->
@@ -140,7 +149,8 @@
                 VerticalAlignment="Center"
                 Foreground="#5D5F61"
                 Kind="Add"
-                Opacity="0.6" />
+                Opacity="0.6"
+                />
 
         </Button>
     </Panel>

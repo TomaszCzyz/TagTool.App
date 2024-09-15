@@ -14,7 +14,8 @@
     d:DesignWidth="450"
     d:DesignHeight="150"
     mc:Ignorable="d"
-    DragDrop.AllowDrop="True">
+    DragDrop.AllowDrop="True"
+    >
     <UserControl.Resources>
         <converters:TaggableItemToIconConverter x:Key="TaggableItemToToIconConverter" />
     </UserControl.Resources>
@@ -28,18 +29,21 @@
         Padding="6"
         Background="#00FFFFFF"
         BorderBrush="Transparent"
-        BorderThickness="2">
+        BorderThickness="2"
+        >
         <Grid
             Name="TopMostGrid"
             HorizontalAlignment="Left"
             VerticalAlignment="Center"
             ColumnDefinitions="30,Auto,*"
-            RowDefinitions="Auto">
+            RowDefinitions="Auto"
+            >
 
             <Image
                 Name="IconImage"
                 Grid.Column="0"
-                Margin="0 0 2 0">
+                Margin="0 0 2 0"
+                >
                 <Image.Source>
                     <MultiBinding Converter="{StaticResource TaggableItemToToIconConverter}">
                         <Binding Path="TaggableItem" />
@@ -53,7 +57,8 @@
                 Grid.Column="1"
                 HorizontalAlignment="Stretch"
                 VerticalAlignment="Center"
-                Text="{Binding DisplayName}">
+                Text="{Binding DisplayName}"
+                >
                 <TextBlock.ContextFlyout>
                     <MenuFlyout>
                         <MenuItem Header="Rename" />
@@ -71,13 +76,15 @@
                 Grid.Column="2"
                 BorderBrush="Green"
                 BorderThickness="0"
-                IsVisible="{Binding AreTagsVisible}">
+                IsVisible="{Binding AreTagsVisible}"
+                >
                 <ItemsControl
                     Margin="0"
                     Padding="5 0"
                     HorizontalAlignment="Left"
                     VerticalAlignment="Center"
-                    ItemsSource="{Binding AssociatedTags}">
+                    ItemsSource="{Binding AssociatedTags}"
+                    >
                     <ItemsControl.Styles>
                         <Style Selector="TextBlock">
                             <Setter Property="ContextFlyout">

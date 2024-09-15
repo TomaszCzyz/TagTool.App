@@ -5,7 +5,8 @@
     xmlns:local="using:TagTool.App"
     xmlns:system="clr-namespace:System;assembly=System.Runtime"
     x:Class="TagTool.App.App"
-    RequestedThemeVariant="Dark">
+    RequestedThemeVariant="Dark"
+    >
     <Application.DataTemplates>
         <local:ViewLocator />
     </Application.DataTemplates>

@@ -17,7 +17,8 @@
     ShowInTaskbar="False"
     SizeToContent="WidthAndHeight"
     Title="PreviewerWindow"
-    WindowStartupLocation="Manual">
+    WindowStartupLocation="Manual"
+    >
     <Panel>
         <ExperimentalAcrylicBorder IsHitTestVisible="False">
             <ExperimentalAcrylicBorder.Material>
@@ -25,7 +26,8 @@
                     BackgroundSource="Digger"
                     MaterialOpacity="0.65"
                     TintColor="Black"
-                    TintOpacity="1" />
+                    TintOpacity="1"
+                    />
             </ExperimentalAcrylicBorder.Material>
         </ExperimentalAcrylicBorder>
         <Grid RowDefinitions="48,*">
@@ -47,7 +49,8 @@
                 HorizontalAlignment="Center"
                 VerticalAlignment="Center"
                 SizeChanged="TaggableItemPreviewerView_OnSizeChanged"
-                Loaded="Control_OnLoaded" />
+                Loaded="Control_OnLoaded"
+                />
 
         </Grid>
     </Panel>

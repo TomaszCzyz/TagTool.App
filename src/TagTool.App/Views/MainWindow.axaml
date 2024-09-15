@@ -13,6 +13,8 @@
     d:DesignWidth="1400"
     d:DesignHeight="700"
     DragDrop.AllowDrop="True"
+    Width="1400"
+    Height="700"
     Background="Transparent"
     ExtendClientAreaChromeHints="Default"
     ExtendClientAreaTitleBarHeightHint="-1"
@@ -21,8 +23,7 @@
     Icon="/Assets/avalonia-logo.ico"
     Title="TagTool.App"
     TransparencyLevelHint="AcrylicBlur"
-    Width="1400"
-    Height="700">
+    >
     <Window.DataTemplates>
         <DataTemplate DataType="viewModels:NotificationViewModel">
             <userControls:CustomNotificationView />
@@ -32,7 +33,8 @@
         <KeyBinding
             Command="{ReflectionBinding FocusNextSearchTabCommand}"
             CommandParameter="{Binding #RootWindow}"
-            Gesture="Ctrl+Q" />
+            Gesture="Ctrl+Q"
+            />
     </Window.KeyBindings>
     <Window.Styles>
         <Style Selector="Border.MenuPanel">
@@ -46,7 +48,8 @@
                         Background="Transparent"
                         Content="{Binding Content, RelativeSource={RelativeSource TemplatedParent}, Mode=TwoWay}"
                         DataContext="{Binding $parent}"
-                        IsChecked="{Binding IsChecked, RelativeSource={RelativeSource TemplatedParent}, Mode=TwoWay}" />
+                        IsChecked="{Binding IsChecked, RelativeSource={RelativeSource TemplatedParent}, Mode=TwoWay}"
+                        />
 
                 </ControlTemplate>
             </Setter>
@@ -60,14 +63,16 @@
     <Panel
         KeyUp="MainWindow_OnKeyUp"
         PointerWheelChanged="MainWindow_OnPointerWheelChanged"
-        KeyDown="MainWindow_OnKeyDown">
+        KeyDown="MainWindow_OnKeyDown"
+        >
         <ExperimentalAcrylicBorder IsHitTestVisible="False">
             <ExperimentalAcrylicBorder.Material>
                 <ExperimentalAcrylicMaterial
                     BackgroundSource="Digger"
                     MaterialOpacity="0.65"
                     TintColor="Black"
-                    TintOpacity="1" />
+                    TintOpacity="1"
+                    />
             </ExperimentalAcrylicBorder.Material>
         </ExperimentalAcrylicBorder>
         <Grid ColumnDefinitions="*" RowDefinitions="Auto,*">
@@ -79,7 +84,8 @@
                 Margin="-1 -1 -1 0"
                 PointerMoved="InputElement_OnPointerMoved"
                 PointerPressed="InputElement_OnPointerPressed"
-                PointerReleased="InputElement_OnPointerReleased">
+                PointerReleased="InputElement_OnPointerReleased"
+                >
 
                 <userControls:MenuView />
             </Border>
@@ -96,17 +102,20 @@
                                             Width="20"
                                             Height="20"
                                             Padding="0"
-                                            Kind="Plus" />
+                                            Kind="Plus"
+                                            />
 
                                         <Popup
                                             IsLightDismissEnabled="True"
                                             IsOpen="{Binding $parent[ToggleButton].IsChecked, Mode=TwoWay}"
-                                            PlacementTarget="{Binding $parent[ToggleButton]}">
+                                            PlacementTarget="{Binding $parent[ToggleButton]}"
+                                            >
 
                                             <Border
                                                 Margin="0"
                                                 Padding="0"
-                                                BorderThickness="1">
+                                                BorderThickness="1"
+                                                >
                                                 <Border.BorderBrush>
                                                     <SolidColorBrush Opacity="0.3" Color="Black" />
                                                 </Border.BorderBrush>
@@ -123,7 +132,8 @@
                                                                 Margin="0"
                                                                 Padding="0"
                                                                 HorizontalAlignment="Stretch"
-                                                                Click="Button_OnClick">
+                                                                Click="Button_OnClick"
+                                                                >
 
                                                                 <TextBlock Text="{Binding .}" />
                                                             </Button>
@@ -148,17 +158,20 @@
                 IsLightDismissEnabled="True"
                 IsOpen="False"
                 Placement="Center"
-                WindowManagerAddShadowHint="True">
+                WindowManagerAddShadowHint="True"
+                >
                 <Border
                     Width="250"
                     Height="300"
                     ClipToBounds="True"
                     CornerRadius="10"
-                    ZIndex="1">
+                    ZIndex="1"
+                    >
                     <ListBox
                         Name="SwitcherListBox"
                         SelectionMode="Single"
-                        WrapSelection="True" />
+                        WrapSelection="True"
+                        />
 
                 </Border>
             </Popup>

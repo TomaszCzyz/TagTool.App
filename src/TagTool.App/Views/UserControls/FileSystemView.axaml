@@ -16,12 +16,14 @@
     d:DesignWidth="800"
     d:DesignHeight="700"
     mc:Ignorable="d"
-    Focusable="True">
+    Focusable="True"
+    >
     <UserControl.Resources>
         <converters:StringToBoolConverter
             x:Key="IsLinuxRootDirConverter"
             StringToCompare="/"
-            ValueWhenMatched="False" />
+            ValueWhenMatched="False"
+            />
 
     </UserControl.Resources>
     <UserControl.Styles>
@@ -53,35 +55,41 @@
                 Grid.Column="0"
                 Classes="NavigationButton"
                 Command="{CompiledBinding NavigateBackCommand}"
-                IsEnabled="{Binding !CanNavigateBack}">
+                IsEnabled="{Binding !CanNavigateBack}"
+                >
                 <avalonia:MaterialIcon
                     Width="20"
                     Height="20"
                     Foreground="White"
-                    Kind="ArrowBack" />
+                    Kind="ArrowBack"
+                    />
 
             </Button>
             <Button
                 Grid.Column="1"
                 Classes="NavigationButton"
                 Command="{Binding NavigateForwardCommand}"
-                IsEnabled="{Binding !CanNavigateForward}">
+                IsEnabled="{Binding !CanNavigateForward}"
+                >
                 <avalonia:MaterialIcon
                     Width="20"
                     Height="20"
                     Foreground="White"
-                    Kind="ArrowForward" />
+                    Kind="ArrowForward"
+                    />
 
             </Button>
             <Button
                 Grid.Column="2"
                 Classes="NavigationButton"
-                Command="{Binding NavigateUpCommand}">
+                Command="{Binding NavigateUpCommand}"
+                >
                 <avalonia:MaterialIcon
                     Width="20"
                     Height="20"
                     Foreground="White"
-                    Kind="ArrowUpward" />
+                    Kind="ArrowUpward"
+                    />
 
             </Button>
             <TextBox
@@ -92,7 +100,8 @@
                 BorderThickness="0"
                 IsVisible="{Binding IsEditing}"
                 Text="{Binding AddressTextBox}"
-                LostFocus="AddressTextBox_OnLostFocus">
+                LostFocus="AddressTextBox_OnLostFocus"
+                >
                 <TextBox.KeyBindings>
                     <KeyBinding Command="{CompiledBinding CancelAddressChangeCommand}" Gesture="Escape" />
                     <KeyBinding Command="{CompiledBinding CommitAddressCommand}" Gesture="Enter" />
@@ -102,13 +111,15 @@
             <DockPanel
                 Grid.Column="3"
                 Margin="5 0 0 0"
-                IsVisible="{Binding !IsEditing}">
+                IsVisible="{Binding !IsEditing}"
+                >
 
                 <ItemsControl
                     DockPanel.Dock="Left"
                     HorizontalAlignment="Left"
                     ItemsSource="{Binding AddressSegments}"
-                    PropertyChanged="AvaloniaObject_OnPropertyChanged">
+                    PropertyChanged="AvaloniaObject_OnPropertyChanged"
+                    >
                     <ItemsControl.ItemsPanel>
                         <ItemsPanelTemplate>
                             <StackPanel Orientation="Horizontal" />
@@ -129,18 +140,21 @@
                                     Classes="ButtonAddressBar Transparent"
                                     Command="{Binding NavigateHereCommand}"
                                     Content="{Binding Name}"
-                                    IsVisible="{Binding Name, Converter={StaticResource IsLinuxRootDirConverter}}" />
+                                    IsVisible="{Binding Name, Converter={StaticResource IsLinuxRootDirConverter}}"
+                                    />
 
                                 <Button
                                     x:Name="PopupButton"
                                     Classes="ButtonAddressBar Transparent"
                                     Command="{Binding OpenPopupCommand}"
-                                    Content="{x:Static io:Path.DirectorySeparatorChar}" />
+                                    Content="{x:Static io:Path.DirectorySeparatorChar}"
+                                    />
 
                                 <Popup
                                     IsLightDismissEnabled="True"
                                     IsOpen="{Binding IsPopupOpen, Mode=TwoWay}"
-                                    PlacementTarget="{ReflectionBinding #PopupButton}">
+                                    PlacementTarget="{ReflectionBinding #PopupButton}"
+                                    >
                                     <ContextMenu ItemsSource="{Binding Children}">
                                         <ContextMenu.Styles>
                                             <Style Selector="MenuItem">
@@ -158,14 +172,16 @@
                 <Border
                     HorizontalAlignment="Stretch"
                     Background="Transparent"
-                    PointerPressed="Border_OnPointerPressed" />
+                    PointerPressed="Border_OnPointerPressed"
+                    />
 
             </DockPanel>
             <Border
                 Grid.Column="4"
                 Width="{Binding $self.Bounds.Height}"
                 BorderBrush="Green"
-                BorderThickness="0">
+                BorderThickness="0"
+                >
                 <Border.Styles>
                     <Style Selector="avalonia|MaterialIcon">
                         <Setter Property="Width" Value="20" />
@@ -192,18 +208,21 @@
                     Padding="0"
                     HorizontalAlignment="Center"
                     VerticalAlignment="Center"
-                    IsChecked="{Binding AreTagsVisible}">
+                    IsChecked="{Binding AreTagsVisible}"
+                    >
 
                     <Panel>
                         <avalonia:MaterialIcon
                             Classes="tb-checked"
                             IsVisible="{ReflectionBinding !$parent[ToggleButton].IsChecked}"
-                            Kind="VisibilityOutline" />
+                            Kind="VisibilityOutline"
+                            />
 
                         <avalonia:MaterialIcon
                             Classes="tb-unchecked"
                             IsVisible="{ReflectionBinding $parent[ToggleButton].IsChecked}"
-                            Kind="VisibilityOffOutline" />
+                            Kind="VisibilityOffOutline"
+                            />
 
                     </Panel>
                 </ToggleButton>
@@ -221,7 +240,8 @@
             ItemsSource="{Binding Items}"
             SelectedItem="{Binding SelectedItem}"
             SelectionMode="Multiple"
-            SelectionChanged="FolderContent_OnSelectionChanged">
+            SelectionChanged="FolderContent_OnSelectionChanged"
+            >
             <ListBox.Styles>
                 <Style Selector="ListBoxItem">
                     <Setter Property="Padding" Value="2" />
@@ -244,13 +264,15 @@
             Background="Orange"
             CornerRadius="4"
             IsVisible="{Binding #FuzzySearchTextBlock.Text, Converter={x:Static StringConverters.IsNotNullOrEmpty}}"
-            Opacity="0.7">
+            Opacity="0.7"
+            >
 
             <DockPanel>
                 <avalonia:MaterialIcon
                     DockPanel.Dock="Left"
                     Margin="4 0 0 0"
-                    Kind="Search" />
+                    Kind="Search"
+                    />
 
                 <TextBlock Name="FuzzySearchTextBlock" Padding="4" />
             </DockPanel>
@@ -260,19 +282,22 @@
             <TextBlock
                 Margin="5 2 0 0"
                 FontSize="12"
-                Text="{Binding Items.Count, StringFormat=\{0\} items |}" />
+                Text="{Binding Items.Count, StringFormat=\{0\} items |}"
+                />
 
             <TextBlock
                 Name="TextBlockSelectedItems"
                 Margin="5 2 0 0"
                 FontSize="12"
-                Text="" />
+                Text=""
+                />
 
         </StackPanel>
         <ProgressBar
             Grid.Row="2"
             IsIndeterminate="True"
-            IsVisible="False" />
+            IsVisible="False"
+            />
 
     </Grid>
 </UserControl>

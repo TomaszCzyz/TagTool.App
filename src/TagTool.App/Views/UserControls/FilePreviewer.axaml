@@ -8,7 +8,8 @@
     x:DataType="userControls:FilePreviewerViewModel"
     d:DesignWidth="500"
     d:DesignHeight="250"
-    mc:Ignorable="d">
+    mc:Ignorable="d"
+    >
 
     <Design.DataContext>
         <userControls:FilePreviewerViewModel />
@@ -21,32 +22,37 @@
             VerticalAlignment="Center"
             IsVisible="{Binding Current, Converter={x:Static ObjectConverters.IsNull}}"
             Text="{Binding NoPreviewMessage}"
-            TextWrapping="Wrap" />
+            TextWrapping="Wrap"
+            />
 
         <ProgressBar
             VerticalAlignment="Bottom"
             IsIndeterminate="True"
-            IsVisible="{Binding IsLoading}" />
+            IsVisible="{Binding IsLoading}"
+            />
 
         <Border IsVisible="{Binding Current, Converter={x:Static ObjectConverters.IsNotNull}}">
             <ScrollViewer
                 Name="ScrollViewer"
                 HorizontalScrollBarVisibility="Auto"
-                VerticalScrollBarVisibility="Auto">
+                VerticalScrollBarVisibility="Auto"
+                >
 
                 <Border
                     Name="ScrollViewerBackground"
                     HorizontalAlignment="Stretch"
                     VerticalAlignment="Stretch"
                     Background="Transparent"
-                    ClipToBounds="True">
+                    ClipToBounds="True"
+                    >
 
                     <Border
                         Name="Border1"
                         Width="{Binding ViewboxWidth}"
                         Height="{Binding ViewboxHeight}"
                         HorizontalAlignment="Center"
-                        VerticalAlignment="Center">
+                        VerticalAlignment="Center"
+                        >
 
                         <Viewbox Stretch="Uniform" StretchDirection="Both">
 
@@ -54,7 +60,8 @@
                                 Name="PreviewImage"
                                 Focusable="True"
                                 PointerWheelChanged="PreviewImage_OnPointerWheelChanged"
-                                Source="{Binding Current}" />
+                                Source="{Binding Current}"
+                                />
                         </Viewbox>
                     </Border>
                 </Border>

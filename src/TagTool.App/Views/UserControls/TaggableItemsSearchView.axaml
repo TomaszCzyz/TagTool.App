@@ -14,14 +14,16 @@
     d:DesignHeight="50"
     mc:Ignorable="d"
     d:DataContext="{x:Static dd:DesignData.TaggableItemsSearchViewModel}"
-    Focusable="True">
+    Focusable="True"
+    >
 
     <DockPanel Margin="2">
         <!-- Search Bar -->
         <views:TaggableItemsSearchBarView
             Name="SearchBarView"
             DockPanel.Dock="Top"
-            DataContext="{Binding SearchBarViewModel, Mode=TwoWay}" />
+            DataContext="{Binding SearchBarViewModel, Mode=TwoWay}"
+            />
 
         <!-- SearchResults -->
         <Panel>
@@ -31,7 +33,8 @@
                 Focusable="True"
                 FontSize="{DynamicResource AppContentFontSize}"
                 ItemsSource="{Binding FoundTaggedItems}"
-                SelectionMode="Multiple">
+                SelectionMode="Multiple"
+                >
                 <ListBox.DataTemplates>
                     <DataTemplate x:CompileBindings="False" DataType="viewModels:TaggableItemViewModel">
                         <views:TaggableItemView FontSize="14" />
@@ -46,13 +49,15 @@
                 BorderThickness="8"
                 CornerRadius="8"
                 IsVisible="False"
-                Opacity="0.6">
+                Opacity="0.6"
+                >
 
                 <TextBlock
                     HorizontalAlignment="Center"
                     VerticalAlignment="Center"
                     FontSize="20"
-                    Text="Drop file(s) or folder(s) here" />
+                    Text="Drop file(s) or folder(s) here"
+                    />
 
             </Border>
         </Panel>

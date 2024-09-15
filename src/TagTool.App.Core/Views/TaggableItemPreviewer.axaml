@@ -10,7 +10,8 @@
     x:DataType="viewModels:TaggableItemPreviewerViewModel"
     d:DesignWidth="800"
     d:DesignHeight="450"
-    mc:Ignorable="d">
+    mc:Ignorable="d"
+    >
 
     <Design.DataContext>
         <viewModels:TaggableItemPreviewerViewModel />
@@ -21,7 +22,8 @@
             Width="50"
             Height="50"
             Foreground="White"
-            IsActive="{Binding IsPreviewLoading}" />
+            IsActive="{Binding IsPreviewLoading}"
+            />
 
         <ContentControl Content="{Binding Previewer}">
             <ContentControl.DataTemplates>
@@ -33,18 +35,21 @@
                         HorizontalAlignment="Center"
                         VerticalAlignment="Center"
                         ColumnDefinitions="150 250"
-                        RowDefinitions="Auto">
+                        RowDefinitions="Auto"
+                        >
 
                         <Border
                             Grid.Column="0"
                             BorderBrush="Beige"
-                            BorderThickness="1">
+                            BorderThickness="1"
+                            >
                             <Image
                                 Width="100"
                                 Height="150"
                                 HorizontalAlignment="Center"
                                 VerticalAlignment="Center"
-                                Source="{Binding Preview.IconPreview}" />
+                                Source="{Binding Preview.IconPreview}"
+                                />
 
                         </Border>
 
@@ -53,7 +58,8 @@
                             Margin="30"
                             VerticalAlignment="Center"
                             Orientation="Vertical"
-                            Spacing="8">
+                            Spacing="8"
+                            >
 
                             <TextBlock FontSize="20" Text="{Binding Preview.FileName}" />
                             <TextBlock Text="{Binding Preview.FileType, StringFormat='Type: {0}'}" />
@@ -68,7 +74,8 @@
         <TextBlock
             Name="UnsupportedFilePreview"
             IsVisible="{Binding Previewer, Converter={x:Static ObjectConverters.IsNull}}"
-            Text="Default" />
+            Text="Default"
+            />
 
     </Panel>
 </UserControl>

@@ -14,7 +14,8 @@
     d:DesignWidth="800"
     d:DesignHeight="450"
     mc:Ignorable="d"
-    d:DataContext="{x:Static dd:DesignData.TagsLibraryViewModel}">
+    d:DataContext="{x:Static dd:DesignData.TagsLibraryViewModel}"
+    >
     <UserControl.Styles>
         <Style Selector="ListBoxItem">
             <Setter Property="Padding" Value="4" />
@@ -29,23 +30,28 @@
         <SolidColorBrush
             x:Key="ExpanderHeaderBackground"
             Opacity="0.3"
-            Color="{StaticResource SystemAltMediumHighColor}" />
+            Color="{StaticResource SystemAltMediumHighColor}"
+            />
         <SolidColorBrush
             x:Key="ExpanderHeaderBackgroundPointerOver"
             Opacity="0.3"
-            Color="{StaticResource SystemAltMediumHighColor}" />
+            Color="{StaticResource SystemAltMediumHighColor}"
+            />
         <SolidColorBrush
             x:Key="ExpanderHeaderBackgroundPressed"
             Opacity="0.3"
-            Color="{StaticResource SystemAltMediumHighColor}" />
+            Color="{StaticResource SystemAltMediumHighColor}"
+            />
         <SolidColorBrush
             x:Key="ExpanderHeaderBackgroundDisabled"
             Opacity="0.3"
-            Color="{StaticResource SystemAltMediumHighColor}" />
+            Color="{StaticResource SystemAltMediumHighColor}"
+            />
         <SolidColorBrush
             x:Key="ExpanderContentBackground"
             Opacity="0.2"
-            Color="#FF2B2B2B" />
+            Color="#FF2B2B2B"
+            />
     </UserControl.Resources>
 
 
@@ -57,7 +63,8 @@
                 HorizontalAlignment="Stretch"
                 ExpandDirection="Down"
                 Header="Date and Time tags"
-                IsExpanded="True">
+                IsExpanded="True"
+                >
                 <ListBox Background="Transparent" ItemsSource="{Binding DateAndTimeTags}">
                     <ListBox.ItemsPanel>
                         <ItemsPanelTemplate>
@@ -69,7 +76,8 @@
                             <MenuItem
                                 Command="{ReflectionBinding #RootUserControl.((userControls:TagsLibraryViewModel)DataContext).RemoveTagCommand, FallbackValue=null}"
                                 CommandParameter="{Binding #TagsListBox.SelectedItem}"
-                                Header="Remove">
+                                Header="Remove"
+                                >
                                 <MenuItem.Icon>
                                     <avalonia:MaterialIcon Kind="DeleteOutline" />
                                 </MenuItem.Icon>
@@ -81,7 +89,8 @@
                             <ContentControl
                                 Content="{Binding $self.DataContext}"
                                 ContentTemplate="{x:Static dataTemplates:TagsTemplateProvider.TagDataTemplate}"
-                                AttachedToVisualTree="Visual_OnAttachedToVisualTree">
+                                AttachedToVisualTree="Visual_OnAttachedToVisualTree"
+                                >
                                 <ContentControl.Styles>
                                     <Style Selector="TextBlock">
                                         <Setter Property="Text">
@@ -102,7 +111,8 @@
                 CornerRadius="2"
                 ExpandDirection="Down"
                 Header="All tags"
-                IsExpanded="True">
+                IsExpanded="True"
+                >
                 <Expander.ContentTransition>
                     <CrossFade Duration="00:00:00.25" />
                 </Expander.ContentTransition>
@@ -110,7 +120,8 @@
                     Name="TagsListBox"
                     Background="Transparent"
                     ItemsSource="{Binding TextTags}"
-                    SelectedItem="{Binding SelectedTag}">
+                    SelectedItem="{Binding SelectedTag}"
+                    >
                     <ListBox.ItemsPanel>
                         <ItemsPanelTemplate>
                             <WrapPanel />
@@ -121,7 +132,8 @@
                             <MenuItem
                                 Command="{ReflectionBinding #RootUserControl.((userControls:TagsLibraryViewModel)DataContext).RemoveTagCommand, FallbackValue=null}"
                                 CommandParameter="{Binding #TagsListBox.SelectedItem}"
-                                Header="Remove">
+                                Header="Remove"
+                                >
                                 <MenuItem.Icon>
                                     <avalonia:MaterialIcon Kind="DeleteOutline" />
                                 </MenuItem.Icon>
@@ -133,7 +145,8 @@
                             <ContentControl
                                 Content="{Binding $self.DataContext}"
                                 ContentTemplate="{x:Static dataTemplates:TagsTemplateProvider.TagDataTemplate}"
-                                AttachedToVisualTree="Visual_OnAttachedToVisualTree">
+                                AttachedToVisualTree="Visual_OnAttachedToVisualTree"
+                                >
                                 <ContentControl.Styles>
                                     <Style Selector="TextBlock">
                                         <Setter Property="Text">
@@ -156,7 +169,8 @@
             VerticalAlignment="Bottom"
             Background="#225D5F61"
             CornerRadius="10"
-            Click="AddTagButton_OnClick">
+            Click="AddTagButton_OnClick"
+            >
 
             <avalonia:MaterialIcon
                 Width="40"
@@ -165,7 +179,8 @@
                 VerticalAlignment="Center"
                 Foreground="#5D5F61"
                 Kind="Add"
-                Opacity="0.6" />
+                Opacity="0.6"
+                />
 
         </Button>
     </Panel>

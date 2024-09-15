@@ -10,7 +10,8 @@
     x:DataType="vm:TaskTriggerViewModel"
     d:DesignWidth="800"
     d:DesignHeight="450"
-    mc:Ignorable="d">
+    mc:Ignorable="d"
+    >
     <UserControl.Resources>
         <converters:StringToBoolConverter x:Key="IsTriggerTypeScheduleConverter" StringToCompare="{x:Static vm:TriggerType.Schedule}" />
         <converters:StringToBoolConverter x:Key="IsTriggerTypeEventConverter" StringToCompare="{x:Static vm:TriggerType.Event}" />
@@ -44,20 +45,23 @@
             Name="TriggerTypeComboBox"
             MinWidth="105"
             ItemsSource="{Binding TriggerTypes, Mode=OneTime}"
-            SelectedItem="{Binding TriggerTypeSelectedItem}" />
+            SelectedItem="{Binding TriggerTypeSelectedItem}"
+            />
 
         <!-- Elements for 'schedule' option -->
         <StackPanel Name="CronInfoStackPanel" IsVisible="{Binding #TriggerTypeComboBox.SelectionBoxItem, Converter={StaticResource IsTriggerTypeScheduleConverter}}">
             <TextBlock
                 MinWidth="50"
                 VerticalAlignment="Center"
-                Text="every:" />
+                Text="every:"
+                />
 
             <ComboBox
                 Name="CronComboBox"
                 MinWidth="125"
                 ItemsSource="{Binding PredefinedCronOptions, Mode=OneTime}"
-                SelectedItem="{Binding CronPredefineOptionSelectedItem}" />
+                SelectedItem="{Binding CronPredefineOptionSelectedItem}"
+                />
 
         </StackPanel>
         <!-- Elements for 'custom' option in 'schedule' type trigger -->
@@ -72,7 +76,8 @@
             <TextBox
                 Name="CustomCronTextBox"
                 Text="{Binding CustomCronText, Mode=TwoWay}"
-                Watermark="10-20 5 */3 * *" />
+                Watermark="10-20 5 */3 * *"
+                />
 
             <TextBlock VerticalAlignment="Center" Text="{Binding #CustomCronTextBox.Text, Converter={StaticResource CronToDescriptionConverter}}" />
         </StackPanel>
@@ -81,13 +86,15 @@
             <TextBlock
                 MinWidth="50"
                 VerticalAlignment="Center"
-                Text="of type:" />
+                Text="of type:"
+                />
 
             <ComboBox
                 MinWidth="125"
                 ItemsSource="{Binding EventTypes, Mode=OneTime}"
                 SelectedIndex="0"
-                SelectedItem="{Binding EventTypeSelectedItem}" />
+                SelectedItem="{Binding EventTypeSelectedItem}"
+                />
 
         </StackPanel>
     </StackPanel>

@@ -21,7 +21,8 @@
     Title="TagTool.App.Lite"
     PointerMoved="InputElement_OnPointerMoved"
     PointerPressed="InputElement_OnPointerPressed"
-    PointerReleased="InputElement_OnPointerReleased">
+    PointerReleased="InputElement_OnPointerReleased"
+    >
 
     <Design.DataContext>
         <vm:MainWindowViewModel />
@@ -34,12 +35,14 @@
                 Name="SearchBarView"
                 DataContext="{Binding SearchBarViewModel, Mode=TwoWay}"
                 Focusable="True"
-                Loaded="TagsSearchBar_OnLoaded" />
+                Loaded="TagsSearchBar_OnLoaded"
+                />
 
             <Grid
                 Grid.Column="1"
                 ColumnDefinitions="*, *"
-                RowDefinitions="*, *">
+                RowDefinitions="*, *"
+                >
                 <Button
                     Grid.Row="0"
                     Grid.Column="0"
@@ -47,11 +50,13 @@
                     Padding="0"
                     Background="Transparent"
                     Command="{Binding OpenTagToolAppCommand}"
-                    ToolTip.Tip="Tag new files">
+                    ToolTip.Tip="Tag new files"
+                    >
                     <avalonia:MaterialIcon
                         Height="20"
                         Foreground="#999999"
-                        Kind="NewBox" />
+                        Kind="NewBox"
+                        />
 
                 </Button>
                 <Button
@@ -60,11 +65,13 @@
                     Margin="3 0"
                     Padding="0"
                     Background="Transparent"
-                    Click="CloseButton_OnClick">
+                    Click="CloseButton_OnClick"
+                    >
                     <avalonia:MaterialIcon
                         Height="20"
                         Foreground="#999999"
-                        Kind="Close" />
+                        Kind="Close"
+                        />
 
                 </Button>
                 <Button
@@ -74,11 +81,13 @@
                     Padding="0"
                     Background="Transparent"
                     Command="{Binding OpenTagToolAppCommand}"
-                    ToolTip.Tip="Open TagTool app">
+                    ToolTip.Tip="Open TagTool app"
+                    >
                     <avalonia:MaterialIcon
                         Height="20"
                         Foreground="#999999"
-                        Kind="OpenInNew" />
+                        Kind="OpenInNew"
+                        />
 
                 </Button>
             </Grid>
@@ -92,7 +101,8 @@
                     Name="TaggableItemsListBox"
                     Width="{Binding #TopMostDockPanel.Bounds.Width}"
                     Background="Transparent"
-                    ItemsSource="{Binding SearchResults}">
+                    ItemsSource="{Binding SearchResults}"
+                    >
                     <!-- todo: maybe DataTemplate is not needed if I have ViewLocator -->
                     <ListBox.ItemTemplate>
                         <DataTemplate x:DataType="viewModels:TaggableItemViewModel">
@@ -105,13 +115,15 @@
                     VerticalAlignment="Center"
                     Foreground="Chocolate"
                     IsVisible="{Binding !#TaggableItemsListBox.ItemCount}"
-                    Text="No items matching given query" />
+                    Text="No items matching given query"
+                    />
 
             </Panel>
             <Grid
                 ColumnDefinitions="* Auto *"
                 IsVisible="{Binding #OtherResultsListBox.ItemCount}"
-                RowDefinitions="Auto">
+                RowDefinitions="Auto"
+                >
                 <Separator Grid.Column="0" />
                 <TextBlock Grid.Column="1" Text="Other items" />
                 <Separator Grid.Column="2" />
@@ -123,7 +135,8 @@
                     Name="OtherResultsListBox"
                     Width="{Binding #TopMostDockPanel.Bounds.Width}"
                     Background="Transparent"
-                    ItemsSource="{Binding OtherResults}">
+                    ItemsSource="{Binding OtherResults}"
+                    >
                     <ListBox.ItemTemplate>
                         <DataTemplate x:DataType="viewModels:TaggableItemViewModel">
                             <views:TaggableItemView FontSize="14" />

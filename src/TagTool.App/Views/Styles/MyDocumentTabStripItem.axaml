@@ -1,7 +1,8 @@
 ﻿<ResourceDictionary
     xmlns="https://github.com/avaloniaui"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:core="using:Dock.Model.Core">
+    xmlns:core="using:Dock.Model.Core"
+    >
 
     <Design.PreviewWith>
         <Border Padding="20">
@@ -34,39 +35,46 @@
                         BorderThickness="{TemplateBinding BorderThickness}"
                         TextElement.FontFamily="{TemplateBinding FontFamily}"
                         TextElement.FontSize="{TemplateBinding FontSize}"
-                        TextElement.FontWeight="{TemplateBinding FontWeight}">
+                        TextElement.FontWeight="{TemplateBinding FontWeight}"
+                        >
                         <Border.ContextMenu>
                             <ContextMenu>
                                 <MenuItem
                                     Command="{Binding Owner.Factory.FloatDockable}"
                                     CommandParameter="{Binding}"
                                     Header="_Float"
-                                    IsVisible="{Binding CanFloat}" />
+                                    IsVisible="{Binding CanFloat}"
+                                    />
                                 <MenuItem
                                     Command="{Binding Owner.Factory.CloseDockable}"
                                     CommandParameter="{Binding}"
                                     Header="_Close"
-                                    IsVisible="{Binding CanClose}" />
+                                    IsVisible="{Binding CanClose}"
+                                    />
                                 <MenuItem
                                     Command="{Binding Owner.Factory.CloseOtherDockables}"
                                     CommandParameter="{Binding}"
                                     Header="Close other tabs"
-                                    IsVisible="{Binding CanClose}" />
+                                    IsVisible="{Binding CanClose}"
+                                    />
                                 <MenuItem
                                     Command="{Binding Owner.Factory.CloseAllDockables}"
                                     CommandParameter="{Binding}"
                                     Header="Close all tabs"
-                                    IsVisible="{Binding CanClose}" />
+                                    IsVisible="{Binding CanClose}"
+                                    />
                                 <MenuItem
                                     Command="{Binding Owner.Factory.CloseLeftDockables}"
                                     CommandParameter="{Binding}"
                                     Header="_Close tabs to the left"
-                                    IsVisible="{Binding CanClose}" />
+                                    IsVisible="{Binding CanClose}"
+                                    />
                                 <MenuItem
                                     Command="{Binding Owner.Factory.CloseRightDockables}"
                                     CommandParameter="{Binding}"
                                     Header="_Close tabs to the right"
-                                    IsVisible="{Binding CanClose}" />
+                                    IsVisible="{Binding CanClose}"
+                                    />
                             </ContextMenu>
                         </Border.ContextMenu>
                         <DockableControl TrackingMode="Tab">
@@ -76,7 +84,8 @@
                                 DockProperties.IsDragArea="True"
                                 DockProperties.IsDropArea="True"
                                 Orientation="Horizontal"
-                                Spacing="2">
+                                Spacing="2"
+                                >
                                 <Panel Margin="2">
                                     <ContentPresenter Content="{Binding}" ContentTemplate="{Binding $parent[DocumentControl].HeaderTemplate}" />
                                 </Panel>
@@ -84,7 +93,8 @@
                                     x:Name="PART_CloseButton"
                                     Command="{Binding Owner.Factory.CloseDockable}"
                                     CommandParameter="{Binding}"
-                                    IsVisible="{Binding CanClose}">
+                                    IsVisible="{Binding CanClose}"
+                                    >
                                     <Button.Styles>
                                         <Style Selector="Button">
                                             <Setter Property="BorderThickness" Value="0" />
@@ -119,7 +129,8 @@
                         VerticalAlignment="Bottom"
                         Fill="Transparent"
                         RadiusX="1"
-                        RadiusY="1" />
+                        RadiusY="1"
+                        />
 
                 </Panel>
 

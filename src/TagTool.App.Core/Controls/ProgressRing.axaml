@@ -1,14 +1,16 @@
 ﻿<ResourceDictionary
     xmlns="https://github.com/avaloniaui"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:local="clr-namespace:TagTool.App.Core.Controls">
+    xmlns:local="clr-namespace:TagTool.App.Core.Controls"
+    >
     <Design.PreviewWith>
         <Border Padding="20">
             <StackPanel Spacing="20">
                 <local:ProgressRing
                     Width="60"
                     Height="60"
-                    IsActive="True" />
+                    IsActive="True"
+                    />
 
             </StackPanel>
         </Border>
@@ -32,7 +34,8 @@
                     BorderBrush="{TemplateBinding BorderBrush}"
                     BorderThickness="{TemplateBinding BorderThickness}"
                     CornerRadius="0"
-                    IsVisible="{TemplateBinding IsActive}">
+                    IsVisible="{TemplateBinding IsActive}"
+                    >
                     <Border.RenderTransform>
                         <TransformGroup>
                             <RotateTransform />
@@ -50,7 +53,8 @@
                                 VerticalAlignment="Top"
                                 Fill="{TemplateBinding Foreground}"
                                 IsVisible="{TemplateBinding IsActive}"
-                                Opacity="0" />
+                                Opacity="0"
+                                />
 
                         </Canvas>
                         <Canvas Name="PART_E2R">
@@ -63,7 +67,8 @@
                                 VerticalAlignment="Top"
                                 Fill="{TemplateBinding Foreground}"
                                 IsVisible="{TemplateBinding IsActive}"
-                                Opacity="0" />
+                                Opacity="0"
+                                />
 
                         </Canvas>
                         <Canvas Name="PART_E3R">
@@ -76,7 +81,8 @@
                                 VerticalAlignment="Top"
                                 Fill="{TemplateBinding Foreground}"
                                 IsVisible="{TemplateBinding IsActive}"
-                                Opacity="0" />
+                                Opacity="0"
+                                />
 
                         </Canvas>
                         <Canvas Name="PART_E4R">
@@ -89,7 +95,8 @@
                                 VerticalAlignment="Top"
                                 Fill="{TemplateBinding Foreground}"
                                 IsVisible="{TemplateBinding IsActive}"
-                                Opacity="0" />
+                                Opacity="0"
+                                />
 
                         </Canvas>
                         <Canvas Name="PART_E5R">
@@ -102,7 +109,8 @@
                                 VerticalAlignment="Top"
                                 Fill="{TemplateBinding Foreground}"
                                 IsVisible="{TemplateBinding IsActive}"
-                                Opacity="0" />
+                                Opacity="0"
+                                />
 
                         </Canvas>
                         <Canvas Name="PART_E6R">
@@ -115,7 +123,8 @@
                                 VerticalAlignment="Top"
                                 Fill="{TemplateBinding Foreground}"
                                 IsVisible="{TemplateBinding IsActive}"
-                                Opacity="0" />
+                                Opacity="0"
+                                />
 
                         </Canvas>
                     </Grid>
@@ -128,7 +137,8 @@
                     Delay="0"
                     FillMode="None"
                     IterationCount="Infinite"
-                    Duration="0:0:4.4">
+                    Duration="0:0:4.4"
+                    >
                     <KeyFrame KeyTime="0:0:0.001">
                         <Setter Property="Opacity" Value="1" />
                     </KeyFrame>
@@ -150,7 +160,8 @@
                     Delay="0:0:0.167"
                     FillMode="None"
                     IterationCount="Infinite"
-                    Duration="0:0:4.4">
+                    Duration="0:0:4.4"
+                    >
                     <KeyFrame KeyTime="0:0:0.001">
                         <Setter Property="Opacity" Value="1" />
                     </KeyFrame>
@@ -172,7 +183,8 @@
                     Delay="0:0:0.334"
                     FillMode="None"
                     IterationCount="Infinite"
-                    Duration="0:0:4.4">
+                    Duration="0:0:4.4"
+                    >
                     <KeyFrame KeyTime="0:0:0.001">
                         <Setter Property="Opacity" Value="1" />
                     </KeyFrame>
@@ -194,7 +206,8 @@
                     Delay="0:0:0.501"
                     FillMode="None"
                     IterationCount="Infinite"
-                    Duration="0:0:4.4">
+                    Duration="0:0:4.4"
+                    >
                     <KeyFrame KeyTime="0:0:0.001">
                         <Setter Property="Opacity" Value="1" />
                     </KeyFrame>
@@ -216,7 +229,8 @@
                     Delay="0:0:0.668"
                     FillMode="None"
                     IterationCount="Infinite"
-                    Duration="0:0:4.4">
+                    Duration="0:0:4.4"
+                    >
                     <KeyFrame KeyTime="0:0:0.001">
                         <Setter Property="Opacity" Value="1" />
                     </KeyFrame>
@@ -238,7 +252,8 @@
                     Delay="0:0:0.835"
                     FillMode="None"
                     IterationCount="Infinite"
-                    Duration="0:0:4.4">
+                    Duration="0:0:4.4"
+                    >
                     <KeyFrame KeyTime="0:0:0.001">
                         <Setter Property="Opacity" Value="1" />
                     </KeyFrame>
@@ -260,7 +275,8 @@
                     Delay="0:0:0.0"
                     FillMode="None"
                     IterationCount="Infinite"
-                    Duration="0:0:4.4">
+                    Duration="0:0:4.4"
+                    >
                     <KeyFrame KeySpline="0.13,0.21,0.1,0.7" KeyTime="0:0:0.001">
                         <Setter Property="RotateTransform.Angle" Value="-110" />
                     </KeyFrame>
@@ -294,7 +310,8 @@
                     Delay="0:0:0.167"
                     FillMode="None"
                     IterationCount="Infinite"
-                    Duration="0:0:4.4">
+                    Duration="0:0:4.4"
+                    >
                     <KeyFrame KeySpline="0.13,0.21,0.1,0.7" KeyTime="0:0:0.001">
                         <Setter Property="RotateTransform.Angle" Value="-116" />
                     </KeyFrame>
@@ -331,7 +348,8 @@
                     Delay="0:0:0.334"
                     FillMode="None"
                     IterationCount="Infinite"
-                    Duration="0:0:4.4">
+                    Duration="0:0:4.4"
+                    >
                     <KeyFrame KeySpline="0.13,0.21,0.1,0.7" KeyTime="0:0:0.001">
                         <Setter Property="RotateTransform.Angle" Value="-122" />
                     </KeyFrame>
@@ -368,7 +386,8 @@
                     Delay="0:0:0.501"
                     FillMode="None"
                     IterationCount="Infinite"
-                    Duration="0:0:4.4">
+                    Duration="0:0:4.4"
+                    >
                     <KeyFrame KeySpline="0.13,0.21,0.1,0.7" KeyTime="0:0:0.001">
                         <Setter Property="RotateTransform.Angle" Value="-128" />
                     </KeyFrame>
@@ -405,7 +424,8 @@
                     Delay="0:0:0.668"
                     FillMode="None"
                     IterationCount="Infinite"
-                    Duration="0:0:4.4">
+                    Duration="0:0:4.4"
+                    >
                     <KeyFrame KeySpline="0.13,0.21,0.1,0.7" KeyTime="0:0:0.001">
                         <Setter Property="RotateTransform.Angle" Value="-134" />
                     </KeyFrame>
@@ -442,7 +462,8 @@
                     Delay="0:0:0.835"
                     FillMode="None"
                     IterationCount="Infinite"
-                    Duration="0:0:4.4">
+                    Duration="0:0:4.4"
+                    >
                     <KeyFrame KeySpline="0.13,0.21,0.1,0.7" KeyTime="0:0:0.001">
                         <Setter Property="RotateTransform.Angle" Value="-140" />
                     </KeyFrame>

@@ -9,9 +9,10 @@
     d:DesignWidth="300"
     d:DesignHeight="250"
     mc:Ignorable="d"
-    WindowStartupLocation="CenterOwner"
     SizeToContent="WidthAndHeight"
-    Title="Create new Tag">
+    Title="Create new Tag"
+    WindowStartupLocation="CenterOwner"
+    >
 
     <Design.DataContext>
         <dialogs:CreateTagDialogViewModel />
@@ -23,14 +24,16 @@
             Grid.Row="0"
             Margin="10"
             Text="{Binding TagName}"
-            Watermark="Enter name for a new Tag" />
+            Watermark="Enter name for a new Tag"
+            />
 
         <Button
             Grid.Row="1"
             Margin="10"
             HorizontalAlignment="Right"
             VerticalAlignment="Bottom"
-            Content="Create" />
+            Content="Create"
+            />
 
     </Grid>
 </Window>

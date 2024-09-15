@@ -16,14 +16,16 @@
     d:DesignHeight="450"
     mc:Ignorable="d"
     Focusable="True"
-    GotFocus="InputElement_OnGotFocus">
+    GotFocus="InputElement_OnGotFocus"
+    >
     <UserControl.Resources>
         <converters:DoubleRangeConverter
             x:Key="DoubleRangeConverter"
             InputMax="1.0"
             InputMin="0.5"
             OutputMax="1.0"
-            OutputMin="0.0" />
+            OutputMin="0.0"
+            />
 
         <converters:TextDecorationsConverter x:Key="TextDecorationsConverter" />
     </UserControl.Resources>
@@ -62,7 +64,8 @@
         BorderThickness="1 1 1 2"
         ClipToBounds="True"
         CornerRadius="4"
-        PointerPressed="SearchBarBorder_OnPointerPressed">
+        PointerPressed="SearchBarBorder_OnPointerPressed"
+        >
         <Border.Transitions>
             <Transitions>
                 <BrushTransition Property="BorderBrush" Duration="0:0:0.2" />
@@ -73,7 +76,8 @@
             Name="SearchBarGrid"
             VerticalAlignment="Top"
             ColumnDefinitions="Auto,*,Auto,Auto"
-            RowDefinitions="Auto">
+            RowDefinitions="Auto"
+            >
             <Grid.KeyBindings>
                 <KeyBinding Command="{ReflectionBinding CommitSearchCommand}" Gesture="Ctrl+Enter" />
             </Grid.KeyBindings>
@@ -131,7 +135,8 @@
                 Margin="10 0 -2 0"
                 Padding="0"
                 Background="Transparent"
-                Command="{ReflectionBinding CommitSearchCommand}">
+                Command="{ReflectionBinding CommitSearchCommand}"
+                >
 
                 <avalonia:MaterialIcon
                     Width="20"
@@ -139,7 +144,8 @@
                     HorizontalAlignment="Center"
                     VerticalAlignment="Center"
                     Foreground="{StaticResource MyLightSecondary500}"
-                    Kind="Magnify" />
+                    Kind="Magnify"
+                    />
 
             </Button>
 
@@ -147,7 +153,8 @@
             <ScrollViewer
                 Grid.Column="1"
                 HorizontalAlignment="Stretch"
-                VerticalAlignment="Top">
+                VerticalAlignment="Top"
+                >
 
                 <!-- Query box -->
                 <ListBox
@@ -162,7 +169,8 @@
                     ItemsSource="{Binding DisplayedSearchBarElements}"
                     SelectedItem="{Binding SelectedItem}"
                     SelectionMode="Single"
-                    KeyDown="TagsListBox_OnKeyDown">
+                    KeyDown="TagsListBox_OnKeyDown"
+                    >
                     <ListBox.DataTemplates>
                         <DataTemplate x:CompileBindings="False" DataType="models:QuerySegment">
                             <Grid ColumnDefinitions="Auto,Auto" RowDefinitions="Auto">
@@ -170,23 +178,27 @@
                                     Grid.Column="0"
                                     Content="{Binding Tag}"
                                     ContentTemplate="{x:Static dataTemplates:TagsTemplateProvider.TagDataTemplate}"
-                                    Loaded="TagDisplayText_OnAttachedToLogicalTree">
+                                    Loaded="TagDisplayText_OnAttachedToLogicalTree"
+                                    >
                                     <ContentControl.ContextFlyout>
                                         <MenuFlyout Closed="PopupFlyoutBase_OnClosing">
                                             <MenuItem
                                                 Command="{ReflectionBinding #UserControlRoot.((viewModels:TaggableItemsSearchBarViewModel)DataContext).UpdateQuerySegmentStateCommand, FallbackValue=null}"
                                                 CommandParameter="{x:Static models:QuerySegmentState.Include}"
-                                                Header="Include" />
+                                                Header="Include"
+                                                />
 
                                             <MenuItem
                                                 Command="{ReflectionBinding #UserControlRoot.((viewModels:TaggableItemsSearchBarViewModel)DataContext).UpdateQuerySegmentStateCommand, FallbackValue=null}"
                                                 CommandParameter="{x:Static models:QuerySegmentState.Exclude}"
-                                                Header="Exclude" />
+                                                Header="Exclude"
+                                                />
 
                                             <MenuItem
                                                 Command="{ReflectionBinding #UserControlRoot.((viewModels:TaggableItemsSearchBarViewModel)DataContext).UpdateQuerySegmentStateCommand, FallbackValue=null}"
                                                 CommandParameter="{x:Static models:QuerySegmentState.MustBePresent}"
-                                                Header="MustBePresent" />
+                                                Header="MustBePresent"
+                                                />
 
                                         </MenuFlyout>
                                     </ContentControl.ContextFlyout>
@@ -199,7 +211,8 @@
                                                 <Binding
                                                     Converter="{StaticResource TextDecorationsConverter}"
                                                     FallbackValue="null"
-                                                    Path="$parent[Grid].((models:QuerySegment)DataContext).State" />
+                                                    Path="$parent[Grid].((models:QuerySegment)DataContext).State"
+                                                    />
 
                                             </Setter>
                                             <Setter Property="Margin" Value="4 1" />
@@ -221,7 +234,8 @@
                                     Command="{ReflectionBinding #UserControlRoot.((viewModels:TaggableItemsSearchBarViewModel)DataContext).RemoveTagFromSearchQueryCommand, FallbackValue=null}"
                                     CommandParameter="{Binding .}"
                                     CornerRadius="100"
-                                    Opacity="{Binding $parent[ListBoxItem].Opacity, Converter={StaticResource DoubleRangeConverter}}">
+                                    Opacity="{Binding $parent[ListBoxItem].Opacity, Converter={StaticResource DoubleRangeConverter}}"
+                                    >
 
                                     <avalonia:MaterialIcon
                                         Width="{Binding $parent.Width}"
@@ -229,7 +243,8 @@
                                         HorizontalAlignment="Center"
                                         VerticalAlignment="Center"
                                         Foreground="{StaticResource MyLightSecondary500}"
-                                        Kind="Close" />
+                                        Kind="Close"
+                                        />
 
                                 </Button>
                             </Grid>
@@ -240,11 +255,12 @@
                                 Background="Transparent"
                                 BorderThickness="0"
                                 FilterMode="None"
-                                MinimumPrefixLength="0"
                                 IsTextCompletionEnabled="True"
+                                MinimumPrefixLength="0"
                                 Watermark="Next Tag..."
                                 AttachedToLogicalTree="AutoCompleteBox_OnAttachedToVisualTree"
-                                Loaded="AutoCompleteBox_OnLoaded">
+                                Loaded="AutoCompleteBox_OnLoaded"
+                                >
                                 <AutoCompleteBox.Styles>
                                     <Style Selector="ListBox">
                                         <Setter Property="ItemsPanel">
@@ -285,7 +301,8 @@
                 Background="Transparent"
                 Command="{ReflectionBinding RecordAudioCommand}"
                 CommandParameter="{Binding $self.IsChecked}"
-                Foreground="{StaticResource MyLightSecondary500}">
+                Foreground="{StaticResource MyLightSecondary500}"
+                >
                 <!-- <ToggleButton.Styles> -->
                 <!--     <Style Selector="ToggleButton.TransparentBackgroundWhenChecked:checked"> -->
                 <!--         <Style Selector="^ /template/ ContentPresenter#PART_ContentPresenter"> -->
@@ -318,7 +335,8 @@
                         Maximum="{Binding MaxVoiceIntensity}"
                         Minimum="{Binding MinVoiceIntensity}"
                         Orientation="Vertical"
-                        Value="{Binding VoiceIntensity}" />
+                        Value="{Binding VoiceIntensity}"
+                        />
 
                     <controls:ProgressRing
                         Width="20"
@@ -327,7 +345,8 @@
                         HorizontalAlignment="Left"
                         VerticalAlignment="Top"
                         Foreground="{StaticResource MyLightSecondary500}"
-                        IsActive="{Binding RecordAudioCommand.IsRunning}" />
+                        IsActive="{Binding RecordAudioCommand.IsRunning}"
+                        />
 
                 </Panel>
             </ToggleButton>

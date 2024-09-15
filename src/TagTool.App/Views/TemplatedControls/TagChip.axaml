@@ -3,7 +3,8 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
     xmlns:system="clr-namespace:System;assembly=System.Runtime"
-    xmlns:templatedControls="clr-namespace:TagTool.App.Views.TemplatedControls">
+    xmlns:templatedControls="clr-namespace:TagTool.App.Views.TemplatedControls"
+    >
 
     <Design.PreviewWith>
         <StackPanel Margin="20">
@@ -28,7 +29,8 @@
                 <templatedControls:TagChip
                     Classes="Implicit"
                     IsDeletable="False"
-                    Text="ImplicitTest" />
+                    Text="ImplicitTest"
+                    />
 
             </StackPanel>
         </StackPanel>
@@ -61,7 +63,8 @@
                         Background="{TemplateBinding Background}"
                         BorderBrush="{TemplateBinding BorderBrush}"
                         BorderThickness="{TemplateBinding BorderThickness}"
-                        CornerRadius="{TemplateBinding CornerRadius}" />
+                        CornerRadius="{TemplateBinding CornerRadius}"
+                        />
 
                     <SelectableTextBlock
                         Name="PART_SelectableTextBlock"
@@ -70,7 +73,8 @@
                         VerticalAlignment="Center"
                         Inlines="{TemplateBinding Inlines}"
                         IsTabStop="False"
-                        Text="{TemplateBinding Text}" />
+                        Text="{TemplateBinding Text}"
+                        />
 
                     <Button
                         Name="PART_DeleteButton"
@@ -78,13 +82,15 @@
                         Width="12"
                         Height="12"
                         Margin="-4 2 4 2"
-                        IsVisible="{TemplateBinding IsDeletable}">
+                        IsVisible="{TemplateBinding IsDeletable}"
+                        >
 
                         <avalonia:MaterialIcon
                             Width="{Binding $parent.Width}"
                             Height="{Binding $parent.Height}"
                             Foreground="#999999"
-                            Kind="Close" />
+                            Kind="Close"
+                            />
 
                     </Button>
                 </Grid>

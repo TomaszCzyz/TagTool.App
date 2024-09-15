@@ -4,7 +4,8 @@
     xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
     xmlns:local="using:TagTool.App.Lite"
     x:Class="TagTool.App.Lite.App"
-    RequestedThemeVariant="Dark">
+    RequestedThemeVariant="Dark"
+    >
     <Application.DataTemplates>
         <local:ViewLocator />
     </Application.DataTemplates>
