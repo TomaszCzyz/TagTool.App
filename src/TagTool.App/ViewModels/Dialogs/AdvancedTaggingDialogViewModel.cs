@@ -22,9 +22,9 @@ public partial class AdvancedTaggingDialogViewModel : ViewModelBase, IDisposable
 
     public ObservableCollection<Node> Items { get; }
 
-    public ObservableCollection<Node> SelectedItems { get; } = new();
+    public ObservableCollection<Node> SelectedItems { get; } = [];
 
-    public ObservableCollection<Tag> ExistingTags { get; set; } = new();
+    public ObservableCollection<Tag> ExistingTags { get; set; } = [];
 
     public ObservableCollection<Tag> ImplicitTags { get; set; } = new(new Tag[] { new("Audio"), new("Text"), new("Date"), new("Zip") });
 
@@ -118,7 +118,7 @@ public partial class AdvancedTaggingDialogViewModel : ViewModelBase, IDisposable
 
         public ObservableCollection<Node> Children => _children ??= InitializeChildren();
 
-        public ObservableCollection<Tag> Tags { get; set; } = new();
+        public ObservableCollection<Tag> Tags { get; set; } = [];
 
         public string Header { get; }
 
@@ -161,7 +161,7 @@ public partial class AdvancedTaggingDialogViewModel : ViewModelBase, IDisposable
         {
             if (Item is not DirectoryInfo directoryInfo)
             {
-                return new ObservableCollection<Node>();
+                return [];
             }
 
             var array = directoryInfo
@@ -172,7 +172,7 @@ public partial class AdvancedTaggingDialogViewModel : ViewModelBase, IDisposable
 
             // todo: safeguard for large directories as TreeView cannot handle too many entries;
             // desired solution: shows first 50 files/folders and button to load next 50
-            // also disabling loading Tags would be nice 
+            // also disabling loading Tags would be nice
 
             foreach (var node in array)
             {

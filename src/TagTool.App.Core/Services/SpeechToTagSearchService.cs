@@ -24,14 +24,14 @@ public class SpeechToTagSearchService : ISpeechToTagSearchService
     {
         if (string.IsNullOrEmpty(filePath))
         {
-            return Enumerable.Empty<string>();
+            return [];
         }
 
         var transcription = await GetSpeechTranscription(filePath);
 
         if (transcription is null)
         {
-            return Enumerable.Empty<string>();
+            return [];
         }
 
         char[] delimiterChars = [' ', ',', '.', ':', '\t'];
@@ -43,21 +43,21 @@ public class SpeechToTagSearchService : ISpeechToTagSearchService
     {
         if (string.IsNullOrEmpty(filePath))
         {
-            return Enumerable.Empty<string>();
+            return [];
         }
 
         var transcription = await GetSpeechTranscription(filePath);
 
         if (transcription is null)
         {
-            return Enumerable.Empty<string>();
+            return [];
         }
 
         var tagNames = await TranscriptionToTags(transcription);
 
         _logger.LogInformation("Tag name extracted from speech: {@TagNames}", tagNames);
 
-        return tagNames ?? Enumerable.Empty<string>();
+        return tagNames ?? [];
     }
 
     private Task<string?> GetSpeechTranscription(string filePath)

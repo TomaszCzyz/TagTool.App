@@ -76,7 +76,7 @@ public partial class TaskViewModel : ViewModelBase
 
     public TaggableItemsSearchBarViewModel SearchBarViewModel { get; }
 
-    public ObservableCollection<TaskTriggerViewModel> Triggers { get; set; } = new();
+    public ObservableCollection<TaskTriggerViewModel> Triggers { get; set; } = [];
 
     /// <summary>
     ///     ctor for XAML previewer

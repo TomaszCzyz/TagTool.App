@@ -40,7 +40,7 @@ public partial class FileSystemSearchViewModel : Document, IDisposable
     [ObservableProperty]
     private bool _ignoreCase = true;
 
-    public ObservableCollection<TaggableItemViewModel> SearchResults { get; set; } = new();
+    public ObservableCollection<TaggableItemViewModel> SearchResults { get; set; } = [];
 
     /// <summary>
     ///     ctor for XAML previewer

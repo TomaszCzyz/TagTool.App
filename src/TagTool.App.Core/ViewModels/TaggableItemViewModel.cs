@@ -80,7 +80,7 @@ public partial class TaggableItemViewModel : ViewModelBase, ITextSearchable
         TaggableItem = new TaggableFile
         {
             Path = @"C:\Users\tczyz\MyFiles\FromOec\DigitalSign.gif",
-            Tags = new HashSet<ITag>(new ITag[] { new TextTag { Name = "Tag1" }, new MonthTag { Month = 3 }, new TextTag { Name = "Tag3" } })
+            Tags = new HashSet<ITag>([new TextTag { Name = "Tag1" }, new MonthTag { Month = 3 }, new TextTag { Name = "Tag3" }])
         };
     }
 

@@ -27,7 +27,7 @@ public partial class TagsAssociationsViewModel : Document
     private readonly TagService.TagServiceClient _tagService;
 
     [ObservableProperty]
-    private ObservableCollection<AssociationData> _associationData = new();
+    private ObservableCollection<AssociationData> _associationData = [];
 
     [ObservableProperty]
     private AssociationData? _selectedItem;

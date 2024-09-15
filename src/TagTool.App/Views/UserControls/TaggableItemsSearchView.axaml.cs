@@ -66,7 +66,7 @@ public partial class TaggableItemsSearchView : UserControl
 
     private async void Drop(object? sender, DragEventArgs e)
     {
-        var fileNames = e.Data.GetFiles()?.ToArray() ?? Array.Empty<IStorageItem>();
+        var fileNames = e.Data.GetFiles()?.ToArray() ?? [];
         if (!e.Data.Contains(DataFormats.Files) || fileNames.Length == 0)
         {
             return;

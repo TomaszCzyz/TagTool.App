@@ -36,7 +36,7 @@ public class WordHighlighter : IWordHighlighter
                 var run = new Run
                 {
                     Text = tagName[index..endIndex],
-                    TextDecorations = new TextDecorationCollection { new() { Location = TextDecorationLocation.Underline, Stroke = solidColorBrush } }
+                    TextDecorations = [new() { Location = TextDecorationLocation.Underline, Stroke = solidColorBrush }]
                     // FontWeight = FontWeight.Bold,
                     // Foreground = new SolidColorBrush(Color.Parse("#EEEEEE"));
                     // Background = solidColorBrush;

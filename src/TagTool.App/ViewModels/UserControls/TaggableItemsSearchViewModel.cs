@@ -29,7 +29,7 @@ public partial class TaggableItemsSearchViewModel : Document
 
     public TaggableItemsSearchBarViewModel SearchBarViewModel { get; }
 
-    public ObservableCollection<TaggableItemViewModel> FoundTaggedItems { get; set; } = new();
+    public ObservableCollection<TaggableItemViewModel> FoundTaggedItems { get; set; } = [];
 
     /// <summary>
     ///     ctor for XAML previewer

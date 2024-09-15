@@ -25,9 +25,9 @@ public partial class MainWindowViewModel : ViewModelBase
 
     public TaggableItemsSearchBarViewModel SearchBarViewModel { get; }
 
-    public ObservableCollection<TaggableItemViewModel> SearchResults { get; } = new();
+    public ObservableCollection<TaggableItemViewModel> SearchResults { get; } = [];
 
-    public ObservableCollection<TaggableItemViewModel> OtherResults { get; set; } = new();
+    public ObservableCollection<TaggableItemViewModel> OtherResults { get; set; } = [];
 
     /// <summary>
     ///     ctor for XAML previewer

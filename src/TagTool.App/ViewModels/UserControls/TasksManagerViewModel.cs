@@ -20,7 +20,7 @@ public class TasksManagerViewModel : Document
     private readonly IServiceProvider _serviceProvider;
     private readonly TagService.TagServiceClient _tagService;
 
-    public ObservableCollection<TaskViewModel> TaskViewModels { get; } = new();
+    public ObservableCollection<TaskViewModel> TaskViewModels { get; } = [];
 
     public IList<JobInfo> Jobs { get; } = new List<JobInfo>();
 

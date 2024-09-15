@@ -18,7 +18,7 @@ public partial class NewItemsPanelViewModel : ViewModelBase
 {
     private readonly FileActionsService.FileActionsServiceClient _fileActionsService;
 
-    public ObservableCollection<string> ItemsToTag { get; } = new();
+    public ObservableCollection<string> ItemsToTag { get; } = [];
 
     [ObservableProperty]
     private bool _noObservedLocation;

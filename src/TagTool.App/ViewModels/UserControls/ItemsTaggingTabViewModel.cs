@@ -17,7 +17,7 @@ namespace TagTool.App.ViewModels.UserControls;
 public partial class ItemsTaggingTabViewModel : Document
 {
     private readonly TagService.TagServiceClient _tagService;
-    public ObservableCollection<TaggableItemViewModel> ItemsToTag { get; set; } = new();
+    public ObservableCollection<TaggableItemViewModel> ItemsToTag { get; set; } = [];
 
     /// <summary>
     ///     ctor for XAML previewer
