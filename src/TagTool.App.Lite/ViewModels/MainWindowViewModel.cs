@@ -6,6 +6,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Avalonia.Controls;
 using Avalonia.Threading;
+using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using DynamicData;
 using JetBrains.Annotations;
@@ -22,6 +23,9 @@ namespace TagTool.App.Lite.ViewModels;
 public partial class MainWindowViewModel : ViewModelBase
 {
     private readonly TagService.TagServiceClient _tagService;
+
+    [ObservableProperty]
+    private bool _isNewItemsPanelVisible;
 
     public TaggableItemsSearchBarViewModel SearchBarViewModel { get; }
 
@@ -84,6 +88,12 @@ public partial class MainWindowViewModel : ViewModelBase
 
             process.Start();
         });
+    }
+
+    [RelayCommand]
+    private void ShowNewItemsPanel()
+    {
+        IsNewItemsPanelVisible ^= true;
     }
 
     private async Task SearchForTaggableItems(ICollection<QuerySegment>? argsQuerySegments)

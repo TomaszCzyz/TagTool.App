@@ -4,6 +4,7 @@ using System.Linq;
 using Avalonia.Controls;
 using Avalonia.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 using DynamicData;
 using JetBrains.Annotations;
 using Microsoft.Extensions.DependencyInjection;
@@ -59,5 +60,11 @@ public partial class NewItemsPanelViewModel : ViewModelBase
 
             ItemsToTag.AddRange(reply.Items.Select(dto => dto.File.Path));
         });
+    }
+
+    [RelayCommand]
+    private void AddWatchedLocation()
+    {
+
     }
 }

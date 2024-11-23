@@ -56,7 +56,7 @@
                     Grid.Row="0"
                     Grid.Column="0"
                     ToolTip.Tip="Tag new files"
-                    Command="{Binding OpenTagToolAppCommand}"
+                    Command="{Binding ShowNewItemsPanelCommand}"
                     >
                     <avalonia:MaterialIcon Kind="NewBox" />
                 </Button>
@@ -78,11 +78,11 @@
             </Grid>
         </Grid>
         <!-- New items panel -->
-        <StackPanel>
+        <Panel IsVisible="{Binding IsNewItemsPanelVisible}" >
             <views1:NewItemsPanel />
-        </StackPanel>
+        </Panel>
         <!-- Results panel -->
-        <StackPanel>
+        <StackPanel IsVisible="{Binding !IsNewItemsPanelVisible}">
             <!-- Query result -->
             <Panel>
                 <ListBox
