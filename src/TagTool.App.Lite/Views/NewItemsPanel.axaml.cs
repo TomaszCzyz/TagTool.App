@@ -1,4 +1,6 @@
 using Avalonia.Controls;
+using Avalonia.Interactivity;
+using Avalonia.Platform.Storage;
 using Microsoft.Extensions.DependencyInjection;
 using TagTool.App.Core;
 using TagTool.App.Lite.ViewModels;
@@ -15,4 +17,37 @@ public partial class NewItemsPanel : UserControl
 
         InitializeComponent();
     }
+
+    private async void SelectNewWatchedLocation_OnClick(object? sender, RoutedEventArgs e)
+    {
+        if (sender is not Button { DataContext: NewItemsPanelViewModel viewModel })
+        {
+            return;
+        }
+
+        var storageProvider = GetStorageProvider();
+
+        var downloadDir = await storageProvider.TryGetWellKnownFolderAsync(WellKnownFolder.Downloads);
+
+        var options = new FolderPickerOpenOptions
+        {
+            Title = "Select 'Watched Location'",
+            AllowMultiple = false,
+            SuggestedStartLocation = downloadDir
+        };
+
+        var result = await storageProvider.OpenFolderPickerAsync(options);
+
+        if (result.Count == 0)
+        {
+            return;
+        }
+
+        foreach (var folder in result)
+        {
+            viewModel.AddWatchedLocationCommand.Execute(folder.Path.LocalPath);
+        }
+    }
+
+    private IStorageProvider GetStorageProvider() => ((TopLevel)VisualRoot!).StorageProvider;
 }
