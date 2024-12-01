@@ -77,60 +77,60 @@
                 </Button>
             </Grid>
         </Grid>
-        <!-- New items panel -->
-        <Panel IsVisible="{Binding IsNewItemsPanelVisible}" >
-            <views1:NewItemsPanel />
+        <Panel>
+            <!-- New items panel -->
+            <views1:NewItemsPanel IsVisible="{Binding IsNewItemsPanelVisible}" />
+            <!-- Results panel -->
+            <StackPanel IsVisible="{Binding !IsNewItemsPanelVisible}">
+                <!-- Query result -->
+                <Panel>
+                    <ListBox
+                        Name="TaggableItemsListBox"
+                        Width="{Binding #TopMostDockPanel.Bounds.Width}"
+                        Background="Transparent"
+                        ItemsSource="{Binding SearchResults}"
+                        >
+                        <!-- todo: maybe DataTemplate is not needed if I have ViewLocator -->
+                        <ListBox.ItemTemplate>
+                            <DataTemplate x:DataType="viewModels:TaggableItemViewModel">
+                                <views:TaggableItemView FontSize="14" />
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+                    <TextBlock
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        Foreground="Chocolate"
+                        IsVisible="{Binding !#TaggableItemsListBox.ItemCount}"
+                        Text="No items matching given query"
+                        />
+                </Panel>
+                <Grid
+                    ColumnDefinitions="* Auto *"
+                    IsVisible="{Binding #OtherResultsListBox.ItemCount}"
+                    RowDefinitions="Auto"
+                    >
+                    <Separator Grid.Column="0" />
+                    <TextBlock Grid.Column="1" Text="Other items" />
+                    <Separator Grid.Column="2" />
+                </Grid>
+                <!-- Other results -->
+                <!-- todo: maybe it should be one listbox with inserted separator-item... it should simplifying e.g. focusing -->
+                <Panel>
+                    <ListBox
+                        Name="OtherResultsListBox"
+                        Width="{Binding #TopMostDockPanel.Bounds.Width}"
+                        Background="Transparent"
+                        ItemsSource="{Binding OtherResults}"
+                        >
+                        <ListBox.ItemTemplate>
+                            <DataTemplate x:DataType="viewModels:TaggableItemViewModel">
+                                <views:TaggableItemView FontSize="14" />
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+                </Panel>
+            </StackPanel>
         </Panel>
-        <!-- Results panel -->
-        <StackPanel IsVisible="{Binding !IsNewItemsPanelVisible}">
-            <!-- Query result -->
-            <Panel>
-                <ListBox
-                    Name="TaggableItemsListBox"
-                    Width="{Binding #TopMostDockPanel.Bounds.Width}"
-                    Background="Transparent"
-                    ItemsSource="{Binding SearchResults}"
-                    >
-                    <!-- todo: maybe DataTemplate is not needed if I have ViewLocator -->
-                    <ListBox.ItemTemplate>
-                        <DataTemplate x:DataType="viewModels:TaggableItemViewModel">
-                            <views:TaggableItemView FontSize="14" />
-                        </DataTemplate>
-                    </ListBox.ItemTemplate>
-                </ListBox>
-                <TextBlock
-                    HorizontalAlignment="Center"
-                    VerticalAlignment="Center"
-                    Foreground="Chocolate"
-                    IsVisible="{Binding !#TaggableItemsListBox.ItemCount}"
-                    Text="No items matching given query"
-                    />
-            </Panel>
-            <Grid
-                ColumnDefinitions="* Auto *"
-                IsVisible="{Binding #OtherResultsListBox.ItemCount}"
-                RowDefinitions="Auto"
-                >
-                <Separator Grid.Column="0" />
-                <TextBlock Grid.Column="1" Text="Other items" />
-                <Separator Grid.Column="2" />
-            </Grid>
-            <!-- Other results -->
-            <!-- todo: maybe it should be one listbox with inserted separator-item... it should simplifying e.g. focusing -->
-            <Panel>
-                <ListBox
-                    Name="OtherResultsListBox"
-                    Width="{Binding #TopMostDockPanel.Bounds.Width}"
-                    Background="Transparent"
-                    ItemsSource="{Binding OtherResults}"
-                    >
-                    <ListBox.ItemTemplate>
-                        <DataTemplate x:DataType="viewModels:TaggableItemViewModel">
-                            <views:TaggableItemView FontSize="14" />
-                        </DataTemplate>
-                    </ListBox.ItemTemplate>
-                </ListBox>
-            </Panel>
-        </StackPanel>
     </DockPanel>
 </Window>
