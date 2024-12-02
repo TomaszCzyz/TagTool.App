@@ -31,7 +31,7 @@
         </Style>
         <Style Selector="TextBox">
             <Style Selector="^:disabled">
-                <Setter Property="Foreground" Value="{TemplateBinding Foreground}" />
+                <!-- <Setter Property="Foreground" Value="{TemplateBinding Foreground}" /> -->
                 <Style Selector="^ /template/ Border#PART_BorderElement">
                     <Setter Property="Background" Value="{TemplateBinding Background}" />
                     <Setter Property="BorderBrush" Value="{TemplateBinding BorderBrush}" />

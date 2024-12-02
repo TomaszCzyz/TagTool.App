@@ -10,7 +10,8 @@
     d:DesignWidth="800"
     d:DesignHeight="450"
     mc:Ignorable="d"
-    GotFocus="InputElement_OnGotFocus">
+    GotFocus="InputElement_OnGotFocus"
+    >
     <Design.DataContext>
         <vm:NewItemsPanelViewModel />
     </Design.DataContext>
@@ -25,27 +26,31 @@
             Margin="0 10"
             HorizontalAlignment="Center"
             IsVisible="{Binding NoObservedLocation}"
-            Spacing="20">
+            Spacing="20"
+            >
             <StackPanel Orientation="Horizontal">
                 <TextBlock
                     Margin="0"
                     Padding="0"
                     VerticalAlignment="Center"
-                    Text="No watched locations, " />
+                    Text="No watched locations, "
+                    />
                 <Button Classes="Transparent" Click="SelectNewWatchedLocation_OnClick">
                     <TextBlock
                         VerticalAlignment="Center"
                         Text="add a new one..."
-                        TextDecorations="Underline" />
+                        TextDecorations="Underline"
+                        />
                 </Button>
             </StackPanel>
             <TextBlock
                 Foreground="Red"
                 IsVisible="{Binding AddLocationErrorMessage, Converter={x:Static ObjectConverters.IsNotNull}}"
-                Text="{Binding AddLocationErrorMessage}" />
-            <ListBox
-                ItemsSource="{Binding ItemsToTag}" />
+                Text="{Binding AddLocationErrorMessage}"
+                />
+
         </StackPanel>
+        <ListBox Background="Transparent" ItemsSource="{Binding ItemsToTag}" />
 
     </DockPanel>
 </UserControl>

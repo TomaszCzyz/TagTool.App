@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
@@ -53,11 +52,6 @@ public partial class NewItemsPanelViewModel : ViewModelBase
         _logger = logger;
         _fileActionsService = tagToolBackend.GetFileActionsService();
 
-        ItemsToTag.CollectionChanged += (sender, args) =>
-        {
-            _logger.LogDebug("ItemsToTag CollectionChanged {@Items}", string.Join(",", args.NewItems?.OfType<string>().ToArray() ?? []));
-        };
-
         Initialize();
     }
 
@@ -99,7 +93,6 @@ public partial class NewItemsPanelViewModel : ViewModelBase
             case AddWatchedLocationReply.ResultOneofCase.None:
                 _logger.LogDebug("Successfully added a new watched location with path {Path}", path);
                 NoObservedLocation = false;
-                await ScanWatchedLocation();
                 break;
             case AddWatchedLocationReply.ResultOneofCase.Error:
                 _logger.LogWarning("Failed to add a new watched location with path {Path}", path);
