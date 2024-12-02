@@ -1,4 +1,6 @@
+using System.Diagnostics;
 using Avalonia.Controls;
+using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Platform.Storage;
 using Microsoft.Extensions.DependencyInjection;
@@ -50,4 +52,9 @@ public partial class NewItemsPanel : UserControl
     }
 
     private IStorageProvider GetStorageProvider() => ((TopLevel)VisualRoot!).StorageProvider;
+
+    private void InputElement_OnGotFocus(object? sender, GotFocusEventArgs e)
+    {
+        Debug.WriteLine("GotFocus");
+    }
 }

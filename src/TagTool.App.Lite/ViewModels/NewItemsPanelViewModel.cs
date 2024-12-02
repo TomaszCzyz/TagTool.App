@@ -1,4 +1,5 @@
-﻿using System.Collections.ObjectModel;
+﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
@@ -52,12 +53,18 @@ public partial class NewItemsPanelViewModel : ViewModelBase
         _logger = logger;
         _fileActionsService = tagToolBackend.GetFileActionsService();
 
+        ItemsToTag.CollectionChanged += (sender, args) =>
+        {
+            _logger.LogDebug("ItemsToTag CollectionChanged {@Items}", string.Join(",", args.NewItems?.OfType<string>().ToArray() ?? []));
+        };
+
         Initialize();
     }
 
     private void Initialize()
     {
         Dispatcher.UIThread.InvokeAsync(ScanWatchedLocation);
+        Dispatcher.UIThread.InvokeAsync(GetWatchedLocations);
     }
 
     private async Task ScanWatchedLocation()
@@ -65,11 +72,21 @@ public partial class NewItemsPanelViewModel : ViewModelBase
         var reply = await _fileActionsService.DetectNewItemsAsync(new DetectNewItemsRequest());
         if (reply.Error is not null)
         {
-            NoObservedLocation = true;
+            _logger.LogWarning("Failed to detect new items, {@Error}", reply.Error);
             return;
         }
 
         ItemsToTag.AddRange(reply.Items.Select(dto => dto.File.Path));
+    }
+
+    private async Task GetWatchedLocations()
+    {
+        var reply = await _fileActionsService.GetWatchedLocationsAsync(new GetWatchedLocationsRequest());
+
+        if (reply.Paths.Count == 0)
+        {
+            NoObservedLocation = true;
+        }
     }
 
     [RelayCommand]
@@ -81,6 +98,8 @@ public partial class NewItemsPanelViewModel : ViewModelBase
         {
             case AddWatchedLocationReply.ResultOneofCase.None:
                 _logger.LogDebug("Successfully added a new watched location with path {Path}", path);
+                NoObservedLocation = false;
+                await ScanWatchedLocation();
                 break;
             case AddWatchedLocationReply.ResultOneofCase.Error:
                 _logger.LogWarning("Failed to add a new watched location with path {Path}", path);
