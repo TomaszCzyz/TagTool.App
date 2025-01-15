@@ -187,8 +187,8 @@
                                     </ContentControl.ContextFlyout>
                                     <ContentControl.Styles>
                                         <Style Selector="TextBlock">
-                                            <Setter x:DataType="models:ITag" Property="Text">
-                                                <Binding Path="DisplayText" />
+                                            <Setter x:DataType="models:Tag" Property="Text">
+                                                <Binding Path="Text" />
                                             </Setter>
                                             <Setter Property="TextDecorations">
                                                 <Binding
@@ -291,36 +291,6 @@
                 <!--     </Style> -->
                 <!--  -->
                 <!-- </ToggleButton.Styles> -->
-                <Panel MaxHeight="20">
-                    <avalonia:MaterialIcon Kind="Microphone">
-                        <avalonia:MaterialIcon.IsVisible>
-                            <MultiBinding Converter="{x:Static BoolConverters.And}">
-                                <Binding Path="!RecordAudioCommand.IsRunning" />
-                                <Binding Path="!IsActive" />
-                            </MultiBinding>
-                        </avalonia:MaterialIcon.IsVisible>
-                    </avalonia:MaterialIcon>
-                    <ProgressBar
-                        Width="10"
-                        MinWidth="10"
-                        MinHeight="{Binding $parent.Bounds.Height}"
-                        Foreground="{StaticResource MyLightSecondary500}"
-                        IsVisible="{Binding IsActive}"
-                        Maximum="{Binding MaxVoiceIntensity}"
-                        Minimum="{Binding MinVoiceIntensity}"
-                        Orientation="Vertical"
-                        Value="{Binding VoiceIntensity}"
-                        />
-                    <controls:ProgressRing
-                        Width="20"
-                        Height="20"
-                        Margin="0"
-                        HorizontalAlignment="Left"
-                        VerticalAlignment="Top"
-                        Foreground="{StaticResource MyLightSecondary500}"
-                        IsActive="{Binding RecordAudioCommand.IsRunning}"
-                        />
-                </Panel>
             </ToggleButton>
         </Grid>
     </Border>

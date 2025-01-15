@@ -15,8 +15,7 @@ using TagTool.App.Core;
 using TagTool.App.Core.Models;
 using TagTool.App.Core.Services;
 using TagTool.App.Core.ViewModels;
-using TagTool.Backend;
-using TagTool.Backend.DomainTypes;
+using TagTool.BackendNew;
 
 namespace TagTool.App.Lite.ViewModels;
 

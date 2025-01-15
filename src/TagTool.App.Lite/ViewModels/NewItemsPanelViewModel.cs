@@ -20,7 +20,6 @@ namespace TagTool.App.Lite.ViewModels;
 public partial class NewItemsPanelViewModel : ViewModelBase
 {
     private readonly ILogger<NewItemsPanelViewModel> _logger;
-    private readonly FileActionsService.FileActionsServiceClient _fileActionsService;
 
     public ObservableCollection<string> ItemsToTag { get; } = [];
 
@@ -41,7 +40,6 @@ public partial class NewItemsPanelViewModel : ViewModelBase
         }
 
         _logger = AppTemplate.Current.Services.GetRequiredService<ILogger<NewItemsPanelViewModel>>();
-        _fileActionsService = AppTemplate.Current.Services.GetRequiredService<ITagToolBackend>().GetFileActionsService();
 
         Initialize();
     }
@@ -50,7 +48,6 @@ public partial class NewItemsPanelViewModel : ViewModelBase
     public NewItemsPanelViewModel(ILogger<NewItemsPanelViewModel> logger, ITagToolBackend tagToolBackend)
     {
         _logger = logger;
-        _fileActionsService = tagToolBackend.GetFileActionsService();
 
         Initialize();
     }
@@ -63,44 +60,43 @@ public partial class NewItemsPanelViewModel : ViewModelBase
 
     private async Task ScanWatchedLocation()
     {
-        var reply = await _fileActionsService.DetectNewItemsAsync(new DetectNewItemsRequest());
-        if (reply.Error is not null)
-        {
-            _logger.LogWarning("Failed to detect new items, {@Error}", reply.Error);
-            return;
-        }
+        // if (reply.Error is not null)
+        // {
+        //     _logger.LogWarning("Failed to detect new items, {@Error}", reply.Error);
+        //     return;
+        // }
 
-        ItemsToTag.AddRange(reply.Items.Select(dto => dto.File.Path));
+        // ItemsToTag.AddRange(reply.Items.Select(dto => dto.File.Path));
     }
 
     private async Task GetWatchedLocations()
     {
-        var reply = await _fileActionsService.GetWatchedLocationsAsync(new GetWatchedLocationsRequest());
-
-        if (reply.Paths.Count == 0)
-        {
-            NoObservedLocation = true;
-        }
+        // var reply = await _fileActionsService.GetWatchedLocationsAsync(new GetWatchedLocationsRequest());
+        //
+        // if (reply.Paths.Count == 0)
+        // {
+        //     NoObservedLocation = true;
+        // }
     }
 
     [RelayCommand]
     private async Task AddWatchedLocation(string path)
     {
-        var reply = await _fileActionsService.AddWatchedLocationAsync(new AddWatchedLocationRequest { Path = path });
-
-        switch (reply.ResultCase)
-        {
-            case AddWatchedLocationReply.ResultOneofCase.None:
-                _logger.LogDebug("Successfully added a new watched location with path {Path}", path);
-                NoObservedLocation = false;
-                break;
-            case AddWatchedLocationReply.ResultOneofCase.Error:
-                _logger.LogWarning("Failed to add a new watched location with path {Path}", path);
-                AddLocationErrorMessage = reply.Error.Message;
-                break;
-            default:
-                throw new UnreachableException();
-        }
+        // var reply = await _fileActionsService.AddWatchedLocationAsync(new AddWatchedLocationRequest { Path = path });
+        //
+        // switch (reply.ResultCase)
+        // {
+        //     case AddWatchedLocationReply.ResultOneofCase.None:
+        //         _logger.LogDebug("Successfully added a new watched location with path {Path}", path);
+        //         NoObservedLocation = false;
+        //         break;
+        //     case AddWatchedLocationReply.ResultOneofCase.Error:
+        //         _logger.LogWarning("Failed to add a new watched location with path {Path}", path);
+        //         AddLocationErrorMessage = reply.Error.Message;
+        //         break;
+        //     default:
+        //         throw new UnreachableException();
+        // }
 
         await ScanWatchedLocation();
     }

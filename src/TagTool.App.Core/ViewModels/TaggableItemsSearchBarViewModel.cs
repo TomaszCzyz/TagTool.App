@@ -4,18 +4,15 @@ using System.Collections.Specialized;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using Avalonia.Controls;
-using Avalonia.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using DynamicData;
-using Google.Protobuf.WellKnownTypes;
 using Grpc.Core;
 using JetBrains.Annotations;
 using Microsoft.Extensions.Logging;
 using TagTool.App.Core.Models;
 using TagTool.App.Core.Services;
-using TagTool.Backend;
-using TagTool.Backend.DomainTypes;
+using TagTool.BackendNew;
 
 namespace TagTool.App.Core.ViewModels;
 
@@ -29,13 +26,10 @@ public class CommitSearchQueryEventArgs : EventArgs
     }
 }
 
-public sealed partial class TaggableItemsSearchBarViewModel : ViewModelBase, IDisposable
+public sealed partial class TaggableItemsSearchBarViewModel : ViewModelBase
 {
     private readonly ILogger<TaggableItemsSearchBarViewModel> _logger;
     private readonly TagService.TagServiceClient _tagService;
-    private readonly ISpeechToTagSearchService _speechToTagSearchService;
-
-    private BassAudioCaptureService? _bassAudioCaptureService;
     private IList<ITag>? _tagsInDropDown;
 
     [ObservableProperty]
@@ -50,8 +44,6 @@ public sealed partial class TaggableItemsSearchBarViewModel : ViewModelBase, IDi
     public ObservableCollection<object> DisplayedSearchBarElements { get; } = [new TextBoxMarker()];
 
     public ObservableCollection<QuerySegment> QuerySegments { get; } = [];
-
-    public bool IsActive => _bassAudioCaptureService?.IsActive() ?? false;
 
     public double MinVoiceIntensity { get; } = -90;
 
@@ -71,7 +63,6 @@ public sealed partial class TaggableItemsSearchBarViewModel : ViewModelBase, IDi
         // _tagService = App.Current.Services.GetRequiredService<ITagToolBackend>().GetTagService();
         _logger = null!;
         _tagService = null!;
-        _speechToTagSearchService = null!;
 
         Initialize();
     }
@@ -84,12 +75,9 @@ public sealed partial class TaggableItemsSearchBarViewModel : ViewModelBase, IDi
     {
         _logger = logger;
         _tagService = tagToolBackend.GetTagService();
-        _speechToTagSearchService = speechToTagSearchService;
 
         Initialize();
     }
-
-    public void Dispose() => _bassAudioCaptureService?.Dispose();
 
     /// <summary>
     ///     The event raised when:
@@ -145,7 +133,7 @@ public sealed partial class TaggableItemsSearchBarViewModel : ViewModelBase, IDi
     public bool FilterAlreadyUsedTags(string? _, object? item)
         => item is string tagNameFromDropDown
            && tagNameFromDropDown != "Unknown TagType"
-           && !QuerySegments.Select(segment => segment.Tag.DisplayText).Contains(tagNameFromDropDown);
+           && !QuerySegments.Select(segment => segment.Tag.Text).Contains(tagNameFromDropDown);
 
     public async Task<IEnumerable<object>> GetTagsAsync(string? searchText, CancellationToken cancellationToken)
     {
@@ -164,11 +152,11 @@ public sealed partial class TaggableItemsSearchBarViewModel : ViewModelBase, IDi
 
         _tagsInDropDown = await streamingCall.ResponseStream
             .ReadAllAsync(cancellationToken)
-            .Select(reply => TagMapper.TagMapper.MapToDomain(reply.Tag))
+            // .Select(reply => TagMapper.TagMapper.MapToDomain(reply.Tag))
             .Where(tag => !QuerySegments.Select(segment => segment.Tag).Contains(tag))
             .ToListAsync(cancellationToken);
 
-        return _tagsInDropDown.Select(tag => (object)tag.DisplayText);
+        return _tagsInDropDown.Select(object (tag) => tag.DisplayText);
     }
 
     [RelayCommand]
@@ -208,65 +196,6 @@ public sealed partial class TaggableItemsSearchBarViewModel : ViewModelBase, IDi
     [RelayCommand]
     private async Task RecordAudio(bool isChecked)
     {
-        if (isChecked)
-        {
-            StartRecord();
-        }
-        else
-        {
-            StopRecord();
-            var words = await _speechToTagSearchService.GetTranscriptionWords(_bassAudioCaptureService?.OutputFilePath);
-
-            var searchTags = words
-                .Select(tagName =>
-                {
-                    var reply = _tagService.DoesTagExists(new DoesTagExistsRequest { Tag = Any.Pack(new NormalTag { Name = tagName }) });
-
-                    return reply.ResultCase switch
-                    {
-                        DoesTagExistsReply.ResultOneofCase.None => null,
-                        DoesTagExistsReply.ResultOneofCase.Tag => reply.Tag.Unpack<NormalTag>(),
-                        _ => throw new UnreachableException()
-                    };
-                })
-                .Where(tag => tag is not null && !QuerySegments.Select(segment => segment.Tag.DisplayText).Contains(tag.Name))
-                .Select(tag => TagMapper.TagMapper.MapToDomain(Any.Pack(tag)))
-                .ToArray();
-
-            if (searchTags.Length == 0)
-            {
-                return;
-            }
-
-            foreach (var tag in searchTags)
-            {
-                QuerySegments.Add(new QuerySegment { Tag = tag });
-            }
-        }
-    }
-
-    private void StartRecord()
-    {
-        _bassAudioCaptureService = new BassAudioCaptureService(3);
-        _bassAudioCaptureService.Start();
-
-        DispatcherTimer.Run(
-            () =>
-            {
-                VoiceIntensity = _bassAudioCaptureService.GetVoiceIntensity();
-                return IsActive;
-            },
-            TimeSpan.FromMilliseconds(100));
-
-        OnPropertyChanged(nameof(IsActive));
-    }
-
-    private void StopRecord()
-    {
-        _bassAudioCaptureService?.Stop();
-        _bassAudioCaptureService?.Dispose();
-
-        OnPropertyChanged(nameof(IsActive));
     }
 
     private void OnCommitSearchQueryEvent(CommitSearchQueryEventArgs e)

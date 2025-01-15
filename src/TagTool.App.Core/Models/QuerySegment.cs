@@ -1,6 +1,5 @@
 ﻿using System.Diagnostics;
-using Google.Protobuf.WellKnownTypes;
-using TagTool.Backend;
+using TagTool.BackendNew;
 
 namespace TagTool.App.Core.Models;
 
@@ -9,7 +8,7 @@ public sealed class QuerySegment
 {
     public QuerySegmentState State { get; init; } = QuerySegmentState.Include;
 
-    public required ITag Tag { get; init; }
+    public required Tag Tag { get; init; }
 
     private bool Equals(QuerySegment other) => Tag.Equals(other.Tag);
 
@@ -21,10 +20,10 @@ public sealed class QuerySegment
 public static class QuerySegmentExtensions
 {
     public static TagQueryParam MapToDto(this QuerySegment segment)
-        => new() { Tag = Any.Pack(TagMapper.TagMapper.MapToDto(segment.Tag)), State = MapQuerySegmentStateToDto(segment.State) };
+        => new() { Tag = segment.Tag.MapToDto(), State = MapQuerySegmentStateToDto(segment.State) };
 
     public static QuerySegment MapFromDto(this TagQueryParam segment)
-        => new() { Tag = TagMapper.TagMapper.MapToDomain(segment.Tag), State = MapQuerySegmentStateFromDto(segment.State) };
+        => new() { Tag = segment.Tag.MapFromDto(), State = MapQuerySegmentStateFromDto(segment.State) };
 
     private static TagQueryParam.Types.QuerySegmentState MapQuerySegmentStateToDto(QuerySegmentState state)
         => state switch

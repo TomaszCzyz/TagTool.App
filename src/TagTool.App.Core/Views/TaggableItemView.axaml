@@ -99,12 +99,12 @@
                         </ItemsPanelTemplate>
                     </ItemsControl.ItemsPanel>
                     <ItemsControl.ItemTemplate>
-                        <DataTemplate DataType="models:ITag">
+                        <DataTemplate DataType="models:Tag">
                             <ContentControl Content="{Binding $self.DataContext}" ContentTemplate="{x:Static dataTemplates:TagsTemplateProvider.TagDataTemplate}">
                                 <ContentControl.Styles>
                                     <Style Selector="TextBlock">
                                         <Setter Property="Text">
-                                            <Binding Path="DisplayText" />
+                                            <Binding Path="Text" />
                                         </Setter>
                                         <Setter Property="Margin" Value="4 1" />
                                         <Setter Property="VerticalAlignment" Value="Center" />

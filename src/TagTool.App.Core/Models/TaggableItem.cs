@@ -2,9 +2,11 @@
 
 public abstract class TaggableItem
 {
+    public Guid Id { get; set; }
+
     public abstract string DisplayName { get; }
 
-    public IReadOnlySet<ITag>? Tags { get; init; }
+    public IReadOnlySet<Tag>? Tags { get; init; }
 }
 
 public class TaggableFile : TaggableItem

@@ -44,16 +44,16 @@ public partial class MainWindowView : Window
 
     private async Task OpenPreviewer_OnKeyDown(object? sender, KeyEventArgs e)
     {
-        if (e.Key == Key.Space)
-        {
-            var items = ViewModel.SearchResults
-                .Select(model => model.TaggableItem)
-                .Concat(ViewModel.OtherResults.Select(model => model.TaggableItem))
-                .ToList();
-
-            var previewerWindow = new PreviewerWindow(items, TaggableItemsListBox.SelectedIndex);
-            await previewerWindow.ShowDialog((Window)VisualRoot!);
-        }
+        // if (e.Key == Key.Space)
+        // {
+        //     var items = ViewModel.SearchResults
+        //         .Select(model => model.TaggableItem)
+        //         .Concat(ViewModel.OtherResults.Select(model => model.TaggableItem))
+        //         .ToList();
+        //
+        //     var previewerWindow = new PreviewerWindow(items, TaggableItemsListBox.SelectedIndex);
+        //     await previewerWindow.ShowDialog((Window)VisualRoot!);
+        // }
     }
 
     private static void OnDoubleTapped_ExecuteLinkedAction(object? sender, TappedEventArgs args)
