@@ -61,7 +61,7 @@
                         <MenuItem Header="Copy" />
                         <Separator />
                         <!-- todo: make this functionality 'an action' associated with special tag 'CommonStorage' -->
-                        <MenuItem Command="{Binding MoveToCommonStorageCommand}" Header="Move to Common Storage" />
+                        <!-- <MenuItem Command="{Binding MoveToCommonStorageCommand}" Header="Move to Common Storage" /> -->
                         <MenuItem Header="Show in Explorer" />
                     </MenuFlyout>
                 </TextBlock.ContextFlyout>

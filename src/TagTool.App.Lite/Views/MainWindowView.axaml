@@ -72,10 +72,6 @@
             </Grid>
         </Grid>
         <Panel>
-            <!-- New items panel -->
-            <Panel IsVisible="{Binding IsNewItemsPanelVisible}">
-                <views1:NewItemsPanel />
-            </Panel>
             <!-- Results panel -->
             <StackPanel IsVisible="{Binding !IsNewItemsPanelVisible}">
                 <!-- Query result -->

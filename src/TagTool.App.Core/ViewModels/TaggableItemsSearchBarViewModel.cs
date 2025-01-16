@@ -13,6 +13,7 @@ using Microsoft.Extensions.Logging;
 using TagTool.App.Core.Models;
 using TagTool.App.Core.Services;
 using TagTool.BackendNew;
+using Tag = TagTool.App.Core.Models.Tag;
 
 namespace TagTool.App.Core.ViewModels;
 
@@ -30,7 +31,7 @@ public sealed partial class TaggableItemsSearchBarViewModel : ViewModelBase
 {
     private readonly ILogger<TaggableItemsSearchBarViewModel> _logger;
     private readonly TagService.TagServiceClient _tagService;
-    private IList<ITag>? _tagsInDropDown;
+    private IList<Tag>? _tagsInDropDown;
 
     [ObservableProperty]
     private object? _selectedItem;
@@ -152,17 +153,23 @@ public sealed partial class TaggableItemsSearchBarViewModel : ViewModelBase
 
         _tagsInDropDown = await streamingCall.ResponseStream
             .ReadAllAsync(cancellationToken)
-            // .Select(reply => TagMapper.TagMapper.MapToDomain(reply.Tag))
+            .Select(reply => reply.Tag.MapFromDto())
             .Where(tag => !QuerySegments.Select(segment => segment.Tag).Contains(tag))
             .ToListAsync(cancellationToken);
 
-        return _tagsInDropDown.Select(object (tag) => tag.DisplayText);
+        return _tagsInDropDown.Select(object (tag) => tag.Text);
     }
 
     [RelayCommand]
     private void AddTagToSearchQuery(string tagName)
     {
-        var first = _tagsInDropDown?.First(tag => tag.DisplayText == tagName)!;
+        if (_tagsInDropDown is null)
+        {
+            return;
+        }
+
+        var first = _tagsInDropDown.First(tag => tag.Text == tagName);
+
         QuerySegments.Add(new QuerySegment { Tag = first });
     }
 
@@ -192,11 +199,6 @@ public sealed partial class TaggableItemsSearchBarViewModel : ViewModelBase
 
     [RelayCommand]
     private void CommitSearch() => OnCommitSearchQueryEvent(new CommitSearchQueryEventArgs(QuerySegments));
-
-    [RelayCommand]
-    private async Task RecordAudio(bool isChecked)
-    {
-    }
 
     private void OnCommitSearchQueryEvent(CommitSearchQueryEventArgs e)
     {

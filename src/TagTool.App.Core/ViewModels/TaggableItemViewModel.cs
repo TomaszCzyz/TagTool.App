@@ -53,7 +53,7 @@ public partial class TaggableItemViewModel : ViewModelBase, ITextSearchable
 
     public string DisplayName => TaggableItem.DisplayName;
 
-    public IReadOnlySet<Tag>? AssociatedTags => TaggableItem.Tags;
+    public ISet<Tag>? AssociatedTags => TaggableItem.Tags;
 
     public ReadOnlySpan<char> SearchText => DisplayName.AsSpan();
 
@@ -68,10 +68,10 @@ public partial class TaggableItemViewModel : ViewModelBase, ITextSearchable
         }
 
         _tagService = null!;
-        TaggableItem = new TaggableFile
+        TaggableItem = new TaggableFile.TaggableFile
         {
             Path = @"C:\Users\tczyz\MyFiles\FromOec\DigitalSign.gif",
-            Tags = new HashSet<Tag>([new Tag { Text = "Tag1" }, new Tag { Text = "Tag3" }])
+            Tags = new HashSet<Tag>([new Tag { Text = "Tag1", Id = Guid.NewGuid() }, new Tag { Text = "Tag3", Id = Guid.NewGuid() }])
         };
     }
 
@@ -90,54 +90,19 @@ public partial class TaggableItemViewModel : ViewModelBase, ITextSearchable
     }
 
     [RelayCommand]
-    private async Task MoveToCommonStorage()
-    {
-        switch (TaggableItem)
-        {
-            case TaggableFile file:
-                await MoveFileToCommonStorage(file);
-
-                break;
-            case TaggableFolder folder:
-                await MoveFolderToCommonStorage(folder);
-
-                break;
-            default:
-                throw new UnreachableException();
-        }
-    }
-
-    private async Task MoveFolderToCommonStorage(TaggableFolder folder)
-    {
-    }
-
-    private async Task MoveFileToCommonStorage(TaggableFile file)
-    {
-    }
-
-    [RelayCommand]
-    private async Task ExecuteLinkedAction()
-    {
-    }
-
-    [RelayCommand]
     private async Task TagIt(Tag tag)
     {
-        var tagReply = await _tagService.TagItemAsync(new TagItemRequest { TagId = tag.Id.ToString(), ItemId = TaggableItem.Id.ToString() });
+        var reply = await _tagService.TagItemAsync(new TagItemRequest { TagId = tag.Id.ToString(), ItemId = TaggableItem.Id.ToString() });
 
-        switch (tagReply.ResultCase)
+        switch (reply.ResultCase)
         {
             case TagItemReply.ResultOneofCase.Item:
-                TaggableItem = TaggableItem switch
-                {
-                    TaggableFile file => new TaggableFile { Path = file.Path, Tags = tagReply.Item.Tags.MapToDomain().ToHashSet() },
-                    TaggableFolder folder => new TaggableFolder { Path = folder.Path, Tags = tagReply.Item.Tags.MapToDomain().ToHashSet() },
-                    _ => throw new UnreachableException()
-                };
+                TaggableItem.Tags = reply.Item.Tags.MapFromDto().ToHashSet();
                 break;
             case TagItemReply.ResultOneofCase.ErrorMessage:
-                // Debug.WriteLine($"Unable to tag item {taggableItemDto}");
+                Debug.WriteLine("Unable to tag item");
                 break;
+            case TagItemReply.ResultOneofCase.None:
             default:
                 throw new UnreachableException();
         }
@@ -151,16 +116,12 @@ public partial class TaggableItemViewModel : ViewModelBase, ITextSearchable
         switch (reply.ResultCase)
         {
             case UntagItemReply.ResultOneofCase.TaggedItem:
-                TaggableItem = TaggableItem switch
-                {
-                    TaggableFile file => new TaggableFile { Path = file.Path, Tags = reply.TaggedItem.Tags.MapToDomain().ToHashSet() },
-                    TaggableFolder folder => new TaggableFolder { Path = folder.Path, Tags = reply.TaggedItem.Tags.MapToDomain().ToHashSet() },
-                    _ => throw new UnreachableException()
-                };
+                TaggableItem.Tags = reply.TaggedItem.Tags.MapFromDto().ToHashSet();
                 break;
             case UntagItemReply.ResultOneofCase.ErrorMessage:
-                // Debug.WriteLine($"Unable to tag item {taggableItemDto}");
+                Debug.WriteLine("Unable to untag item");
                 break;
+            case UntagItemReply.ResultOneofCase.None:
             default:
                 throw new UnreachableException();
         }

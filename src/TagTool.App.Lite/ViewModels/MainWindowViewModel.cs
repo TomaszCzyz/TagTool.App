@@ -97,24 +97,24 @@ public partial class MainWindowViewModel : ViewModelBase
 
     private async Task SearchForTaggableItems(ICollection<QuerySegment>? argsQuerySegments)
     {
-        var tagQueryParams = argsQuerySegments?.Select(segment => segment.MapToDto());
-
-        var reply = await _tagService.GetItemsByTagsAsync(new GetItemsByTagsRequest
-        {
-            QueryParams = { tagQueryParams ?? Array.Empty<TagQueryParam>() }
-        });
-
-        SearchResults.Clear();
-        SearchResults.AddRange(reply.TaggedItems.Select(item
-            => new TaggableItemViewModel(_tagService)
-            {
-                TaggableItem = item.TaggableItem.ItemCase switch
-                {
-                    TaggableItemDto.ItemOneofCase.File => new TaggableFile { Path = item.TaggableItem.File.Path },
-                    TaggableItemDto.ItemOneofCase.Folder => new TaggableFolder { Path = item.TaggableItem.Folder.Path },
-                    _ => throw new UnreachableException()
-                },
-                AreTagsVisible = true
-            }));
+        // var tagQueryParams = argsQuerySegments?.Select(segment => segment.MapToDto());
+        //
+        // var reply = await _tagService.GetItemsByTagsAsync(new GetItemsByTagsRequest
+        // {
+        //     QueryParams = { tagQueryParams ?? Array.Empty<TagQueryParam>() }
+        // });
+        //
+        // SearchResults.Clear();
+        // SearchResults.AddRange(reply.TaggedItems.Select(item
+        //     => new TaggableItemViewModel(_tagService)
+        //     {
+        //         TaggableItem = item.TaggableItem.ItemCase switch
+        //         {
+        //             TaggableItemDto.ItemOneofCase.File => new TaggableFile { Path = item.TaggableItem.File.Path },
+        //             TaggableItemDto.ItemOneofCase.Folder => new TaggableFolder { Path = item.TaggableItem.Folder.Path },
+        //             _ => throw new UnreachableException()
+        //         },
+        //         AreTagsVisible = true
+        //     }));
     }
 }

@@ -116,7 +116,7 @@ message GetItemsByTagsRequest {
 message TagQueryParam {
   // The segment's state.
   QuerySegmentState state = 1;
-
+  // The tag.
   Tag tag = 2;
 
   enum QuerySegmentState {
