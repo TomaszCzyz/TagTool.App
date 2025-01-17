@@ -1,6 +1,7 @@
 ﻿using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using Avalonia.Controls;
+using Avalonia.Media.Imaging;
 using Avalonia.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
@@ -26,7 +27,8 @@ public interface ITextSearchable
 [DebuggerDisplay("{DisplayName}")]
 public partial class TaggableItemViewModel : ViewModelBase, ITextSearchable
 {
-    private readonly TagService.TagServiceClient _tagService;
+    private readonly TaggableItemIconResolverDispatcher _iconResolver;
+    private readonly TaggableItemDisplayTextResolver _displayTextResolver;
     private TaggableItem _taggableItem;
 
     [ObservableProperty]
@@ -51,7 +53,9 @@ public partial class TaggableItemViewModel : ViewModelBase, ITextSearchable
         }
     }
 
-    public string DisplayName => TaggableItem.DisplayName;
+    public string DisplayName => _displayTextResolver.GetDisplayText(TaggableItem);
+
+    public Bitmap Icon => _iconResolver.GetIcon(TaggableItem);
 
     public ISet<Tag>? AssociatedTags => TaggableItem.Tags;
 
@@ -67,7 +71,8 @@ public partial class TaggableItemViewModel : ViewModelBase, ITextSearchable
             Debug.Fail("ctor for XAML Previewer should not be invoke during standard execution");
         }
 
-        _tagService = null!;
+        _iconResolver = null!;
+        _displayTextResolver = null!;
         TaggableItem = new TaggableFile.TaggableFile
         {
             Path = @"C:\Users\tczyz\MyFiles\FromOec\DigitalSign.gif",
@@ -75,10 +80,12 @@ public partial class TaggableItemViewModel : ViewModelBase, ITextSearchable
         };
     }
 
-    public TaggableItemViewModel(TagService.TagServiceClient tagServiceClient)
+    public TaggableItemViewModel(
+        TaggableItemIconResolverDispatcher iconResolver,
+        TaggableItemDisplayTextResolver displayTextResolver)
     {
-        // todo: add cancellation token support (tags should not be loaded for example when folder has been exited or tags are not visible)
-        _tagService = tagServiceClient;
+        _iconResolver = iconResolver;
+        _displayTextResolver = displayTextResolver;
 
         // todo: rework this to use DI properly
         var tagToolBackend = AppTemplate.Current.Services.GetRequiredService<ITagToolBackend>();
@@ -86,44 +93,6 @@ public partial class TaggableItemViewModel : ViewModelBase, ITextSearchable
         if (AreTagsVisible)
         {
             Dispatcher.UIThread.InvokeAsync(UpdateTaggableItem, DispatcherPriority.Background);
-        }
-    }
-
-    [RelayCommand]
-    private async Task TagIt(Tag tag)
-    {
-        var reply = await _tagService.TagItemAsync(new TagItemRequest { TagId = tag.Id.ToString(), ItemId = TaggableItem.Id.ToString() });
-
-        switch (reply.ResultCase)
-        {
-            case TagItemReply.ResultOneofCase.Item:
-                TaggableItem.Tags = reply.Item.Tags.MapFromDto().ToHashSet();
-                break;
-            case TagItemReply.ResultOneofCase.ErrorMessage:
-                Debug.WriteLine("Unable to tag item");
-                break;
-            case TagItemReply.ResultOneofCase.None:
-            default:
-                throw new UnreachableException();
-        }
-    }
-
-    [RelayCommand]
-    private async Task UntagItem(Tag tag)
-    {
-        var reply = await _tagService.UntagItemAsync(new UntagItemRequest { TagId = tag.Id.ToString(), ItemId = TaggableItem.Id.ToString() });
-
-        switch (reply.ResultCase)
-        {
-            case UntagItemReply.ResultOneofCase.TaggedItem:
-                TaggableItem.Tags = reply.TaggedItem.Tags.MapFromDto().ToHashSet();
-                break;
-            case UntagItemReply.ResultOneofCase.ErrorMessage:
-                Debug.WriteLine("Unable to untag item");
-                break;
-            case UntagItemReply.ResultOneofCase.None:
-            default:
-                throw new UnreachableException();
         }
     }
 

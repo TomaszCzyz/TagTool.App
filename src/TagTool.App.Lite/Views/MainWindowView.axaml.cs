@@ -1,4 +1,3 @@
-using System.Linq;
 using System.Threading.Tasks;
 using Avalonia;
 using Avalonia.Controls;
@@ -8,8 +7,6 @@ using Avalonia.Interactivity;
 using Avalonia.VisualTree;
 using TagTool.App.Core;
 using TagTool.App.Core.ViewModels;
-using TagTool.App.Core.Views;
-using TagTool.App.Lite.ViewModels;
 
 namespace TagTool.App.Lite.Views;
 
@@ -60,7 +57,7 @@ public partial class MainWindowView : Window
     {
         if (sender is ListBox { SelectedItem: TaggableItemViewModel vm })
         {
-            vm.ExecuteLinkedActionCommand.Execute(null);
+            // vm.ExecuteLinkedActionCommand.Execute(null);
         }
     }
 
@@ -73,7 +70,7 @@ public partial class MainWindowView : Window
 
         if (sender is ListBox { SelectedItem: TaggableItemViewModel vm })
         {
-            vm.ExecuteLinkedActionCommand.Execute(null);
+            // vm.ExecuteLinkedActionCommand.Execute(null);
         }
     }
 

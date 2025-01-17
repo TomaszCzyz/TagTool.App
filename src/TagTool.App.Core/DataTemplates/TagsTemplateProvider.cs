@@ -9,9 +9,9 @@ namespace TagTool.App.Core.DataTemplates;
 public static class TagsTemplateProvider
 {
     // ReSharper disable once ConditionIsAlwaysTrueOrFalseAccordingToNullableAPIContract
-    public static FuncDataTemplate<ITag> TagDataTemplate { get; } = new(tag => tag is not null, BuildTagPresenter);
+    public static FuncDataTemplate<Tag> TagDataTemplate { get; } = new(tag => tag.Id != Guid.Empty, BuildTagPresenter);
 
-    private static Control BuildTagPresenter(ITag tag)
+    private static Control BuildTagPresenter(Tag tag)
     {
         var resourceName = $"{tag.GetType().Name}Color";
 

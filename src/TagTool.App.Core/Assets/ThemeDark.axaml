@@ -1,0 +1,36 @@
+<ResourceDictionary xmlns="https://github.com/avaloniaui" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <SolidColorBrush x:Key="Primary">#aac7ff</SolidColorBrush>
+    <SolidColorBrush x:Key="OnPrimary">#0a305f</SolidColorBrush>
+    <SolidColorBrush x:Key="PrimaryContainer">#284777</SolidColorBrush>
+    <SolidColorBrush x:Key="PrimaryInverse">#415f91</SolidColorBrush>
+    <SolidColorBrush x:Key="OnPrimaryContainer">#d6e3ff</SolidColorBrush>
+    <SolidColorBrush x:Key="Secondary">#bec6dc</SolidColorBrush>
+    <SolidColorBrush x:Key="OnSecondary">#283141</SolidColorBrush>
+    <SolidColorBrush x:Key="SecondaryContainer">#3e4759</SolidColorBrush>
+    <SolidColorBrush x:Key="OnSecondaryContainer">#dae2f9</SolidColorBrush>
+    <SolidColorBrush x:Key="Tertiary">#ddbce0</SolidColorBrush>
+    <SolidColorBrush x:Key="OnTertiary">#3f2844</SolidColorBrush>
+    <SolidColorBrush x:Key="TertiaryContainer">#573e5c</SolidColorBrush>
+    <SolidColorBrush x:Key="OnTertiaryContainer">#fad8fd</SolidColorBrush>
+    <SolidColorBrush x:Key="Error">#ffb4ab</SolidColorBrush>
+    <SolidColorBrush x:Key="OnError">#690005</SolidColorBrush>
+    <SolidColorBrush x:Key="ErrorContainer">#93000a</SolidColorBrush>
+    <SolidColorBrush x:Key="OnErrorContainer">#ffdad6</SolidColorBrush>
+    <SolidColorBrush x:Key="SurfaceDim">#111318</SolidColorBrush>
+    <SolidColorBrush x:Key="Surface">#111318</SolidColorBrush>
+    <SolidColorBrush x:Key="SurfaceBright">#37393e</SolidColorBrush>
+    <SolidColorBrush x:Key="SurfaceInverse">#e2e2e9</SolidColorBrush>
+    <SolidColorBrush x:Key="OnSurfaceInverse">#2e3036</SolidColorBrush>
+    <SolidColorBrush x:Key="OnSurface">#e2e2e9</SolidColorBrush>
+    <SolidColorBrush x:Key="OnSurfaceVariant">#c4c6d0</SolidColorBrush>
+    <SolidColorBrush x:Key="Outline">#8e9099</SolidColorBrush>
+    <SolidColorBrush x:Key="OutlineVariant">#44474e</SolidColorBrush>
+    <SolidColorBrush x:Key="SurfaceContainerLowest">#0c0e13</SolidColorBrush>
+    <SolidColorBrush x:Key="SurfaceContainerLow">#191c20</SolidColorBrush>
+    <SolidColorBrush x:Key="SurfaceContainer">#1d2024</SolidColorBrush>
+    <SolidColorBrush x:Key="SurfaceContainerHigh">#282a2f</SolidColorBrush>
+    <SolidColorBrush x:Key="SurfaceContainerHighest">#33353a</SolidColorBrush>
+
+</ResourceDictionary>
+

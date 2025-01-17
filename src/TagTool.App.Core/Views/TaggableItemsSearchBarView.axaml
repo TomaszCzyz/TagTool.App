@@ -2,7 +2,6 @@
     xmlns="https://github.com/avaloniaui"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
-    xmlns:controls="clr-namespace:TagTool.App.Core.Controls"
     xmlns:converters="clr-namespace:TagTool.App.Core.Converters"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:dataTemplates="clr-namespace:TagTool.App.Core.DataTemplates"
@@ -37,16 +36,16 @@
                 <Setter Property="Background" Value="{DynamicResource ToggleButtonBackgroundCheckedPointerOver}" />
             </Style>
         </Style>
-        <Style Selector="Border.SearchBox">
-            <Setter Property="BorderBrush">
-                <SolidColorBrush Opacity="0.5" Color="{StaticResource MyLightSecondary500}" />
-            </Setter>
-        </Style>
-        <Style Selector="Border.SearchBox:pointerover, Border.SearchBox:focus-within">
-            <Setter Property="BorderBrush">
-                <SolidColorBrush Opacity="1" Color="{StaticResource MyLightSecondary500}" />
-            </Setter>
-        </Style>
+        <!-- <Style Selector="Border.SearchBox"> -->
+        <!--     <Setter Property="BorderBrush"> -->
+        <!--         <SolidColorBrush Opacity="0.5" Color="{DynamicResource Secondary}" /> -->
+        <!--     </Setter> -->
+        <!-- </Style> -->
+        <!-- <Style Selector="Border.SearchBox:pointerover, Border.SearchBox:focus-within"> -->
+        <!--     <Setter Property="BorderBrush"> -->
+        <!--         <SolidColorBrush Opacity="1" Color="{StaticResource MyLightSecondary500}" /> -->
+        <!--     </Setter> -->
+        <!-- </Style> -->
     </UserControl.Styles>
     <Design.DataContext>
         <viewModels:TaggableItemsSearchBarViewModel />
@@ -132,7 +131,7 @@
                     Height="20"
                     HorizontalAlignment="Center"
                     VerticalAlignment="Center"
-                    Foreground="{StaticResource MyLightSecondary500}"
+                    Foreground="{DynamicResource Primary}"
                     Kind="Magnify"
                     />
             </Button>
@@ -222,7 +221,7 @@
                                         Height="{Binding $parent.Height}"
                                         HorizontalAlignment="Center"
                                         VerticalAlignment="Center"
-                                        Foreground="{StaticResource MyLightSecondary500}"
+                                        Foreground="{DynamicResource Primary}"
                                         Kind="Close"
                                         />
                                 </Button>
@@ -267,31 +266,6 @@
                     </ListBox.DataTemplates>
                 </ListBox>
             </ScrollViewer>
-            <!-- Record button -->
-            <ToggleButton
-                Grid.Column="2"
-                Classes="TransparentBackgroundWhenChecked"
-                Padding="0 5"
-                HorizontalAlignment="Right"
-                VerticalAlignment="Center"
-                Background="Transparent"
-                Command="{ReflectionBinding RecordAudioCommand}"
-                CommandParameter="{Binding $self.IsChecked}"
-                Foreground="{StaticResource MyLightSecondary500}"
-                >
-                <!-- <ToggleButton.Styles> -->
-                <!--     <Style Selector="ToggleButton.TransparentBackgroundWhenChecked:checked"> -->
-                <!--         <Style Selector="^ /template/ ContentPresenter#PART_ContentPresenter"> -->
-                <!--             <Setter Property="Background" Value="Transparent" /> -->
-                <!--         </Style> -->
-                <!--  -->
-                <!--         <Style Selector="^:pointerover /template/ ContentPresenter#PART_ContentPresenter"> -->
-                <!--             <Setter Property="Background" Value="{DynamicResource ToggleButtonBackgroundCheckedPointerOver}" /> -->
-                <!--         </Style> -->
-                <!--     </Style> -->
-                <!--  -->
-                <!-- </ToggleButton.Styles> -->
-            </ToggleButton>
         </Grid>
     </Border>
 </UserControl>

@@ -23,8 +23,9 @@ public partial class TaggableItemView : UserControl
         AddHandler(DragDrop.DropEvent, (_, _) => DragDropInfoAreaBorder.BorderBrush = Brushes.Transparent);
 
         // Tunnel strategy allows elements higher in hierarchy to handle this event differently, e.g. FileSystemView -> navigate to folder
-        AddHandler(DoubleTappedEvent, (_, _) => ViewModel.ExecuteLinkedActionCommand.Execute(null), RoutingStrategies.Tunnel);
-        // todo: I cannot add AddHandler(OnKeyDown,...), because routed event does not go inside ListBoxItem... why? 
+        // AddHandler(DoubleTappedEvent, (_, _) => ViewModel.ExecuteLinkedActionCommand.Execute(null), RoutingStrategies.Tunnel);
+
+        // todo: I cannot add AddHandler(OnKeyDown,...), because routed event does not go inside ListBoxItem... why?
     }
 
     private void DragOver(object? sender, DragEventArgs e)
@@ -39,9 +40,9 @@ public partial class TaggableItemView : UserControl
 
     private void Drop(object? sender, DragEventArgs e)
     {
-        var tag = (ITag)e.Data.Get("draggedTag")!;
+        var tag = (Tag)e.Data.Get("draggedTag")!;
 
-        ViewModel.TagItCommand.Execute(tag);
+        // ViewModel.TagItCommand.Execute(tag);
     }
 
     private void UntagMenuItem_OnClick(object? sender, RoutedEventArgs e)
@@ -49,6 +50,6 @@ public partial class TaggableItemView : UserControl
         var menuItem = (MenuItem)sender!;
         var textBlock = menuItem.FindLogicalAncestorOfType<TextBlock>()!;
 
-        ViewModel.UntagItemCommand.Execute(textBlock.DataContext);
+        // ViewModel.UntagItemCommand.Execute(textBlock.DataContext);
     }
 }

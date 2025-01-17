@@ -2,7 +2,6 @@
     xmlns="https://github.com/avaloniaui"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
-    xmlns:converters="clr-namespace:TagTool.App.Core.Converters;assembly=TagTool.App.Core"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:dataTemplates="clr-namespace:TagTool.App.Core.DataTemplates"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -16,9 +15,6 @@
     mc:Ignorable="d"
     DragDrop.AllowDrop="True"
     >
-    <UserControl.Resources>
-        <converters:TaggableItemToIconConverter x:Key="TaggableItemToToIconConverter" />
-    </UserControl.Resources>
     <Design.DataContext>
         <viewModels:TaggableItemViewModel />
     </Design.DataContext>
@@ -40,14 +36,8 @@
                 Name="IconImage"
                 Grid.Column="0"
                 Margin="0 0 2 0"
-                >
-                <Image.Source>
-                    <MultiBinding Converter="{StaticResource TaggableItemToToIconConverter}">
-                        <Binding Path="TaggableItem" />
-                        <Binding Path="#DisplayNameTextBlock.FontSize" />
-                    </MultiBinding>
-                </Image.Source>
-            </Image>
+                Source="{Binding Icon}"
+                />
             <TextBlock
                 Name="DisplayNameTextBlock"
                 Grid.Column="1"

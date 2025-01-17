@@ -4,8 +4,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Serilog;
 using TagTool.App.Core;
 using TagTool.App.Core.Extensions;
-using TagTool.App.Lite.ViewModels;
 using TagTool.App.Lite.Views;
+using MainWindowViewModel = TagTool.App.Lite.Views.MainWindowViewModel;
 
 namespace TagTool.App.Lite;
 
