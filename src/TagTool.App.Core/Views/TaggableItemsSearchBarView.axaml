@@ -36,26 +36,22 @@
                 <Setter Property="Background" Value="{DynamicResource ToggleButtonBackgroundCheckedPointerOver}" />
             </Style>
         </Style>
-        <!-- <Style Selector="Border.SearchBox"> -->
-        <!--     <Setter Property="BorderBrush"> -->
-        <!--         <SolidColorBrush Opacity="0.5" Color="{DynamicResource Secondary}" /> -->
-        <!--     </Setter> -->
-        <!-- </Style> -->
-        <!-- <Style Selector="Border.SearchBox:pointerover, Border.SearchBox:focus-within"> -->
-        <!--     <Setter Property="BorderBrush"> -->
-        <!--         <SolidColorBrush Opacity="1" Color="{StaticResource MyLightSecondary500}" /> -->
-        <!--     </Setter> -->
-        <!-- </Style> -->
+        <Style Selector="Border.SearchBox">
+            <Setter Property="Opacity" Value="0.5" />
+        </Style>
+        <Style Selector="Border.SearchBox:pointerover, Border.SearchBox:focus-within">
+            <Setter Property="Opacity" Value="1" />
+        </Style>
     </UserControl.Styles>
     <Design.DataContext>
         <viewModels:TaggableItemsSearchBarViewModel />
     </Design.DataContext>
-    <!-- Search Bar -->
     <Border
         Name="SearchBarBorder"
         Classes="SearchBox"
         VerticalAlignment="Top"
         Background="Transparent"
+        BorderBrush="{DynamicResource Outline}"
         BorderThickness="1 1 1 2"
         ClipToBounds="True"
         CornerRadius="4"
@@ -119,6 +115,7 @@
                     <Setter Property="Background" Value="Transparent" />
                 </Style>
             </Grid.Styles>
+            <!-- Search button -->
             <Button
                 Grid.Column="0"
                 Margin="10 0 -2 0"

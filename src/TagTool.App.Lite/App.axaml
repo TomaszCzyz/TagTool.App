@@ -16,11 +16,6 @@
                 <ResourceInclude x:Key="Light" Source="avares://TagTool.App.Core/Assets/ThemeLight.axaml" />
             </ResourceDictionary.ThemeDictionaries>
         </ResourceDictionary>
-        <!-- <ResourceDictionary> -->
-        <!--     <ResourceDictionary.MergedDictionaries> -->
-        <!--     </ResourceDictionary.MergedDictionaries> -->
-        <!-- </ResourceDictionary> -->
-
         <!-- global font size -->
         <x:Double x:Key="ControlContentThemeFontSize">14</x:Double>
         <x:Double x:Key="AppContentFontSize">16</x:Double>
