@@ -46,10 +46,6 @@ public sealed partial class TaggableItemsSearchBarViewModel : ViewModelBase
 
     public ObservableCollection<QuerySegment> QuerySegments { get; } = [];
 
-    public double MinVoiceIntensity { get; } = -90;
-
-    public double MaxVoiceIntensity { get; } = -20;
-
     /// <summary>
     ///     ctor for XAML previewer
     /// </summary>
@@ -71,8 +67,7 @@ public sealed partial class TaggableItemsSearchBarViewModel : ViewModelBase
     [UsedImplicitly]
     public TaggableItemsSearchBarViewModel(
         ILogger<TaggableItemsSearchBarViewModel> logger,
-        ITagToolBackend tagToolBackend,
-        ISpeechToTagSearchService speechToTagSearchService)
+        ITagToolBackend tagToolBackend)
     {
         _logger = logger;
         _tagService = tagToolBackend.GetTagService();
@@ -192,7 +187,7 @@ public sealed partial class TaggableItemsSearchBarViewModel : ViewModelBase
             return;
         }
 
-        var indexOf = QuerySegments.IndexOf<object>(SelectedItem);
+        var indexOf = QuerySegments.IndexOf(SelectedItem);
 
         QuerySegments[indexOf] = new QuerySegment { Tag = QuerySegments[indexOf].Tag, State = newState };
     }

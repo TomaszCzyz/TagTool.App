@@ -7,6 +7,7 @@ using Avalonia.Controls;
 using Avalonia.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using DynamicData;
 using JetBrains.Annotations;
 using Microsoft.Extensions.DependencyInjection;
 using TagTool.App.Core;
@@ -14,12 +15,14 @@ using TagTool.App.Core.Models;
 using TagTool.App.Core.Services;
 using TagTool.App.Core.Views;
 using TagTool.BackendNew;
-using Tag = TagTool.BackendNew.Tag;
 
 namespace TagTool.App.Lite.Views;
 
 public partial class MainWindowViewModel : ViewModelBase
 {
+    private readonly TaggableItemIconResolverDispatcher _iconResolver;
+    private readonly TaggableItemDisplayTextResolver _displayTextResolver;
+    private readonly TaggableItemMapper _taggableItemMapper;
     private readonly TagService.TagServiceClient _tagService;
 
     [ObservableProperty]
@@ -27,19 +30,24 @@ public partial class MainWindowViewModel : ViewModelBase
 
     public TaggableItemsSearchBarViewModel SearchBarViewModel { get; }
 
-    public ObservableCollection<TaggableItemViewModel> SearchResults { get; } = [];
+    public ObservableCollection<TaggableItemModel> SearchResults { get; } = [];
 
-    public ObservableCollection<TaggableItemViewModel> OtherResults { get; set; } = [];
+    public ObservableCollection<TaggableItemModel> OtherResults { get; set; } = [];
 
     /// <summary>
     ///     ctor for XAML previewer
     /// </summary>
-    public MainWindowViewModel()
+    public MainWindowViewModel(TaggableItemDisplayTextResolver displayTextResolver, TaggableItemIconResolverDispatcher iconResolver,
+        TaggableItemMapper taggableItemMapper)
     {
         if (!Design.IsDesignMode)
         {
             Debug.Fail("ctor for XAML Previewer should not be invoke during standard execution");
         }
+
+        _displayTextResolver = displayTextResolver;
+        _iconResolver = iconResolver;
+        _taggableItemMapper = taggableItemMapper;
 
         _tagService = AppTemplate.Current.Services.GetRequiredService<ITagToolBackend>().GetTagService();
         SearchBarViewModel = AppTemplate.Current.Services.GetRequiredService<TaggableItemsSearchBarViewModel>();
@@ -48,10 +56,14 @@ public partial class MainWindowViewModel : ViewModelBase
     }
 
     [UsedImplicitly]
-    public MainWindowViewModel(TaggableItemsSearchBarViewModel taggableItemsSearchBarViewModel, ITagToolBackend tagToolBackend)
+    public MainWindowViewModel(TaggableItemsSearchBarViewModel taggableItemsSearchBarViewModel, ITagToolBackend tagToolBackend,
+        TaggableItemDisplayTextResolver displayTextResolver, TaggableItemIconResolverDispatcher iconResolver, TaggableItemMapper taggableItemMapper)
     {
         _tagService = tagToolBackend.GetTagService();
         SearchBarViewModel = taggableItemsSearchBarViewModel;
+        _displayTextResolver = displayTextResolver;
+        _iconResolver = iconResolver;
+        _taggableItemMapper = taggableItemMapper;
 
         Initialize();
     }
@@ -102,8 +114,8 @@ public partial class MainWindowViewModel : ViewModelBase
 
         switch (reply.ResultCase)
         {
-            case TagItemReply.ResultOneofCase.Item:
-                item.Tags = reply.Item.Tags.MapFromDto().ToHashSet();
+            case TagItemReply.ResultOneofCase.TaggableItem:
+                item.Tags = reply.TaggableItem.Tags.MapFromDto().ToHashSet();
                 break;
             case TagItemReply.ResultOneofCase.ErrorMessage:
                 Debug.WriteLine("Unable to tag item");
@@ -119,40 +131,38 @@ public partial class MainWindowViewModel : ViewModelBase
         var (item, tag) = args;
         var reply = await _tagService.UntagItemAsync(new UntagItemRequest { TagId = tag.Id, ItemId = item.Id.ToString() });
 
-        switch (reply.ResultCase)
-        {
-            case UntagItemReply.ResultOneofCase.TaggedItem:
-                item.Tags = reply.TaggedItem.Tags.MapFromDto().ToHashSet();
-                break;
-            case UntagItemReply.ResultOneofCase.ErrorMessage:
-                Debug.WriteLine("Unable to untag item");
-                break;
-            case UntagItemReply.ResultOneofCase.None:
-            default:
-                throw new UnreachableException();
-        }
+        // switch (reply.ResultCase)
+        // {
+        //     case UntagItemReply.ResultOneofCase.TaggedItem:
+        //         item.Tags = reply.TaggedItem.Tags.MapFromDto().ToHashSet();
+        //         break;
+        //     case UntagItemReply.ResultOneofCase.ErrorMessage:
+        //         Debug.WriteLine("Unable to untag item");
+        //         break;
+        //     case UntagItemReply.ResultOneofCase.None:
+        //     default:
+        //         throw new UnreachableException();
+        // }
     }
 
     private async Task SearchForTaggableItems(ICollection<QuerySegment>? argsQuerySegments)
     {
-        // var tagQueryParams = argsQuerySegments?.Select(segment => segment.MapToDto());
-        //
-        // var reply = await _tagService.GetItemsByTagsAsync(new GetItemsByTagsRequest
-        // {
-        //     QueryParams = { tagQueryParams ?? Array.Empty<TagQueryParam>() }
-        // });
-        //
-        // SearchResults.Clear();
-        // SearchResults.AddRange(reply.TaggedItems.Select(item
-        //     => new TaggableItemViewModel(_tagService)
-        //     {
-        //         TaggableItem = item.TaggableItem.ItemCase switch
-        //         {
-        //             TaggableItemDto.ItemOneofCase.File => new TaggableFile { Path = item.TaggableItem.File.Path },
-        //             TaggableItemDto.ItemOneofCase.Folder => new TaggableFolder { Path = item.TaggableItem.Folder.Path },
-        //             _ => throw new UnreachableException()
-        //         },
-        //         AreTagsVisible = true
-        //     }));
+        var tagQueryParams = argsQuerySegments?.Select(segment => segment.MapToDto());
+
+        var reply = await _tagService.GetItemsByTagsAsync(new GetItemsByTagsRequest { QueryParams = { tagQueryParams ?? [] } });
+
+        var taggableItems = reply.TaggedItems
+            .Select(i => _taggableItemMapper.MapToObj(i.Item.Type, i.Item.Payload))
+            .ToArray();
+
+        SearchResults.Clear();
+        SearchResults.AddRange(taggableItems.Select(
+            item =>
+            {
+                var text = _displayTextResolver.GetDisplayText(item);
+                var icon = _iconResolver.GetIcon(item, null);
+                var tags = item.Tags?.ToHashSet() ?? [];
+                return new TaggableItemModel(item.Id, text, icon, tags);
+            }));
     }
 }

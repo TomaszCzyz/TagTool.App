@@ -8,15 +8,16 @@ namespace TagTool.App.Core.DataTemplates;
 
 public static class TagsTemplateProvider
 {
-    public static FuncDataTemplate<Tag> TagDataTemplate { get; } = new(_ => true, BuildTagPresenter);
+    public static FuncDataTemplate<Tag?> TagDataTemplate { get; } = new(tag => tag.HasValue, BuildTagPresenter);
 
-    private static TextBlock BuildTagPresenter(Tag tag)
+    private static TextBlock BuildTagPresenter(Tag? tag)
     {
-        var resourceName = $"{tag.GetType().Name}Color";
+        var resourceName = $"{tag?.GetType().Name}Color";
 
         var color = Application.Current!.TryGetResource(resourceName, null, out var resource)
             ? (Color)resource!
-            : (Color)Application.Current.Resources["DefaultTagColor"]!;
+            : new Color(235, 235, 235, 235);
+            // (Color)Application.Current.Resources["DefaultTagColor"]!;
 
         var textBlock = new TextBlock
         {

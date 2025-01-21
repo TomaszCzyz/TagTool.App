@@ -59,6 +59,17 @@ message DeleteTagReply {
   };
 }
 
+message AddItemRequest {
+  Item item = 1;
+}
+
+message AddItemReply {
+  oneof result {
+    TaggableItem taggableItem = 1;
+    google.protobuf.StringValue errorMessage = 2;
+  };
+}
+
 // The request to tag a given item.
 message TagItemRequest {
   int32 tagId = 1;
@@ -69,7 +80,7 @@ message TagItemRequest {
 message TagItemReply {
   oneof result {
     // The item with all its tags.
-    TaggedItem Item = 1;
+    TaggableItem taggableItem = 1;
     // The Error message in case of a failure.
     google.protobuf.StringValue errorMessage = 2;
   };
@@ -85,7 +96,7 @@ message UntagItemRequest {
 message UntagItemReply {
   oneof result {
     // The item with all its tags.
-    TaggedItem taggedItem = 1;
+    TaggableItem taggableItem = 1;
     // The Error message in case of a failure.
     google.protobuf.StringValue errorMessage = 2;
   }
@@ -100,7 +111,7 @@ message GetItemRequest {
 message GetItemReply {
   oneof result {
     // The item associated tags.
-    TaggedItem taggedItem = 1;
+    TaggableItem taggableItem = 1;
     // The Error message in case of a failure.
     google.protobuf.StringValue errorMessage = 2;
   }
@@ -131,7 +142,7 @@ message TagQueryParam {
 
 // The reply containing tagged items than met query conditions.
 message GetItemsByTagsReply {
-  repeated TaggedItem taggedItems = 1;
+  repeated TaggableItem taggedItems = 1;
 }
 
 // The request to check if given Tag exists.
