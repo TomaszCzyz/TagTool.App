@@ -4,7 +4,6 @@
     xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:viewModels="clr-namespace:TagTool.App.Core.ViewModels;assembly=TagTool.App.Core"
     xmlns:views="clr-namespace:TagTool.App.Core.Views;assembly=TagTool.App.Core"
     xmlns:views1="clr-namespace:TagTool.App.Lite.Views"
     x:Class="TagTool.App.Lite.Views.MainWindowView"
@@ -89,7 +88,7 @@
                         >
                         <!-- todo: maybe DataTemplate is not needed if I have ViewLocator -->
                         <ListBox.ItemTemplate>
-                            <DataTemplate x:DataType="viewModels:TaggableItemViewModel">
+                            <DataTemplate x:DataType="views:TaggableItemViewModel">
                                 <views:TaggableItemView FontSize="14" />
                             </DataTemplate>
                         </ListBox.ItemTemplate>
@@ -121,7 +120,7 @@
                         ItemsSource="{Binding OtherResults}"
                         >
                         <ListBox.ItemTemplate>
-                            <DataTemplate x:DataType="viewModels:TaggableItemViewModel">
+                            <DataTemplate x:DataType="views:TaggableItemViewModel">
                                 <views:TaggableItemView FontSize="14" />
                             </DataTemplate>
                         </ListBox.ItemTemplate>

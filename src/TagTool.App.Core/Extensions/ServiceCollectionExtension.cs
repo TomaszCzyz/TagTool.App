@@ -5,7 +5,7 @@ using Microsoft.Extensions.Logging;
 using Serilog;
 using Serilog.Events;
 using Serilog.Formatting.Compact;
-using TagTool.App.Core.ViewModels;
+using TagTool.App.Core.Views;
 
 namespace TagTool.App.Core.Extensions;
 

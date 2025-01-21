@@ -50,7 +50,7 @@ public class DefaultFileIconProvider : IFileIconProvider
         return null;
     }
 
-    [SupportedOSPlatform("windows")] // The platform guard attributes used
+    [SupportedOSPlatform("windows")]
     private static Bitmap? GetIconOnWindows(string filePath, int length)
     {
         if (Icon.ExtractAssociatedIcon(filePath) is not { } icon)
@@ -63,6 +63,6 @@ public class DefaultFileIconProvider : IFileIconProvider
         memoryStream.Flush();
         memoryStream.Seek(0, SeekOrigin.Begin);
 
-        return length == default ? new Bitmap(memoryStream) : Bitmap.DecodeToHeight(memoryStream, length);
+        return length == 0 ? new Bitmap(memoryStream) : Bitmap.DecodeToHeight(memoryStream, length);
     }
 }

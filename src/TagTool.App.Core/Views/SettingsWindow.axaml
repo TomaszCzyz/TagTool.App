@@ -3,16 +3,16 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:viewModels="clr-namespace:TagTool.App.Core.ViewModels"
+    xmlns:views="clr-namespace:TagTool.App.Core.Views"
     x:Class="TagTool.App.Core.Views.SettingsWindow"
     d:DesignWidth="800"
     d:DesignHeight="450"
     mc:Ignorable="d"
     Title="Settings"
-    x:DataType="viewModels:SettingsWindowViewModel"
+    x:DataType="views:SettingsWindowViewModel"
     >
     <Design.DataContext>
-        <viewModels:SettingsWindowViewModel />
+        <views:SettingsWindowViewModel />
     </Design.DataContext>
 
     <StackPanel>

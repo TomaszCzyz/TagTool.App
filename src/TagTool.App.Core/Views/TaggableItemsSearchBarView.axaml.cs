@@ -3,7 +3,6 @@ using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.LogicalTree;
 using Avalonia.VisualTree;
-using TagTool.App.Core.ViewModels;
 
 namespace TagTool.App.Core.Views;
 

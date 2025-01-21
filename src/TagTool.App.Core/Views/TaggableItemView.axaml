@@ -6,9 +6,9 @@
     xmlns:dataTemplates="clr-namespace:TagTool.App.Core.DataTemplates"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:models="clr-namespace:TagTool.App.Core.Models;assembly=TagTool.App.Core"
-    xmlns:viewModels="clr-namespace:TagTool.App.Core.ViewModels"
+    xmlns:views="clr-namespace:TagTool.App.Core.Views"
     x:Class="TagTool.App.Core.Views.TaggableItemView"
-    x:DataType="viewModels:TaggableItemViewModel"
+    x:DataType="views:TaggableItemViewModel"
     Name="UserControlRoot"
     d:DesignWidth="450"
     d:DesignHeight="150"
@@ -16,7 +16,7 @@
     DragDrop.AllowDrop="True"
     >
     <Design.DataContext>
-        <viewModels:TaggableItemViewModel />
+        <views:TaggableItemViewModel />
     </Design.DataContext>
     <Border
         Name="DragDropInfoAreaBorder"

@@ -6,7 +6,7 @@ using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.VisualTree;
 using TagTool.App.Core;
-using TagTool.App.Core.ViewModels;
+using TagTool.App.Core.Views;
 
 namespace TagTool.App.Lite.Views;
 

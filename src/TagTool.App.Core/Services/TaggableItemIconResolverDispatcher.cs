@@ -16,11 +16,11 @@ public class TaggableItemIconResolverDispatcher : ITaggableItemIconResolver<Tagg
         _taggableFileIconResolver = taggableFileIconResolver;
     }
 
-    public Bitmap GetIcon(TaggableItem item)
+    public Bitmap GetIcon(TaggableItem item, int? length)
     {
         return item switch
         {
-            TaggableFile.TaggableFile taggableFile => _taggableFileIconResolver.GetIcon(taggableFile),
+            TaggableFile.TaggableFile taggableFile => _taggableFileIconResolver.GetIcon(taggableFile, length),
             _ => throw new ArgumentOutOfRangeException(nameof(item), item, null)
         };
     }

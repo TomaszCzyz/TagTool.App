@@ -4,7 +4,6 @@ using Avalonia.Interactivity;
 using Avalonia.LogicalTree;
 using Avalonia.Media;
 using TagTool.App.Core.Models;
-using TagTool.App.Core.ViewModels;
 
 namespace TagTool.App.Core.Views;
 

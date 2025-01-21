@@ -15,7 +15,7 @@ using TagTool.App.Core.Services;
 using TagTool.BackendNew;
 using Tag = TagTool.App.Core.Models.Tag;
 
-namespace TagTool.App.Core.ViewModels;
+namespace TagTool.App.Core.Views;
 
 public class CommitSearchQueryEventArgs : EventArgs
 {
@@ -85,7 +85,7 @@ public sealed partial class TaggableItemsSearchBarViewModel : ViewModelBase
     ///     <list type="bullet">
     ///         <item>
     ///             <description>
-    ///                 <see cref="TagTool.App.Core.ViewModels.TaggableItemsSearchBarViewModel.QuerySegments" />
+    ///                 <see cref="QuerySegments" />
     ///                 collection is updated
     ///             </description>
     ///         </item>
@@ -192,7 +192,7 @@ public sealed partial class TaggableItemsSearchBarViewModel : ViewModelBase
             return;
         }
 
-        var indexOf = QuerySegments.IndexOf(SelectedItem);
+        var indexOf = QuerySegments.IndexOf<object>(SelectedItem);
 
         QuerySegments[indexOf] = new QuerySegment { Tag = QuerySegments[indexOf].Tag, State = newState };
     }

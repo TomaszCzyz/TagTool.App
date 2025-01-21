@@ -45,7 +45,7 @@ public class IconPathToBitmapConverter : IValueConverter
     private static Bitmap CreateBitmap(Stream stream, int length)
     {
         stream.Seek(0, SeekOrigin.Begin);
-        if (length == default)
+        if (length == 0)
         {
             return new Bitmap(stream);
         }

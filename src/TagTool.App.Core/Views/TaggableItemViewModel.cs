@@ -4,14 +4,12 @@ using Avalonia.Controls;
 using Avalonia.Media.Imaging;
 using Avalonia.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
-using CommunityToolkit.Mvvm.Input;
 using Microsoft.Extensions.DependencyInjection;
 using TagTool.App.Core.Models;
 using TagTool.App.Core.Services;
-using TagTool.BackendNew;
 using Tag = TagTool.App.Core.Models.Tag;
 
-namespace TagTool.App.Core.ViewModels;
+namespace TagTool.App.Core.Views;
 
 public interface ITextSearchable
 {
@@ -55,7 +53,7 @@ public partial class TaggableItemViewModel : ViewModelBase, ITextSearchable
 
     public string DisplayName => _displayTextResolver.GetDisplayText(TaggableItem);
 
-    public Bitmap Icon => _iconResolver.GetIcon(TaggableItem);
+    public Bitmap Icon => _iconResolver.GetIcon(TaggableItem, null);
 
     public ISet<Tag>? AssociatedTags => TaggableItem.Tags;
 

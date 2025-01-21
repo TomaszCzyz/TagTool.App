@@ -7,9 +7,9 @@
     xmlns:dataTemplates="clr-namespace:TagTool.App.Core.DataTemplates"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:models="clr-namespace:TagTool.App.Core.Models"
-    xmlns:viewModels="clr-namespace:TagTool.App.Core.ViewModels"
+    xmlns:views="clr-namespace:TagTool.App.Core.Views"
     x:Class="TagTool.App.Core.Views.TaggableItemsSearchBarView"
-    x:DataType="viewModels:TaggableItemsSearchBarViewModel"
+    x:DataType="views:TaggableItemsSearchBarViewModel"
     x:Name="UserControlRoot"
     d:DesignWidth="800"
     d:DesignHeight="450"
@@ -44,7 +44,7 @@
         </Style>
     </UserControl.Styles>
     <Design.DataContext>
-        <viewModels:TaggableItemsSearchBarViewModel />
+        <views:TaggableItemsSearchBarViewModel />
     </Design.DataContext>
     <Border
         Name="SearchBarBorder"
@@ -165,17 +165,17 @@
                                     <ContentControl.ContextFlyout>
                                         <MenuFlyout Closed="PopupFlyoutBase_OnClosing">
                                             <MenuItem
-                                                Command="{ReflectionBinding #UserControlRoot.((viewModels:TaggableItemsSearchBarViewModel)DataContext).UpdateQuerySegmentStateCommand, FallbackValue=null}"
+                                                Command="{ReflectionBinding #UserControlRoot.((views:TaggableItemsSearchBarViewModel)DataContext).UpdateQuerySegmentStateCommand, FallbackValue=null}"
                                                 CommandParameter="{x:Static models:QuerySegmentState.Include}"
                                                 Header="Include"
                                                 />
                                             <MenuItem
-                                                Command="{ReflectionBinding #UserControlRoot.((viewModels:TaggableItemsSearchBarViewModel)DataContext).UpdateQuerySegmentStateCommand, FallbackValue=null}"
+                                                Command="{ReflectionBinding #UserControlRoot.((views:TaggableItemsSearchBarViewModel)DataContext).UpdateQuerySegmentStateCommand, FallbackValue=null}"
                                                 CommandParameter="{x:Static models:QuerySegmentState.Exclude}"
                                                 Header="Exclude"
                                                 />
                                             <MenuItem
-                                                Command="{ReflectionBinding #UserControlRoot.((viewModels:TaggableItemsSearchBarViewModel)DataContext).UpdateQuerySegmentStateCommand, FallbackValue=null}"
+                                                Command="{ReflectionBinding #UserControlRoot.((views:TaggableItemsSearchBarViewModel)DataContext).UpdateQuerySegmentStateCommand, FallbackValue=null}"
                                                 CommandParameter="{x:Static models:QuerySegmentState.MustBePresent}"
                                                 Header="MustBePresent"
                                                 />
@@ -208,7 +208,7 @@
                                     Margin="-4 2 0 2"
                                     Padding="0"
                                     VerticalAlignment="Top"
-                                    Command="{ReflectionBinding #UserControlRoot.((viewModels:TaggableItemsSearchBarViewModel)DataContext).RemoveTagFromSearchQueryCommand, FallbackValue=null}"
+                                    Command="{ReflectionBinding #UserControlRoot.((views:TaggableItemsSearchBarViewModel)DataContext).RemoveTagFromSearchQueryCommand, FallbackValue=null}"
                                     CommandParameter="{Binding .}"
                                     CornerRadius="100"
                                     Opacity="{Binding $parent[ListBoxItem].Opacity, Converter={StaticResource DoubleRangeConverter}}"

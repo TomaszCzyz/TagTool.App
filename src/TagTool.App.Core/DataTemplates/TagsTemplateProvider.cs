@@ -8,10 +8,9 @@ namespace TagTool.App.Core.DataTemplates;
 
 public static class TagsTemplateProvider
 {
-    // ReSharper disable once ConditionIsAlwaysTrueOrFalseAccordingToNullableAPIContract
     public static FuncDataTemplate<Tag> TagDataTemplate { get; } = new(_ => true, BuildTagPresenter);
 
-    private static Control BuildTagPresenter(Tag tag)
+    private static TextBlock BuildTagPresenter(Tag tag)
     {
         var resourceName = $"{tag.GetType().Name}Color";
 

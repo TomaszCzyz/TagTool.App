@@ -12,7 +12,7 @@ using Microsoft.Extensions.DependencyInjection;
 using TagTool.App.Core;
 using TagTool.App.Core.Models;
 using TagTool.App.Core.Services;
-using TagTool.App.Core.ViewModels;
+using TagTool.App.Core.Views;
 using TagTool.BackendNew;
 using Tag = TagTool.BackendNew.Tag;
 

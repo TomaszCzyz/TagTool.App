@@ -4,7 +4,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using TagTool.App.Core.Extensions;
 using TagTool.App.Core.Services;
-using TagTool.App.Core.ViewModels;
+using TagTool.App.Core.Views;
 
 namespace TagTool.App.Core;
 

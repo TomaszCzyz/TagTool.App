@@ -5,5 +5,5 @@ namespace TagTool.App.Core.Contracts;
 
 public interface ITaggableItemIconResolver<in T> where T : TaggableItem
 {
-    Bitmap GetIcon(T item);
+    Bitmap GetIcon(T item, int? length);
 }
