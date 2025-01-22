@@ -142,7 +142,7 @@ public partial class MainWindowViewModel : ViewModelBase
         var reply = await _tagService.GetItemsByTagsAsync(new GetItemsByTagsRequest { QueryParams = { tagQueryParams ?? [] } });
 
         var taggableItems = reply.TaggedItems
-            .Select(i => _taggableItemMapper.MapToObj(i.Item.Type, i.Item.Payload))
+            .Select(i => _taggableItemMapper.MapToObj(i.Item.Type, i.Item.Payload, i.Tags))
             .ToArray();
 
         SearchResults.Clear();
