@@ -4,7 +4,7 @@ using Avalonia.Controls.Templates;
 using Avalonia.Media;
 using TagTool.App.Contracts;
 
-namespace TagTool.App.Core.DataTemplates;
+namespace TagTool.App.DataTemplates;
 
 public static class TagsTemplateProvider
 {

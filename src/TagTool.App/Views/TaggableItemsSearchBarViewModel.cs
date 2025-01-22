@@ -11,12 +11,12 @@ using Grpc.Core;
 using JetBrains.Annotations;
 using Microsoft.Extensions.Logging;
 using TagTool.App.Contracts;
-using TagTool.App.Core.Extensions;
-using TagTool.App.Core.Models;
-using TagTool.App.Core.Services;
+using TagTool.App.Extensions;
+using TagTool.App.Models;
+using TagTool.App.Services;
 using TagTool.BackendNew;
 
-namespace TagTool.App.Core.Views;
+namespace TagTool.App.Views;
 
 public class CommitSearchQueryEventArgs : EventArgs
 {
@@ -188,7 +188,7 @@ public sealed partial class TaggableItemsSearchBarViewModel : ViewModelBase
             return;
         }
 
-        var indexOf = QuerySegments.IndexOf(SelectedItem);
+        var indexOf = QuerySegments.IndexOf<object>(SelectedItem);
 
         QuerySegments[indexOf] = new QuerySegment { Tag = QuerySegments[indexOf].Tag, State = newState };
     }

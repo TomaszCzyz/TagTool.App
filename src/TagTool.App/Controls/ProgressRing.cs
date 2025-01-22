@@ -1,7 +1,7 @@
 ﻿using Avalonia;
 using Avalonia.Controls.Primitives;
 
-namespace TagTool.App.Core.Controls;
+namespace TagTool.App.Controls;
 
 public class ProgressRing : TemplatedControl
 {

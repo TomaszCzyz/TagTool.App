@@ -2,7 +2,7 @@ using JetBrains.Annotations;
 using TagTool.App.Contracts;
 using TagTool.TaggableFile;
 
-namespace TagTool.App.Core.Services;
+namespace TagTool.App.Services;
 
 [UsedImplicitly]
 public class TaggableItemDisplayTextResolver : ITaggableItemDisplayTextResolver<TaggableItemBase>

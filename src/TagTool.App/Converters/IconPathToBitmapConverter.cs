@@ -2,9 +2,9 @@
 using Avalonia.Data.Converters;
 using Avalonia.Media.Imaging;
 using Avalonia.Platform;
-using TagTool.App.Core.Services;
+using TagTool.App.Services;
 
-namespace TagTool.App.Core.Converters;
+namespace TagTool.App.Converters;
 
 public class IconPathToBitmapConverter : IValueConverter
 {

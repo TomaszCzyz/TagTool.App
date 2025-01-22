@@ -2,11 +2,11 @@ using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
 using Microsoft.Extensions.DependencyInjection;
 using Serilog;
-using TagTool.App.Core.Extensions;
-using TagTool.App.Core.Views;
-using MainWindowViewModel = TagTool.App.Core.Views.MainWindowViewModel;
+using TagTool.App.Extensions;
+using TagTool.App.Views;
+using MainWindowViewModel = TagTool.App.Views.MainWindowViewModel;
 
-namespace TagTool.App.Core;
+namespace TagTool.App;
 
 public class App : AppTemplate
 {

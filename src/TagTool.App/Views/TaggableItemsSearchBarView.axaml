@@ -3,14 +3,14 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
     xmlns:contracts="clr-namespace:TagTool.App.Contracts;assembly=TagTool.App.Contracts"
-    xmlns:converters="clr-namespace:TagTool.App.Core.Converters"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:dataTemplates="clr-namespace:TagTool.App.Core.DataTemplates"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:models="clr-namespace:TagTool.App.Core.Models"
-    xmlns:views="clr-namespace:TagTool.App.Core.Views"
-    x:Class="TagTool.App.Core.Views.TaggableItemsSearchBarView"
-    x:DataType="views:TaggableItemsSearchBarViewModel"
+    xmlns:views1="clr-namespace:TagTool.App.Views"
+    xmlns:converters="clr-namespace:TagTool.App.Converters"
+    xmlns:models="clr-namespace:TagTool.App.Models"
+    xmlns:dataTemplates="clr-namespace:TagTool.App.DataTemplates"
+    x:Class="TagTool.App.Views.TaggableItemsSearchBarView"
+    x:DataType="views1:TaggableItemsSearchBarViewModel"
     x:Name="UserControlRoot"
     d:DesignWidth="800"
     d:DesignHeight="450"
@@ -45,7 +45,7 @@
         </Style>
     </UserControl.Styles>
     <Design.DataContext>
-        <views:TaggableItemsSearchBarViewModel />
+        <views1:TaggableItemsSearchBarViewModel />
     </Design.DataContext>
     <Border
         Name="SearchBarBorder"
@@ -166,17 +166,17 @@
                                     <ContentControl.ContextFlyout>
                                         <MenuFlyout Closed="PopupFlyoutBase_OnClosing">
                                             <MenuItem
-                                                Command="{ReflectionBinding #UserControlRoot.((views:TaggableItemsSearchBarViewModel)DataContext).UpdateQuerySegmentStateCommand, FallbackValue=null}"
+                                                Command="{ReflectionBinding #UserControlRoot.((views1:TaggableItemsSearchBarViewModel)DataContext).UpdateQuerySegmentStateCommand, FallbackValue=null}"
                                                 CommandParameter="{x:Static models:QuerySegmentState.Include}"
                                                 Header="Include"
                                                 />
                                             <MenuItem
-                                                Command="{ReflectionBinding #UserControlRoot.((views:TaggableItemsSearchBarViewModel)DataContext).UpdateQuerySegmentStateCommand, FallbackValue=null}"
+                                                Command="{ReflectionBinding #UserControlRoot.((views1:TaggableItemsSearchBarViewModel)DataContext).UpdateQuerySegmentStateCommand, FallbackValue=null}"
                                                 CommandParameter="{x:Static models:QuerySegmentState.Exclude}"
                                                 Header="Exclude"
                                                 />
                                             <MenuItem
-                                                Command="{ReflectionBinding #UserControlRoot.((views:TaggableItemsSearchBarViewModel)DataContext).UpdateQuerySegmentStateCommand, FallbackValue=null}"
+                                                Command="{ReflectionBinding #UserControlRoot.((views1:TaggableItemsSearchBarViewModel)DataContext).UpdateQuerySegmentStateCommand, FallbackValue=null}"
                                                 CommandParameter="{x:Static models:QuerySegmentState.MustBePresent}"
                                                 Header="MustBePresent"
                                                 />
@@ -209,7 +209,7 @@
                                     Margin="-4 2 0 2"
                                     Padding="0"
                                     VerticalAlignment="Top"
-                                    Command="{ReflectionBinding #UserControlRoot.((views:TaggableItemsSearchBarViewModel)DataContext).RemoveTagFromSearchQueryCommand, FallbackValue=null}"
+                                    Command="{ReflectionBinding #UserControlRoot.((views1:TaggableItemsSearchBarViewModel)DataContext).RemoveTagFromSearchQueryCommand, FallbackValue=null}"
                                     CommandParameter="{Binding .}"
                                     CornerRadius="100"
                                     Opacity="{Binding $parent[ListBoxItem].Opacity, Converter={StaticResource DoubleRangeConverter}}"

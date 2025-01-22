@@ -2,7 +2,7 @@
 using Avalonia.Data.Converters;
 using Avalonia.Media;
 
-namespace TagTool.App.Core.Converters;
+namespace TagTool.App.Converters;
 
 public class BoolToBrushConverter : IValueConverter
 {

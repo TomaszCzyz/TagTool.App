@@ -1,8 +1,8 @@
 using Avalonia.Controls;
 using Avalonia.Controls.Templates;
-using TagTool.App.Core.Views;
+using TagTool.App.Views;
 
-namespace TagTool.App.Core;
+namespace TagTool.App;
 
 public class ViewLocator : IDataTemplate
 {

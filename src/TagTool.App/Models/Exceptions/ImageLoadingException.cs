@@ -1,4 +1,4 @@
-﻿namespace TagTool.App.Core.Models.Exceptions;
+﻿namespace TagTool.App.Models.Exceptions;
 
 public class ImageLoadingException : Exception
 {

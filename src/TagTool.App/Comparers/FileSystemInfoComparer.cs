@@ -1,4 +1,4 @@
-﻿namespace TagTool.App.Core.Comparers;
+﻿namespace TagTool.App.Comparers;
 
 public class FileSystemInfoComparer : IComparer<FileSystemInfo>
 {

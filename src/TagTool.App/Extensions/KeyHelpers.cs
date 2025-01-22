@@ -1,7 +1,7 @@
 using Avalonia.Input;
 using static Avalonia.Input.Key;
 
-namespace TagTool.App.Core.Extensions;
+namespace TagTool.App.Extensions;
 
 public static class KeyExtensions
 {

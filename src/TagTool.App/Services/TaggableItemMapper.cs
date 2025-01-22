@@ -1,9 +1,9 @@
 using System.Text.Json;
 using TagTool.App.Contracts;
-using TagTool.App.Core.Extensions;
+using TagTool.App.Extensions;
 using Tag = TagTool.BackendNew.Common.Tag;
 
-namespace TagTool.App.Core.Services;
+namespace TagTool.App.Services;
 
 public class TaggableItemMapper
 {

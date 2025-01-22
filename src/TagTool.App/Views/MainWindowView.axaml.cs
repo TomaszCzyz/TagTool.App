@@ -4,8 +4,9 @@ using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.VisualTree;
+using VisualExtensions = Avalonia.VisualTree.VisualExtensions;
 
-namespace TagTool.App.Core.Views;
+namespace TagTool.App.Views;
 
 public partial class MainWindowView : Window
 {
@@ -78,7 +79,7 @@ public partial class MainWindowView : Window
     {
         if (args.Key == Key.Up)
         {
-            SearchBarView.FindDescendantOfType<AutoCompleteBox>()?.Focus();
+            VisualExtensions.FindDescendantOfType<AutoCompleteBox>(SearchBarView)?.Focus();
         }
     }
 
@@ -109,7 +110,7 @@ public partial class MainWindowView : Window
     {
         if (args.Key == Key.Down
             && TaggableItemsListBox.ItemCount != 0
-            && !(SearchBarView.FindDescendantOfType<AutoCompleteBox>()?.IsDropDownOpen ?? false))
+            && !(VisualExtensions.FindDescendantOfType<AutoCompleteBox>(SearchBarView)?.IsDropDownOpen ?? false))
         {
             TaggableItemsListBox.ContainerFromIndex(0)?.Focus();
             TaggableItemsListBox.Selection.Select(0);

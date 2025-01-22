@@ -3,7 +3,7 @@ using System.Drawing;
 using System.Runtime.Versioning;
 using Bitmap = Avalonia.Media.Imaging.Bitmap;
 
-namespace TagTool.App.Core.Services;
+namespace TagTool.App.Services;
 
 public interface IFileIconProvider
 {

@@ -1,5 +1,5 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 
-namespace TagTool.App.Core.Views;
+namespace TagTool.App.Views;
 
 public abstract class ViewModelBase : ObservableObject;

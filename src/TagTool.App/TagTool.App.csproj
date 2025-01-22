@@ -7,7 +7,7 @@
     <Nullable>enable</Nullable>
     <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
     <NoWarn>CA1848</NoWarn>
-    <RootNamespace>TagTool.App.Core</RootNamespace>
+    <RootNamespace>TagTool.App</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>

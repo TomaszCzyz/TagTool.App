@@ -2,12 +2,12 @@
 using Avalonia.Markup.Xaml;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using TagTool.App.Core.Extensions;
-using TagTool.App.Core.Services;
-using TagTool.App.Core.Views;
+using TagTool.App.Extensions;
+using TagTool.App.Services;
+using TagTool.App.Views;
 using TagTool.TaggableFile;
 
-namespace TagTool.App.Core;
+namespace TagTool.App;
 
 public abstract class AppTemplate : Application
 {

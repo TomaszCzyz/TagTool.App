@@ -4,10 +4,10 @@
     xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:models="clr-namespace:TagTool.App.Core.Models"
-    xmlns:views="clr-namespace:TagTool.App.Core.Views;assembly=TagTool.App"
-    x:Class="TagTool.App.Core.Views.MainWindowView"
-    x:DataType="views:MainWindowViewModel"
+    xmlns:views1="clr-namespace:TagTool.App.Views"
+    xmlns:models="clr-namespace:TagTool.App.Models"
+    x:Class="TagTool.App.Views.MainWindowView"
+    x:DataType="views1:MainWindowViewModel"
     d:DesignWidth="850"
     d:DesignHeight="450"
     mc:Ignorable="d"
@@ -23,12 +23,12 @@
     PointerReleased="InputElement_OnPointerReleased"
     >
     <Design.DataContext>
-        <views:MainWindowViewModel />
+        <views1:MainWindowViewModel />
     </Design.DataContext>
     <DockPanel Name="TopMostDockPanel">
         <Grid DockPanel.Dock="Top" ColumnDefinitions="*, Auto">
             <!-- Search Bar -->
-            <views:TaggableItemsSearchBarView
+            <views1:TaggableItemsSearchBarView
                 Name="SearchBarView"
                 DataContext="{Binding SearchBarViewModel, Mode=TwoWay}"
                 Focusable="True"
@@ -87,7 +87,7 @@
                     >
                     <ListBox.ItemTemplate>
                         <DataTemplate x:DataType="models:TaggableItem">
-                            <views:TaggableItemView />
+                            <views1:TaggableItemView />
                         </DataTemplate>
                     </ListBox.ItemTemplate>
                 </ListBox>

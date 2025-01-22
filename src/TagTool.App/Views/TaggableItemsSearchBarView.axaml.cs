@@ -4,7 +4,7 @@ using Avalonia.Interactivity;
 using Avalonia.LogicalTree;
 using Avalonia.VisualTree;
 
-namespace TagTool.App.Core.Views;
+namespace TagTool.App.Views;
 
 public partial class TaggableItemsSearchBarView : UserControl
 {

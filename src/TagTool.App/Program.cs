@@ -1,6 +1,6 @@
 ﻿using Avalonia;
 
-namespace TagTool.App.Core;
+namespace TagTool.App;
 
 public static class Program
 {

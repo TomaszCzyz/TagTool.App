@@ -1,3 +1,3 @@
-namespace TagTool.App.Core.Models;
+namespace TagTool.App.Models;
 
 public sealed class TextBoxMarker;

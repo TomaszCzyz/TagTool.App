@@ -1,9 +1,9 @@
 ﻿using System.Diagnostics;
 using TagTool.App.Contracts;
-using TagTool.App.Core.Extensions;
+using TagTool.App.Extensions;
 using TagTool.BackendNew;
 
-namespace TagTool.App.Core.Models;
+namespace TagTool.App.Models;
 
 [DebuggerDisplay("State: {State}, Tag: {Tag}")]
 public sealed class QuerySegment

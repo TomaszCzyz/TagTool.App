@@ -1,7 +1,7 @@
 using TagTool.App.Contracts;
-using TagTool.App.Core.Models;
+using TagTool.App.Models;
 
-namespace TagTool.App.Core;
+namespace TagTool.App;
 
 public static class DesignData
 {

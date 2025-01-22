@@ -5,9 +5,9 @@ using Microsoft.Extensions.Logging;
 using Serilog;
 using Serilog.Events;
 using Serilog.Formatting.Compact;
-using TagTool.App.Core.Views;
+using TagTool.App.Views;
 
-namespace TagTool.App.Core.Extensions;
+namespace TagTool.App.Extensions;
 
 public static class ServiceCollectionExtension
 {

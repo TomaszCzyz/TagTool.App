@@ -1,6 +1,6 @@
 using TagTool.BackendNew.Common;
 
-namespace TagTool.App.Core.Extensions;
+namespace TagTool.App.Extensions;
 
 public static class TagExtensions
 {

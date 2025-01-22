@@ -7,12 +7,12 @@ using DynamicData;
 using JetBrains.Annotations;
 using Microsoft.Extensions.DependencyInjection;
 using TagTool.App.Contracts;
-using TagTool.App.Core.Extensions;
-using TagTool.App.Core.Models;
-using TagTool.App.Core.Services;
+using TagTool.App.Extensions;
+using TagTool.App.Models;
+using TagTool.App.Services;
 using TagTool.BackendNew;
 
-namespace TagTool.App.Core.Views;
+namespace TagTool.App.Views;
 
 public partial class MainWindowViewModel : ViewModelBase
 {

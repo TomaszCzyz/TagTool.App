@@ -2,9 +2,9 @@
 using System.Globalization;
 using Avalonia.Data.Converters;
 using Avalonia.Media;
-using TagTool.App.Core.Models;
+using TagTool.App.Models;
 
-namespace TagTool.App.Core.Converters;
+namespace TagTool.App.Converters;
 
 public class TextDecorationsConverter : IValueConverter
 {

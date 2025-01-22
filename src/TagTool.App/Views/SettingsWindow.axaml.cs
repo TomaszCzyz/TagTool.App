@@ -1,6 +1,6 @@
 using Avalonia.Controls;
 
-namespace TagTool.App.Core.Views;
+namespace TagTool.App.Views;
 
 public partial class SettingsWindow : Window
 {

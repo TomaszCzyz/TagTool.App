@@ -2,12 +2,12 @@
     xmlns="https://github.com/avaloniaui"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
-    xmlns:core="clr-namespace:TagTool.App.Core"
-    x:Class="TagTool.App.Core.App"
+    xmlns:app="clr-namespace:TagTool.App"
+    x:Class="TagTool.App.App"
     RequestedThemeVariant="Dark"
     >
     <Application.DataTemplates>
-        <core:ViewLocator />
+        <app:ViewLocator />
     </Application.DataTemplates>
     <Application.Resources>
         <ResourceDictionary>

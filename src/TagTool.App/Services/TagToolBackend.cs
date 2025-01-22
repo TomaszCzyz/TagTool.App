@@ -1,7 +1,7 @@
 using Grpc.Net.Client;
 using TagTool.BackendNew;
 
-namespace TagTool.App.Core.Services;
+namespace TagTool.App.Services;
 
 public interface ITagToolBackend
 {

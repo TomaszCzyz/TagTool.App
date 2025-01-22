@@ -1,6 +1,6 @@
 using Avalonia.Controls;
 
-namespace TagTool.App.Core.Extensions;
+namespace TagTool.App.Extensions;
 
 public static class ListBoxExtensions
 {
