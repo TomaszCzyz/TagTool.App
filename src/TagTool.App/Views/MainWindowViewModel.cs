@@ -7,6 +7,7 @@ using DynamicData;
 using JetBrains.Annotations;
 using Microsoft.Extensions.DependencyInjection;
 using TagTool.App.Contracts;
+using TagTool.App.Core.Extensions;
 using TagTool.App.Core.Models;
 using TagTool.App.Core.Services;
 using TagTool.BackendNew;
@@ -22,9 +23,9 @@ public partial class MainWindowViewModel : ViewModelBase
 
     public TaggableItemsSearchBarViewModel SearchBarViewModel { get; }
 
-    public ObservableCollection<TaggableItemModel> SearchResults { get; } = [];
+    public ObservableCollection<TaggableItem> SearchResults { get; } = [];
 
-    public ObservableCollection<TaggableItemModel> OtherResults { get; set; } = [];
+    public ObservableCollection<TaggableItem> OtherResults { get; set; } = [];
 
     /// <summary>
     ///     ctor for XAML previewer
@@ -96,7 +97,7 @@ public partial class MainWindowViewModel : ViewModelBase
     }
 
     [RelayCommand]
-    private async Task TagItem((TaggableItem Item, Tag Tag) args)
+    private async Task TagItem((TaggableItemBase Item, Tag Tag) args)
     {
         var (item, tag) = args;
         var reply = await _tagService.TagItemAsync(new TagItemRequest { TagId = tag.Id, ItemId = item.Id.ToString() });
@@ -115,7 +116,7 @@ public partial class MainWindowViewModel : ViewModelBase
     }
 
     [RelayCommand]
-    private async Task UntagItem((TaggableItem Item, Tag Tag) args)
+    private async Task UntagItem((TaggableItemBase Item, Tag Tag) args)
     {
         var (item, tag) = args;
         var reply = await _tagService.UntagItemAsync(new UntagItemRequest { TagId = tag.Id, ItemId = item.Id.ToString() });
@@ -151,13 +152,7 @@ public partial class MainWindowViewModel : ViewModelBase
                 var text = _displayTextResolver.GetDisplayText(item);
                 var icon = _iconResolver.GetIcon(item, null);
                 var tags = item.Tags?.ToHashSet() ?? [];
-                return new TaggableItemModel
-                {
-                    Id = item.Id,
-                    DisplayName = text,
-                    Icon = icon,
-                    Tags = tags
-                };
+                return new TaggableItem(item.Id, text, icon, tags);
             }));
     }
 }

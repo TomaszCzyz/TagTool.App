@@ -7,7 +7,7 @@ public class TaggableItemMapper
 {
     private readonly JsonSerializerOptions _jsonSerializerOptions = new(JsonSerializerDefaults.Web);
 
-    public TaggableItem MapToObj(string type, string taggableItem)
+    public TaggableItemBase MapToObj(string type, string taggableItem)
     {
         return type switch
         {

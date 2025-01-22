@@ -1,24 +1,21 @@
 ﻿<UserControl
     xmlns="https://github.com/avaloniaui"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+    xmlns:contracts="clr-namespace:TagTool.App.Contracts;assembly=TagTool.App.Contracts"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:dataTemplates="clr-namespace:TagTool.App.Core.DataTemplates"
+    xmlns:local="clr-namespace:TagTool.App.Core"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:models="clr-namespace:TagTool.App.Core.Models;assembly=TagTool.App"
-    xmlns:views="clr-namespace:TagTool.App.Core.Views"
-    xmlns:contracts="clr-namespace:TagTool.App.Contracts;assembly=TagTool.App.Contracts"
+    xmlns:models="clr-namespace:TagTool.App.Core.Models"
     x:Class="TagTool.App.Core.Views.TaggableItemView"
-    x:DataType="views:TaggableItemViewModel"
+    x:DataType="models:TaggableItem"
     Name="UserControlRoot"
     d:DesignWidth="450"
     d:DesignHeight="150"
     mc:Ignorable="d"
     DragDrop.AllowDrop="True"
+    d:DataContext="{x:Static local:DesignData.TaggableItemSample}"
     >
-    <Design.DataContext>
-        <views:TaggableItemViewModel />
-    </Design.DataContext>
     <Border
         Name="DragDropInfoAreaBorder"
         Padding="6"
@@ -45,43 +42,31 @@
                 HorizontalAlignment="Stretch"
                 VerticalAlignment="Center"
                 Text="{Binding DisplayName}"
-                >
-                <TextBlock.ContextFlyout>
-                    <MenuFlyout>
-                        <MenuItem Header="Rename" />
-                        <MenuItem Header="Copy" />
-                        <Separator />
-                        <!-- todo: make this functionality 'an action' associated with special tag 'CommonStorage' -->
-                        <!-- <MenuItem Command="{Binding MoveToCommonStorageCommand}" Header="Move to Common Storage" /> -->
-                        <MenuItem Header="Show in Explorer" />
-                    </MenuFlyout>
-                </TextBlock.ContextFlyout>
-            </TextBlock>
+                />
             <!-- Associated tags -->
             <Border
                 Grid.Column="2"
                 BorderBrush="Green"
                 BorderThickness="0"
-                IsVisible="{Binding AreTagsVisible}"
                 >
                 <ItemsControl
                     Margin="0"
                     Padding="5 0"
                     HorizontalAlignment="Left"
                     VerticalAlignment="Center"
-                    ItemsSource="{Binding AssociatedTags}"
+                    ItemsSource="{Binding Tags}"
                     >
                     <ItemsControl.Styles>
                         <Style Selector="TextBlock">
-                            <Setter Property="ContextFlyout">
-                                <MenuFlyout>
-                                    <MenuItem Header="Remove" Click="UntagMenuItem_OnClick">
-                                        <MenuItem.Icon>
-                                            <avalonia:MaterialIcon Kind="DeleteOutline" />
-                                        </MenuItem.Icon>
-                                    </MenuItem>
-                                </MenuFlyout>
-                            </Setter>
+                            <!-- <Setter Property="ContextFlyout"> -->
+                            <!--     <MenuFlyout> -->
+                            <!--         <MenuItem Header="Remove" Click="UntagMenuItem_OnClick"> -->
+                            <!--             <MenuItem.Icon> -->
+                            <!--                 <avalonia:MaterialIcon Kind="DeleteOutline" /> -->
+                            <!--             </MenuItem.Icon> -->
+                            <!--         </MenuItem> -->
+                            <!--     </MenuFlyout> -->
+                            <!-- </Setter> -->
                         </Style>
                     </ItemsControl.Styles>
                     <ItemsControl.ItemsPanel>

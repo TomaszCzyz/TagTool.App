@@ -5,7 +5,7 @@ using TagTool.TaggableFile;
 namespace TagTool.App.Core.Services;
 
 [UsedImplicitly]
-public class TaggableItemDisplayTextResolver : ITaggableItemDisplayTextResolver<TaggableItem>
+public class TaggableItemDisplayTextResolver : ITaggableItemDisplayTextResolver<TaggableItemBase>
 {
     private readonly TaggableFileDisplayTextResolver _fileDisplayTextResolver;
 
@@ -14,12 +14,12 @@ public class TaggableItemDisplayTextResolver : ITaggableItemDisplayTextResolver<
         _fileDisplayTextResolver = fileDisplayTextResolver;
     }
 
-    public string GetDisplayText(TaggableItem item)
+    public string GetDisplayText(TaggableItemBase itemBase)
     {
-        return item switch
+        return itemBase switch
         {
             TaggableFile.TaggableFile taggableFile => _fileDisplayTextResolver.GetDisplayText(taggableFile),
-            _ => throw new ArgumentOutOfRangeException(nameof(item), item, null)
+            _ => throw new ArgumentOutOfRangeException(nameof(itemBase), itemBase, null)
         };
     }
 }

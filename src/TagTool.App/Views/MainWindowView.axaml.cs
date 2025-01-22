@@ -26,18 +26,21 @@ public partial class MainWindowView : Window
 
         // Focus switching between SearchResults and OtherResults
         TaggableItemsListBox.AddHandler(KeyDownEvent, SwitchFocusToOtherResults);
-        OtherResultsListBox.AddHandler(KeyDownEvent, SwitchFocusFromOtherResultsToSearchResults);
+        // OtherResultsListBox.AddHandler(KeyDownEvent, SwitchFocusFromOtherResultsToSearchResults);
 
         TaggableItemsListBox.AddHandler(KeyDownEvent, OnKeyDown_ExecuteLinkedAction, handledEventsToo: true);
         TaggableItemsListBox.AddHandler(DoubleTappedEvent, OnDoubleTapped_ExecuteLinkedAction, handledEventsToo: true);
-        OtherResultsListBox.AddHandler(KeyDownEvent, OnKeyDown_ExecuteLinkedAction, handledEventsToo: true);
-        OtherResultsListBox.AddHandler(DoubleTappedEvent, OnDoubleTapped_ExecuteLinkedAction, handledEventsToo: true);
+        // OtherResultsListBox.AddHandler(KeyDownEvent, OnKeyDown_ExecuteLinkedAction, handledEventsToo: true);
+        // OtherResultsListBox.AddHandler(DoubleTappedEvent, OnDoubleTapped_ExecuteLinkedAction, handledEventsToo: true);
 
         TaggableItemsListBox.AddHandler(KeyDownEvent, OpenPreviewer_OnKeyDown);
     }
 
-    private async Task OpenPreviewer_OnKeyDown(object? sender, KeyEventArgs e)
+    private Task OpenPreviewer_OnKeyDown(object? sender, KeyEventArgs e)
     {
+        _ = sender;
+        _ = e;
+        return Task.CompletedTask;
         // if (e.Key == Key.Space)
         // {
         //     var items = ViewModel.SearchResults
@@ -52,10 +55,10 @@ public partial class MainWindowView : Window
 
     private static void OnDoubleTapped_ExecuteLinkedAction(object? sender, TappedEventArgs args)
     {
-        if (sender is ListBox { SelectedItem: TaggableItemViewModel vm })
-        {
-            // vm.ExecuteLinkedActionCommand.Execute(null);
-        }
+        // if (sender is ListBox { SelectedItem: TaggableItemViewModel vm })
+        // {
+        //     // vm.ExecuteLinkedActionCommand.Execute(null);
+        // }
     }
 
     private static void OnKeyDown_ExecuteLinkedAction(object? sender, KeyEventArgs args)
@@ -65,10 +68,10 @@ public partial class MainWindowView : Window
             return;
         }
 
-        if (sender is ListBox { SelectedItem: TaggableItemViewModel vm })
-        {
-            // vm.ExecuteLinkedActionCommand.Execute(null);
-        }
+        // if (sender is ListBox { SelectedItem: TaggableItemViewModel vm })
+        // {
+        //     // vm.ExecuteLinkedActionCommand.Execute(null);
+        // }
     }
 
     private void SwitchFocusToSearchBar(object? sender, KeyEventArgs args)
@@ -81,25 +84,25 @@ public partial class MainWindowView : Window
 
     private void SwitchFocusToOtherResults(object? sender, KeyEventArgs args)
     {
-        if (args.Key == Key.Down && OtherResultsListBox.Items.Count != 0)
-        {
-            TaggableItemsListBox.Selection.Clear();
-
-            OtherResultsListBox.ContainerFromIndex(0)?.Focus();
-            OtherResultsListBox.Selection.Select(0);
-        }
+        // if (args.Key == Key.Down && OtherResultsListBox.Items.Count != 0)
+        // {
+        //     TaggableItemsListBox.Selection.Clear();
+        //
+        //     OtherResultsListBox.ContainerFromIndex(0)?.Focus();
+        //     OtherResultsListBox.Selection.Select(0);
+        // }
     }
 
     private void SwitchFocusFromOtherResultsToSearchResults(object? sender, KeyEventArgs args)
     {
-        if (args.Key == Key.Up && TaggableItemsListBox.Items.Count != 0)
-        {
-            OtherResultsListBox.Selection.Clear();
-
-            var lastItemIndex = TaggableItemsListBox.ItemCount - 1;
-            TaggableItemsListBox.ContainerFromIndex(lastItemIndex)?.Focus();
-            TaggableItemsListBox.Selection.Select(lastItemIndex);
-        }
+        // if (args.Key == Key.Up && TaggableItemsListBox.Items.Count != 0)
+        // {
+        //     OtherResultsListBox.Selection.Clear();
+        //
+        //     var lastItemIndex = TaggableItemsListBox.ItemCount - 1;
+        //     TaggableItemsListBox.ContainerFromIndex(lastItemIndex)?.Focus();
+        //     TaggableItemsListBox.Selection.Select(lastItemIndex);
+        // }
     }
 
     private void SwitchFocusToSearchResults(object? sender, KeyEventArgs args)

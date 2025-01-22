@@ -1,6 +1,6 @@
 ﻿namespace TagTool.App.Contracts;
 
-public abstract class TaggableItem
+public abstract class TaggableItemBase
 {
     public Guid Id { get; set; }
 

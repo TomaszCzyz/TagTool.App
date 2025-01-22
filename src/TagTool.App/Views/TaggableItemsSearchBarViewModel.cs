@@ -11,6 +11,7 @@ using Grpc.Core;
 using JetBrains.Annotations;
 using Microsoft.Extensions.Logging;
 using TagTool.App.Contracts;
+using TagTool.App.Core.Extensions;
 using TagTool.App.Core.Models;
 using TagTool.App.Core.Services;
 using TagTool.BackendNew;

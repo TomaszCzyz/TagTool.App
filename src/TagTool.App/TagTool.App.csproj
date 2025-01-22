@@ -74,11 +74,7 @@
   <ItemGroup>
     <TrimmerRootDescriptor Include="Roots.xml" />
   </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Contracts\" />
-  </ItemGroup>
-
+  
   <ItemGroup>
     <ProjectReference Include="..\TagTool.App.Contracts\TagTool.App.Contracts.csproj" />
     <ProjectReference Include="..\TagTool.TaggableFile\TagTool.TaggableFile.csproj" />
