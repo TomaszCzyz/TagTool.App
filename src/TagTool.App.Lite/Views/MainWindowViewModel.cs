@@ -5,7 +5,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using Avalonia.Controls;
 using Avalonia.Threading;
-using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using DynamicData;
 using JetBrains.Annotations;
@@ -20,13 +19,10 @@ namespace TagTool.App.Lite.Views;
 
 public partial class MainWindowViewModel : ViewModelBase
 {
-    private readonly TaggableItemIconResolverDispatcher _iconResolver;
+    private readonly TaggableItemIconResolver _iconResolver;
     private readonly TaggableItemDisplayTextResolver _displayTextResolver;
     private readonly TaggableItemMapper _taggableItemMapper;
     private readonly TagService.TagServiceClient _tagService;
-
-    [ObservableProperty]
-    private bool _isNewItemsPanelVisible;
 
     public TaggableItemsSearchBarViewModel SearchBarViewModel { get; }
 
@@ -37,33 +33,36 @@ public partial class MainWindowViewModel : ViewModelBase
     /// <summary>
     ///     ctor for XAML previewer
     /// </summary>
-    public MainWindowViewModel(TaggableItemDisplayTextResolver displayTextResolver, TaggableItemIconResolverDispatcher iconResolver,
-        TaggableItemMapper taggableItemMapper)
+    public MainWindowViewModel()
     {
         if (!Design.IsDesignMode)
         {
             Debug.Fail("ctor for XAML Previewer should not be invoke during standard execution");
         }
 
-        _displayTextResolver = displayTextResolver;
-        _iconResolver = iconResolver;
-        _taggableItemMapper = taggableItemMapper;
-
+        _displayTextResolver = AppTemplate.Current.Services.GetRequiredService<TaggableItemDisplayTextResolver>();
+        _iconResolver = AppTemplate.Current.Services.GetRequiredService<TaggableItemIconResolver>();
+        _taggableItemMapper = AppTemplate.Current.Services.GetRequiredService<TaggableItemMapper>();
         _tagService = AppTemplate.Current.Services.GetRequiredService<ITagToolBackend>().GetTagService();
+
         SearchBarViewModel = AppTemplate.Current.Services.GetRequiredService<TaggableItemsSearchBarViewModel>();
 
         Initialize();
     }
 
     [UsedImplicitly]
-    public MainWindowViewModel(TaggableItemsSearchBarViewModel taggableItemsSearchBarViewModel, ITagToolBackend tagToolBackend,
-        TaggableItemDisplayTextResolver displayTextResolver, TaggableItemIconResolverDispatcher iconResolver, TaggableItemMapper taggableItemMapper)
+    public MainWindowViewModel(
+        TaggableItemsSearchBarViewModel taggableItemsSearchBarViewModel,
+        ITagToolBackend tagToolBackend,
+        TaggableItemDisplayTextResolver displayTextResolver,
+        TaggableItemIconResolver iconResolver,
+        TaggableItemMapper taggableItemMapper)
     {
         _tagService = tagToolBackend.GetTagService();
-        SearchBarViewModel = taggableItemsSearchBarViewModel;
         _displayTextResolver = displayTextResolver;
         _iconResolver = iconResolver;
         _taggableItemMapper = taggableItemMapper;
+        SearchBarViewModel = taggableItemsSearchBarViewModel;
 
         Initialize();
     }
@@ -72,13 +71,8 @@ public partial class MainWindowViewModel : ViewModelBase
     {
         SearchBarViewModel.CommitSearchQueryEvent += (_, args) => Dispatcher.UIThread.InvokeAsync(() => SearchForTaggableItems(args.QuerySegments));
 
-        // Initial, empty search to retrieve the most popular items.
+        // Initial, empty search.
         Dispatcher.UIThread.InvokeAsync(() => SearchForTaggableItems(null));
-
-        // OtherResults.Add(new TaggableItemViewModel(_tagService, )
-        // {
-        //     TaggableItem = new TaggableFile { Path = "info.FullName" }, AreTagsVisible = true
-        // });
     }
 
     [RelayCommand]
@@ -103,7 +97,6 @@ public partial class MainWindowViewModel : ViewModelBase
     [RelayCommand]
     private void ShowNewItemsPanel()
     {
-        IsNewItemsPanelVisible ^= true;
     }
 
     [RelayCommand]
@@ -162,7 +155,13 @@ public partial class MainWindowViewModel : ViewModelBase
                 var text = _displayTextResolver.GetDisplayText(item);
                 var icon = _iconResolver.GetIcon(item, null);
                 var tags = item.Tags?.ToHashSet() ?? [];
-                return new TaggableItemModel(item.Id, text, icon, tags);
+                return new TaggableItemModel
+                {
+                    Id = item.Id,
+                    DisplayName = text,
+                    Icon = icon,
+                    Tags = tags
+                };
             }));
     }
 }

@@ -25,7 +25,7 @@ public interface ITextSearchable
 [DebuggerDisplay("{DisplayName}")]
 public partial class TaggableItemViewModel : ViewModelBase, ITextSearchable
 {
-    private readonly TaggableItemIconResolverDispatcher _iconResolver;
+    private readonly TaggableItemIconResolver _iconResolver;
     private readonly TaggableItemDisplayTextResolver _displayTextResolver;
     private TaggableItem _taggableItem;
 
@@ -79,7 +79,7 @@ public partial class TaggableItemViewModel : ViewModelBase, ITextSearchable
     }
 
     public TaggableItemViewModel(
-        TaggableItemIconResolverDispatcher iconResolver,
+        TaggableItemIconResolver iconResolver,
         TaggableItemDisplayTextResolver displayTextResolver)
     {
         _iconResolver = iconResolver;

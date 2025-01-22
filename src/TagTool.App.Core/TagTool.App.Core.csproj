@@ -69,4 +69,11 @@
     <None Update="bass.dll" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Compile Update="Views\TaggableItemModelView.axaml.cs">
+      <DependentUpon>TaggableItemModelView.axaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+  </ItemGroup>
+
 </Project>

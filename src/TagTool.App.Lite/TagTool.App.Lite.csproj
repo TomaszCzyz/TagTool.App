@@ -23,4 +23,8 @@
     <TrimmerRootDescriptor Include="Roots.xml"/>
   </ItemGroup>
 
+  <ItemGroup>
+    <UpToDateCheckInput Remove="Assets\avalonia-logo.ico" />
+  </ItemGroup>
+
 </Project>

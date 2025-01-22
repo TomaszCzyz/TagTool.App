@@ -6,6 +6,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:views="clr-namespace:TagTool.App.Core.Views;assembly=TagTool.App.Core"
     xmlns:views1="clr-namespace:TagTool.App.Lite.Views"
+    xmlns:models="clr-namespace:TagTool.App.Core.Models;assembly=TagTool.App.Core"
     x:Class="TagTool.App.Lite.Views.MainWindowView"
     x:DataType="views1:MainWindowViewModel"
     d:DesignWidth="850"
@@ -77,7 +78,7 @@
         </Grid>
         <Panel>
             <!-- Results panel -->
-            <StackPanel IsVisible="{Binding !IsNewItemsPanelVisible}">
+            <!-- <StackPanel IsVisible="{Binding !IsNewItemsPanelVisible}"> -->
                 <!-- Query result -->
                 <Panel>
                     <ListBox
@@ -88,8 +89,11 @@
                         >
                         <!-- todo: maybe DataTemplate is not needed if I have ViewLocator -->
                         <ListBox.ItemTemplate>
-                            <DataTemplate x:DataType="views:TaggableItemViewModel">
-                                <views:TaggableItemView FontSize="14" />
+                            <!-- <DataTemplate x:DataType="views:TaggableItemViewModel"> -->
+                                <!-- <views:TaggableItemView FontSize="14" /> -->
+                            <!-- </DataTemplate> -->
+                            <DataTemplate x:DataType="views:TaggableItemModel">
+                                <views:TaggableItemModelView FontSize="14" />
                             </DataTemplate>
                         </ListBox.ItemTemplate>
                     </ListBox>
@@ -120,13 +124,13 @@
                         ItemsSource="{Binding OtherResults}"
                         >
                         <ListBox.ItemTemplate>
-                            <DataTemplate x:DataType="views:TaggableItemViewModel">
-                                <views:TaggableItemView FontSize="14" />
+                            <DataTemplate x:DataType="views:TaggableItemModel">
+                                <views:TaggableItemModelView FontSize="14" />
                             </DataTemplate>
                         </ListBox.ItemTemplate>
                     </ListBox>
                 </Panel>
-            </StackPanel>
+            <!-- </StackPanel> -->
         </Panel>
     </DockPanel>
 </Window>

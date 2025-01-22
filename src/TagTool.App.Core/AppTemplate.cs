@@ -4,6 +4,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using TagTool.App.Core.Extensions;
 using TagTool.App.Core.Services;
+using TagTool.App.Core.TaggableFile;
 using TagTool.App.Core.Views;
 
 namespace TagTool.App.Core;
@@ -27,6 +28,14 @@ public abstract class AppTemplate : Application
         services.AddSingleton<ITagToolBackendConnectionFactory, GrpcChannelFactory>();
         services.AddSingleton<ITagToolBackend, TagToolBackend>();
         services.AddTransient<ISpeechToTagSearchService, SpeechToTagSearchService>();
+
+        services.AddSingleton<TaggableItemDisplayTextResolver>();
+        services.AddSingleton<TaggableItemIconResolver>();
+        services.AddSingleton<TaggableItemMapper>();
+
+        services.AddSingleton<TaggableFileIconResolver>();
+        services.AddSingleton<TaggableFileDisplayTextResolver>();
+
         services.AddViewModelsFromAssembly(typeof(ViewModelBase));
 
         return configuration;

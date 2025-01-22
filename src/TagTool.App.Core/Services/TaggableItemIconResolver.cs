@@ -7,11 +7,11 @@ using TagTool.App.Core.TaggableFile;
 namespace TagTool.App.Core.Services;
 
 [UsedImplicitly]
-public class TaggableItemIconResolverDispatcher : ITaggableItemIconResolver<TaggableItem>
+public class TaggableItemIconResolver : ITaggableItemIconResolver<TaggableItem>
 {
     private readonly TaggableFileIconResolver _taggableFileIconResolver;
 
-    public TaggableItemIconResolverDispatcher(TaggableFileIconResolver taggableFileIconResolver)
+    public TaggableItemIconResolver(TaggableFileIconResolver taggableFileIconResolver)
     {
         _taggableFileIconResolver = taggableFileIconResolver;
     }
