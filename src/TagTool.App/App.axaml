@@ -2,52 +2,41 @@
     xmlns="https://github.com/avaloniaui"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
-    xmlns:local="using:TagTool.App"
-    xmlns:system="clr-namespace:System;assembly=System.Runtime"
-    x:Class="TagTool.App.App"
+    xmlns:core="clr-namespace:TagTool.App.Core"
+    x:Class="TagTool.App.Core.App"
     RequestedThemeVariant="Dark"
     >
     <Application.DataTemplates>
-        <local:ViewLocator />
+        <core:ViewLocator />
     </Application.DataTemplates>
     <Application.Resources>
-        <ResourceDictionary x:Key="DoINeedItDictionary">
-            <ResourceDictionary.MergedDictionaries>
-                <ResourceInclude Source="/Views/Styles/MyDocumentTabStripItem.axaml" />
-            </ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary>
+            <ResourceDictionary.ThemeDictionaries>
+                <ResourceInclude x:Key="Dark" Source="avares://TagTool.App/Assets/ThemeDark.axaml" />
+                <ResourceInclude x:Key="Light" Source="avares://TagTool.App/Assets/ThemeLight.axaml" />
+            </ResourceDictionary.ThemeDictionaries>
         </ResourceDictionary>
-        <Color x:Key="DefaultTagColor">#656769</Color>
-        <Color x:Key="TextTagColor">#53A7FF</Color>
-        <Color x:Key="DayTagColor">#9CFF5E</Color>
-        <Color x:Key="DayRangeTagColor">#337C00</Color>
-        <Color x:Key="MonthTagColor">#FF6AB2</Color>
-        <Color x:Key="MonthRangeTagColor">#9F5057</Color>
-        <Color x:Key="TypeTagColor">#00FFFD</Color>
-        <Color x:Key="MyLightSecondary500">#FA9538</Color>
         <!-- global font size -->
         <x:Double x:Key="ControlContentThemeFontSize">14</x:Double>
         <x:Double x:Key="AppContentFontSize">16</x:Double>
-        <Color x:Key="AppFontColor">#333</Color>
-        <system:Double x:Key="DockFontSizeNormal">14</system:Double>
-        <SolidColorBrush x:Key="DockApplicationAccentBrushLow">#007ACC</SolidColorBrush>
-        <SolidColorBrush x:Key="DockApplicationAccentBrushMed">#DADADA</SolidColorBrush>
-        <SolidColorBrush x:Key="DockApplicationAccentBrushHigh">#52B0EF</SolidColorBrush>
-        <SolidColorBrush x:Key="DockApplicationAccentForegroundBrush">#F0F0F0</SolidColorBrush>
-        <SolidColorBrush x:Key="DockApplicationAccentBrushIndicator">#007ACC</SolidColorBrush>
     </Application.Resources>
     <Application.Styles>
         <FluentTheme />
         <avalonia:MaterialIconStyles />
-        <StyleInclude Source="avares://Dock.Avalonia/Themes/DockFluentTheme.axaml" />
-        <StyleInclude Source="avares://Avalonia.Controls.DataGrid/Themes/Fluent.xaml" />
-        <StyleInclude Source="/Views/TemplatedControls/TagChip.axaml" />
-        <StyleInclude Source="/Views/TemplatedControls/SpecialTag.axaml" />
-        <StyleInclude Source="/Controls/TextSearchableListBox.axaml" />
-        <Style Selector="DocumentControl /template/ Grid#PART_Grid">
-            <Setter Property="Height" Value="0" />
+        <StyleInclude Source="avares://TagTool.App/Controls/MyControls.axaml" />
+        <Style Selector="TextBlock">
+            <Setter Property="Foreground" Value="{DynamicResource Primary}" />
         </Style>
-        <Style Selector="DocumentTabStrip /template/ Button#PART_ButtonCreate">
-            <Setter Property="VerticalAlignment" Value="Center" />
+        <Style Selector="Button.Transparent">
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="BorderBrush" Value="Transparent" />
+            <Setter Property="Padding" Value="0" />
+            <Setter Property="Margin" Value="0" />
+            <Style Selector="^:pointerover, ^:focus-within, ^:focus">
+                <Style Selector="^ /template/ ContentPresenter#PART_ContentPresenter">
+                    <Setter Property="Background" Value="Transparent" />
+                </Style>
+            </Style>
         </Style>
     </Application.Styles>
 </Application>

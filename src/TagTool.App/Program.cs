@@ -1,8 +1,6 @@
 ﻿using Avalonia;
-using Avalonia.Logging;
-using Avalonia.Svg.Skia;
 
-namespace TagTool.App;
+namespace TagTool.App.Core;
 
 public static class Program
 {
@@ -10,18 +8,13 @@ public static class Program
     // SynchronizationContext-reliant code before AppMain is called: things aren't initialized
     // yet and stuff might break.
     [STAThread]
-    public static void Main(string[] args) => BuildAvaloniaApp().StartWithClassicDesktopLifetime(args);
+    public static void Main(string[] args)
+        => BuildAvaloniaApp()
+            .StartWithClassicDesktopLifetime(args);
 
-    private static AppBuilder BuildAvaloniaApp()
-    {
-        // todo: check if it is needed in non-debug mode
-        GC.KeepAlive(typeof(SvgImageExtension).Assembly);
-        GC.KeepAlive(typeof(Avalonia.Svg.Skia.Svg).Assembly);
-        var appBuilder = AppBuilder
-            .Configure<App>()
+    // Avalonia configuration, don't remove; also used by visual designer.
+    public static AppBuilder BuildAvaloniaApp()
+        => AppBuilder.Configure<App>()
             .UsePlatformDetect()
-            .LogToTrace(LogEventLevel.Error);
-
-        return appBuilder;
-    }
+            .LogToTrace();
 }

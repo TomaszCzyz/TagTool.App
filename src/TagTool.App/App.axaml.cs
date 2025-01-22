@@ -1,19 +1,12 @@
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
-using Dock.Model.Core;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Serilog;
-using TagTool.App.Core;
 using TagTool.App.Core.Extensions;
-using TagTool.App.Core.Services;
-using TagTool.App.Docks;
-using TagTool.App.Options;
-using TagTool.App.Services;
-using TagTool.App.ViewModels;
-using TagTool.App.Views;
+using TagTool.App.Core.Views;
+using MainWindowViewModel = TagTool.App.Core.Views.MainWindowViewModel;
 
-namespace TagTool.App;
+namespace TagTool.App.Core;
 
 public class App : AppTemplate
 {
@@ -28,41 +21,23 @@ public class App : AppTemplate
     {
         if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktopLifetime)
         {
-            var mainWindowViewModel = Services.GetRequiredService<MainWindowViewModel>();
-            var mainWindow = new MainWindow { DataContext = mainWindowViewModel };
+            var mainWindow = new MainWindowView { DataContext = Services.GetRequiredService<MainWindowViewModel>() };
 
             desktopLifetime.MainWindow = mainWindow;
 
-            desktopLifetime.Exit += async (_, _) => await Log.CloseAndFlushAsync();
+            desktopLifetime.Exit += (_, _) => Log.CloseAndFlush();
         }
 
         base.OnFrameworkInitializationCompleted();
     }
 
-    private static IServiceProvider ConfigureServices()
+    private static ServiceProvider ConfigureServices()
     {
         var services = new ServiceCollection();
 
-        var configuration = ConfigureCoreServices(services);
-
-        services.AddSingleton<IFileIconProvider, DefaultFileIconProvider>();
-        services.AddSingleton<IWordHighlighter, WordHighlighter>();
-        services.AddSingleton<IWorkspaceManager, WorkspaceManager>();
-        services.AddSingleton<DefaultDockFactory>();
-        services.AddTransient<MyDocumentDock>();
-        services
-            .AddOptions<GeneralOptions>()
-            .Configure(options => configuration.GetSection(GeneralOptions.General).Bind(options));
+        _ = ConfigureCoreServices(services);
 
         services.AddViewModelsFromAssembly(typeof(Program));
-
-        var dockables = typeof(Program).Assembly.ExportedTypes
-            .Where(x => typeof(IDockable).IsAssignableFrom(x) && x is { IsInterface: false, IsAbstract: false });
-
-        foreach (var type in dockables)
-        {
-            services.AddTransient(type);
-        }
 
         return services.BuildServiceProvider();
     }

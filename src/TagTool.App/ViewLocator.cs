@@ -1,9 +1,8 @@
 using Avalonia.Controls;
 using Avalonia.Controls.Templates;
-using Dock.Model.Core;
-using TagTool.App.Core.ViewModels;
+using TagTool.App.Core.Views;
 
-namespace TagTool.App;
+namespace TagTool.App.Core;
 
 public class ViewLocator : IDataTemplate
 {
@@ -25,5 +24,5 @@ public class ViewLocator : IDataTemplate
         return new TextBlock { Text = "Not Found: " + name };
     }
 
-    public bool Match(object? data) => data is ViewModelBase or IDockable;
+    public bool Match(object? data) => data is ViewModelBase;
 }

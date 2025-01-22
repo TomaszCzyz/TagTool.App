@@ -1,0 +1,134 @@
+<Window
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:views="clr-namespace:TagTool.App.Core.Views;assembly=TagTool.App"
+    x:Class="TagTool.App.Core.Views.MainWindowView"
+    x:DataType="views:MainWindowViewModel"
+    d:DesignWidth="850"
+    d:DesignHeight="450"
+    mc:Ignorable="d"
+    Background="{DynamicResource Surface}"
+    ExtendClientAreaChromeHints="NoChrome"
+    ExtendClientAreaTitleBarHeightHint="-1"
+    ExtendClientAreaToDecorationsHint="True"
+    ShowInTaskbar="True"
+    SizeToContent="Height"
+    Title="TagTool.App.Lite"
+    PointerMoved="InputElement_OnPointerMoved"
+    PointerPressed="InputElement_OnPointerPressed"
+    PointerReleased="InputElement_OnPointerReleased"
+    >
+    <Design.DataContext>
+        <views:MainWindowViewModel />
+    </Design.DataContext>
+    <DockPanel Name="TopMostDockPanel">
+        <Grid DockPanel.Dock="Top" ColumnDefinitions="*, Auto">
+            <!-- Search Bar -->
+            <views:TaggableItemsSearchBarView
+                Name="SearchBarView"
+                DataContext="{Binding SearchBarViewModel, Mode=TwoWay}"
+                Focusable="True"
+                Loaded="TagsSearchBar_OnLoaded"
+                />
+            <Grid
+                Grid.Column="1"
+                ColumnDefinitions="*, *"
+                RowDefinitions="*, *"
+                >
+                <Grid.Styles>
+                    <Style Selector="Button">
+                        <Setter Property="Margin" Value="3 0" />
+                        <Setter Property="Padding" Value="0" />
+                        <Setter Property="Background" Value="Transparent" />
+                    </Style>
+                    <Style Selector="avalonia|MaterialIcon">
+                        <Setter Property="Height" Value="20" />
+                        <Setter Property="Foreground" Value="{DynamicResource Primary}" />
+                    </Style>
+                </Grid.Styles>
+                <Button
+                    Grid.Row="0"
+                    Grid.Column="0"
+                    ToolTip.Tip="Tag new files"
+                    Command="{Binding ShowNewItemsPanelCommand}"
+                    >
+                    <avalonia:MaterialIcon Kind="NewBox" />
+                </Button>
+                <Button
+                    Grid.Row="0"
+                    Grid.Column="1"
+                    Click="CloseButton_OnClick"
+                    >
+                    <avalonia:MaterialIcon Kind="Close" />
+                </Button>
+                <Button
+                    Grid.Row="1"
+                    Grid.Column="1"
+                    ToolTip.Tip="Open TagTool app"
+                    Command="{Binding OpenTagToolAppCommand}"
+                    >
+                    <avalonia:MaterialIcon Kind="OpenInNew" />
+                </Button>
+            </Grid>
+        </Grid>
+        <Panel>
+            <!-- Results panel -->
+            <!-- <StackPanel IsVisible="{Binding !IsNewItemsPanelVisible}"> -->
+            <!-- Query result -->
+            <Panel>
+                <ListBox
+                    Name="TaggableItemsListBox"
+                    Width="{Binding #TopMostDockPanel.Bounds.Width}"
+                    Background="Transparent"
+                    ItemsSource="{Binding SearchResults}"
+                    >
+                    <!-- todo: maybe DataTemplate is not needed if I have ViewLocator -->
+                    <ListBox.ItemTemplate>
+                        <!-- <DataTemplate x:DataType="views:TaggableItemViewModel"> -->
+                        <!-- <views:TaggableItemView FontSize="14" /> -->
+                        <!-- </DataTemplate> -->
+                        <DataTemplate x:DataType="views:TaggableItemModel">
+                            <views:TaggableItemModelView FontSize="14" />
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+                <TextBlock
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    Foreground="{DynamicResource Primary}"
+                    IsVisible="{Binding !#TaggableItemsListBox.ItemCount}"
+                    Text="No items matching given query"
+                    />
+            </Panel>
+            <Grid
+                ColumnDefinitions="* Auto *"
+                IsVisible="{Binding #OtherResultsListBox.ItemCount}"
+                RowDefinitions="Auto"
+                >
+                <Separator Grid.Column="0" />
+                <TextBlock Grid.Column="1" Text="Other items" />
+                <Separator Grid.Column="2" />
+            </Grid>
+            <!-- Other results -->
+            <!-- todo: maybe it should be one listbox with inserted separator-item... it should simplifying e.g. focusing -->
+            <Panel>
+                <ListBox
+                    Name="OtherResultsListBox"
+                    Width="{Binding #TopMostDockPanel.Bounds.Width}"
+                    Background="Transparent"
+                    ItemsSource="{Binding OtherResults}"
+                    >
+                    <ListBox.ItemTemplate>
+                        <DataTemplate x:DataType="views:TaggableItemModel">
+                            <views:TaggableItemModelView FontSize="14" />
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+            </Panel>
+            <!-- </StackPanel> -->
+        </Panel>
+    </DockPanel>
+</Window>
