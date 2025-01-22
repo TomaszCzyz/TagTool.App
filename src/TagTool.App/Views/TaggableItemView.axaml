@@ -42,6 +42,7 @@
                 HorizontalAlignment="Stretch"
                 VerticalAlignment="Center"
                 Text="{Binding DisplayName}"
+                FontSize="16"
                 />
             <!-- Associated tags -->
             <Border

@@ -15,7 +15,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TagTool.App", "src\TagTool.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TagTool.App.Contracts", "src\TagTool.App.Contracts\TagTool.App.Contracts.csproj", "{F258E8B2-313A-480A-9230-1190EB75867B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TagTool.TaggableFile", "src\TagTool.TaggableFile\TagTool.TaggableFile.csproj", "{E5C72AE5-476D-4DB4-98C6-6EB152FB3E8D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TagTool.App.TaggableFile", "src\TagTool.App.TaggableFile\TagTool.App.TaggableFile.csproj", "{E5C72AE5-476D-4DB4-98C6-6EB152FB3E8D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

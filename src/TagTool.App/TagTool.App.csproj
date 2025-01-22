@@ -77,7 +77,7 @@
   
   <ItemGroup>
     <ProjectReference Include="..\TagTool.App.Contracts\TagTool.App.Contracts.csproj" />
-    <ProjectReference Include="..\TagTool.TaggableFile\TagTool.TaggableFile.csproj" />
+    <ProjectReference Include="..\TagTool.App.TaggableFile\TagTool.App.TaggableFile.csproj" />
   </ItemGroup>
 
 </Project>
