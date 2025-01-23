@@ -72,11 +72,17 @@ public partial class MainWindowViewModel : ViewModelBase
 
         // Initial, empty search.
         Dispatcher.UIThread.InvokeAsync(() => SearchForTaggableItems(null));
+        // Fetch TaggableItem-specific operations
         Dispatcher.UIThread.InvokeAsync(() =>
         {
             var reply = _tagService.GetOperations(new GetOperationsRequest());
-            Test.Clear();
-            Test.AddRange(reply.Operations[0].Name.ToArray());
+            var operationNames = reply.Operations.FirstOrDefault()?.Name.ToArray();
+            if (operationNames is not null)
+            {
+                Test.Clear();
+                Test.AddRange(operationNames);
+            }
+
             TaggableItemContextMenuActions = reply.Operations.ToDictionary(
                 o => o.TypeName == "TaggableFile_A8ABBA71" ? typeof(TaggableFile.TaggableFile) : throw new ArgumentOutOfRangeException(),
                 o => o.Name.ToArray());

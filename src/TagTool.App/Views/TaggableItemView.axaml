@@ -8,7 +8,6 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:dataTemplates="clr-namespace:TagTool.App.DataTemplates"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:models="clr-namespace:TagTool.App.Models"
     xmlns:vm="clr-namespace:TagTool.App.Views"
     x:Class="TagTool.App.Views.TaggableItemView"
     x:DataType="vm:TaggableItemViewModel"
@@ -21,22 +20,13 @@
     >
     <UserControl.Resources>
         <converters:ItemOperationsConverter x:Key="ItemOperationsConverter" />
+        <converters:ItemOperationsToBoolConverter x:Key="ItemOperationsToBoolConverter" />
     </UserControl.Resources>
     <Border
         Name="DragDropInfoAreaBorder"
         Padding="6"
         Background="#00FFFFFF"
-        BorderBrush="Red"
-        BorderThickness="2"
         >
-        <!-- <Border.ContextMenu> -->
-        <!--     <ContextMenu> -->
-        <!--         <MenuItem Header="Tag/untag..."> -->
-        <!--             <MenuItem Header="_Open..." /> -->
-        <!--         </MenuItem> -->
-        <!--         <MenuItem Header="Paste" /> -->
-        <!--     </ContextMenu> -->
-        <!-- </Border.ContextMenu> -->
         <DockPanel Name="TopMostDockPanel" Background="Transparent">
             <Grid
                 Name="TopMostGrid"
@@ -57,6 +47,7 @@
                     HorizontalAlignment="Stretch"
                     VerticalAlignment="Center"
                     FontSize="16"
+                    Foreground="{DynamicResource OnSurface}"
                     Text="{Binding DisplayName}"
                     />
                 <!-- Associated tags -->
@@ -131,6 +122,12 @@
                             <MenuFlyout Placement="Bottom">
                                 <MenuItem Header="Tag/untag..." />
                                 <MenuItem Header="Item Operations">
+                                    <MenuItem.IsEnabled>
+                                        <MultiBinding Converter="{StaticResource ItemOperationsToBoolConverter}">
+                                            <Binding FallbackValue="{x:Null}" Path="$parent[ListBox].((vm:MainWindowViewModel)DataContext).TaggableItemContextMenuActions" />
+                                            <Binding FallbackValue="{x:Null}" Path="$self.((vm:TaggableItemViewModel)DataContext).TaggableItem" />
+                                        </MultiBinding>
+                                    </MenuItem.IsEnabled>
                                     <MenuItem.ItemsSource>
                                         <MultiBinding Converter="{StaticResource ItemOperationsConverter}">
                                             <Binding FallbackValue="{x:Null}" Path="$parent[ListBox].((vm:MainWindowViewModel)DataContext).TaggableItemContextMenuActions" />

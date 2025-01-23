@@ -4,7 +4,6 @@
     xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:models="clr-namespace:TagTool.App.Models"
     xmlns:views1="clr-namespace:TagTool.App.Views"
     x:Class="TagTool.App.Views.MainWindowView"
     x:DataType="views1:MainWindowViewModel"
@@ -17,6 +16,7 @@
     ExtendClientAreaToDecorationsHint="True"
     ShowInTaskbar="True"
     SizeToContent="Height"
+    CanResize="False"
     Title="TagTool.App.Lite"
     PointerMoved="InputElement_OnPointerMoved"
     PointerPressed="InputElement_OnPointerPressed"
@@ -85,6 +85,11 @@
                     ItemsSource="{Binding SearchResults}"
                     SelectionMode="Single"
                     >
+                    <ListBox.Styles>
+                        <Style Selector="ListBoxItem">
+                            <Setter Property="Padding" Value="0" />
+                        </Style>
+                    </ListBox.Styles>
                     <ListBox.ItemTemplate>
                         <DataTemplate x:DataType="views1:TaggableItemViewModel">
                             <views1:TaggableItemView />
