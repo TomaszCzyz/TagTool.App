@@ -86,7 +86,7 @@
                     SelectionMode="Single"
                     >
                     <ListBox.ItemTemplate>
-                        <DataTemplate x:DataType="models:TaggableItem">
+                        <DataTemplate x:DataType="views1:TaggableItemViewModel">
                             <views1:TaggableItemView />
                         </DataTemplate>
                     </ListBox.ItemTemplate>

@@ -23,11 +23,11 @@ public partial class MainWindowViewModel : ViewModelBase
 
     public TaggableItemsSearchBarViewModel SearchBarViewModel { get; }
 
-    public ObservableCollection<TaggableItem> SearchResults { get; } = [];
+    public ObservableCollection<TaggableItemViewModel> SearchResults { get; } = [];
 
-    public ObservableCollection<TaggableItem> OtherResults { get; set; } = [];
+    public Dictionary<Type, string[]> TaggableItemContextMenuActions { get; set; } = [];
 
-    public ObservableCollection<string> TaggableItemContextMenuActions { get; set; }
+    public ObservableCollection<string> Test { get; set; } = [];
 
     /// <summary>
     ///     ctor for XAML previewer
@@ -46,7 +46,6 @@ public partial class MainWindowViewModel : ViewModelBase
 
         SearchBarViewModel = AppTemplate.Current.Services.GetRequiredService<TaggableItemsSearchBarViewModel>();
 
-        // _tagService.InvokeOperationAsync()
         Initialize();
     }
 
@@ -73,6 +72,15 @@ public partial class MainWindowViewModel : ViewModelBase
 
         // Initial, empty search.
         Dispatcher.UIThread.InvokeAsync(() => SearchForTaggableItems(null));
+        Dispatcher.UIThread.InvokeAsync(() =>
+        {
+            var reply = _tagService.GetOperations(new GetOperationsRequest());
+            Test.Clear();
+            Test.AddRange(reply.Operations[0].Name.ToArray());
+            TaggableItemContextMenuActions = reply.Operations.ToDictionary(
+                o => o.TypeName == "TaggableFile_A8ABBA71" ? typeof(TaggableFile.TaggableFile) : throw new ArgumentOutOfRangeException(),
+                o => o.Name.ToArray());
+        });
     }
 
     [RelayCommand]
@@ -154,8 +162,7 @@ public partial class MainWindowViewModel : ViewModelBase
             {
                 var text = _displayTextResolver.GetDisplayText(item);
                 var icon = _iconResolver.GetIcon(item, null);
-                var tags = item.Tags?.ToHashSet() ?? [];
-                return new TaggableItem(item.Id, text, icon, tags);
+                return new TaggableItemViewModel(item, icon, text);
             }));
     }
 }

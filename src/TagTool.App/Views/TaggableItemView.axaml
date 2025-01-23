@@ -2,104 +2,147 @@
     xmlns="https://github.com/avaloniaui"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:app="clr-namespace:TagTool.App"
+    xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
     xmlns:contracts="clr-namespace:TagTool.App.Contracts;assembly=TagTool.App.Contracts"
+    xmlns:converters="clr-namespace:TagTool.App.Converters"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:dataTemplates="clr-namespace:TagTool.App.DataTemplates"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:models="clr-namespace:TagTool.App.Models"
+    xmlns:vm="clr-namespace:TagTool.App.Views"
     x:Class="TagTool.App.Views.TaggableItemView"
-    x:DataType="models:TaggableItem"
+    x:DataType="vm:TaggableItemViewModel"
     Name="UserControlRoot"
     d:DesignWidth="750"
     d:DesignHeight="100"
     mc:Ignorable="d"
     DragDrop.AllowDrop="True"
-    d:DataContext="{x:Static app:DesignData.TaggableItemSample}"
+    d:DataContext="{x:Static app:DesignData.TaggableItemViewModelSample}"
     >
+    <UserControl.Resources>
+        <converters:ItemOperationsConverter x:Key="ItemOperationsConverter" />
+    </UserControl.Resources>
     <Border
         Name="DragDropInfoAreaBorder"
         Padding="6"
         Background="#00FFFFFF"
-        BorderBrush="Transparent"
+        BorderBrush="Red"
         BorderThickness="2"
         >
-        <Border.ContextMenu>
-            <ContextMenu>
-                <MenuItem Header="Tag/untag..." />
-                <MenuItem Header="Paste" />
-            </ContextMenu>
-        </Border.ContextMenu>
-        <Grid
-            Name="TopMostGrid"
-            HorizontalAlignment="Left"
-            VerticalAlignment="Center"
-            ColumnDefinitions="30,Auto,*"
-            RowDefinitions="Auto"
-            >
-            <Image
-                Name="IconImage"
-                Grid.Column="0"
-                Margin="0 0 2 0"
-                Source="{Binding Icon}"
-                />
-            <TextBlock
-                Name="DisplayNameTextBlock"
-                Grid.Column="1"
-                HorizontalAlignment="Stretch"
+        <!-- <Border.ContextMenu> -->
+        <!--     <ContextMenu> -->
+        <!--         <MenuItem Header="Tag/untag..."> -->
+        <!--             <MenuItem Header="_Open..." /> -->
+        <!--         </MenuItem> -->
+        <!--         <MenuItem Header="Paste" /> -->
+        <!--     </ContextMenu> -->
+        <!-- </Border.ContextMenu> -->
+        <DockPanel Name="TopMostDockPanel" Background="Transparent">
+            <Grid
+                Name="TopMostGrid"
+                DockPanel.Dock="Left"
                 VerticalAlignment="Center"
-                FontSize="16"
-                Text="{Binding DisplayName}"
-                />
-            <!-- Associated tags -->
-            <Border
-                Grid.Column="2"
-                BorderBrush="Green"
-                BorderThickness="0"
+                ColumnDefinitions="30 Auto * Auto"
+                RowDefinitions="Auto"
                 >
-                <ItemsControl
-                    Margin="0"
-                    Padding="5 0"
-                    HorizontalAlignment="Left"
+                <Image
+                    Name="IconImage"
+                    Grid.Column="0"
+                    Margin="0 0 2 0"
+                    Source="{Binding Icon}"
+                    />
+                <TextBlock
+                    Name="DisplayNameTextBlock"
+                    Grid.Column="1"
+                    HorizontalAlignment="Stretch"
                     VerticalAlignment="Center"
-                    ItemsSource="{Binding Tags}"
+                    FontSize="16"
+                    Text="{Binding DisplayName}"
+                    />
+                <!-- Associated tags -->
+                <Border
+                    Grid.Column="2"
+                    BorderBrush="Green"
+                    BorderThickness="0"
                     >
-                    <!-- <ItemsControl.Styles> -->
-                    <!--     <Style Selector="TextBlock"> -->
-                    <!--         <Setter Property="ContextFlyout"> -->
-                    <!--             <MenuFlyout> -->
-                    <!--                 <MenuItem Header="Remove"> -->
-                    <!--                     <MenuItem.Icon> -->
-                    <!--                         <avalonia:MaterialIcon Kind="DeleteOutline" /> -->
-                    <!--                     </MenuItem.Icon> -->
-                    <!--                 </MenuItem> -->
-                    <!--             </MenuFlyout> -->
-                    <!--         </Setter> -->
-                    <!--     </Style> -->
-                    <!-- </ItemsControl.Styles> -->
-                    <ItemsControl.ItemsPanel>
-                        <ItemsPanelTemplate>
-                            <VirtualizingStackPanel Orientation="Horizontal" />
-                        </ItemsPanelTemplate>
-                    </ItemsControl.ItemsPanel>
-                    <ItemsControl.ItemTemplate>
-                        <DataTemplate DataType="contracts:Tag">
-                            <ContentControl Content="{Binding $self.DataContext}" ContentTemplate="{x:Static dataTemplates:TagsTemplateProvider.TagDataTemplate}">
-                                <ContentControl.Styles>
-                                    <Style Selector="TextBlock">
-                                        <Setter Property="Text">
-                                            <Binding Path="Text" />
-                                        </Setter>
-                                        <Setter Property="Margin" Value="4 1" />
-                                        <Setter Property="VerticalAlignment" Value="Center" />
-                                        <Setter Property="IsTabStop" Value="False" />
-                                        <Setter Property="FontSize" Value="18" />
-                                    </Style>
-                                </ContentControl.Styles>
-                            </ContentControl>
-                        </DataTemplate>
-                    </ItemsControl.ItemTemplate>
-                </ItemsControl>
+                    <ItemsControl
+                        Margin="0"
+                        Padding="5 0"
+                        HorizontalAlignment="Left"
+                        VerticalAlignment="Center"
+                        ItemsSource="{Binding Tags}"
+                        >
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <VirtualizingStackPanel Orientation="Horizontal" />
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate DataType="contracts:Tag">
+                                <ContentControl Content="{Binding $self.DataContext}" ContentTemplate="{x:Static dataTemplates:TagsTemplateProvider.TagDataTemplate}">
+                                    <ContentControl.Styles>
+                                        <Style Selector="TextBlock">
+                                            <Setter Property="Text">
+                                                <Binding Path="Text" />
+                                            </Setter>
+                                            <Setter Property="Margin" Value="4 1" />
+                                            <Setter Property="VerticalAlignment" Value="Center" />
+                                            <Setter Property="IsTabStop" Value="False" />
+                                            <Setter Property="FontSize" Value="18" />
+                                        </Style>
+                                    </ContentControl.Styles>
+                                </ContentControl>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </Border>
+                <!-- Action buttons -->
+            </Grid>
+            <Border
+                DockPanel.Dock="Right"
+                HorizontalAlignment="Right"
+                Opacity="{Binding #TopMostDockPanel.IsPointerOver}"
+                >
+                <Border.Transitions>
+                    <Transitions>
+                        <DoubleTransition Property="Opacity" Duration="0:0:0.2" />
+                    </Transitions>
+                </Border.Transitions>
+                <StackPanel Orientation="Horizontal">
+                    <StackPanel.Styles>
+                        <Style Selector="avalonia|MaterialIcon">
+                            <Setter Property="Margin" Value="5" />
+                        </Style>
+                    </StackPanel.Styles>
+                    <Button ToolTip.Tip="Add/Remove tags" Classes="TransparentWithFeedback">
+                        <avalonia:MaterialIcon
+                            Width="25"
+                            Height="25"
+                            Kind="Edit"
+                            />
+                    </Button>
+                    <Button Classes="TransparentWithFeedback">
+                        <avalonia:MaterialIcon
+                            Width="30"
+                            Height="30"
+                            Kind="DotsVertical"
+                            />
+                        <Button.Flyout>
+                            <MenuFlyout Placement="Bottom">
+                                <MenuItem Header="Tag/untag..." />
+                                <MenuItem Header="Item Operations">
+                                    <MenuItem.ItemsSource>
+                                        <MultiBinding Converter="{StaticResource ItemOperationsConverter}">
+                                            <Binding FallbackValue="{x:Null}" Path="$parent[ListBox].((vm:MainWindowViewModel)DataContext).TaggableItemContextMenuActions" />
+                                            <Binding FallbackValue="{x:Null}" Path="$self.((vm:TaggableItemViewModel)DataContext).TaggableItem" />
+                                        </MultiBinding>
+                                    </MenuItem.ItemsSource>
+                                </MenuItem>
+                            </MenuFlyout>
+                        </Button.Flyout>
+                    </Button>
+                </StackPanel>
             </Border>
-        </Grid>
+        </DockPanel>
     </Border>
 </UserControl>
