@@ -255,6 +255,9 @@ message InvokeOperationRequest {
 message InvokeOperationReply {
 }
 
+message GetOperationsRequest {
+}
+
 message GetOperationsReply {
   message ItemTypeOperations {
     string typeName = 1;
