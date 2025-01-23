@@ -27,6 +27,8 @@ public partial class MainWindowViewModel : ViewModelBase
 
     public ObservableCollection<TaggableItem> OtherResults { get; set; } = [];
 
+    public ObservableCollection<string> TaggableItemContextMenuActions { get; set; }
+
     /// <summary>
     ///     ctor for XAML previewer
     /// </summary>
@@ -44,6 +46,7 @@ public partial class MainWindowViewModel : ViewModelBase
 
         SearchBarViewModel = AppTemplate.Current.Services.GetRequiredService<TaggableItemsSearchBarViewModel>();
 
+        // _tagService.InvokeOperationAsync()
         Initialize();
     }
 

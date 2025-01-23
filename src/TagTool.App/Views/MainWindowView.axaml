@@ -4,8 +4,8 @@
     xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:views1="clr-namespace:TagTool.App.Views"
     xmlns:models="clr-namespace:TagTool.App.Models"
+    xmlns:views1="clr-namespace:TagTool.App.Views"
     x:Class="TagTool.App.Views.MainWindowView"
     x:DataType="views1:MainWindowViewModel"
     d:DesignWidth="850"
@@ -100,10 +100,10 @@
                     />
             </Panel>
             <!-- <Grid -->
-            <!--     ColumnDefinitions="* Auto *" -->
-            <!--     IsVisible="{Binding #OtherResultsListBox.ItemCount}" -->
-            <!--     RowDefinitions="Auto" -->
-            <!--     > -->
+            <!-- ColumnDefinitions="* Auto *" -->
+            <!-- IsVisible="{Binding #OtherResultsListBox.ItemCount}" -->
+            <!-- RowDefinitions="Auto" -->
+            <!-- > -->
             <!--     <Separator Grid.Column="0" /> -->
             <!--     <TextBlock Grid.Column="1" Text="Other items" /> -->
             <!--     <Separator Grid.Column="2" /> -->
@@ -111,12 +111,12 @@
             <!-- Other results -->
             <!-- todo: maybe it should be one listbox with inserted separator-item... it should simplifying e.g. focusing -->
             <!-- <Panel> -->
-            <!--     <ListBox -->
-            <!--         Name="OtherResultsListBox" -->
-            <!--         Width="{Binding #TopMostDockPanel.Bounds.Width}" -->
-            <!--         Background="Transparent" -->
-            <!--         ItemsSource="{Binding OtherResults}" -->
-            <!--         > -->
+            <!-- <ListBox -->
+            <!-- Name="OtherResultsListBox" -->
+            <!-- Width="{Binding #TopMostDockPanel.Bounds.Width}" -->
+            <!-- Background="Transparent" -->
+            <!-- ItemsSource="{Binding OtherResults}" -->
+            <!-- > -->
             <!--         <ListBox.ItemTemplate> -->
             <!--             <DataTemplate x:DataType="models:TaggableItem"> -->
             <!--                 <views:TaggableItemView FontSize="14" /> -->
