@@ -27,8 +27,6 @@ public partial class MainWindowViewModel : ViewModelBase
 
     public Dictionary<Type, string[]> TaggableItemContextMenuActions { get; set; } = [];
 
-    public ObservableCollection<string> Test { get; set; } = [];
-
     /// <summary>
     ///     ctor for XAML previewer
     /// </summary>
@@ -76,35 +74,9 @@ public partial class MainWindowViewModel : ViewModelBase
         Dispatcher.UIThread.InvokeAsync(() =>
         {
             var reply = _tagService.GetOperations(new GetOperationsRequest());
-            var operationNames = reply.Operations.FirstOrDefault()?.Name.ToArray();
-            if (operationNames is not null)
-            {
-                Test.Clear();
-                Test.AddRange(operationNames);
-            }
-
             TaggableItemContextMenuActions = reply.Operations.ToDictionary(
                 o => o.TypeName == "TaggableFile_A8ABBA71" ? typeof(TaggableFile.TaggableFile) : throw new ArgumentOutOfRangeException(),
                 o => o.Name.ToArray());
-        });
-    }
-
-    [RelayCommand]
-    private static async Task OpenTagToolApp()
-    {
-        await Task.Run(() =>
-        {
-            var process = new Process
-            {
-                StartInfo = new ProcessStartInfo
-                {
-                    WorkingDirectory = @"C:\Users\tczyz\Source\Repos\My\TagTool\TagTool.App\src\TagTool.App\bin\Debug\net7.0",
-                    FileName = @"C:\Users\tczyz\Source\Repos\My\TagTool\TagTool.App\src\TagTool.App\bin\Debug\net7.0\TagTool.App.exe",
-                    UseShellExecute = true
-                }
-            };
-
-            process.Start();
         });
     }
 

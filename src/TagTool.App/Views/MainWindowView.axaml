@@ -11,12 +11,12 @@
     d:DesignHeight="450"
     mc:Ignorable="d"
     Background="{DynamicResource Surface}"
+    CanResize="False"
     ExtendClientAreaChromeHints="NoChrome"
     ExtendClientAreaTitleBarHeightHint="-1"
     ExtendClientAreaToDecorationsHint="True"
     ShowInTaskbar="True"
     SizeToContent="Height"
-    CanResize="False"
     Title="TagTool.App.Lite"
     PointerMoved="InputElement_OnPointerMoved"
     PointerPressed="InputElement_OnPointerPressed"
@@ -36,8 +36,8 @@
                 />
             <Grid
                 Grid.Column="1"
-                ColumnDefinitions="*, *"
-                RowDefinitions="*, *"
+                ColumnDefinitions="* *"
+                RowDefinitions="*  *"
                 >
                 <Grid.Styles>
                     <Style Selector="Button">
@@ -64,14 +64,6 @@
                     Click="CloseButton_OnClick"
                     >
                     <avalonia:MaterialIcon Kind="Close" />
-                </Button>
-                <Button
-                    Grid.Row="1"
-                    Grid.Column="1"
-                    ToolTip.Tip="Open TagTool app"
-                    Command="{Binding OpenTagToolAppCommand}"
-                    >
-                    <avalonia:MaterialIcon Kind="OpenInNew" />
                 </Button>
             </Grid>
         </Grid>
