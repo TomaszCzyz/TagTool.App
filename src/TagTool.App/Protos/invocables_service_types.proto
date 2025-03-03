@@ -1,0 +1,50 @@
+syntax = "proto3";
+
+import "google/protobuf/any.proto";
+import "google/protobuf/wrappers.proto";
+
+option csharp_namespace = "TagTool.BackendNew.Services.Grpc.Dtos";
+
+package TagToolBackendNew;
+
+message GetInvocablesDescriptionsRequest {
+}
+
+message GetInvocablesDescriptionsReply {
+  repeated InvocableDefinition invocable_definitions = 1;
+
+  message InvocableDefinition {
+    string id = 1;
+    string group_id = 2;
+    string display_name = 3;
+    string description = 4;
+    string payload_schema = 5;
+    string trigger_type = 6;
+  }
+}
+
+message GetInvocablesRequest {
+}
+
+message GetInvocablesReply {
+}
+
+message CreateInvocableRequest {
+  string type = 1;
+  string args = 2;
+  oneof trigger {
+    EventTrigger event_trigger = 3;
+    CronTrigger cron_trigger = 4;
+  }
+
+  message EventTrigger {
+  }
+
+  message CronTrigger {
+    string cron_expression = 1;
+  }
+}
+
+message CreateInvocableReply{
+}
+

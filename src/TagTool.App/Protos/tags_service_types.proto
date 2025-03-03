@@ -2,14 +2,15 @@ syntax = "proto3";
 
 import "google/protobuf/any.proto";
 import "google/protobuf/wrappers.proto";
-import "Protos/tag_service_types_common.proto";
+import "Protos/common_types.proto";
 
-option csharp_namespace = "TagTool.BackendNew";
+option csharp_namespace = "TagTool.BackendNew.Services.Grpc.Dtos";
 
 package TagToolBackendNew;
 
 // The request to create a new tag.
-message CreateTagRequest {
+message
+  CreateTagRequest {
   // The tag.
   string text = 2;
 }

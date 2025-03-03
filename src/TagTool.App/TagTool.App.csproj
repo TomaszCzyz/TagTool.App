@@ -61,9 +61,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Protobuf Include="Protos\tag_service.proto" GrpcServices="Client" />
-    <Protobuf Include="Protos\tag_service_types.proto" GrpcServices="None" />
-    <Protobuf Include="Protos\tag_service_types_common.proto" GrpcServices="None" />
+    <Protobuf Include="Protos\tags_service.proto" GrpcServices="Client" />
+    <Protobuf Include="Protos\tags_service_types.proto" GrpcServices="None" />
+    <Protobuf Include="Protos\common_types.proto" GrpcServices="None" />
   </ItemGroup>
 
   <ItemGroup>

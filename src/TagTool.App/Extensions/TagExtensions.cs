@@ -1,4 +1,4 @@
-using TagTool.BackendNew.Common;
+using TagTool.BackendNew.Services.Grpc.Dtos;
 
 namespace TagTool.App.Extensions;
 

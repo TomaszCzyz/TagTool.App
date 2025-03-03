@@ -1,7 +1,7 @@
 using System.Text.Json;
 using TagTool.App.Contracts;
 using TagTool.App.Extensions;
-using Tag = TagTool.BackendNew.Common.Tag;
+using Tag = TagTool.BackendNew.Services.Grpc.Dtos.Tag;
 
 namespace TagTool.App.Services;
 

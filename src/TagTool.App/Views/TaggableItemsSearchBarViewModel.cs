@@ -10,11 +10,13 @@ using DynamicData;
 using Grpc.Core;
 using JetBrains.Annotations;
 using Microsoft.Extensions.Logging;
-using TagTool.App.Contracts;
 using TagTool.App.Extensions;
 using TagTool.App.Models;
 using TagTool.App.Services;
 using TagTool.BackendNew;
+using TagTool.BackendNew.Services.Grpc;
+using TagTool.BackendNew.Services.Grpc.Dtos;
+using Tag = TagTool.App.Contracts.Tag;
 
 namespace TagTool.App.Views;
 
@@ -31,7 +33,7 @@ public class CommitSearchQueryEventArgs : EventArgs
 public sealed partial class TaggableItemsSearchBarViewModel : ViewModelBase
 {
     private readonly ILogger<TaggableItemsSearchBarViewModel> _logger;
-    private readonly TagService.TagServiceClient _tagService;
+    private readonly TagsService.TagsServiceClient _tagService;
     private IList<Tag>? _tagsInDropDown;
 
     [ObservableProperty]

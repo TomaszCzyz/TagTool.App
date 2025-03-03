@@ -1,7 +1,8 @@
 ﻿using System.Diagnostics;
-using TagTool.App.Contracts;
 using TagTool.App.Extensions;
 using TagTool.BackendNew;
+using TagTool.BackendNew.Services.Grpc.Dtos;
+using Tag = TagTool.App.Contracts.Tag;
 
 namespace TagTool.App.Models;
 

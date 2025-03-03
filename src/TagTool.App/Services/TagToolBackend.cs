@@ -1,11 +1,11 @@
 using Grpc.Net.Client;
-using TagTool.BackendNew;
+using TagTool.BackendNew.Services.Grpc;
 
 namespace TagTool.App.Services;
 
 public interface ITagToolBackend
 {
-    public TagService.TagServiceClient GetTagService();
+    public TagsService.TagsServiceClient GetTagService();
 }
 
 public class TagToolBackend : ITagToolBackend
@@ -18,5 +18,5 @@ public class TagToolBackend : ITagToolBackend
     }
 
     // public TagService.TagServiceClient GetTagService() => new(_connectionFactory.Create());
-    public TagService.TagServiceClient GetTagService() => new(GrpcChannel.ForAddress("http://localhost:5280"));
+    public TagsService.TagsServiceClient GetTagService() => new(GrpcChannel.ForAddress("http://localhost:5280"));
 }

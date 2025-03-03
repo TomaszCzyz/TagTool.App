@@ -10,7 +10,9 @@ using TagTool.App.Contracts;
 using TagTool.App.Extensions;
 using TagTool.App.Models;
 using TagTool.App.Services;
-using TagTool.BackendNew;
+using TagTool.BackendNew.Services.Grpc;
+using TagTool.BackendNew.Services.Grpc.Dtos;
+using Tag = TagTool.App.Contracts.Tag;
 
 namespace TagTool.App.Views;
 
@@ -19,7 +21,7 @@ public partial class MainWindowViewModel : ViewModelBase
     private readonly TaggableItemIconResolver _iconResolver;
     private readonly TaggableItemDisplayTextResolver _displayTextResolver;
     private readonly TaggableItemMapper _taggableItemMapper;
-    private readonly TagService.TagServiceClient _tagService;
+    private readonly TagsService.TagsServiceClient _tagService;
 
     public TaggableItemsSearchBarViewModel SearchBarViewModel { get; }
 
