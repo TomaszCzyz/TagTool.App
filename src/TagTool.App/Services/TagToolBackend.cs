@@ -6,6 +6,8 @@ namespace TagTool.App.Services;
 public interface ITagToolBackend
 {
     public TagsService.TagsServiceClient GetTagService();
+
+    public InvocablesService.InvocablesServiceClient GetInvocablesService();
 }
 
 public class TagToolBackend : ITagToolBackend
@@ -19,4 +21,6 @@ public class TagToolBackend : ITagToolBackend
 
     // public TagService.TagServiceClient GetTagService() => new(_connectionFactory.Create());
     public TagsService.TagsServiceClient GetTagService() => new(GrpcChannel.ForAddress("http://localhost:5280"));
+
+    public InvocablesService.InvocablesServiceClient GetInvocablesService() => new(GrpcChannel.ForAddress("http://localhost:5280"));
 }

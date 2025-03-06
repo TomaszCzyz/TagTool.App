@@ -4,9 +4,10 @@
     xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:views1="clr-namespace:TagTool.App.Views"
+    xmlns:views="clr-namespace:TagTool.App.Views"
+    xmlns:converters="clr-namespace:TagTool.App.Converters"
     x:Class="TagTool.App.Views.MainWindowView"
-    x:DataType="views1:MainWindowViewModel"
+    x:DataType="views:MainWindowViewModel"
     d:DesignWidth="850"
     d:DesignHeight="450"
     mc:Ignorable="d"
@@ -22,15 +23,20 @@
     PointerPressed="InputElement_OnPointerPressed"
     PointerReleased="InputElement_OnPointerReleased"
     >
+    <Window.Resources>
+        <converters:ArraySizeToBooleanConverter Threshold="1" x:Key="ArraySizeToBooleanConverter"/>
+    </Window.Resources>
     <Design.DataContext>
-        <views1:MainWindowViewModel />
+        <views:MainWindowViewModel />
     </Design.DataContext>
-    <TabControl TabStripPlacement="Left" SelectedIndex="1">
+    <TabControl SelectedIndex="1" TabStripPlacement="Left">
         <TabControl.Styles>
-            <Style Selector="TabItem">
-                <Setter Property="Padding" Value="0" />
+            <Style Selector="TabControl /template/ ContentPresenter#PART_SelectedContentHost">
+                <Setter Property="BorderThickness" Value="1 0 0 0" />
                 <Setter Property="BorderBrush" Value="{DynamicResource OnPrimary}" />
-                <Setter Property="BorderThickness" Value="0 0 1 0" />
+            </Style>
+            <Style Selector="TabItem">
+                <Setter Property="Padding" Value="0 0 -5 0" />
                 <Style Selector="^[TabStripPlacement=Left] /template/ ContentPresenter#PART_ContentPresenter">
                     <Setter Property="Margin" Value="4 0 0 0" />
                 </Style>
@@ -49,7 +55,7 @@
             <DockPanel Name="TopMostDockPanel" Margin="-10 0 0 0">
                 <Grid DockPanel.Dock="Top" ColumnDefinitions="*, Auto">
                     <!-- Search Bar -->
-                    <views1:TaggableItemsSearchBarView
+                    <views:TaggableItemsSearchBarView
                         Name="SearchBarView"
                         DataContext="{Binding SearchBarViewModel, Mode=TwoWay}"
                         Focusable="True"
@@ -104,8 +110,8 @@
                                 </Style>
                             </ListBox.Styles>
                             <ListBox.ItemTemplate>
-                                <DataTemplate x:DataType="views1:TaggableItemViewModel">
-                                    <views1:TaggableItemView />
+                                <DataTemplate x:DataType="views:TaggableItemViewModel">
+                                    <views:TaggableItemView />
                                 </DataTemplate>
                             </ListBox.ItemTemplate>
                         </ListBox>
@@ -155,7 +161,48 @@
                     Kind="Hashtag"
                     />
             </TabItem.Header>
-            <TextBlock Margin="5">JOBs</TextBlock>
+            <StackPanel
+                MinHeight="300"
+                Margin="10"
+                Spacing="10"
+                >
+                <TextBlock Text="Select job:" />
+                <ComboBox ItemsSource="{Binding JobItems}" SelectedItem="{Binding SelectedJobItem}">
+                    <ComboBox.SelectionBoxItemTemplate>
+                        <DataTemplate x:DataType="views:JobItem">
+                            <StackPanel>
+                                <TextBlock Text="{Binding Name}" />
+                            </StackPanel>
+                        </DataTemplate>
+                    </ComboBox.SelectionBoxItemTemplate>
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate x:DataType="views:JobItem">
+                            <StackPanel>
+                                <TextBlock Text="{Binding Name}" />
+                                <TextBlock
+                                    Margin="10 0 0 0"
+                                    Foreground="{DynamicResource Secondary}"
+                                    Text="{Binding Description}"
+                                    />
+                            </StackPanel>
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                </ComboBox>
+                <StackPanel IsVisible="{Binding !!SelectedJobItem}">
+                    <TextBlock Text="Description:" />
+                    <TextBlock Foreground="{DynamicResource Secondary}" Text="{Binding SelectedJobItem.Description, FallbackValue=''}" />
+                </StackPanel>
+                <StackPanel IsVisible="{Binding !!SelectedJobItem}" Spacing="10">
+                    <TextBlock Text="Job trigger:" />
+                    <StackPanel Orientation="Horizontal" Spacing="10">
+                        <ComboBox ItemsSource="{Binding TriggerTypes}" SelectedItem="{Binding SelectedTriggerType}" />
+                        <StackPanel Orientation="Horizontal" IsVisible="{Binding IsCronVisible}">
+                            <TextBlock VerticalAlignment="Center" Text="schedule:" />
+                            <TextBox Text="{Binding CronExpression}" />
+                        </StackPanel>
+                    </StackPanel>
+                </StackPanel>
+            </StackPanel>
         </TabItem>
     </TabControl>
 </Window>

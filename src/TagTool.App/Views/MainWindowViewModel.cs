@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using Avalonia.Controls;
 using Avalonia.Threading;
+using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using DynamicData;
 using JetBrains.Annotations;
@@ -16,18 +17,67 @@ using Tag = TagTool.App.Contracts.Tag;
 
 namespace TagTool.App.Views;
 
+public enum TriggerType
+{
+    Event = 0,
+    Cron = 1,
+}
+
+public static class TriggerTypeExtensions
+{
+    public static TriggerType MapFromDto(this string triggerType)
+        => triggerType switch
+        {
+            "Event" => TriggerType.Event,
+            "Cron" => TriggerType.Cron,
+            _ => throw new ArgumentOutOfRangeException(nameof(triggerType), triggerType, null)
+        };
+}
+
+public record InvocableDefinition
+{
+    public required string Id { get; init; }
+    public required string GroupId { get; init; }
+    public required string DisplayName { get; init; }
+    public required string Description { get; init; }
+    public required TriggerType TriggerType { get; init; }
+    public required string Payload { get; init; }
+}
+
+public record JobItem(string Id, string Name, string Description);
+
 public partial class MainWindowViewModel : ViewModelBase
 {
     private readonly TaggableItemIconResolver _iconResolver;
     private readonly TaggableItemDisplayTextResolver _displayTextResolver;
     private readonly TaggableItemMapper _taggableItemMapper;
     private readonly TagsService.TagsServiceClient _tagService;
+    private readonly InvocablesService.InvocablesServiceClient _invocablesServiceClient;
 
     public TaggableItemsSearchBarViewModel SearchBarViewModel { get; }
 
     public ObservableCollection<TaggableItemViewModel> SearchResults { get; } = [];
 
     public Dictionary<Type, string[]> TaggableItemContextMenuActions { get; set; } = [];
+
+    public ObservableCollection<JobItem> JobItems { get; } = [];
+
+    // public ObservableCollection<InvocableDefinition> InvocableDefinitions { get; } = [];
+    private readonly List<InvocableDefinition> _invocableDefinitions = [];
+
+    [ObservableProperty]
+    private JobItem? _selectedJobItem;
+
+    public ObservableCollection<TriggerType> TriggerTypes { get; } = [];
+
+    public bool IsCronVisible => SelectedTriggerType == TriggerType.Cron;
+
+    [ObservableProperty]
+    private string _cronExpression = "* * * * *";
+
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(IsCronVisible))]
+    private TriggerType? _selectedTriggerType;
 
     /// <summary>
     ///     ctor for XAML previewer
@@ -43,6 +93,7 @@ public partial class MainWindowViewModel : ViewModelBase
         _iconResolver = AppTemplate.Current.Services.GetRequiredService<TaggableItemIconResolver>();
         _taggableItemMapper = AppTemplate.Current.Services.GetRequiredService<TaggableItemMapper>();
         _tagService = AppTemplate.Current.Services.GetRequiredService<ITagToolBackend>().GetTagService();
+        _invocablesServiceClient = AppTemplate.Current.Services.GetRequiredService<ITagToolBackend>().GetInvocablesService();
 
         SearchBarViewModel = AppTemplate.Current.Services.GetRequiredService<TaggableItemsSearchBarViewModel>();
 
@@ -58,6 +109,7 @@ public partial class MainWindowViewModel : ViewModelBase
         TaggableItemMapper taggableItemMapper)
     {
         _tagService = tagToolBackend.GetTagService();
+        _invocablesServiceClient = tagToolBackend.GetInvocablesService();
         _displayTextResolver = displayTextResolver;
         _iconResolver = iconResolver;
         _taggableItemMapper = taggableItemMapper;
@@ -72,6 +124,7 @@ public partial class MainWindowViewModel : ViewModelBase
 
         // Initial, empty search.
         Dispatcher.UIThread.InvokeAsync(() => SearchForTaggableItems(null));
+        Dispatcher.UIThread.InvokeAsync(GetInvocableDescriptions);
         // Fetch TaggableItem-specific operations
         Dispatcher.UIThread.InvokeAsync(() =>
         {
@@ -80,6 +133,24 @@ public partial class MainWindowViewModel : ViewModelBase
                 o => o.TypeName == "TaggableFile_A8ABBA71" ? typeof(TaggableFile.TaggableFile) : throw new ArgumentOutOfRangeException(),
                 o => o.Name.ToArray());
         });
+    }
+
+    partial void OnSelectedJobItemChanged(JobItem? value)
+    {
+        TriggerTypes.Clear();
+
+        if (value is null)
+        {
+            return;
+        }
+
+        var invocableDefinition = _invocableDefinitions.First(d => d.Id == value.Id);
+        var triggerTypes = _invocableDefinitions
+            .Where(d => d.GroupId == invocableDefinition.GroupId)
+            .Select(d => d.TriggerType);
+
+        TriggerTypes.AddRange(triggerTypes);
+        SelectedTriggerType = TriggerTypes.First();
     }
 
     [RelayCommand]
@@ -124,6 +195,26 @@ public partial class MainWindowViewModel : ViewModelBase
         //     default:
         //         throw new UnreachableException();
         // }
+    }
+
+    private async Task GetInvocableDescriptions()
+    {
+        var reply = await _invocablesServiceClient.GetInvocablesDescriptionsAsync(new GetInvocablesDescriptionsRequest());
+        _invocableDefinitions.Clear();
+        _invocableDefinitions.AddRange(reply.InvocableDefinitions
+            .Select(d => new InvocableDefinition
+            {
+                Id = d.Id,
+                GroupId = d.GroupId,
+                DisplayName = d.DisplayName,
+                Description = d.Description,
+                TriggerType = d.TriggerType.MapFromDto(),
+                Payload = d.PayloadSchema
+            }));
+
+        JobItems.Clear();
+        JobItems.AddRange(reply.InvocableDefinitions.Select(d => new JobItem(d.Id, d.DisplayName, d.Description)));
+        SelectedJobItem = JobItems.FirstOrDefault();
     }
 
     private async Task SearchForTaggableItems(ICollection<QuerySegment>? argsQuerySegments)
