@@ -1,5 +1,7 @@
 ﻿using System.Collections.ObjectModel;
 using System.Diagnostics;
+using System.Text.Json;
+using System.Text.Json.Nodes;
 using Avalonia.Controls;
 using Avalonia.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
@@ -34,6 +36,11 @@ public static class TriggerTypeExtensions
         };
 }
 
+public interface IPayloadProperty;
+
+// This needs to be viewmodel
+public record StringProperty(string Name, bool IsRequired) : IPayloadProperty;
+
 public record InvocableDefinition
 {
     public required string Id { get; init; }
@@ -43,6 +50,8 @@ public record InvocableDefinition
     public required TriggerType TriggerType { get; init; }
     public required string Payload { get; init; }
 }
+
+// JsonSchema
 
 public record JobItem(string Id, string Name, string Description);
 
@@ -62,7 +71,6 @@ public partial class MainWindowViewModel : ViewModelBase
 
     public ObservableCollection<JobItem> JobItems { get; } = [];
 
-    // public ObservableCollection<InvocableDefinition> InvocableDefinitions { get; } = [];
     private readonly List<InvocableDefinition> _invocableDefinitions = [];
 
     [ObservableProperty]
@@ -74,6 +82,8 @@ public partial class MainWindowViewModel : ViewModelBase
 
     [ObservableProperty]
     private string _cronExpression = "* * * * *";
+
+    public ObservableCollection<IPayloadProperty> PayloadProperties { get; } = [];
 
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(IsCronVisible))]
@@ -138,6 +148,7 @@ public partial class MainWindowViewModel : ViewModelBase
     partial void OnSelectedJobItemChanged(JobItem? value)
     {
         TriggerTypes.Clear();
+        PayloadProperties.Clear();
 
         if (value is null)
         {
@@ -151,6 +162,24 @@ public partial class MainWindowViewModel : ViewModelBase
 
         TriggerTypes.AddRange(triggerTypes);
         SelectedTriggerType = TriggerTypes.First();
+
+        using var jsonDocument = JsonDocument.Parse(invocableDefinition.Payload);
+        var root = jsonDocument.RootElement;
+        var payload = root.GetProperty("properties").GetProperty("Payload");
+        var payloadProperties = payload.GetProperty("properties");
+        var payloadRequired = payload.GetProperty("required");
+
+        foreach (var property in payloadProperties.EnumerateObject())
+        {
+            // 'type' can be an array!!!
+            var propertyType = property.Value.GetProperty("type");
+            if (propertyType.GetString() == "string")
+            {
+                var isRequired = payloadRequired.EnumerateArray().Any(r => r.GetString() == property.Name);
+                PayloadProperties.Add(new StringProperty(property.Name, isRequired));
+            }
+        }
+        // PayloadProperties.AddRange(invocableDefinition.Payload)
     }
 
     [RelayCommand]

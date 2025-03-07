@@ -2,10 +2,10 @@
     xmlns="https://github.com/avaloniaui"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+    xmlns:converters="clr-namespace:TagTool.App.Converters"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:views="clr-namespace:TagTool.App.Views"
-    xmlns:converters="clr-namespace:TagTool.App.Converters"
     x:Class="TagTool.App.Views.MainWindowView"
     x:DataType="views:MainWindowViewModel"
     d:DesignWidth="850"
@@ -24,7 +24,7 @@
     PointerReleased="InputElement_OnPointerReleased"
     >
     <Window.Resources>
-        <converters:ArraySizeToBooleanConverter Threshold="1" x:Key="ArraySizeToBooleanConverter"/>
+        <converters:ArraySizeToBooleanConverter x:Key="ArraySizeToBooleanConverter" Threshold="1" />
     </Window.Resources>
     <Design.DataContext>
         <views:MainWindowViewModel />
@@ -196,11 +196,21 @@
                     <TextBlock Text="Job trigger:" />
                     <StackPanel Orientation="Horizontal" Spacing="10">
                         <ComboBox ItemsSource="{Binding TriggerTypes}" SelectedItem="{Binding SelectedTriggerType}" />
-                        <StackPanel Orientation="Horizontal" IsVisible="{Binding IsCronVisible}">
+                        <StackPanel IsVisible="{Binding IsCronVisible}" Orientation="Horizontal">
                             <TextBlock VerticalAlignment="Center" Text="schedule:" />
                             <TextBox Text="{Binding CronExpression}" />
                         </StackPanel>
                     </StackPanel>
+                </StackPanel>
+                <StackPanel IsVisible="{Binding !!SelectedJobItem}" Spacing="10">
+                    <TextBlock Text="Payload fields:" />
+                    <ItemsControl ItemsSource="{Binding PayloadProperties}">
+                        <ItemsControl.DataTemplates>
+                            <DataTemplate x:DataType="views:StringProperty">
+                                <TextBox Text="qweqwe" />
+                            </DataTemplate>
+                        </ItemsControl.DataTemplates>
+                    </ItemsControl>
                 </StackPanel>
             </StackPanel>
         </TabItem>
