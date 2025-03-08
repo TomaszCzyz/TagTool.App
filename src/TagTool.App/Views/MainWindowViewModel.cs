@@ -1,12 +1,12 @@
 ﻿using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Text.Json;
-using System.Text.Json.Nodes;
 using Avalonia.Controls;
 using Avalonia.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using DynamicData;
+using Grpc.Core;
 using JetBrains.Annotations;
 using Microsoft.Extensions.DependencyInjection;
 using TagTool.App.Contracts;
@@ -41,6 +41,8 @@ public interface IPayloadProperty;
 // This needs to be viewmodel
 public record StringProperty(string Name, bool IsRequired) : IPayloadProperty;
 
+public record TagProperty(string Name, bool IsRequired) : IPayloadProperty;
+
 public record InvocableDefinition
 {
     public required string Id { get; init; }
@@ -50,8 +52,6 @@ public record InvocableDefinition
     public required TriggerType TriggerType { get; init; }
     public required string Payload { get; init; }
 }
-
-// JsonSchema
 
 public record JobItem(string Id, string Name, string Description);
 
@@ -89,6 +89,9 @@ public partial class MainWindowViewModel : ViewModelBase
     [NotifyPropertyChangedFor(nameof(IsCronVisible))]
     private TriggerType? _selectedTriggerType;
 
+    [ObservableProperty]
+    private Func<string?, CancellationToken, Task<IEnumerable<object>>> _getTagsAsyncPopulator;
+
     /// <summary>
     ///     ctor for XAML previewer
     /// </summary>
@@ -106,6 +109,7 @@ public partial class MainWindowViewModel : ViewModelBase
         _invocablesServiceClient = AppTemplate.Current.Services.GetRequiredService<ITagToolBackend>().GetInvocablesService();
 
         SearchBarViewModel = AppTemplate.Current.Services.GetRequiredService<TaggableItemsSearchBarViewModel>();
+        GetTagsAsyncPopulator = GetTagsAsync;
 
         Initialize();
     }
@@ -124,6 +128,7 @@ public partial class MainWindowViewModel : ViewModelBase
         _iconResolver = iconResolver;
         _taggableItemMapper = taggableItemMapper;
         SearchBarViewModel = taggableItemsSearchBarViewModel;
+        GetTagsAsyncPopulator = GetTagsAsync;
 
         Initialize();
     }
@@ -178,8 +183,34 @@ public partial class MainWindowViewModel : ViewModelBase
                 var isRequired = payloadRequired.EnumerateArray().Any(r => r.GetString() == property.Name);
                 PayloadProperties.Add(new StringProperty(property.Name, isRequired));
             }
+            else if (propertyType.GetString() == "tag")
+            {
+                var isRequired = payloadRequired.EnumerateArray().Any(r => r.GetString() == property.Name);
+                PayloadProperties.Add(new TagProperty(property.Name, isRequired));
+            }
         }
         // PayloadProperties.AddRange(invocableDefinition.Payload)
+    }
+
+    public async Task<IEnumerable<object>> GetTagsAsync(string? searchText, CancellationToken cancellationToken)
+    {
+        var callOptions = new CallOptions()
+            .WithCancellationToken(cancellationToken)
+            .WithDeadline(DateTime.UtcNow.AddMinutes(1));
+
+        var streamingCall = _tagService.SearchTags(
+            new SearchTagsRequest
+            {
+                SearchText = searchText,
+                SearchType = SearchTagsRequest.Types.SearchType.Fuzzy,
+                ResultsLimit = 30
+            },
+            callOptions);
+
+        return await streamingCall.ResponseStream
+            .ReadAllAsync(cancellationToken)
+            .Select(r => r.Tag.MapFromDto().Text)
+            .ToListAsync(cancellationToken);
     }
 
     [RelayCommand]

@@ -8,6 +8,7 @@
     xmlns:views="clr-namespace:TagTool.App.Views"
     x:Class="TagTool.App.Views.MainWindowView"
     x:DataType="views:MainWindowViewModel"
+    Name="Root"
     d:DesignWidth="850"
     d:DesignHeight="450"
     mc:Ignorable="d"
@@ -207,7 +208,58 @@
                     <ItemsControl ItemsSource="{Binding PayloadProperties}">
                         <ItemsControl.DataTemplates>
                             <DataTemplate x:DataType="views:StringProperty">
-                                <TextBox Text="qweqwe" />
+                                <Grid ColumnDefinitions="Auto, *">
+                                    <TextBlock
+                                        Grid.Column="0"
+                                        VerticalAlignment="Center"
+                                        Foreground="{DynamicResource Secondary}"
+                                        Text="{Binding Name, StringFormat='{}{0}: '}"
+                                        />
+                                    <TextBox Grid.Column="1" Watermark="Enter path..."/>
+                                </Grid>
+                            </DataTemplate>
+                            <DataTemplate x:DataType="views:TagProperty">
+                                <Grid ColumnDefinitions="Auto, *">
+                                    <TextBlock
+                                        Grid.Column="0"
+                                        VerticalAlignment="Center"
+                                        Foreground="{DynamicResource Secondary}"
+                                        Text="{Binding Name, StringFormat='{}{0}: '}"
+                                        />
+                                    <AutoCompleteBox
+                                        Grid.Column="1"
+                                        BorderThickness="0"
+                                        FilterMode="None"
+                                        IsTextCompletionEnabled="True"
+                                        MinimumPrefixLength="0"
+                                        Watermark="Select Tag..."
+                                        AttachedToLogicalTree="AutoCompleteBox_OnAttachedToLogicalTree"
+                                        >
+                                        <AutoCompleteBox.Styles>
+                                            <Style Selector="ListBox">
+                                                <Setter Property="ItemsPanel">
+                                                    <ItemsPanelTemplate>
+                                                        <StackPanel Orientation="Vertical" />
+                                                    </ItemsPanelTemplate>
+                                                </Setter>
+                                            </Style>
+                                            <Style Selector="TextBox">
+                                                <Setter Property="BorderThickness" Value="0" />
+                                                <Setter Property="Background" Value="Transparent" />
+
+                                                <Style Selector="^:pointerover, ^:focus-within, ^:focus">
+                                                    <Style Selector="^ /template/ Border#PART_BorderElement">
+                                                        <Setter Property="Background" Value="Transparent" />
+                                                        <Setter Property="BorderThickness" Value="0" />
+                                                    </Style>
+                                                </Style>
+                                            </Style>
+                                            <Style Selector="Popup">
+                                                <Setter Property="Placement" Value="BottomEdgeAlignedLeft" />
+                                            </Style>
+                                        </AutoCompleteBox.Styles>
+                                    </AutoCompleteBox>
+                                </Grid>
                             </DataTemplate>
                         </ItemsControl.DataTemplates>
                     </ItemsControl>

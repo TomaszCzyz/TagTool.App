@@ -3,6 +3,7 @@ using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Input;
 using Avalonia.Interactivity;
+using Avalonia.LogicalTree;
 using Avalonia.VisualTree;
 using VisualExtensions = Avalonia.VisualTree.VisualExtensions;
 
@@ -13,6 +14,8 @@ public partial class MainWindowView : Window
     private MainWindowViewModel ViewModel => (MainWindowViewModel)DataContext!;
     private bool _mouseDownForWindowMoving;
     private PointerPoint _originalPoint;
+
+    private AutoCompleteBox? _autoCompleteBox;
 
     public MainWindowView()
     {
@@ -168,5 +171,12 @@ public partial class MainWindowView : Window
         {
             applicationLifetime.Shutdown();
         }
+    }
+
+    private void AutoCompleteBox_OnAttachedToLogicalTree(object? sender, LogicalTreeAttachmentEventArgs e)
+    {
+        _autoCompleteBox = (AutoCompleteBox)sender!;
+
+        _autoCompleteBox.AsyncPopulator = ViewModel.GetTagsAsync;
     }
 }

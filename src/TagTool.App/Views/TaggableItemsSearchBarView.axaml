@@ -247,7 +247,7 @@
                                     <Style Selector="TextBox">
                                         <Setter Property="BorderThickness" Value="0" />
                                         <Setter Property="Background" Value="Transparent" />
-                                        <!-- pointerover -->
+
                                         <Style Selector="^:pointerover, ^:focus-within, ^:focus">
                                             <Style Selector="^ /template/ Border#PART_BorderElement">
                                                 <Setter Property="Background" Value="Transparent" />
