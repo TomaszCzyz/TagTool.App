@@ -4,6 +4,7 @@ using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.LogicalTree;
+using Avalonia.Platform.Storage;
 using Avalonia.VisualTree;
 using VisualExtensions = Avalonia.VisualTree.VisualExtensions;
 
@@ -178,5 +179,25 @@ public partial class MainWindowView : Window
         _autoCompleteBox = (AutoCompleteBox)sender!;
 
         _autoCompleteBox.AsyncPopulator = ViewModel.GetTagsAsync;
+    }
+
+    private async void Button_OnClick(object? sender, RoutedEventArgs _)
+    {
+        var documentsDir = await StorageProvider.TryGetWellKnownFolderAsync(WellKnownFolder.Documents);
+
+        var options = new FolderPickerOpenOptions
+        {
+            Title = "Select folder for a Common Storage",
+            AllowMultiple = false,
+            SuggestedStartLocation = documentsDir
+        };
+
+        var result = await StorageProvider.OpenFolderPickerAsync(options);
+
+        if (result.Count == 1)
+        {
+            var textBox = (sender as Control)?.FindAncestorOfType<TextBox>()!;
+            textBox.Text = result[0].Path.LocalPath;
+        }
     }
 }

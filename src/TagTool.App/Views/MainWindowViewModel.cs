@@ -43,6 +43,8 @@ public record StringProperty(string Name, bool IsRequired) : IPayloadProperty;
 
 public record TagProperty(string Name, bool IsRequired) : IPayloadProperty;
 
+public record DirectoryPathProperty(string Name, bool IsRequired) : IPayloadProperty;
+
 public record InvocableDefinition
 {
     public required string Id { get; init; }
@@ -176,21 +178,31 @@ public partial class MainWindowViewModel : ViewModelBase
 
         foreach (var property in payloadProperties.EnumerateObject())
         {
-            // 'type' can be an array!!!
             var propertyType = property.Value.GetProperty("type");
-            if (propertyType.GetString() == "string")
+            if (propertyType.ValueKind != JsonValueKind.String)
             {
-                var isRequired = payloadRequired.EnumerateArray().Any(r => r.GetString() == property.Name);
-                PayloadProperties.Add(new StringProperty(property.Name, isRequired));
+                // 'type' can be an array!!!
+                throw new NotImplementedException();
             }
-            else if (propertyType.GetString() == "tag")
+
+            var type = propertyType.GetString();
+            switch (type)
             {
-                var isRequired = payloadRequired.EnumerateArray().Any(r => r.GetString() == property.Name);
-                PayloadProperties.Add(new TagProperty(property.Name, isRequired));
+                case "string":
+                    PayloadProperties.Add(new StringProperty(property.Name, IsRequired(payloadRequired, property)));
+                    break;
+                case "tag":
+                    PayloadProperties.Add(new TagProperty(property.Name, IsRequired(payloadRequired, property)));
+                    break;
+                case "directoryPath":
+                    PayloadProperties.Add(new DirectoryPathProperty(property.Name, IsRequired(payloadRequired, property)));
+                    break;
             }
         }
-        // PayloadProperties.AddRange(invocableDefinition.Payload)
     }
+
+    private static bool IsRequired(JsonElement payloadRequired, JsonProperty property)
+        => payloadRequired.EnumerateArray().Any(r => r.GetString() == property.Name);
 
     public async Task<IEnumerable<object>> GetTagsAsync(string? searchText, CancellationToken cancellationToken)
     {
