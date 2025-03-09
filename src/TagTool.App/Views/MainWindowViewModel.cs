@@ -1,6 +1,7 @@
 ﻿using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Text.Json;
+using System.Text.Json.Nodes;
 using Avalonia.Controls;
 using Avalonia.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
@@ -36,14 +37,18 @@ public static class TriggerTypeExtensions
         };
 }
 
-public interface IPayloadProperty;
+public interface IPayloadProperty
+{
+    public string Name { get; }
+    public object? Value { get; }
+}
 
 // This needs to be viewmodel
-public record StringProperty(string Name, bool IsRequired) : IPayloadProperty;
+public record StringProperty(object? Value, string Name, bool IsRequired) : IPayloadProperty;
 
-public record TagProperty(string Name, bool IsRequired) : IPayloadProperty;
+public record TagProperty(object? Value, string Name, bool IsRequired) : IPayloadProperty;
 
-public record DirectoryPathProperty(string Name, bool IsRequired) : IPayloadProperty;
+public record DirectoryPathProperty(object? Value, string Name, bool IsRequired) : IPayloadProperty;
 
 public record InvocableDefinition
 {
@@ -63,7 +68,7 @@ public partial class MainWindowViewModel : ViewModelBase
     private readonly TaggableItemDisplayTextResolver _displayTextResolver;
     private readonly TaggableItemMapper _taggableItemMapper;
     private readonly TagsService.TagsServiceClient _tagService;
-    private readonly InvocablesService.InvocablesServiceClient _invocablesServiceClient;
+    private readonly InvocablesService.InvocablesServiceClient _invocablesService;
 
     public TaggableItemsSearchBarViewModel SearchBarViewModel { get; }
 
@@ -94,6 +99,9 @@ public partial class MainWindowViewModel : ViewModelBase
     [ObservableProperty]
     private Func<string?, CancellationToken, Task<IEnumerable<object>>> _getTagsAsyncPopulator;
 
+    [ObservableProperty]
+    private string? _selectedTag;
+
     /// <summary>
     ///     ctor for XAML previewer
     /// </summary>
@@ -108,7 +116,7 @@ public partial class MainWindowViewModel : ViewModelBase
         _iconResolver = AppTemplate.Current.Services.GetRequiredService<TaggableItemIconResolver>();
         _taggableItemMapper = AppTemplate.Current.Services.GetRequiredService<TaggableItemMapper>();
         _tagService = AppTemplate.Current.Services.GetRequiredService<ITagToolBackend>().GetTagService();
-        _invocablesServiceClient = AppTemplate.Current.Services.GetRequiredService<ITagToolBackend>().GetInvocablesService();
+        _invocablesService = AppTemplate.Current.Services.GetRequiredService<ITagToolBackend>().GetInvocablesService();
 
         SearchBarViewModel = AppTemplate.Current.Services.GetRequiredService<TaggableItemsSearchBarViewModel>();
         GetTagsAsyncPopulator = GetTagsAsync;
@@ -125,7 +133,7 @@ public partial class MainWindowViewModel : ViewModelBase
         TaggableItemMapper taggableItemMapper)
     {
         _tagService = tagToolBackend.GetTagService();
-        _invocablesServiceClient = tagToolBackend.GetInvocablesService();
+        _invocablesService = tagToolBackend.GetInvocablesService();
         _displayTextResolver = displayTextResolver;
         _iconResolver = iconResolver;
         _taggableItemMapper = taggableItemMapper;
@@ -189,13 +197,13 @@ public partial class MainWindowViewModel : ViewModelBase
             switch (type)
             {
                 case "string":
-                    PayloadProperties.Add(new StringProperty(property.Name, IsRequired(payloadRequired, property)));
+                    PayloadProperties.Add(new StringProperty("", property.Name, IsRequired(payloadRequired, property)));
                     break;
                 case "tag":
-                    PayloadProperties.Add(new TagProperty(property.Name, IsRequired(payloadRequired, property)));
+                    PayloadProperties.Add(new TagProperty(null, property.Name, IsRequired(payloadRequired, property)));
                     break;
                 case "directoryPath":
-                    PayloadProperties.Add(new DirectoryPathProperty(property.Name, IsRequired(payloadRequired, property)));
+                    PayloadProperties.Add(new DirectoryPathProperty(null, property.Name, IsRequired(payloadRequired, property)));
                     break;
             }
         }
@@ -221,7 +229,7 @@ public partial class MainWindowViewModel : ViewModelBase
 
         return await streamingCall.ResponseStream
             .ReadAllAsync(cancellationToken)
-            .Select(r => r.Tag.MapFromDto().Text)
+            .Select(object (r) => r.Tag.MapFromDto())
             .ToListAsync(cancellationToken);
     }
 
@@ -271,7 +279,7 @@ public partial class MainWindowViewModel : ViewModelBase
 
     private async Task GetInvocableDescriptions()
     {
-        var reply = await _invocablesServiceClient.GetInvocablesDescriptionsAsync(new GetInvocablesDescriptionsRequest());
+        var reply = await _invocablesService.GetInvocablesDescriptionsAsync(new GetInvocablesDescriptionsRequest());
         _invocableDefinitions.Clear();
         _invocableDefinitions.AddRange(reply.InvocableDefinitions
             .Select(d => new InvocableDefinition
@@ -307,5 +315,35 @@ public partial class MainWindowViewModel : ViewModelBase
                 var icon = _iconResolver.GetIcon(item, null);
                 return new TaggableItemViewModel(item, icon, text);
             }));
+    }
+
+    [RelayCommand]
+    private async Task CreateJob()
+    {
+        Debug.Assert(SelectedJobItem != null, nameof(SelectedJobItem) + " != null");
+
+        var jsonNode = JsonNode.Parse("{}")!;
+        foreach (var property in PayloadProperties)
+        {
+            if (property is TagProperty tagProperty)
+            {
+                var tag = (Tag)tagProperty.Value!;
+                jsonNode.AsObject().Add(tagProperty.Name, tag.Id);
+            }
+            else
+            {
+                jsonNode.AsObject().Add(property.Name, JsonSerializer.Serialize(property.Value));
+            }
+        }
+
+        var request = new CreateInvocableRequest
+        {
+            InvocableId = SelectedJobItem.Id,
+            EventTrigger = new CreateInvocableRequest.Types.EventTrigger(),
+            CronTrigger = new CreateInvocableRequest.Types.CronTrigger { CronExpression = CronExpression },
+            Args = jsonNode.ToJsonString()
+        };
+
+        var reply = await _invocablesService.CreateInvocableAsync(request);
     }
 }

@@ -6,6 +6,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:views="clr-namespace:TagTool.App.Views"
+    xmlns:contracts="clr-namespace:TagTool.App.Contracts;assembly=TagTool.App.Contracts"
     x:Class="TagTool.App.Views.MainWindowView"
     x:DataType="views:MainWindowViewModel"
     Name="Root"
@@ -215,7 +216,11 @@
                                         Foreground="{DynamicResource Secondary}"
                                         Text="{Binding Name, StringFormat='{}{0}: '}"
                                         />
-                                    <TextBox Grid.Column="1" Watermark="Enter path..." />
+                                    <TextBox
+                                        Grid.Column="1"
+                                        Text="{Binding Value}"
+                                        Watermark="Enter path..."
+                                        />
                                 </Grid>
                             </DataTemplate>
                             <DataTemplate x:DataType="views:TagProperty">
@@ -226,14 +231,17 @@
                                         Foreground="{DynamicResource Secondary}"
                                         Text="{Binding Name, StringFormat='{}{0}: '}"
                                         />
+                                    <!-- SelectedItem="{Binding $parent[Window].((views:MainWindowViewModel)DataContext).SelectedTag, FallbackValue=null}" -->
                                     <AutoCompleteBox
                                         Grid.Column="1"
                                         BorderThickness="0"
                                         FilterMode="None"
                                         IsTextCompletionEnabled="True"
                                         MinimumPrefixLength="0"
+                                        SelectedItem="{Binding Value}"
                                         Watermark="Select Tag..."
                                         AttachedToLogicalTree="AutoCompleteBox_OnAttachedToLogicalTree"
+                                        LostFocus="AutoCompleteBox_OnLostFocus"
                                         >
                                         <AutoCompleteBox.Styles>
                                             <Style Selector="ListBox">
@@ -258,6 +266,11 @@
                                                 <Setter Property="Placement" Value="BottomEdgeAlignedLeft" />
                                             </Style>
                                         </AutoCompleteBox.Styles>
+                                        <!-- <AutoCompleteBox.ItemTemplate> -->
+                                        <!--     <DataTemplate x:DataType="contracts:Tag"> -->
+                                        <!--         <TextBlock Text="{Binding Text}" /> -->
+                                        <!--     </DataTemplate> -->
+                                        <!-- </AutoCompleteBox.ItemTemplate> -->
                                     </AutoCompleteBox>
                                 </Grid>
                             </DataTemplate>
@@ -269,7 +282,11 @@
                                         Foreground="{DynamicResource Secondary}"
                                         Text="{Binding Name, StringFormat='{}{0}: '}"
                                         />
-                                    <TextBox Grid.Column="1" Text="path">
+                                    <TextBox
+                                        Grid.Column="1"
+                                        Text="{Binding Value}"
+                                        Watermark="Enter path..."
+                                        >
                                         <TextBox.InnerRightContent>
                                             <Button
                                                 Classes="TransparentWithFeedback"
@@ -277,7 +294,11 @@
                                                 Padding="0"
                                                 Click="Button_OnClick"
                                                 >
-                                                <avalonia:MaterialIcon Width="20" Height="20" Kind="FolderOutline" />
+                                                <avalonia:MaterialIcon
+                                                    Width="20"
+                                                    Height="20"
+                                                    Kind="FolderOutline"
+                                                    />
                                             </Button>
                                         </TextBox.InnerRightContent>
                                     </TextBox>
@@ -286,6 +307,11 @@
                         </ItemsControl.DataTemplates>
                     </ItemsControl>
                 </StackPanel>
+                <Button
+                    Command="{Binding CreateJobCommand}"
+                    Content="Create"
+                    IsVisible="{Binding !!SelectedJobItem}"
+                    />
             </StackPanel>
         </TabItem>
     </TabControl>

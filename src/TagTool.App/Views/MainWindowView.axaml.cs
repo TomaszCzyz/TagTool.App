@@ -200,4 +200,13 @@ public partial class MainWindowView : Window
             textBox.Text = result[0].Path.LocalPath;
         }
     }
+
+    private void AutoCompleteBox_OnLostFocus(object? sender, RoutedEventArgs e)
+    {
+        var autoCompleteBox = (AutoCompleteBox)sender!;
+        if (autoCompleteBox.SelectedItem is null)
+        {
+            autoCompleteBox.Text = "";
+        }
+    }
 }
