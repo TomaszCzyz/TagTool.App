@@ -12,6 +12,7 @@ using JetBrains.Annotations;
 using Microsoft.Extensions.DependencyInjection;
 using TagTool.App.Contracts;
 using TagTool.App.Extensions;
+using TagTool.App.Extensions.Mappers;
 using TagTool.App.Models;
 using TagTool.App.Services;
 using TagTool.BackendNew.Services.Grpc;
@@ -19,46 +20,6 @@ using TagTool.BackendNew.Services.Grpc.Dtos;
 using Tag = TagTool.App.Contracts.Tag;
 
 namespace TagTool.App.Views;
-
-public enum TriggerType
-{
-    Event = 0,
-    Cron = 1,
-}
-
-public static class TriggerTypeExtensions
-{
-    public static TriggerType MapFromDto(this string triggerType)
-        => triggerType switch
-        {
-            "Event" => TriggerType.Event,
-            "Cron" => TriggerType.Cron,
-            _ => throw new ArgumentOutOfRangeException(nameof(triggerType), triggerType, null)
-        };
-}
-
-public interface IPayloadProperty
-{
-    public string Name { get; }
-    public object? Value { get; }
-}
-
-// This needs to be viewmodel
-public record StringProperty(object? Value, string Name, bool IsRequired) : IPayloadProperty;
-
-public record TagProperty(object? Value, string Name, bool IsRequired) : IPayloadProperty;
-
-public record DirectoryPathProperty(object? Value, string Name, bool IsRequired) : IPayloadProperty;
-
-public record InvocableDefinition
-{
-    public required string Id { get; init; }
-    public required string GroupId { get; init; }
-    public required string DisplayName { get; init; }
-    public required string Description { get; init; }
-    public required TriggerType TriggerType { get; init; }
-    public required string Payload { get; init; }
-}
 
 public record JobItem(string Id, string Name, string Description);
 
@@ -242,7 +203,10 @@ public partial class MainWindowViewModel : ViewModelBase
     private async Task TagItem((TaggableItemBase Item, Tag Tag) args)
     {
         var (item, tag) = args;
-        var reply = await _tagService.TagItemAsync(new TagItemRequest { TagId = tag.Id, ItemId = item.Id.ToString() });
+        var reply = await _tagService.TagItemAsync(new TagItemRequest
+        {
+            TagId = tag.Id, ItemId = item.Id.ToString()
+        });
 
         switch (reply.ResultCase)
         {
@@ -261,7 +225,10 @@ public partial class MainWindowViewModel : ViewModelBase
     private async Task UntagItem((TaggableItemBase Item, Tag Tag) args)
     {
         var (item, tag) = args;
-        var reply = await _tagService.UntagItemAsync(new UntagItemRequest { TagId = tag.Id, ItemId = item.Id.ToString() });
+        var reply = await _tagService.UntagItemAsync(new UntagItemRequest
+        {
+            TagId = tag.Id, ItemId = item.Id.ToString()
+        });
 
         // switch (reply.ResultCase)
         // {
@@ -301,7 +268,13 @@ public partial class MainWindowViewModel : ViewModelBase
     {
         var tagQueryParams = argsQuerySegments?.Select(segment => segment.MapToDto());
 
-        var reply = await _tagService.GetItemsByTagsAsync(new GetItemsByTagsRequest { QueryParams = { tagQueryParams ?? [] } });
+        var reply = await _tagService.GetItemsByTagsAsync(new GetItemsByTagsRequest
+        {
+            QueryParams =
+            {
+                tagQueryParams ?? []
+            }
+        });
 
         var taggableItems = reply.TaggedItems
             .Select(i => _taggableItemMapper.MapToObj(i.Item.Type, i.Item.Payload, i.Tags))
@@ -340,7 +313,10 @@ public partial class MainWindowViewModel : ViewModelBase
         {
             InvocableId = SelectedJobItem.Id,
             EventTrigger = new CreateInvocableRequest.Types.EventTrigger(),
-            CronTrigger = new CreateInvocableRequest.Types.CronTrigger { CronExpression = CronExpression },
+            CronTrigger = new CreateInvocableRequest.Types.CronTrigger
+            {
+                CronExpression = CronExpression
+            },
             Args = jsonNode.ToJsonString()
         };
 

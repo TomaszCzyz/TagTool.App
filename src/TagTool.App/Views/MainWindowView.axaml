@@ -6,7 +6,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:views="clr-namespace:TagTool.App.Views"
-    xmlns:contracts="clr-namespace:TagTool.App.Contracts;assembly=TagTool.App.Contracts"
+    xmlns:models="clr-namespace:TagTool.App.Models"
     x:Class="TagTool.App.Views.MainWindowView"
     x:DataType="views:MainWindowViewModel"
     Name="Root"
@@ -208,7 +208,7 @@
                     <TextBlock Text="Payload fields:" />
                     <ItemsControl ItemsSource="{Binding PayloadProperties}">
                         <ItemsControl.DataTemplates>
-                            <DataTemplate x:DataType="views:StringProperty">
+                            <DataTemplate x:DataType="models:StringProperty">
                                 <Grid ColumnDefinitions="Auto, *">
                                     <TextBlock
                                         Grid.Column="0"
@@ -223,7 +223,7 @@
                                         />
                                 </Grid>
                             </DataTemplate>
-                            <DataTemplate x:DataType="views:TagProperty">
+                            <DataTemplate x:DataType="models:TagProperty">
                                 <Grid ColumnDefinitions="Auto, *">
                                     <TextBlock
                                         Grid.Column="0"
@@ -274,7 +274,7 @@
                                     </AutoCompleteBox>
                                 </Grid>
                             </DataTemplate>
-                            <DataTemplate x:DataType="views:DirectoryPathProperty">
+                            <DataTemplate x:DataType="models:DirectoryPathProperty">
                                 <Grid ColumnDefinitions="Auto, *">
                                     <TextBlock
                                         Grid.Column="0"

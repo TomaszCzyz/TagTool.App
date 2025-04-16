@@ -156,7 +156,8 @@ public partial class MainWindowView : Window
             return;
         }
 
-        _mouseDownForWindowMoving = true;
+        // TODO: handle Linux/Windows behavior
+        // _mouseDownForWindowMoving = true;
         _originalPoint = e.GetCurrentPoint(this);
     }
 
